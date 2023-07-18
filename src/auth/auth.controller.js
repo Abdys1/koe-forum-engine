@@ -1,14 +1,16 @@
 import AuthenticationError from './authentication.error.js';
 
 class AuthController {
+  #authService;
+
   constructor(authService) {
-    this.authService = authService;
+    this.#authService = authService;
   }
 
   async login(req, res, next) {
     try {
       const { username, password } = req.body;
-      const { accessToken, refreshToken } = await this.authService.login(username, password);
+      const { accessToken, refreshToken } = await this.#authService.login(username, password);
       res.cookie('refresh-token', refreshToken, {
         httpOnly: true,
         sameSite: 'Strict',

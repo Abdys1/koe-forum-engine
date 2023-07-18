@@ -7,7 +7,9 @@
     "dev": "node src/bin/www.js",
     "watch:dev": "nodemon src/bin/www.js",
     "lint": "eslint ./src --ext .js",
-    "test": "vitest"
+    "test": "vitest",
+    "migration:make": "knex migrate:make --knexfile ./src/db/knexfile.js",
+    "migration:migrate": "knex migrate:latest --knexfile ./src/db/knexfile.js"
   },
   "dependencies": {
     "cookie-parser": "1.4.4",
@@ -15,7 +17,9 @@
     "dotenv": "16.3.1",
     "express": "4.16.1",
     "jsonwebtoken": "9.0.1",
-    "morgan": "1.9.1"
+    "knex": "2.5.1",
+    "morgan": "1.9.1",
+    "pg": "8.11.1"
   },
   "devDependencies": {
     "eslint": "8.44.0",

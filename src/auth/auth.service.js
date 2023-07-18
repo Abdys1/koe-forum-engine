@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import AuthenticationError from './authentication.error';
+import AuthenticationError from './authentication.error.js';
 
 async function signToken(payload, secretKey, expiresIn) {
   return new Promise((resolve, reject) => {
