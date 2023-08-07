@@ -1,8 +1,8 @@
 import {
   describe, it, expect, vi, beforeEach,
 } from 'vitest';
-import AuthenticationError from './authentication.error';
-import AuthController from './auth.controller.js';
+import AuthenticationError from './AuthenticationError';
+import AuthController from './AuthController.js';
 
 describe('Auth controller login', () => {
   const req = { body: { username: 'john', password: 'changeme' } };
@@ -16,7 +16,7 @@ describe('Auth controller login', () => {
   beforeEach(() => {
     fakeAuthService = { login: vi.fn() };
     authController = new AuthController(fakeAuthService);
-    res = { send: vi.fn(), cookie: vi.fn() };
+    res = { send: vi.fn(), cookie: vi.fn(), status: vi.fn() };
     next = vi.fn();
   });
 
@@ -24,7 +24,8 @@ describe('Auth controller login', () => {
     fakeAuthService.login.mockReturnValueOnce(Promise.resolve(expectedTokens));
 
     await authController.login(req, res, next);
-    expect(res.send).toHaveBeenCalledWith(200, { accessToken: 'access-token' });
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.send).toHaveBeenCalledWith({ accessToken: 'access-token' });
   });
 
   it('should set refreshToken cookie with valid credentials', async () => {

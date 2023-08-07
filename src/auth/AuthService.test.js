@@ -1,30 +1,33 @@
 import {
-  describe, it, expect, vi, beforeAll, beforeEach, afterAll,
+  describe, it, expect, vi, beforeAll, beforeEach,
 } from 'vitest';
-import jwt from 'jsonwebtoken';
-import AuthService from './auth.service.js';
-import AuthenticationError from './authentication.error.js';
+import AuthService from './AuthService.js';
+import AuthenticationError from './AuthenticationError.js';
 
 describe('Auth service login', () => {
-  let secretKey;
   let userDao;
+  let pwdHasher;
+  let tokenGenerator;
   let authService;
 
   beforeAll(() => {
-    secretKey = 'secret';
-    vi.stubEnv('ACCESS_TOKEN_SECRET', secretKey);
-    vi.stubEnv('REFRESH_TOKEN_SECRET', secretKey);
     userDao = {
-      fakeUsers: [{ username: 'admin', passwd: 'admin' }, { username: 'admin2', passwd: 'admin' }],
+      fakeUsers: [{ username: 'admin', passwd: 'admin' }, { username: 'admin2', passwd: 'alma' }],
       async findPwdByUsername(username) {
         const result = this.fakeUsers.find((user) => user.username === username);
         return Promise.resolve(result?.passwd);
       },
     };
+    pwdHasher = {
+      verify: (hash, pwd) => hash === pwd,
+    };
+    tokenGenerator = {
+      signToken: vi.fn(),
+    };
   });
 
   beforeEach(() => {
-    authService = new AuthService(userDao);
+    authService = new AuthService(userDao, pwdHasher, tokenGenerator);
   });
 
   async function checkWrongCredentials(username, passwd) {
@@ -36,32 +39,19 @@ describe('Auth service login', () => {
     }
   }
 
-  async function verifyToken(token) {
-    return new Promise((resolve, reject) => {
-      jwt.verify(token, secretKey, (err) => {
-        if (err) { reject(err); }
-        resolve(true);
-      });
-    });
+  async function checkJwtTokens(username, password, expectedToken) {
+    tokenGenerator.signToken.mockImplementation(() => expectedToken);
+    const { accessToken, refreshToken } = await authService.login(username, password);
+    expect(accessToken).toBe(expectedToken);
+    expect(refreshToken).toBe(expectedToken);
   }
 
-  async function checkTokens(tokens) {
-    const { accessToken } = tokens;
-    expect(accessToken).toBeTruthy();
-    expect(accessToken.length).toBeGreaterThan(0);
-    expect(await verifyToken(accessToken)).toBeTruthy();
+  it('should be generate verifyable tokens for admin', async () => {
+    checkJwtTokens('admin', 'admin', 'TOKEN_FOR_ADMIN');
+  });
 
-    const { refreshToken } = tokens;
-    expect(refreshToken).toBeTruthy();
-    expect(refreshToken.length).toBeGreaterThan(0);
-    expect(await verifyToken(refreshToken)).toBeTruthy();
-  }
-
-  it('should be generate verifyable tokens with valid credentials', async () => {
-    const tokens = await authService.login('admin', 'admin');
-    await checkTokens(tokens);
-    const tokens2 = await authService.login('admin2', 'admin');
-    await checkTokens(tokens2);
+  it('should be generate verifyable tokens for admin2', async () => {
+    checkJwtTokens('admin2', 'alma', 'TOKEN_FOR_ADMIN2');
   });
 
   it('should reject with invalid credentials', () => {
@@ -110,9 +100,5 @@ describe('Auth service login', () => {
 
   it('should reject with undefined credentials', () => {
     checkWrongCredentials(undefined, undefined);
-  });
-
-  afterAll(() => {
-    vi.unstubAllEnvs();
   });
 });

@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 
-import authRouter from './routes/auth.js';
+import authRouter from './routes/AuthRoutes.js';
 
 globalThis.__filename = fileURLToPath(import.meta.url);
 globalThis.__dirname = path.dirname(__filename);

@@ -21,5 +21,8 @@ export default {
       loadExtensions: ['.js'],
       stub: './migration.stub.js',
     },
+    seeds: {
+      stub: './seed.stub.js',
+    },
   },
 };

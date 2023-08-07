@@ -1,4 +1,4 @@
-import AuthenticationError from './authentication.error.js';
+import AuthenticationError from './AuthenticationError.js';
 
 class AuthController {
   #authService;
@@ -17,7 +17,8 @@ class AuthController {
         secure: true,
         maxAge: 24 * 60 * 60 * 1000,
       });
-      res.send(200, { accessToken });
+      res.status(200);
+      res.send({ accessToken });
     } catch (err) {
       if (err instanceof AuthenticationError) {
         res.send(401);

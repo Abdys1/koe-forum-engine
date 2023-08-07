@@ -6,9 +6,10 @@ class UserDao {
   }
 
   async findPwdByUsername(username) {
-    return this.#db('forum_users')
+    const result = await this.#db('forum_user')
       .where('username', username)
       .first('password');
+    return result?.password;
   }
 }
 

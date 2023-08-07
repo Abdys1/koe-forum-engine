@@ -9,9 +9,13 @@
     "lint": "eslint ./src --ext .js",
     "test": "vitest",
     "migration:make": "knex migrate:make --knexfile ./src/db/knexfile.js",
-    "migration:migrate": "knex migrate:latest --knexfile ./src/db/knexfile.js"
+    "migration:migrate": "knex migrate:latest --knexfile ./src/db/knexfile.js",
+    "migration:rollback": "knex migrate:down --knexfile ./src/db/knexfile.js",
+    "seed:make": "knex seed:make --knexfile ./src/db/knexfile.js",
+    "seed:run": "knex seed:run --knexfile ./src/db/knexfile.js"
   },
   "dependencies": {
+    "argon2": "0.31.0",
     "cookie-parser": "1.4.4",
     "debug": "2.6.9",
     "dotenv": "16.3.1",
