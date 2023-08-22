@@ -11,9 +11,9 @@ async function signToken(payload, secretKey, expiresIn) {
 
 async function verifyToken(token, secretKey) {
   return new Promise((resolve, reject) => {
-    jwt.verify(token, secretKey, (err) => {
+    jwt.verify(token, secretKey, (err, decoded) => {
       if (err) { reject(err); }
-      resolve(true);
+      resolve(decoded);
     });
   });
 }

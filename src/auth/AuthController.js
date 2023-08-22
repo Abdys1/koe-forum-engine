@@ -1,5 +1,3 @@
-import AuthenticationError from './AuthenticationError.js';
-
 class AuthController {
   #authService;
 
@@ -11,20 +9,29 @@ class AuthController {
     try {
       const { username, password } = req.body;
       const { accessToken, refreshToken } = await this.#authService.login(username, password);
-      res.cookie('refresh-token', refreshToken, {
+      res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
         sameSite: 'Strict',
         secure: true,
         maxAge: 24 * 60 * 60 * 1000,
       });
-      res.status(200);
-      res.send({ accessToken });
+      res.status(200).send({ accessToken });
     } catch (err) {
-      if (err instanceof AuthenticationError) {
-        res.send(401);
+      next(err);
+    }
+  }
+
+  async refresh(req, res, next) {
+    try {
+      const { refreshToken } = req.cookies;
+      if (!refreshToken) {
+        res.status(401).send();
       } else {
-        next(err);
+        const accessToken = await this.#authService.refreshAccessToken(refreshToken);
+        res.status(200).send({ accessToken });
       }
+    } catch (err) {
+      next(err);
     }
   }
 }

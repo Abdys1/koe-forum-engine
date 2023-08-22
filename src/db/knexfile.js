@@ -1,7 +1,3 @@
-import dotenv from 'dotenv';
-
-dotenv.config({ path: '../../.env' });
-
 export default {
   development: {
     client: 'postgresql',
@@ -19,10 +15,21 @@ export default {
     migrations: {
       tableName: 'knex_migrations',
       loadExtensions: ['.js'],
-      stub: './migration.stub.js',
+      stub: 'migration.stub.js',
     },
     seeds: {
-      stub: './seed.stub.js',
+      stub: 'seed.stub.js',
+    },
+  },
+  test: {
+    client: 'sqlite3',
+    connection: ':memory:',
+    useNullAsDefault: true,
+    migrations: {
+      directory: './src/db/migrations',
+    },
+    seeds: {
+      directory: './src/db/seeds',
     },
   },
 };

@@ -14,15 +14,49 @@ class AuthService {
   }
 
   async login(username, passwd) {
-    const hash = await this.#userDao.findPwdByUsername(username);
-    const matched = await this.#pwdHasher.verify(hash, passwd);
-    if (!matched) {
-      return Promise.reject(new AuthenticationError('Wrong credentials!'));
+    const hashPwd = await this.#userDao.findPwdByUsername(username);
+    const isValidPassword = await this.#verifyPassword(hashPwd, passwd);
+    if (!isValidPassword) {
+      throw new AuthenticationError('Wrong credentials');
     }
 
-    const accessToken = await this.#tokenGenerator.signToken({ username }, process.env.ACCESS_TOKEN_SECRET, '10m');
-    const refreshToken = await this.#tokenGenerator.signToken({ username }, process.env.REFRESH_TOKEN_SECRET, '1d');
+    return this.#generateTokens(username);
+  }
+
+  async #verifyPassword(hashPwd, rawPwd) {
+    try {
+      return await this.#pwdHasher.verify(hashPwd, rawPwd);
+    } catch (err) {
+      return false;
+    }
+  }
+
+  async #generateTokens(username) {
+    const accessToken = await this.#signAccessToken(username);
+    const refreshToken = await this.#signRefreshToken(username);
     return { accessToken, refreshToken };
+  }
+
+  async #signAccessToken(username) {
+    return this.#tokenGenerator.signToken({ username }, process.env.ACCESS_TOKEN_SECRET, '10m');
+  }
+
+  async #signRefreshToken(username) {
+    return this.#tokenGenerator.signToken({ username }, process.env.REFRESH_TOKEN_SECRET, '1d');
+  }
+
+  async refreshAccessToken(refreshToken) {
+    const payload = await this.#verifyToken(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    const accessToken = await this.#signAccessToken(payload.username);
+    return accessToken;
+  }
+
+  async #verifyToken(token, secret) {
+    try {
+      return await this.#tokenGenerator.verifyToken(token, secret);
+    } catch (err) {
+      throw new AuthenticationError(err);
+    }
   }
 }
 
