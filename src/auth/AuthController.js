@@ -1,3 +1,5 @@
+import logger from '#src/logging/Logger.js';
+
 class AuthController {
   #authService;
 
@@ -9,6 +11,7 @@ class AuthController {
     try {
       const { username, password } = req.body;
       const { accessToken, refreshToken } = await this.#authService.login(username, password);
+      logger.info(`${username}'s tokens has created`);
       res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
         sameSite: 'Strict',
@@ -25,9 +28,11 @@ class AuthController {
     try {
       const { refreshToken } = req.cookies;
       if (!refreshToken) {
+        logger.error('Refresh token not found');
         res.status(401).send();
       } else {
         const accessToken = await this.#authService.refreshAccessToken(refreshToken);
+        logger.info('New access token has created');
         res.status(200).send({ accessToken });
       }
     } catch (err) {

@@ -1,6 +1,7 @@
 export default {
   development: {
     client: 'postgresql',
+    debug: false,
     connection: {
       host: process.env.DB_HOST,
       port: process.env.DB_PORT,

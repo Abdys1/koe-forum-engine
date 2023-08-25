@@ -16,8 +16,11 @@ describe('AuthService', () => {
     userDao = {
       fakeUsers: [{ username: 'admin', passwd: argon2.hash('admin') }, { username: 'admin2', passwd: argon2.hash('alma') }],
       async findPwdByUsername(username) {
+        if (!username) {
+          throw new Error('Undefinded username');
+        }
         const result = this.fakeUsers.find((user) => user.username === username);
-        return Promise.resolve(result?.passwd);
+        return result?.passwd;
       },
     };
     tokenGenerator = {

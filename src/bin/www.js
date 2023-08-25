@@ -2,7 +2,7 @@
 
 import debugLib from 'debug';
 import http from 'http';
-import app from '../app.js';
+import app from '#src/App.js';
 
 /**
  * Normalize a port into a number, string, or false.

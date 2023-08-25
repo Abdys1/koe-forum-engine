@@ -14,17 +14,17 @@ class AuthService {
   }
 
   async login(username, passwd) {
-    const hashPwd = await this.#userDao.findPwdByUsername(username);
-    const isValidPassword = await this.#verifyPassword(hashPwd, passwd);
+    const isValidPassword = await this.#verifyPassword(username, passwd);
     if (!isValidPassword) {
-      throw new AuthenticationError('Wrong credentials');
+      throw new AuthenticationError(`Wrong credentials! Username: ${username}`);
     }
 
     return this.#generateTokens(username);
   }
 
-  async #verifyPassword(hashPwd, rawPwd) {
+  async #verifyPassword(username, rawPwd) {
     try {
+      const hashPwd = await this.#userDao.findPwdByUsername(username);
       return await this.#pwdHasher.verify(hashPwd, rawPwd);
     } catch (err) {
       return false;
