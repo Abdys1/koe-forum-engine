@@ -2,8 +2,8 @@ import {
   describe, it, expect, vi, beforeAll, beforeEach,
 } from 'vitest';
 import argon2 from 'argon2';
-import AuthService from '../AuthService.js';
-import AuthenticationError from '../AuthenticationError.js';
+import AuthService from '#src/auth/AuthService.js';
+import AuthenticationError from '#src/auth/AuthenticationError.js';
 
 class TestError extends Error {}
 

@@ -1,5 +1,5 @@
-import db from '../db/index.js';
-import UserDao from './UserDao.js';
+import db from '#src/db/index.js';
+import UserDao from '#src/user/UserDao.js';
 
 const userDao = new UserDao(db);
 

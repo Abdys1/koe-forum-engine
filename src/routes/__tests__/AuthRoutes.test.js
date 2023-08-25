@@ -2,9 +2,9 @@ import {
   beforeAll, describe, it, expect, afterAll,
 } from 'vitest';
 import supertest from 'supertest';
-import db from '../../db/index.js';
-import app from '../../App.js';
-import { verifyToken } from '../../auth/TokenGenerator.js';
+import db from '#src/db/index.js';
+import app from '#src/App.js';
+import { verifyToken } from '#src/auth/TokenGenerator.js';
 
 async function checkAccessToken(resp, expectedUsername) {
   expect(resp.status).toBe(200);

@@ -1,4 +1,4 @@
-import AuthenticationError from './AuthenticationError.js';
+import AuthenticationError from '#src/auth/AuthenticationError.js';
 
 class AuthService {
   #userDao;

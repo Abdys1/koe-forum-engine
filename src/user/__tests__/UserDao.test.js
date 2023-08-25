@@ -2,8 +2,8 @@ import {
   afterAll, beforeAll, describe, expect, it,
 } from 'vitest';
 import { verify } from 'argon2';
-import UserDao from '../UserDao.js';
-import db from '../../db/index.js';
+import UserDao from '#src/user/UserDao.js';
+import db from '#src/db/index.js';
 
 describe('User dao findPwdByUsername()', () => {
   let userDao;

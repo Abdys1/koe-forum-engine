@@ -4,9 +4,9 @@ import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import { fileURLToPath } from 'url';
-import AuthenticationError from './auth/AuthenticationError.js';
+import AuthenticationError from '#src/auth/AuthenticationError.js';
 
-import authRouter from './routes/AuthRoutes.js';
+import authRouter from '#src/routes/AuthRoutes.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
