@@ -4,7 +4,7 @@ import {
 import supertest from 'supertest';
 import db from '#src/db/index.js';
 import app from '#src/App.js';
-import { verifyToken } from '#src/auth/TokenGenerator.js';
+import { verifyToken } from '#src/auth/JwtTokenGenerator.js';
 
 async function checkAccessToken(resp, expectedUsername) {
   expect(resp.status).toBe(200);

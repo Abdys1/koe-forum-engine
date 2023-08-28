@@ -4,8 +4,8 @@ import path from 'path';
 import cookieParser from 'cookie-parser';
 import { fileURLToPath } from 'url';
 import AuthenticationError from '#src/auth/AuthenticationError.js';
-import httpLogger from '#src/logging/HttpLogger.js';
-import logger from '#src/logging/Logger.js';
+import httpLogger from '#src/logger/HttpLogger.js';
+import logger from '#src/logger/Logger.js';
 
 import authRouter from '#src/routes/AuthRoutes.js';
 

@@ -1,4 +1,4 @@
-import logger from '#src/logging/Logger.js';
+import logger from '#src/logger/Logger.js';
 
 class AuthController {
   #authService;

@@ -1,4 +1,5 @@
 import AuthenticationError from '#src/auth/AuthenticationError.js';
+import logger from '#src/logger/Logger.js';
 
 class AuthService {
   #userDao;
@@ -27,6 +28,7 @@ class AuthService {
       const hashPwd = await this.#userDao.findPwdByUsername(username);
       return await this.#pwdHasher.verify(hashPwd, rawPwd);
     } catch (err) {
+      logger.error(err);
       return false;
     }
   }
