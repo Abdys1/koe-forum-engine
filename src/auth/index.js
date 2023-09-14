@@ -1,6 +1,6 @@
 import argon2 from 'argon2';
 import * as tokenGenerator from '#src/auth/JwtTokenGenerator.js';
-import userDao from '#src/user/index.js';
+import { userDao } from '#src/user/index.js';
 import AuthService from '#src/auth/AuthService.js';
 import AuthController from '#src/auth/AuthController.js';
 

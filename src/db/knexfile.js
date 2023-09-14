@@ -1,3 +1,16 @@
+import path from 'path';
+import os from 'os';
+import { readFileSync } from 'fs';
+
+function readTestDatabasePort() {
+  const variablesDir = path.join(
+    os.tmpdir(),
+    'testcontainer_global_setup',
+  );
+  const port = readFileSync(path.join(variablesDir, 'databasePort'), 'utf8');
+  return port ? Number(port) : undefined;
+}
+
 export default {
   development: {
     client: 'postgresql',
@@ -23,14 +36,18 @@ export default {
     },
   },
   test: {
-    client: 'sqlite3',
-    connection: ':memory:',
-    useNullAsDefault: true,
-    migrations: {
-      directory: './src/db/migrations',
+    client: 'postgresql',
+    debug: false,
+    connection: {
+      host: 'localhost',
+      port: readTestDatabasePort(),
+      user: 'koe_engine',
+      password: 'test',
+      database: 'koe_forum_db',
     },
-    seeds: {
-      directory: './src/db/seeds',
+    migrations: {
+      tableName: 'knex_migrations',
+      loadExtensions: ['.js'],
     },
   },
 };

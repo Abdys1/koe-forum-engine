@@ -1,10 +1,16 @@
 import {
-  beforeAll, describe, it, expect, afterAll,
+  beforeAll, describe, it, expect,
 } from 'vitest';
 import supertest from 'supertest';
 import db from '#src/db/index.js';
 import app from '#src/App.js';
 import { verifyToken } from '#src/auth/JwtTokenGenerator.js';
+import argon2 from 'argon2';
+import migrateDatabase from '#src/__tests__/utils/migrations.js';
+
+const BASE_URL = '/api/auth';
+const LOGIN_URL = `${BASE_URL}/login`;
+const REFRESH_URL = `${BASE_URL}/refresh`;
 
 async function checkAccessToken(resp, expectedUsername) {
   expect(resp.status).toBe(200);
@@ -13,20 +19,18 @@ async function checkAccessToken(resp, expectedUsername) {
   expect(payload.username).toBe(expectedUsername);
 }
 
-describe('POST /api/auth/login', () => {
-  const url = '/api/auth/login';
-
+describe('Authentication routes', () => {
   let request;
 
   beforeAll(async () => {
+    await migrateDatabase();
+    await db('forum_user').insert({ username: 'admin', password: await argon2.hash('alma') });
     request = supertest(app);
-    await db.migrate.latest();
-    await db.seed.run();
   });
 
-  it('should return tokens with valid credentials', async () => {
+  it(`POST ${LOGIN_URL} should return tokens with valid credentials`, async () => {
     const username = 'admin';
-    const resp = await request.post(url)
+    const resp = await request.post(LOGIN_URL)
       .send({ username, password: 'alma' })
       .set('Accept', 'application/json');
 
@@ -34,8 +38,8 @@ describe('POST /api/auth/login', () => {
     await checkAccessToken(resp, username);
   });
 
-  it('should return 401 with wrong credentials', async () => {
-    const resp = await request.post(url)
+  it(`POST ${LOGIN_URL} should return 401 with wrong credentials`, async () => {
+    const resp = await request.post(LOGIN_URL)
       .send({ username: 'admin', password: 'bad_pwd' })
       .set('Accept', 'application/json');
 
@@ -43,45 +47,25 @@ describe('POST /api/auth/login', () => {
     expect(resp.body.accessToken).toBeFalsy();
   });
 
-  afterAll(async () => {
-    await db.migrate.down();
-  });
-});
-
-describe('POST /api/auth/refresh', () => {
-  const url = '/api/auth/refresh';
-
-  let request;
-
-  beforeAll(async () => {
-    request = supertest(app);
-    await db.migrate.latest();
-    await db.seed.run();
-  });
-
-  it('should return 401 status when has not refresh token', async () => {
-    const resp = await request.post(url);
-    expect(resp.status).toBe(401);
-  });
-
-  it('should return 401 status when refresh token is invalid', async () => {
-    const resp = await request.post(url).set('Cookie', [
-      'refreshToken=badToken; Max-Age=86400; Path=/; Expires=Tue, 22 Aug 2023 17:19:27 GMT; HttpOnly; Secure; SameSite=Strict',
-    ]);
-    expect(resp.status).toBe(401);
-    expect(resp.body.accessToken).toBeFalsy();
-  });
-
-  it('should return access token when has valid refresh token', async () => {
+  it(`POST ${REFRESH_URL} should return access token when has valid refresh token`, async () => {
     const username = 'admin';
     const loginResp = await request.post('/api/auth/login').send({ username, password: 'alma' });
     const refreshTokenCookie = loginResp.headers['set-cookie'];
 
-    const resp = await request.post(url).set('Cookie', refreshTokenCookie);
+    const resp = await request.post(REFRESH_URL).set('Cookie', refreshTokenCookie);
     await checkAccessToken(resp, username);
   });
 
-  afterAll(async () => {
-    await db.migrate.down();
+  it(`POST ${REFRESH_URL} should return 401 status when has not refresh token`, async () => {
+    const resp = await request.post(REFRESH_URL);
+    expect(resp.status).toBe(401);
+  });
+
+  it(`POST ${REFRESH_URL} should return 401 status when refresh token is invalid`, async () => {
+    const resp = await request.post(REFRESH_URL).set('Cookie', [
+      'refreshToken=badToken; Max-Age=86400; Path=/; Expires=Tue, 22 Aug 2023 17:19:27 GMT; HttpOnly; Secure; SameSite=Strict',
+    ]);
+    expect(resp.status).toBe(401);
+    expect(resp.body.accessToken).toBeFalsy();
   });
 });

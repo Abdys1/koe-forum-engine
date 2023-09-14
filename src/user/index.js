@@ -3,4 +3,4 @@ import UserDao from '#src/user/UserDao.js';
 
 const userDao = new UserDao(db);
 
-export default userDao;
+export { userDao };

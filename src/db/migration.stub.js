@@ -1,8 +1,10 @@
 /* eslint-disable no-unused-vars */
-export function up(knex) {
+function up(knex) {
 
 }
 
-export function down(knex) {
+function down(knex) {
 
 }
+
+export { up, down };
