@@ -17,7 +17,7 @@ describe('AuthService', () => {
       fakeUsers: [{ username: 'admin', passwd: argon2.hash('admin') }, { username: 'admin2', passwd: argon2.hash('alma') }],
       async findPwdByUsername(username) {
         if (!username) {
-          throw new Error('Undefinded username');
+          throw new Error('Username undefind!');
         }
         const result = this.fakeUsers.find((user) => user.username === username);
         return result?.passwd;

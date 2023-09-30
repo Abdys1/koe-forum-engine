@@ -3,12 +3,16 @@ import os from 'os';
 import { readFileSync } from 'fs';
 
 function readTestDatabasePort() {
-  const variablesDir = path.join(
-    os.tmpdir(),
-    'testcontainer_global_setup',
-  );
-  const port = readFileSync(path.join(variablesDir, 'databasePort'), 'utf8');
-  return port ? Number(port) : undefined;
+  try {
+    const variablesDir = path.join(
+      os.tmpdir(),
+      'testcontainer_global_setup',
+    );
+    const port = readFileSync(path.join(variablesDir, 'databasePort'), 'utf8');
+    return port ? Number(port) : undefined;
+  } catch (err) {
+    return 5432;
+  }
 }
 
 export default {
