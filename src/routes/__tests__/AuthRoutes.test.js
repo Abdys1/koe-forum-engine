@@ -4,9 +4,9 @@ import {
 import supertest from 'supertest';
 import db from '#src/db/index.js';
 import app from '#src/App.js';
-import { verifyToken } from '#src/auth/JwtTokenGenerator.js';
+import { verifyToken } from '#src/components/auth/JwtTokenGenerator.js';
 import argon2 from 'argon2';
-import migrateDatabase from '#src/__tests__/utils/migrations.js';
+import migrateDatabase from '#src/__tests__/test-utils/migrations.js';
 
 const BASE_URL = '/api/auth';
 const LOGIN_URL = `${BASE_URL}/login`;
@@ -28,44 +28,48 @@ describe('Authentication routes', () => {
     request = supertest(app);
   });
 
-  it(`POST ${LOGIN_URL} should return tokens with valid credentials`, async () => {
-    const username = 'admin';
-    const resp = await request.post(LOGIN_URL)
-      .send({ username, password: 'alma' })
-      .set('Accept', 'application/json');
+  describe(`POST ${LOGIN_URL}`, () => {
+    it('should return tokens with valid credentials', async () => {
+      const username = 'admin';
+      const resp = await request.post(LOGIN_URL)
+        .send({ username, password: 'alma' })
+        .set('Accept', 'application/json');
 
-    expect(resp.headers['set-cookie'][0]).toMatch(/refreshToken=.*;*HttpOnly/);
-    await checkAccessToken(resp, username);
+      expect(resp.headers['set-cookie'][0]).toMatch(/refreshToken=.*;*HttpOnly/);
+      await checkAccessToken(resp, username);
+    });
+
+    it('should return 401 with wrong credentials', async () => {
+      const resp = await request.post(LOGIN_URL)
+        .send({ username: 'admin', password: 'bad_pwd' })
+        .set('Accept', 'application/json');
+
+      expect(resp.status).toBe(401);
+      expect(resp.body.accessToken).toBeFalsy();
+    });
   });
 
-  it(`POST ${LOGIN_URL} should return 401 with wrong credentials`, async () => {
-    const resp = await request.post(LOGIN_URL)
-      .send({ username: 'admin', password: 'bad_pwd' })
-      .set('Accept', 'application/json');
+  describe(`POST ${REFRESH_URL}`, () => {
+    it('should return access token when has valid refresh token', async () => {
+      const username = 'admin';
+      const loginResp = await request.post('/api/auth/login').send({ username, password: 'alma' });
+      const refreshTokenCookie = loginResp.headers['set-cookie'];
 
-    expect(resp.status).toBe(401);
-    expect(resp.body.accessToken).toBeFalsy();
-  });
+      const resp = await request.post(REFRESH_URL).set('Cookie', refreshTokenCookie);
+      await checkAccessToken(resp, username);
+    });
 
-  it(`POST ${REFRESH_URL} should return access token when has valid refresh token`, async () => {
-    const username = 'admin';
-    const loginResp = await request.post('/api/auth/login').send({ username, password: 'alma' });
-    const refreshTokenCookie = loginResp.headers['set-cookie'];
+    it('should return 401 status when has not refresh token', async () => {
+      const resp = await request.post(REFRESH_URL);
+      expect(resp.status).toBe(401);
+    });
 
-    const resp = await request.post(REFRESH_URL).set('Cookie', refreshTokenCookie);
-    await checkAccessToken(resp, username);
-  });
-
-  it(`POST ${REFRESH_URL} should return 401 status when has not refresh token`, async () => {
-    const resp = await request.post(REFRESH_URL);
-    expect(resp.status).toBe(401);
-  });
-
-  it(`POST ${REFRESH_URL} should return 401 status when refresh token is invalid`, async () => {
-    const resp = await request.post(REFRESH_URL).set('Cookie', [
-      'refreshToken=badToken; Max-Age=86400; Path=/; Expires=Tue, 22 Aug 2023 17:19:27 GMT; HttpOnly; Secure; SameSite=Strict',
-    ]);
-    expect(resp.status).toBe(401);
-    expect(resp.body.accessToken).toBeFalsy();
+    it('should return 401 status when refresh token is invalid', async () => {
+      const resp = await request.post(REFRESH_URL).set('Cookie', [
+        'refreshToken=badToken; Max-Age=86400; Path=/; Expires=Tue, 22 Aug 2023 17:19:27 GMT; HttpOnly; Secure; SameSite=Strict',
+      ]);
+      expect(resp.status).toBe(401);
+      expect(resp.body.accessToken).toBeFalsy();
+    });
   });
 });

@@ -1,5 +1,5 @@
-import AuthenticationError from '#src/auth/AuthenticationError.js';
-import logger from '#src/logger/Logger.js';
+import AuthenticationError from '#src/components/auth/AuthenticationError.js';
+import logger from '#src/components/logger/Logger.js';
 
 class AuthService {
   #userDao;
