@@ -2,16 +2,12 @@ import 'dotenv/config';
 import express from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
-import { fileURLToPath } from 'url';
-import AuthenticationError from '#src/components/auth/AuthenticationError.js';
-import httpLogger from '#src/components/logger/HttpLogger.js';
-import logger from '#src/components/logger/Logger.js';
-import { authMiddleware } from '#src/components/auth/index.js';
+import AuthenticationError from 'components/auth/AuthenticationError';
+import httpLogger from 'components/logger/HttpLogger';
+import logger from 'components/logger/Logger';
+import { authMiddleware } from 'components/auth/index';
 
-import apiRouter from '#src/routes/ApiRoutes.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import apiRouter from 'routes/ApiRoutes';
 
 const app = express();
 
@@ -25,7 +21,7 @@ app.use(authMiddleware);
 app.use('/api', apiRouter);
 
 // TODO legyen külön fájl
-app.use((err, _, res, next) => {
+app.use((err: any, req: any, res: any, next: any) => {
   logger.error(err);
   if (err instanceof AuthenticationError) {
     res.status(401).send();

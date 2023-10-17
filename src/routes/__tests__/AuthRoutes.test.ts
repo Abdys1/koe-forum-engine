@@ -1,26 +1,27 @@
 import {
   beforeAll, describe, it, expect,
 } from 'vitest';
-import supertest from 'supertest';
-import db from '#src/db/index.js';
-import app from '#src/App.js';
-import { verifyToken } from '#src/components/auth/JwtTokenGenerator.js';
+import supertest, { Request, Response, SuperTest } from 'supertest';
+import db from 'db/index';
+import app from 'App';
+import { verifyToken } from 'components/auth/JwtTokenGenerator.js';
 import argon2 from 'argon2';
-import migrateDatabase from '#src/__tests__/test-utils/migrations.js';
+import migrateDatabase from '__tests__/test-utils/migrations';
 
 const BASE_URL = '/api/auth';
 const LOGIN_URL = `${BASE_URL}/login`;
 const REFRESH_URL = `${BASE_URL}/refresh`;
 
-async function checkAccessToken(resp, expectedUsername) {
+async function checkAccessToken(resp: Response, expectedUsername: string) {
   expect(resp.status).toBe(200);
   expect(resp.body.accessToken).toBeTruthy();
-  const payload = await verifyToken(resp.body.accessToken, process.env.ACCESS_TOKEN_SECRET);
+  const secret = process.env.ACCESS_TOKEN_SECRET || '';
+  const payload = await verifyToken(resp.body.accessToken, secret);
   expect(payload.username).toBe(expectedUsername);
 }
 
 describe('Authentication routes', () => {
-  let request;
+  let request: SuperTest<any>;
 
   beforeAll(async () => {
     await migrateDatabase();

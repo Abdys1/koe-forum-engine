@@ -1,12 +1,14 @@
-function resolveAuditTableName(tableName) {
+import { Knex } from "knex";
+
+function resolveAuditTableName(tableName: string): string {
   return `aud_${tableName}`;
 }
 
-function resolveOnUpdateFuncName(tableName) {
+function resolveOnUpdateFuncName(tableName: string): string {
   return `on_update_${tableName}`;
 }
 
-function createAuditTriggerQuery(tableName, auditTableName) {
+function createAuditTriggerQuery(tableName: string, auditTableName: string): string {
   const AUD_TABLE_SEQ = `${auditTableName}_aud_id_seq`;
   const ON_UPDATE_FUNC_NAME = resolveOnUpdateFuncName(tableName);
 
@@ -33,7 +35,7 @@ function createAuditTriggerQuery(tableName, auditTableName) {
   EXECUTE PROCEDURE ${ON_UPDATE_FUNC_NAME}();`;
 }
 
-function createTableWithAudit(knex, tableName, initCb, initAuditCb) {
+function createTableWithAudit(knex: Knex, tableName: string, initCb: any, initAuditCb: any) {
   const auditTableName = resolveAuditTableName(tableName);
   return knex.schema
     .createTable(tableName, initCb)
@@ -46,7 +48,7 @@ function createTableWithAudit(knex, tableName, initCb, initAuditCb) {
     .raw(createAuditTriggerQuery(tableName, auditTableName));
 }
 
-function dropTableWithAuditIfExists(knex, tableName) {
+function dropTableWithAuditIfExists(knex: Knex, tableName: string) {
   const auditTableName = resolveAuditTableName(tableName);
   const onUpdateFuncName = resolveOnUpdateFuncName(tableName);
   return knex.schema

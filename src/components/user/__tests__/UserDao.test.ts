@@ -1,12 +1,12 @@
 import {
   beforeAll, describe, expect, it,
 } from 'vitest';
-import UserDao from '#src/components/user/UserDao.js';
-import db from '#src/db/index.js';
-import migrateDatabase from '#src/__tests__/test-utils/migrations.js';
+import UserDao from 'components/user/UserDao';
+import db from 'db/index';
+import migrateDatabase from '__tests__/test-utils/migrations';
 
 describe('User dao ', () => {
-  let userDao;
+  let userDao: UserDao;
 
   beforeAll(async () => {
     await migrateDatabase();

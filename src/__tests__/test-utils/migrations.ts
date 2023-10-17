@@ -1,4 +1,4 @@
-import db from '#src/db/index.js';
+import db from 'db/index.js';
 
 const MIGRATIONS_DIR = './src/db/migrations';
 

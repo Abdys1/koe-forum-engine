@@ -1,20 +1,22 @@
-import logger from '#src/components/logger/Logger.js';
+import logger from 'components/logger/Logger.js';
+import AuthService from 'components/auth/AuthService';
+import { Request, Response } from 'express-serve-static-core';
 
 class AuthController {
-  #authService;
+  private authService: AuthService;
 
-  constructor(authService) {
-    this.#authService = authService;
+  constructor(authService: AuthService) {
+    this.authService = authService;
   }
 
-  async login(req, res, next) {
+  async login(req: Request, res: Response, next: Function) {
     try {
       const { username, password } = req.body;
-      const { accessToken, refreshToken } = await this.#authService.login(username, password);
+      const { accessToken, refreshToken } = await this.authService.login(username, password);
       logger.info(`${username}'s tokens has created`);
       res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
-        sameSite: 'Strict',
+        sameSite: 'strict',
         secure: true,
         maxAge: 24 * 60 * 60 * 1000,
       });
@@ -24,14 +26,14 @@ class AuthController {
     }
   }
 
-  async refresh(req, res, next) {
+  async refresh(req: Request, res: Response, next: Function) {
     try {
       const { refreshToken } = req.cookies;
       if (!refreshToken) {
         logger.error('Refresh token not found');
         res.status(401).send();
       } else {
-        const accessToken = await this.#authService.refreshAccessToken(refreshToken);
+        const accessToken = await this.authService.refreshAccessToken(refreshToken);
         logger.info('New access token has created');
         res.status(200).send({ accessToken });
       }

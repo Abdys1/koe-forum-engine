@@ -1,7 +1,7 @@
 import argon2 from 'argon2';
+import { Knex } from 'knex';
 
-/* eslint-disable import/prefer-default-export */
-async function seed(knex) {
+async function seed(knex: Knex) {
   const hash = await argon2.hash('alma');
   return knex('forum_user')
     .insert({

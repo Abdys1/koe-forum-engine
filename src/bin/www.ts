@@ -2,13 +2,13 @@
 
 import debugLib from 'debug';
 import http from 'http';
-import app from '#src/App.js';
+import app from 'App';
 
 /**
  * Normalize a port into a number, string, or false.
  */
 
-function normalizePort(val) {
+function normalizePort(val: any) {
   const port = parseInt(val, 10);
 
   if (Number.isNaN(port)) {
@@ -31,7 +31,7 @@ const debug = debugLib('your-project-name:server');
  * Event listener for HTTP server "error" event.
  */
 
-function onError(error) {
+function onError(error: any) {
   if (error.syscall !== 'listen') {
     throw error;
   }
@@ -69,7 +69,7 @@ function onListening() {
   const addr = server.address();
   const bind = typeof addr === 'string'
     ? `pipe ${addr}`
-    : `port ${addr.port}`;
+    : `port ${addr?.port}`;
   debug(`Listening on ${bind}`);
 }
 

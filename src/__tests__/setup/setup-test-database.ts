@@ -1,12 +1,12 @@
-import { GenericContainer } from 'testcontainers';
+import { GenericContainer, StartedTestContainer } from 'testcontainers';
 import { mkdir, writeFile } from 'fs/promises';
 import path from 'path';
 import os from 'os';
 
-let container;
+let container: StartedTestContainer;
 let teardownHappened = false;
 
-async function shareDatabaseConfig(cont) {
+async function shareDatabaseConfig(cont: StartedTestContainer) {
   const variablesDir = path.join(
     os.tmpdir(),
     'testcontainer_global_setup',

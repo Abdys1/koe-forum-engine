@@ -32,11 +32,11 @@ export default {
     },
     migrations: {
       tableName: 'knex_migrations',
-      loadExtensions: ['.js'],
-      stub: 'migration.stub.js',
+      loadExtensions: ['.ts'],
+      stub: 'migration.stub.ts',
     },
     seeds: {
-      stub: 'seed.stub.js',
+      stub: 'seed.stub.ts',
     },
   },
   test: {
@@ -51,7 +51,7 @@ export default {
     },
     migrations: {
       tableName: 'knex_migrations',
-      loadExtensions: ['.js'],
+      loadExtensions: ['.ts'],
     },
   },
 };

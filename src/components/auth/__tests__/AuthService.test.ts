@@ -2,24 +2,25 @@ import {
   describe, it, expect, vi, beforeAll, beforeEach,
 } from 'vitest';
 import argon2 from 'argon2';
-import AuthService from '#src/components/auth/AuthService.js';
-import AuthenticationError from '#src/components/auth/AuthenticationError.js';
+import AuthService from 'components/auth/AuthService.js';
+import AuthenticationError from 'components/auth/AuthenticationError.js';
+import UserDao from 'components/user/UserDao';
 
 class TestError extends Error {}
 
 describe('AuthService', () => {
-  let userDao;
-  let tokenGenerator;
-  let authService;
+  let userDao: any;
+  let tokenGenerator: any;
+  let authService: AuthService;
 
   beforeAll(() => {
     userDao = {
       fakeUsers: [{ username: 'admin', passwd: argon2.hash('admin') }, { username: 'admin2', passwd: argon2.hash('alma') }],
-      async findPwdByUsername(username) {
+      async findPwdByUsername(username: string) {
         if (!username) {
           throw new Error('Username undefind!');
         }
-        const result = this.fakeUsers.find((user) => user.username === username);
+        const result = this.fakeUsers.find((user: any) => user.username === username);
         return result?.passwd;
       },
     };
@@ -33,7 +34,7 @@ describe('AuthService', () => {
     authService = new AuthService(userDao, argon2, tokenGenerator);
   });
 
-  function checkJwtTokens(username, password, expectedToken) {
+  function checkJwtTokens(username: string | undefined | null, password: string | undefined | null, expectedToken: string) {
     tokenGenerator.signToken.mockImplementation(() => expectedToken);
     const expected = { accessToken: expectedToken, refreshToken: expectedToken };
     expect(authService.login(username, password)).resolves.toStrictEqual(expected);
@@ -108,7 +109,7 @@ describe('AuthService', () => {
     });
 
     it('should throw authentication error when refresh token is invalid', () => {
-      tokenGenerator.verifyToken.mockImplementation(() => Promise.rejects(new Error()));
+      tokenGenerator.verifyToken.mockImplementation(() => Promise.reject(new Error()));
 
       expect(authService.refreshAccessToken('refreshToken')).rejects.toThrow(AuthenticationError);
     });

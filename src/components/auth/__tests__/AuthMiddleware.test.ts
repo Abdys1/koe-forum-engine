@@ -2,13 +2,13 @@
 import {
   describe, it, expect, vi, beforeEach,
 } from 'vitest';
-import useAuthMiddleware from '#src/components/auth/AuthMiddleware.js';
+import useAuthMiddleware from 'components/auth/AuthMiddleware.js';
 
 describe('AuthMidlleware', () => {
-  let verifyToken;
-  let authMiddleware;
+  let verifyToken: any;
+  let authMiddleware: any;
 
-  function createRequestWithToken(token) {
+  function createRequestWithToken(token: string) {
     return { headers: { Authorization: token } };
   }
 
