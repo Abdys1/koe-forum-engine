@@ -7,6 +7,7 @@ import app from '#src/App.js';
 import { verifyToken } from '#src/components/auth/JwtTokenGenerator.js';
 import argon2 from 'argon2';
 import migrateDatabase from '#src/__tests__/test-utils/migrations.js';
+import config from '#src/Config.js';
 
 const BASE_URL = '/api/auth';
 const LOGIN_URL = `${BASE_URL}/login`;
@@ -15,7 +16,7 @@ const REFRESH_URL = `${BASE_URL}/refresh`;
 async function checkAccessToken(resp, expectedUsername) {
   expect(resp.status).toBe(200);
   expect(resp.body.accessToken).toBeTruthy();
-  const payload = await verifyToken(resp.body.accessToken, process.env.ACCESS_TOKEN_SECRET);
+  const payload = await verifyToken(resp.body.accessToken, config.auth.secrets.accessToken);
   expect(payload.username).toBe(expectedUsername);
 }
 
@@ -52,7 +53,7 @@ describe('Authentication routes', () => {
   describe(`POST ${REFRESH_URL}`, () => {
     it('should return access token when has valid refresh token', async () => {
       const username = 'admin';
-      const loginResp = await request.post('/api/auth/login').send({ username, password: 'alma' });
+      const loginResp = await request.post(LOGIN_URL).send({ username, password: 'alma' });
       const refreshTokenCookie = loginResp.headers['set-cookie'];
 
       const resp = await request.post(REFRESH_URL).set('Cookie', refreshTokenCookie);

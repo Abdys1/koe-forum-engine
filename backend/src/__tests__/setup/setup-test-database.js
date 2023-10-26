@@ -2,6 +2,7 @@ import { GenericContainer } from 'testcontainers';
 import { mkdir, writeFile } from 'fs/promises';
 import path from 'path';
 import os from 'os';
+import config from '#src/Config.js';
 
 let container;
 let teardownHappened = false;
@@ -18,10 +19,13 @@ async function shareDatabaseConfig(cont) {
   );
 }
 
-// TODO olvassuk fel a compose filet
 export async function setup() {
   container = await new GenericContainer('postgres:14.3-alpine')
-    .withEnvironment({ POSTGRES_USER: 'koe_engine', POSTGRES_DB: 'koe_forum_db', POSTGRES_PASSWORD: 'test' })
+    .withEnvironment({
+      POSTGRES_USER: config.database.username,
+      POSTGRES_DB: config.database.name,
+      POSTGRES_PASSWORD: config.database.password,
+    })
     .withExposedPorts(5432)
     .withTmpFs({ '/temp_pgdata': 'rw,noexec,nosuid,size=65536k' })
     .start();

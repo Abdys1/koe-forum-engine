@@ -1,5 +1,6 @@
 import AuthenticationError from '#src/components/auth/AuthenticationError.js';
 import logger from '#src/components/logger/Logger.js';
+import config from '#src/Config.js';
 
 class AuthService {
   #userDao;
@@ -40,15 +41,15 @@ class AuthService {
   }
 
   async #signAccessToken(username) {
-    return this.#tokenGenerator.signToken({ username }, process.env.ACCESS_TOKEN_SECRET, '10m');
+    return this.#tokenGenerator.signToken({ username }, config.auth.secrets.accessToken, '10m');
   }
 
   async #signRefreshToken(username) {
-    return this.#tokenGenerator.signToken({ username }, process.env.REFRESH_TOKEN_SECRET, '1d');
+    return this.#tokenGenerator.signToken({ username }, config.auth.secrets.refreshToken, '1d');
   }
 
   async refreshAccessToken(refreshToken) {
-    const payload = await this.#verifyToken(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    const payload = await this.#verifyToken(refreshToken, config.auth.secrets.refreshToken);
     const accessToken = await this.#signAccessToken(payload.username);
     return accessToken;
   }
