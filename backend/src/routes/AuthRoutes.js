@@ -7,4 +7,6 @@ router.post('/login', (req, res, next) => authController.login(req, res, next));
 
 router.post('/refresh', (req, res, next) => authController.refresh(req, res, next));
 
+router.post('/registrate', (req, res, next) => authController.registrate(req, res, next));
+
 export default router;

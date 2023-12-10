@@ -22,6 +22,9 @@ describe('AuthService', () => {
         const result = this.fakeUsers.find((user) => user.username === username);
         return result?.passwd;
       },
+      async existsByUsername(username) {
+        return this.fakeUsers.some((user) => user.username === username);
+      },
     };
     tokenGenerator = {
       signToken: vi.fn(),
@@ -118,6 +121,26 @@ describe('AuthService', () => {
       tokenGenerator.signToken.mockImplementation(() => Promise.reject(new TestError()));
 
       expect(authService.refreshAccessToken('refreshToken')).rejects.toThrow(TestError);
+    });
+  });
+
+  describe('registrate()', () => {
+    it('should return true when username doesnt exists', () => {
+      expect(authService.registrate({
+        username: 'test',
+        email: 'test@test.hu',
+        password: 'tesztPwd',
+
+      })).resolves.toBe(true);
+    });
+
+    it('should return false when username exists', () => {
+      expect(authService.registrate({
+        username: 'admin',
+        email: 'test@test.hu',
+        password: 'tesztPwd',
+
+      })).resolves.toBe(false);
     });
   });
 });

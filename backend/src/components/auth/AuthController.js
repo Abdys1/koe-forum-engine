@@ -39,6 +39,15 @@ class AuthController {
       next(err);
     }
   }
+
+  async registrate(req, res, next) {
+    const success = await this.#authService.registrate({ username: req.body.username });
+    if (success) {
+      res.status(200).send();
+    } else {
+      res.status(409).send();
+    }
+  }
 }
 
 export default AuthController;

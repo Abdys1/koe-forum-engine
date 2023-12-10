@@ -10,4 +10,4 @@ package-lock.json
 .db
 *.log
 logs
-
+*.code-workspace

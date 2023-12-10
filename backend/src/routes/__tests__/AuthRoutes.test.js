@@ -6,12 +6,13 @@ import db from '#src/db/index.js';
 import app from '#src/App.js';
 import { verifyToken } from '#src/components/auth/JwtTokenGenerator.js';
 import argon2 from 'argon2';
-import migrateDatabase from '#src/__tests__/test-utils/migrations.js';
+import migrateTestDatabase from '#src/__tests__/test-utils/migrations.js';
 import config from '#src/Config.js';
 
 const BASE_URL = '/api/auth';
 const LOGIN_URL = `${BASE_URL}/login`;
 const REFRESH_URL = `${BASE_URL}/refresh`;
+const REGISTRATION_URL = `${BASE_URL}/registrate`;
 
 async function checkAccessToken(resp, expectedUsername) {
   expect(resp.status).toBe(200);
@@ -24,12 +25,12 @@ describe('Authentication routes', () => {
   let request;
 
   beforeAll(async () => {
-    await migrateDatabase();
+    await migrateTestDatabase();
     await db('forum_user').insert({ username: 'admin', password: await argon2.hash('alma') });
     request = supertest(app);
   });
 
-  describe(`POST ${LOGIN_URL}`, () => {
+  describe('POST /api/auth/login', () => {
     it('should return tokens with valid credentials', async () => {
       const username = 'admin';
       const resp = await request.post(LOGIN_URL)
@@ -50,7 +51,7 @@ describe('Authentication routes', () => {
     });
   });
 
-  describe(`POST ${REFRESH_URL}`, () => {
+  describe('POST /api/auth/refresh', () => {
     it('should return access token when has valid refresh token', async () => {
       const username = 'admin';
       const loginResp = await request.post(LOGIN_URL).send({ username, password: 'alma' });
@@ -71,6 +72,32 @@ describe('Authentication routes', () => {
       ]);
       expect(resp.status).toBe(401);
       expect(resp.body.accessToken).toBeFalsy();
+    });
+  });
+
+  describe('POST /api/auth/registrate', () => {
+    it('should return 200 status when user has not registered yet', async () => {
+      const resp = await request.post(REGISTRATION_URL)
+        .send({
+          username: 'test',
+          email: 'test@test.hu',
+          password: 'alma',
+        })
+        .set('Accept', 'application/json');
+
+      expect(resp.status).toBe(200);
+    });
+
+    it('should return 409 status when user has already registered', async () => {
+      const resp = await request.post(REGISTRATION_URL)
+        .send({
+          username: 'admin',
+          email: 'test@test.hu',
+          password: 'alma',
+        })
+        .set('Accept', 'application/json');
+
+      expect(resp.status).toBe(409);
     });
   });
 });

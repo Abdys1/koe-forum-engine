@@ -61,6 +61,10 @@ class AuthService {
       throw new AuthenticationError(err);
     }
   }
+
+  async registrate({ username }) {
+    return !(await this.#userDao.existsByUsername(username));
+  }
 }
 
 export default AuthService;
