@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 
-import debugLib from 'debug';
 import http from 'http';
 import app from '#src/App.js';
+import config from '#src/Config.js';
+import logger from '#src/components/logger/Logger.js';
+import mongoose from 'mongoose';
 
 /**
  * Normalize a port into a number, string, or false.
@@ -25,7 +27,6 @@ function normalizePort(val) {
 }
 
 const port = normalizePort(process.env.PORT || '3000');
-const debug = debugLib('your-project-name:server');
 
 /**
  * Event listener for HTTP server "error" event.
@@ -43,11 +44,11 @@ function onError(error) {
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      debug(`${bind} requires elevated privileges`);
+      logger.debug(`${bind} requires elevated privileges`);
       process.exit(1);
       break;
     case 'EADDRINUSE':
-      debug(`${bind} is already in use`);
+      logger.debug(`${bind} is already in use`);
       process.exit(1);
       break;
     default:
@@ -70,7 +71,7 @@ function onListening() {
   const bind = typeof addr === 'string'
     ? `pipe ${addr}`
     : `port ${addr.port}`;
-  debug(`Listening on ${bind}`);
+  logger.debug(`Listening on ${bind}`);
 }
 
 /**
@@ -82,7 +83,13 @@ app.set('port', port);
 /**
  * Listen on provided port, on all network interfaces.
  */
-
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+mongoose.connect(config.database.url).then(() => {
+  logger.info('Database connected!');
+  server.listen(port);
+  server.on('error', onError);
+  server.on('listening', onListening);
+}).catch((err) => {
+  logger.error('Database connection failed!');
+  logger.error(err);
+  process.exit(1);
+});

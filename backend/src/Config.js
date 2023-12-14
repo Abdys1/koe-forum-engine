@@ -3,40 +3,24 @@ import path from 'path';
 import os from 'os';
 import { readFileSync } from 'fs';
 
-function readTestDatabasePort() {
+function readTestDatabaseUrl() {
   try {
     const variablesDir = path.join(
       os.tmpdir(),
       'testcontainer_global_setup',
     );
-    const port = readFileSync(path.join(variablesDir, 'databasePort'), 'utf8');
-    return port ? Number(port) : undefined;
+    return readFileSync(path.join(variablesDir, 'databaseUrl'), 'utf8');
   } catch (err) {
-    return 5432;
+    return '';
   }
 }
 
-let dbConfig;
-if (process.env.NODE_ENV !== 'test') {
-  dbConfig = {
-    name: process.env.DB_NAME,
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    username: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-  };
-} else {
-  dbConfig = {
-    name: 'koe_forum_db',
-    host: 'localhost',
-    port: readTestDatabasePort(),
-    username: 'koe_engine',
-    password: 'test',
-  };
-}
+const databaseUrl = process.env.NODE_ENV === 'test' ? readTestDatabaseUrl() : process.env.DATABASE_URL;
 
 export default {
-  database: dbConfig,
+  database: {
+    url: databaseUrl,
+  },
   auth: {
     secrets: {
       accessToken: process.env.ACCESS_TOKEN_SECRET,

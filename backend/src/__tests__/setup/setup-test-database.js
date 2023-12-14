@@ -1,35 +1,25 @@
-import { GenericContainer } from 'testcontainers';
+import { MongoDBContainer } from '@testcontainers/mongodb';
 import { mkdir, writeFile } from 'fs/promises';
 import path from 'path';
 import os from 'os';
-import config from '#src/Config.js';
+import mongoose from 'mongoose';
 
 let container;
 let teardownHappened = false;
 
-async function shareDatabaseConfig(cont) {
+async function shareDatabaseConfig(databaseUrl) {
   const variablesDir = path.join(
     os.tmpdir(),
     'testcontainer_global_setup',
   );
   await mkdir(variablesDir, { recursive: true });
-  await writeFile(
-    path.join(variablesDir, 'databasePort'),
-    cont.getMappedPort(5432).toString(),
-  );
+  await writeFile(path.join(variablesDir, 'databaseUrl'), databaseUrl);
 }
 
 export async function setup() {
-  container = await new GenericContainer('postgres:14.3-alpine')
-    .withEnvironment({
-      POSTGRES_USER: config.database.username,
-      POSTGRES_DB: config.database.name,
-      POSTGRES_PASSWORD: config.database.password,
-    })
-    .withExposedPorts(5432)
-    .withTmpFs({ '/temp_pgdata': 'rw,noexec,nosuid,size=65536k' })
-    .start();
-  await shareDatabaseConfig(container);
+  container = await new MongoDBContainer('mongo:6.0.1').start();
+  const connectionUrl = `mongodb://127.0.0.1:${container.getMappedPort(27017)}/koe-forum-engine?directConnection=true`;
+  await shareDatabaseConfig(connectionUrl);
 }
 
 export async function teardown() {

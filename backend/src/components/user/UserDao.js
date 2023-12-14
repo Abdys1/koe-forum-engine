@@ -1,23 +1,15 @@
-class UserDao {
-  #db;
+import UserModel from '#src/components/user/UserModel.js';
 
-  constructor(db) {
-    this.#db = db;
-  }
-
-  async findPwdByUsername(username) {
-    const result = await this.#db('forum_user')
-      .where('username', username)
-      .first('password');
-    return result?.password;
-  }
-
-  async existsByUsername(username) {
-    const result = await this.#db('forum_user')
-      .where('username', username)
-      .count();
-    return Number(result[0].count) > 0;
-  }
+async function findPwdByUsername(username) {
+  const result = await UserModel.findOne({ username }, { password: true }).exec();
+  return result?.password;
 }
 
-export default UserDao;
+async function existsByUsername(username) {
+  return !!(await UserModel.exists({ username }).exec());
+}
+
+export default {
+  findPwdByUsername,
+  existsByUsername,
+};
