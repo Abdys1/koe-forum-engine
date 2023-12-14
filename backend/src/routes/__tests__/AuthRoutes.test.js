@@ -1,13 +1,13 @@
 import {
-  beforeAll, describe, it, expect,
+  beforeAll, describe, it, expect, afterAll,
 } from 'vitest';
+import mongoose from 'mongoose';
+import argon2 from 'argon2';
 import supertest from 'supertest';
-import db from '#src/db/index.js';
 import app from '#src/App.js';
 import { verifyToken } from '#src/components/auth/JwtTokenGenerator.js';
-import argon2 from 'argon2';
-import migrateTestDatabase from '#src/__tests__/test-utils/migrations.js';
 import config from '#src/Config.js';
+import UserModel from '#src/components/user/UserModel.js';
 
 const BASE_URL = '/api/auth';
 const LOGIN_URL = `${BASE_URL}/login`;
@@ -25,8 +25,9 @@ describe('Authentication routes', () => {
   let request;
 
   beforeAll(async () => {
-    await migrateTestDatabase();
-    await db('forum_user').insert({ username: 'admin', password: await argon2.hash('alma') });
+    await mongoose.connect(config.database.url);
+    const user = new UserModel({ username: 'admin', password: await argon2.hash('alma') });
+    await user.save();
     request = supertest(app);
   });
 
@@ -99,5 +100,10 @@ describe('Authentication routes', () => {
 
       expect(resp.status).toBe(409);
     });
+  });
+
+  afterAll(async () => {
+    await UserModel.deleteOne({ username: 'admin' });
+    await mongoose.connection.close();
   });
 });
