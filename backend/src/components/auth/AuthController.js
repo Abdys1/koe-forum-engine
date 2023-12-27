@@ -20,6 +20,7 @@ class AuthController {
       });
       res.status(200).send({ accessToken });
     } catch (err) {
+      // TODO itt kezeljük ha nem jó az authentikáció, mert az üzltei hiba
       next(err);
     }
   }
@@ -40,7 +41,7 @@ class AuthController {
     }
   }
 
-  async registrate(req, res, next) {
+  async registrate(req, res) {
     const success = await this.#authService.registrate({ username: req.body.username });
     if (success) {
       res.status(200).send();

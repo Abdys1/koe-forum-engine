@@ -9,7 +9,12 @@ async function existsByUsername(username) {
   return !!(await UserModel.exists({ username }).exec());
 }
 
+function save() {
+
+}
+
 export default {
   findPwdByUsername,
   existsByUsername,
+  save,
 };

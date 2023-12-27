@@ -25,6 +25,7 @@ describe('AuthService', () => {
       async existsByUsername(username) {
         return this.fakeUsers.some((user) => user.username === username);
       },
+      save: vi.fn(),
     };
     tokenGenerator = {
       signToken: vi.fn(),
@@ -125,21 +126,26 @@ describe('AuthService', () => {
   });
 
   describe('registrate()', () => {
-    it('should return true when username doesnt exists', () => {
-      expect(authService.registrate({
-        username: 'test',
-        email: 'test@test.hu',
-        password: 'tesztPwd',
-      })).resolves.toBe(true);
-    });
-
-    it('should return false when username exists', () => {
-      expect(authService.registrate({
+    it('dont save user when username already exists', async () => {
+      const success = await authService.registrate({
         username: 'admin',
         email: 'test@test.hu',
         password: 'tesztPwd',
+      });
 
-      })).resolves.toBe(false);
+      expect(success).toBe(false);
+      expect(userDao.save).toHaveBeenCalledTimes(0);
+    });
+
+    it('should save user when username doesnt exists', async () => {
+      const success = await authService.registrate({
+        username: 'test',
+        email: 'test@test.hu',
+        password: 'tesztPwd',
+      });
+
+      expect(success).toBe(true);
+      expect(userDao.save).toHaveBeenCalledTimes(1);
     });
   });
 });
