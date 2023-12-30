@@ -1,9 +1,10 @@
 import {
-  describe, it, expect, vi, beforeAll, beforeEach,
+  describe, it, expect, vi, beforeEach,
 } from 'vitest';
 import argon2 from 'argon2';
 import AuthService from '#src/components/auth/AuthService.js';
 import AuthenticationError from '#src/components/auth/AuthenticationError.js';
+import FakeUserDao from '#src/components/user/__tests__/FakeUserDao.js';
 
 class TestError extends Error {}
 
@@ -12,28 +13,12 @@ describe('AuthService', () => {
   let tokenGenerator;
   let authService;
 
-  beforeAll(() => {
-    userDao = {
-      fakeUsers: [{ username: 'admin', passwd: argon2.hash('admin') }, { username: 'admin2', passwd: argon2.hash('alma') }],
-      async findPwdByUsername(username) {
-        if (!username) {
-          throw new Error('Username undefined!');
-        }
-        const result = this.fakeUsers.find((user) => user.username === username);
-        return result?.passwd;
-      },
-      async existsByUsername(username) {
-        return this.fakeUsers.some((user) => user.username === username);
-      },
-      save: vi.fn(),
-    };
+  beforeEach(() => {
     tokenGenerator = {
       signToken: vi.fn(),
       verifyToken: vi.fn(),
     };
-  });
-
-  beforeEach(() => {
+    userDao = new FakeUserDao([{ username: 'admin', password: argon2.hash('admin') }, { username: 'admin2', password: argon2.hash('alma') }]);
     authService = new AuthService(userDao, argon2, tokenGenerator);
   });
 
@@ -127,25 +112,26 @@ describe('AuthService', () => {
 
   describe('registrate()', () => {
     it('dont save user when username already exists', async () => {
-      const success = await authService.registrate({
-        username: 'admin',
-        email: 'test@test.hu',
-        password: 'tesztPwd',
-      });
+      vi.spyOn(userDao, 'save');
+      const user = { username: 'admin', password: 'tesztPwd' };
+
+      const success = await authService.registrate(user);
 
       expect(success).toBe(false);
       expect(userDao.save).toHaveBeenCalledTimes(0);
     });
 
     it('should save user when username doesnt exists', async () => {
-      const success = await authService.registrate({
-        username: 'test',
-        email: 'test@test.hu',
-        password: 'tesztPwd',
-      });
+      vi.spyOn(userDao, 'save');
+      const user = { username: 'test', password: 'tesztPwd' };
+
+      expect(userDao.isUserSaved(user.username, user.password)).toBe(false);
+
+      const success = await authService.registrate(user);
 
       expect(success).toBe(true);
       expect(userDao.save).toHaveBeenCalledTimes(1);
+      expect(userDao.isUserSaved(user.username, user.password)).toBe(true);
     });
   });
 });

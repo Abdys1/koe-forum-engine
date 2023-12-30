@@ -62,10 +62,10 @@ class AuthService {
     }
   }
 
-  async registrate({ username }) {
+  async registrate({ username, password }) {
     const canRegistrate = !(await this.#userDao.existsByUsername(username));
     if (canRegistrate) {
-      this.#userDao.save();
+      this.#userDao.save({ username, password });
       return true;
     }
     return false;
