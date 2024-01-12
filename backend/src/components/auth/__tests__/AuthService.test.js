@@ -1,40 +1,49 @@
 import {
-  describe, it, expect, vi, beforeEach,
+  describe, it, expect, vi, beforeEach, afterEach,
 } from 'vitest';
-import argon2 from 'argon2';
-import AuthService from '#src/components/auth/AuthService.js';
+
 import AuthenticationError from '#src/components/auth/AuthenticationError.js';
-import FakeUserDao from '#src/components/user/__tests__/FakeUserDao.js';
+import AuthService from '#src/components/auth/AuthService.js';
+import FakeUserDao from '#src/components/user/FakeUserDao.js';
 
 class TestError extends Error {}
 
 describe('AuthService', () => {
+  let testUser;
+  let pwdHasher;
   let userDao;
   let tokenGenerator;
   let authService;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     tokenGenerator = {
       signToken: vi.fn(),
       verifyToken: vi.fn(),
     };
-    userDao = new FakeUserDao([{ username: 'admin', password: argon2.hash('admin') }, { username: 'admin2', password: argon2.hash('alma') }]);
-    authService = new AuthService(userDao, argon2, tokenGenerator);
+    pwdHasher = {
+      hash: vi.fn(),
+      verify: vi.fn(),
+    };
+    testUser = FakeUserDao.createTestUser();
+    userDao = new FakeUserDao();
+    await userDao.save(testUser);
+    authService = new AuthService(userDao, pwdHasher, tokenGenerator);
   });
 
-  function checkJwtTokens(username, password, expectedToken) {
-    tokenGenerator.signToken.mockImplementation(() => expectedToken);
-    const expected = { accessToken: expectedToken, refreshToken: expectedToken };
-    expect(authService.login(username, password)).resolves.toStrictEqual(expected);
-  }
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
   describe('login()', () => {
-    it('should be generate verifyable tokens for admin', () => {
-      checkJwtTokens('admin', 'admin', 'TOKEN_FOR_ADMIN');
-    });
+    it('should be generate verifyable tokens for registered user', async () => {
+      const expectedToken = `RANDOM_TOKEN_${Date.now()}`;
+      tokenGenerator.signToken.mockReturnValue(expectedToken);
+      pwdHasher.verify.mockResolvedValueOnce(true);
 
-    it('should be generate verifyable tokens for admin2', () => {
-      checkJwtTokens('admin2', 'alma', 'TOKEN_FOR_ADMIN2');
+      const tokens = await authService.login(testUser.username, testUser.password);
+
+      expect(tokens.accessToken).toBe(expectedToken);
+      expect(tokens.refreshToken).toBe(expectedToken);
     });
 
     it('should reject with invalid credentials', () => {
@@ -88,50 +97,63 @@ describe('AuthService', () => {
 
   describe('refreshAccessToken()', () => {
     it('should return access token when refresh token is valid', () => {
-      const token = `AccessToken_${new Date().valueOf()}`;
+      const token = `AccessToken_${Math.floor(Date.now() + Math.random())}`;
 
-      tokenGenerator.verifyToken.mockImplementation(() => Promise.resolve({ username: 'teszt' }));
-      tokenGenerator.signToken.mockImplementation(() => Promise.resolve(token));
+      tokenGenerator.verifyToken.mockResolvedValueOnce({ username: 'teszt' });
+      tokenGenerator.signToken.mockResolvedValueOnce(token);
 
       expect(authService.refreshAccessToken('refreshToken')).resolves.toBe(token);
     });
 
     it('should throw authentication error when refresh token is invalid', () => {
-      tokenGenerator.verifyToken.mockImplementation(() => Promise.rejects(new Error()));
+      tokenGenerator.verifyToken.mockRejectedValueOnce(new Error());
 
       expect(authService.refreshAccessToken('refreshToken')).rejects.toThrow(AuthenticationError);
     });
 
     it('should throw unexpected error when cannot sign token', () => {
-      tokenGenerator.verifyToken.mockImplementation(() => Promise.resolve({ username: 'teszt' }));
-      tokenGenerator.signToken.mockImplementation(() => Promise.reject(new TestError()));
+      tokenGenerator.verifyToken.mockResolvedValueOnce({ username: 'teszt' });
+      tokenGenerator.signToken.mockRejectedValueOnce(new TestError());
 
       expect(authService.refreshAccessToken('refreshToken')).rejects.toThrow(TestError);
     });
   });
 
   describe('registrate()', () => {
-    it('dont save user when username already exists', async () => {
+    it('dont registrate when user already exists', async () => {
+      pwdHasher.hash.mockImplementation((pwd) => pwd);
       vi.spyOn(userDao, 'save');
-      const user = { username: 'admin', password: 'tesztPwd' };
 
-      const success = await authService.registrate(user);
+      const success = await authService.registrate(testUser);
 
       expect(success).toBe(false);
       expect(userDao.save).toHaveBeenCalledTimes(0);
     });
 
-    it('should save user when username doesnt exists', async () => {
+    it('should registrate when user doesnt exists', async () => {
+      pwdHasher.hash.mockImplementation((pwd) => pwd);
       vi.spyOn(userDao, 'save');
-      const user = { username: 'test', password: 'tesztPwd' };
+      const user = FakeUserDao.createTestUser();
 
-      expect(userDao.isUserSaved(user.username, user.password)).toBe(false);
+      expect(userDao.isUserSaved(user)).toBe(false);
 
       const success = await authService.registrate(user);
 
       expect(success).toBe(true);
-      expect(userDao.save).toHaveBeenCalledTimes(1);
-      expect(userDao.isUserSaved(user.username, user.password)).toBe(true);
+      expect(userDao.save).toHaveBeenCalledOnce();
+      expect(userDao.isUserSaved(user)).toBe(true);
+    });
+
+    it('should hash password', async () => {
+      const hashPrefix = `HASHED_${Date.now()}`;
+      pwdHasher.hash.mockImplementation((pwd) => `${hashPrefix}_${pwd}`);
+      const user = FakeUserDao.createTestUser();
+
+      const success = await authService.registrate(user);
+      const hashedPwd = await userDao.findPwdByUsername(user.username);
+
+      expect(success).toBe(true);
+      expect(hashedPwd).toBe(`${hashPrefix}_${user.password}`);
     });
   });
 });

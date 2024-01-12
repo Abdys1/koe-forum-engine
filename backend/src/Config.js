@@ -1,7 +1,7 @@
 import 'dotenv/config';
-import path from 'path';
-import os from 'os';
 import { readFileSync } from 'fs';
+import os from 'os';
+import path from 'path';
 
 function readTestDatabaseUrl() {
   try {

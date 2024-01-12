@@ -1,17 +1,26 @@
-import {
-  afterAll,
-  beforeAll, describe, expect, it,
-} from 'vitest';
-import UserModel from '#src/components/user/UserModel.js';
-import { userDao } from '#src/components/user/index.js';
 import mongoose from 'mongoose';
+import {
+  beforeAll,
+  beforeEach, describe, expect, it,
+} from 'vitest';
+
+import logger from '#src/components/logger/Logger.js';
+import { userDao } from '#src/components/user/index.js';
+import UserModel from '#src/components/user/UserModel.js';
 import config from '#src/Config.js';
 
 describe('User dao ', () => {
   beforeAll(async () => {
     await mongoose.connect(config.database.url);
-    const testUser = new UserModel({ username: 'test_user', password: 'alma' });
-    await testUser.save();
+  });
+
+  beforeEach(async () => {
+    try {
+      await UserModel.collection.drop();
+    } catch (err) {
+      logger.error(err);
+    }
+    await UserModel.create({ username: 'test_user', password: 'alma' });
   });
 
   describe('findPwdByUsername()', () => {
@@ -43,8 +52,13 @@ describe('User dao ', () => {
     });
   });
 
-  afterAll(async () => {
-    await UserModel.deleteOne({ username: 'test_user' });
-    await mongoose.connection.close();
+  describe('save()', () => {
+    it('should create a new entry on user collection', async () => {
+      const newUser = { username: 'test_user_2', password: 'alma_2' };
+      await userDao.save(newUser);
+      const savedUser = await UserModel.findOne({ username: newUser.username });
+      expect(savedUser).toBeTruthy();
+      expect(savedUser.password).toBe(newUser.password);
+    });
   });
 });

@@ -65,7 +65,8 @@ class AuthService {
   async registrate({ username, password }) {
     const canRegistrate = !(await this.#userDao.existsByUsername(username));
     if (canRegistrate) {
-      this.#userDao.save({ username, password });
+      const hashedPwd = await this.#pwdHasher.hash(password);
+      await this.#userDao.save({ username, password: hashedPwd });
       return true;
     }
     return false;

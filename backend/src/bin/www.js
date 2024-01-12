@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
+import mongoose from 'mongoose';
 import http from 'http';
 import app from '#src/App.js';
-import config from '#src/Config.js';
 import logger from '#src/components/logger/Logger.js';
-import mongoose from 'mongoose';
+import config from '#src/Config.js';
 
 /**
  * Normalize a port into a number, string, or false.

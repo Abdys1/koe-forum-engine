@@ -1,11 +1,11 @@
+import cookieParser from 'cookie-parser';
 import express from 'express';
 import path from 'path';
-import cookieParser from 'cookie-parser';
 import { fileURLToPath } from 'url';
 import AuthenticationError from '#src/components/auth/AuthenticationError.js';
+import { authMiddleware } from '#src/components/auth/index.js';
 import httpLogger from '#src/components/logger/HttpLogger.js';
 import logger from '#src/components/logger/Logger.js';
-import { authMiddleware } from '#src/components/auth/index.js';
 
 import apiRouter from '#src/routes/ApiRoutes.js';
 

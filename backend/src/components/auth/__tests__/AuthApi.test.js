@@ -1,13 +1,18 @@
-import {
-  beforeAll, describe, it, expect, afterAll,
-} from 'vitest';
-import mongoose from 'mongoose';
 import argon2 from 'argon2';
+import mongoose from 'mongoose';
 import supertest from 'supertest';
+import {
+  beforeAll, describe, it, expect, afterAll, beforeEach, afterEach,
+} from 'vitest';
+
 import app from '#src/App.js';
 import { verifyToken } from '#src/components/auth/JwtTokenGenerator.js';
-import config from '#src/Config.js';
+import logger from '#src/components/logger/Logger.js';
 import UserModel from '#src/components/user/UserModel.js';
+import config from '#src/Config.js';
+
+// TODO ezt emeljük ki egy util-ba
+let actualUserId = 0;
 
 describe('Authentication api', () => {
   const BASE_URL = '/api/auth';
@@ -16,7 +21,8 @@ describe('Authentication api', () => {
   let testUser;
 
   function createRandomUser() {
-    return { username: `test_user_${Date.now()}`, password: 'alma' };
+    actualUserId += 1;
+    return { username: `test_user_${actualUserId}`, password: 'alma' };
   }
 
   async function registrate(user) {
@@ -44,12 +50,20 @@ describe('Authentication api', () => {
 
   beforeAll(async () => {
     await mongoose.connect(config.database.url);
+    request = supertest(app);
+  });
+
+  beforeEach(async () => {
+    try {
+      await UserModel.collection.drop();
+    } catch (err) {
+      logger.error(err);
+    }
     testUser = createRandomUser();
     const user = new UserModel({
       username: testUser.username, password: await argon2.hash(testUser.password),
     });
     await user.save();
-    request = supertest(app);
   });
 
   it('when try login after registrate then should return valid access token', async () => {
@@ -112,7 +126,6 @@ describe('Authentication api', () => {
   });
 
   afterAll(async () => {
-    await UserModel.deleteOne({ username: 'admin' });
     await mongoose.connection.close();
   });
 });

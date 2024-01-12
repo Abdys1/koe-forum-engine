@@ -17,7 +17,40 @@
             }
         ],
         "no-underscore-dangle":  ["error", { "allow": ["__dirname", "__filename"] }],
-        "import/no-extraneous-dependencies": ["error", {"devDependencies": ["**/*.test.js"]}]
+        "import/no-extraneous-dependencies": ["error", {"devDependencies": ["**/*.test.js"]}],
+        "import/order": [
+            "error",
+            { "groups": 
+                [
+                "external", 
+                "builtin", 
+                "internal", 
+                "sibling", 
+                "parent", 
+                "index"
+                ],
+                "pathGroups": [
+                    { 
+                      "pattern": "components", 
+                      "group": "internal" 
+                    }, 
+                    { 
+                      "pattern": "common", 
+                      "group": "internal" 
+                    }, 
+                    { 
+                      "pattern": "routes/ **", 
+                      "group": "internal" 
+                    }
+                 ],
+                 "pathGroupsExcludedImportTypes": 
+                    ["internal"], 
+                    "alphabetize": { 
+                        "order": "asc", 
+                        "caseInsensitive": true 
+                 } 
+            } 
+        ]
     },
     "settings": {
         "import/resolver": {
