@@ -15,16 +15,23 @@ function readTestDatabaseUrl() {
   }
 }
 
-const databaseUrl = process.env.NODE_ENV === 'test' ? readTestDatabaseUrl() : process.env.DATABASE_URL;
+const databaseUrl = process.env.NODE_ENV === 'test' ? readTestDatabaseUrl() : (process.env.DATABASE_URL || '');
 
-export default {
+type Config = {
+  database: { url: string };
+  auth: { secrets: { accessToken: string, refreshToken: string } }
+}
+
+const config: Config = {
   database: {
     url: databaseUrl,
   },
   auth: {
     secrets: {
-      accessToken: process.env.ACCESS_TOKEN_SECRET,
-      refreshToken: process.env.REFRESH_TOKEN_SECRET,
+      accessToken: process.env.ACCESS_TOKEN_SECRET || '',
+      refreshToken: process.env.REFRESH_TOKEN_SECRET || '',
     },
   },
 };
+
+export default config;

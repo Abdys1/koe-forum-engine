@@ -2,15 +2,15 @@
 
 import mongoose from 'mongoose';
 import http from 'http';
-import app from '#src/app.js';
-import logger from '#src/components/logger/logger.js';
-import config from '#src/config.js';
+import app from '#src/app';
+import logger from '#src/components/logger/logger';
+import config from '#src/config';
 
 /**
  * Normalize a port into a number, string, or false.
  */
 
-function normalizePort(val) {
+function normalizePort(val: any) {
   const port = parseInt(val, 10);
 
   if (Number.isNaN(port)) {
@@ -32,7 +32,7 @@ const port = normalizePort(process.env.PORT || '3000');
  * Event listener for HTTP server "error" event.
  */
 
-function onError(error) {
+function onError(error: any) {
   if (error.syscall !== 'listen') {
     throw error;
   }
@@ -67,7 +67,7 @@ const server = http.createServer(app);
  */
 
 function onListening() {
-  const addr = server.address();
+  const addr: any = server.address();
   const bind = typeof addr === 'string'
     ? `pipe ${addr}`
     : `port ${addr.port}`;

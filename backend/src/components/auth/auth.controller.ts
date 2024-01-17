@@ -1,13 +1,13 @@
-import logger from '#src/components/logger/logger.js';
+import logger from '#src/components/logger/logger';
 
 class AuthController {
   #authService;
 
-  constructor(authService) {
+  constructor(authService: any) {
     this.#authService = authService;
   }
 
-  async login(req, res, next) {
+  async login(req: any, res: any, next: any) {
     try {
       const { username, password } = req.body;
       // TODO szedjük szét verifyUser-re és generateTokens-re
@@ -26,7 +26,7 @@ class AuthController {
     }
   }
 
-  async refresh(req, res, next) {
+  async refresh(req: any, res: any, next: any) {
     try {
       const { refreshToken } = req.cookies;
       if (!refreshToken) {
@@ -42,7 +42,7 @@ class AuthController {
     }
   }
 
-  async registrate(req, res) {
+  async registrate(req: any, res: any, next: any) {
     const success = await this.#authService.registrate(
       { username: req.body.username, password: req.body.password },
     );

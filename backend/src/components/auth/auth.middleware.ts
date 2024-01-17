@@ -1,5 +1,5 @@
-function useAuthMiddleware(verifyToken, publicPaths) {
-  return async (req, res, next) => {
+function useAuthMiddleware(verifyToken: any, publicPaths: any) {
+  return async (req: any, res: any, next: any) => {
     try {
       if (!publicPaths.includes(req.path)) {
         const token = req.headers.Authorization.split(' ')[1];
