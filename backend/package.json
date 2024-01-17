@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "imports": {
-    "#src/*.js": "./src/*.js"
+    "#src/*.js": "./src/*.js",
+    "#test/*.js": "./__tests__/*.js"
   },
   "scripts": {
     "dev": "node src/bin/www.js",

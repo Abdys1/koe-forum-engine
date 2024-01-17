@@ -2,17 +2,16 @@ import argon2 from 'argon2';
 import mongoose from 'mongoose';
 import supertest from 'supertest';
 import {
-  beforeAll, describe, it, expect, afterAll, beforeEach, afterEach,
+  beforeAll, describe, it, expect, afterAll, beforeEach,
 } from 'vitest';
 
 import app from '#src/App.js';
-import { verifyToken } from '#src/components/auth/JwtTokenGenerator.js';
-import logger from '#src/components/logger/Logger.js';
-import UserModel from '#src/components/user/UserModel.js';
+import { verifyToken } from '#src/components/auth/jwt-token-generator.js';
+import logger from '#src/components/logger/logger.js';
+import UserModel from '#src/components/user/user.model.js';
 import config from '#src/Config.js';
 
-// TODO ezt emeljük ki egy util-ba
-let actualUserId = 0;
+import { generateUsername, generatePassword } from '#test/utils/test-data-generator.js';
 
 describe('Authentication api', () => {
   const BASE_URL = '/api/auth';
@@ -21,8 +20,7 @@ describe('Authentication api', () => {
   let testUser;
 
   function createRandomUser() {
-    actualUserId += 1;
-    return { username: `test_user_${actualUserId}`, password: 'alma' };
+    return { username: generateUsername(), password: generatePassword() };
   }
 
   async function registrate(user) {

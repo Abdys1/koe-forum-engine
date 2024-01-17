@@ -1,13 +1,12 @@
-class FakeUserDao {
-  static actualUserId = 0;
+import { generateUsername, generatePassword } from '#test/utils/test-data-generator.js';
 
+class FakeUserDao {
   constructor() {
     this.fakeUsers = [];
   }
 
   static createTestUser() {
-    FakeUserDao.actualUserId += 1;
-    return { username: `test_user_${FakeUserDao.actualUserId}`, password: `test_pwd_${FakeUserDao.actualUserId}` };
+    return { username: generateUsername(), password: generatePassword() };
   }
 
   async findPwdByUsername(username) {

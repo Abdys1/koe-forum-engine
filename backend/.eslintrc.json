@@ -55,7 +55,7 @@
     "settings": {
         "import/resolver": {
             "alias": {
-                "map": [["#src", "./src"]],
+                "map": [["#src", "./src"], ["#test", "./__tests__"]],
                 "extensions": [".js", ".jsx"]
             }
         }

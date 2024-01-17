@@ -1,4 +1,4 @@
-import UserModel from '#src/components/user/UserModel.js';
+import UserModel from '#src/components/user/user.model.js';
 
 async function findPwdByUsername(username) {
   const result = await UserModel.findOne({ username }, { password: true });

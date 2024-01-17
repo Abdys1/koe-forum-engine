@@ -2,7 +2,8 @@
 import {
   describe, it, expect, vi, beforeEach,
 } from 'vitest';
-import useAuthMiddleware from '#src/components/auth/AuthMiddleware.js';
+
+import useAuthMiddleware from '#src/components/auth/auth.middleware.js';
 
 describe('AuthMidlleware', () => {
   let verifyToken;

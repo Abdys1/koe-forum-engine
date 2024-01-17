@@ -1,12 +1,11 @@
 import mongoose from 'mongoose';
 import {
-  beforeAll,
-  beforeEach, describe, expect, it,
+  beforeAll, beforeEach, describe, expect, it,
 } from 'vitest';
 
-import logger from '#src/components/logger/Logger.js';
+import logger from '#src/components/logger/logger.js';
 import { userDao } from '#src/components/user/index.js';
-import UserModel from '#src/components/user/UserModel.js';
+import UserModel from '#src/components/user/user.model.js';
 import config from '#src/Config.js';
 
 describe('User dao ', () => {

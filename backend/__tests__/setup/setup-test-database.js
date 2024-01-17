@@ -1,5 +1,4 @@
 import { MongoDBContainer } from '@testcontainers/mongodb';
-import mongoose from 'mongoose';
 import { mkdir, writeFile } from 'fs/promises';
 import os from 'os';
 import path from 'path';

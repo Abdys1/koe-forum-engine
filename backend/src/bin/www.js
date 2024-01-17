@@ -2,9 +2,9 @@
 
 import mongoose from 'mongoose';
 import http from 'http';
-import app from '#src/App.js';
-import logger from '#src/components/logger/Logger.js';
-import config from '#src/Config.js';
+import app from '#src/app.js';
+import logger from '#src/components/logger/logger.js';
+import config from '#src/config.js';
 
 /**
  * Normalize a port into a number, string, or false.

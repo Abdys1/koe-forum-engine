@@ -1,4 +1,4 @@
-import logger from '#src/components/logger/Logger.js';
+import logger from '#src/components/logger/logger.js';
 
 class AuthController {
   #authService;
@@ -10,6 +10,7 @@ class AuthController {
   async login(req, res, next) {
     try {
       const { username, password } = req.body;
+      // TODO szedjük szét verifyUser-re és generateTokens-re
       const { accessToken, refreshToken } = await this.#authService.login(username, password);
       logger.info(`${username}'s tokens has created`);
       res.cookie('refreshToken', refreshToken, {

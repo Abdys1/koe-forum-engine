@@ -2,9 +2,10 @@ import {
   describe, it, expect, vi, beforeEach, afterEach,
 } from 'vitest';
 
-import AuthenticationError from '#src/components/auth/AuthenticationError.js';
-import AuthService from '#src/components/auth/AuthService.js';
-import FakeUserDao from '#src/components/user/FakeUserDao.js';
+import AuthService from '#src/components/auth/auth.service.js';
+import AuthenticationError from '#src/components/auth/authentication.error.js';
+
+import FakeUserDao from '#test/components/user/FakeUserDao.js';
 
 class TestError extends Error {}
 

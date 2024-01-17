@@ -1,3 +1,3 @@
-import userDao from '#src/components/user/UserDao.js';
+import userDao from '#src/components/user/user.dao.js';
 
 export { userDao };

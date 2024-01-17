@@ -1,5 +1,5 @@
 import express from 'express';
-import authRouter from '#src/routes/AuthRoutes.js';
+import authRouter from '#src/routes/auth.routes.js';
 
 const router = express.Router();
 

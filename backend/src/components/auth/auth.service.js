@@ -1,5 +1,5 @@
-import AuthenticationError from '#src/components/auth/AuthenticationError.js';
-import logger from '#src/components/logger/Logger.js';
+import AuthenticationError from '#src/components/auth/authentication.error.js';
+import logger from '#src/components/logger/logger.js';
 import config from '#src/Config.js';
 
 class AuthService {
