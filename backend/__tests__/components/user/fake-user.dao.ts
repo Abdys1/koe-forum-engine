@@ -1,15 +1,18 @@
-import { generateUsername, generatePassword } from '#test/utils/test-data-generator.js';
+import { generateUsername, generatePassword } from '@test/utils/test-data-generator';
+import { ForumUser, UserDao } from '@src/components/user/types';
 
-class FakeUserDao {
-  constructor() {
+class FakeUserDao implements UserDao {
+  private fakeUsers: ForumUser[];
+
+  public constructor() {
     this.fakeUsers = [];
   }
 
-  static createTestUser() {
+  public static createTestUser(): ForumUser {
     return { username: generateUsername(), password: generatePassword() };
   }
 
-  async findPwdByUsername(username) {
+  public async findPwdByUsername(username: string): Promise<string | undefined> {
     if (!username) {
       throw new Error('Username undefined!');
     }
@@ -17,15 +20,15 @@ class FakeUserDao {
     return result?.password;
   }
 
-  async existsByUsername(username) {
+  public async existsByUsername(username: string): Promise<boolean> {
     return this.fakeUsers.some((user) => user.username === username);
   }
 
-  async save(user) {
+  public async save(user: ForumUser): Promise<void> {
     this.fakeUsers.push(user);
   }
 
-  isUserSaved(user) {
+  public isUserSaved(user: ForumUser): boolean {
     return this.fakeUsers.some(
       (fakeUser) => user.username === fakeUser.username && user.password === fakeUser.password,
     );

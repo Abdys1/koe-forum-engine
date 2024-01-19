@@ -1,3 +1,5 @@
-import userDao from '#src/components/user/user.dao';
+import UserDaoImpl from '@src/components/user/user.dao';
+
+const userDao = new UserDaoImpl();
 
 export { userDao };

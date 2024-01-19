@@ -1,45 +1,46 @@
 import argon2 from 'argon2';
 import mongoose from 'mongoose';
-import supertest from 'supertest';
+import supertest, { Response } from 'supertest';
 import {
   beforeAll, describe, it, expect, afterAll, beforeEach,
 } from 'vitest';
+import TestAgent from 'supertest/lib/agent';
 
-import app from '#src/App.js';
-import { verifyToken } from '#src/components/auth/jwt-token-generator.js';
-import logger from '#src/components/logger/logger.js';
-import UserModel from '#src/components/user/user.model.js';
-import config from '#src/Config.js';
+import app from '@src/app';
+import { verifyToken } from '@src/components/auth/jwt-token-generator.js';
+import logger from '@src/components/logger/logger';
+import UserModel from '@src/components/user/user.model';
+import config from '@src/config';
 
-import { generateUsername, generatePassword } from '#test/utils/test-data-generator.js';
+import { generateUsername, generatePassword } from '@test/utils/test-data-generator';
 
 describe('Authentication api', () => {
   const BASE_URL = '/api/auth';
 
-  let request;
-  let testUser;
+  let request: TestAgent;
+  let testUser: { username: string, password: string };
 
   function createRandomUser() {
     return { username: generateUsername(), password: generatePassword() };
   }
 
-  async function registrate(user) {
+  async function registrate(user: { username: string, password: string }): Promise<Response> {
     return request.post(`${BASE_URL}/registrate`)
       .send({ username: user.username, password: user.password })
       .set('Accept', 'application/json');
   }
 
-  async function login(user) {
+  async function login(user: { username: string, password: string }): Promise<Response> {
     return request.post(`${BASE_URL}/login`)
       .send({ username: user.username, password: user.password })
       .set('Accept', 'application/json');
   }
 
-  async function refresh(cookies) {
+  async function refresh(cookies: Array<string>): Promise<Response> {
     return request.post(`${BASE_URL}/refresh`).set('Cookie', cookies);
   }
 
-  async function checkAccessToken(resp, expectedUsername) {
+  async function checkAccessToken(resp: Response, expectedUsername: string) {
     expect(resp.status).toBe(200);
     expect(resp.body.accessToken).toBeTruthy();
     const payload = await verifyToken(resp.body.accessToken, config.auth.secrets.accessToken);
@@ -91,7 +92,7 @@ describe('Authentication api', () => {
 
   it('when already login then refresh endpoint should return new access token', async () => {
     const loginResp = await login(testUser);
-    const resp = await refresh(loginResp.headers['set-cookie']);
+    const resp = await refresh(loginResp.get('Set-Cookie'));
 
     await checkAccessToken(resp, testUser.username);
   });

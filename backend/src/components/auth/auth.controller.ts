@@ -1,21 +1,23 @@
-import logger from '#src/components/logger/logger';
+import logger from '@src/components/logger/logger';
+import { AuthService } from '@src/components/auth/types';
+import { NextFunction, Request, Response } from 'express';
 
 class AuthController {
-  #authService;
+  private authService;
 
-  constructor(authService: any) {
-    this.#authService = authService;
+  constructor(authService: AuthService) {
+    this.authService = authService;
   }
 
-  async login(req: any, res: any, next: any) {
+  async login(req: Request, res: Response, next: NextFunction) {
     try {
       const { username, password } = req.body;
       // TODO szedjük szét verifyUser-re és generateTokens-re
-      const { accessToken, refreshToken } = await this.#authService.login(username, password);
+      const { accessToken, refreshToken } = await this.authService.login(username, password);
       logger.info(`${username}'s tokens has created`);
       res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
-        sameSite: 'Strict',
+        sameSite: 'strict',
         secure: true,
         maxAge: 24 * 60 * 60 * 1000,
       });
@@ -26,14 +28,14 @@ class AuthController {
     }
   }
 
-  async refresh(req: any, res: any, next: any) {
+  async refresh(req: Request, res: Response, next: NextFunction) {
     try {
       const { refreshToken } = req.cookies;
       if (!refreshToken) {
         logger.error('Refresh token not found');
         res.status(401).send();
       } else {
-        const accessToken = await this.#authService.refreshAccessToken(refreshToken);
+        const accessToken = await this.authService.refreshAccessToken(refreshToken);
         logger.info('New access token has created');
         res.status(200).send({ accessToken });
       }
@@ -42,8 +44,8 @@ class AuthController {
     }
   }
 
-  async registrate(req: any, res: any, next: any) {
-    const success = await this.#authService.registrate(
+  async registrate(req: Request, res: Response) {
+    const success = await this.authService.registrate(
       { username: req.body.username, password: req.body.password },
     );
     if (success) {

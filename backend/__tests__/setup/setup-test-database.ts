@@ -1,12 +1,12 @@
-import { MongoDBContainer } from '@testcontainers/mongodb';
+import { MongoDBContainer, StartedMongoDBContainer } from '@testcontainers/mongodb';
 import { mkdir, writeFile } from 'fs/promises';
 import os from 'os';
 import path from 'path';
 
-let container;
+let container: StartedMongoDBContainer | undefined;
 let teardownHappened = false;
 
-async function shareDatabaseConfig(databaseUrl) {
+async function shareDatabaseConfig(databaseUrl: string) {
   const variablesDir = path.join(
     os.tmpdir(),
     'testcontainer_global_setup',

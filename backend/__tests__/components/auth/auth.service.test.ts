@@ -1,20 +1,22 @@
 import {
-  describe, it, expect, vi, beforeEach, afterEach,
+  describe, it, expect, vi, beforeEach, afterEach, Mocked,
 } from 'vitest';
 
-import AuthService from '#src/components/auth/auth.service.js';
-import AuthenticationError from '#src/components/auth/authentication.error.js';
+import AuthServiceImpl from '@src/components/auth/auth.service';
+import AuthenticationError from '@src/components/auth/authentication.error.js';
 
-import FakeUserDao from '#test/components/user/FakeUserDao.js';
+import FakeUserDao from '@test/components/user/fake-user.dao';
+import { ForumUser } from '@src/components/user/types';
+import { PasswordHasher, TokenGenerator, AuthService } from '@src/components/auth/types';
 
 class TestError extends Error {}
 
 describe('AuthService', () => {
-  let testUser;
-  let pwdHasher;
-  let userDao;
-  let tokenGenerator;
-  let authService;
+  let testUser: ForumUser;
+  let pwdHasher: Mocked<PasswordHasher>;
+  let userDao: FakeUserDao;
+  let tokenGenerator: Mocked<TokenGenerator>;
+  let authService: AuthService;
 
   beforeEach(async () => {
     tokenGenerator = {
@@ -28,7 +30,7 @@ describe('AuthService', () => {
     testUser = FakeUserDao.createTestUser();
     userDao = new FakeUserDao();
     await userDao.save(testUser);
-    authService = new AuthService(userDao, pwdHasher, tokenGenerator);
+    authService = new AuthServiceImpl(userDao, pwdHasher, tokenGenerator);
   });
 
   afterEach(() => {
@@ -38,7 +40,7 @@ describe('AuthService', () => {
   describe('login()', () => {
     it('should be generate verifyable tokens for registered user', async () => {
       const expectedToken = `RANDOM_TOKEN_${Date.now()}`;
-      tokenGenerator.signToken.mockReturnValue(expectedToken);
+      tokenGenerator.signToken.mockResolvedValue(expectedToken);
       pwdHasher.verify.mockResolvedValueOnce(true);
 
       const tokens = await authService.login(testUser.username, testUser.password);
@@ -70,30 +72,6 @@ describe('AuthService', () => {
     it('should reject with empty password', () => {
       expect(authService.login('admin', '')).rejects.toThrow(AuthenticationError);
     });
-
-    it('should reject with null credentials', () => {
-      expect(authService.login(null, null)).rejects.toThrow(AuthenticationError);
-    });
-
-    it('should reject with null username', () => {
-      expect(authService.login(null, 'admin')).rejects.toThrow(AuthenticationError);
-    });
-
-    it('should reject with null password', () => {
-      expect(authService.login('admin', null)).rejects.toThrow(AuthenticationError);
-    });
-
-    it('should reject with undefined username', () => {
-      expect(authService.login(undefined, 'admin')).rejects.toThrow(AuthenticationError);
-    });
-
-    it('should reject with undefined password', () => {
-      expect(authService.login('admin', undefined)).rejects.toThrow(AuthenticationError);
-    });
-
-    it('should reject with undefined credentials', () => {
-      expect(authService.login(undefined, undefined)).rejects.toThrow(AuthenticationError);
-    });
   });
 
   describe('refreshAccessToken()', () => {
@@ -122,7 +100,7 @@ describe('AuthService', () => {
 
   describe('registrate()', () => {
     it('dont registrate when user already exists', async () => {
-      pwdHasher.hash.mockImplementation((pwd) => pwd);
+      pwdHasher.hash.mockImplementation((pwd) => Promise.resolve(pwd));
       vi.spyOn(userDao, 'save');
 
       const success = await authService.registrate(testUser);
@@ -132,7 +110,7 @@ describe('AuthService', () => {
     });
 
     it('should registrate when user doesnt exists', async () => {
-      pwdHasher.hash.mockImplementation((pwd) => pwd);
+      pwdHasher.hash.mockImplementation((pwd) => Promise.resolve(pwd));
       vi.spyOn(userDao, 'save');
       const user = FakeUserDao.createTestUser();
 
@@ -147,7 +125,7 @@ describe('AuthService', () => {
 
     it('should hash password', async () => {
       const hashPrefix = `HASHED_${Date.now()}`;
-      pwdHasher.hash.mockImplementation((pwd) => `${hashPrefix}_${pwd}`);
+      pwdHasher.hash.mockImplementation((pwd) => Promise.resolve(`${hashPrefix}_${pwd}`));
       const user = FakeUserDao.createTestUser();
 
       const success = await authService.registrate(user);

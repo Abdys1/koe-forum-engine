@@ -1,12 +1,22 @@
-function useAuthMiddleware(verifyToken: any, publicPaths: any) {
-  return async (req: any, res: any, next: any) => {
+import { AuthenticationMiddleware, TokenVerifierFunc } from "@src/components/auth/types";
+import { NextFunction, Request, Response } from "express";
+import logger from "@src/components/logger/logger";
+import AuthenticationError from "./authentication.error";
+
+// TODO a configot adjuk át neki és úgy teszteljük mert most emiatt nem jók a tesztek
+function useAuthMiddleware(verifyToken: TokenVerifierFunc, publicPaths: Array<string>, secretKey: string): AuthenticationMiddleware {
+  return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       if (!publicPaths.includes(req.path)) {
-        const token = req.headers.Authorization.split(' ')[1];
-        await verifyToken(token);
+        const bearerToken = (req.headers['Authorization'] as string).split(' ');
+        if (bearerToken.length != 2) {
+          throw new AuthenticationError('Token is not found!');
+        }
+        await verifyToken(bearerToken[1], secretKey);
       }
       next();
     } catch (err) {
+      logger.error(err);
       res.status(403).send();
     }
   };

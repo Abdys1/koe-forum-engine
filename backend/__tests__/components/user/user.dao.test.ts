@@ -3,10 +3,10 @@ import {
   beforeAll, beforeEach, describe, expect, it,
 } from 'vitest';
 
-import logger from '#src/components/logger/logger.js';
-import { userDao } from '#src/components/user/index.js';
-import UserModel from '#src/components/user/user.model.js';
-import config from '#src/Config.js';
+import logger from '@src/components/logger/logger';
+import { userDao } from '@src/components/user/index';
+import UserModel from '@src/components/user/user.model';
+import config from '@src/config';
 
 describe('User dao ', () => {
   beforeAll(async () => {
@@ -44,11 +44,6 @@ describe('User dao ', () => {
     it('should return false when username empty', () => {
       expect(userDao.existsByUsername('')).resolves.toBe(false);
     });
-
-    it('should return false when username null or undefined', () => {
-      expect(userDao.existsByUsername(null)).resolves.toBe(false);
-      expect(userDao.existsByUsername()).resolves.toBe(false);
-    });
   });
 
   describe('save()', () => {
@@ -57,7 +52,7 @@ describe('User dao ', () => {
       await userDao.save(newUser);
       const savedUser = await UserModel.findOne({ username: newUser.username });
       expect(savedUser).toBeTruthy();
-      expect(savedUser.password).toBe(newUser.password);
+      expect(savedUser?.password).toBe(newUser.password);
     });
   });
 });

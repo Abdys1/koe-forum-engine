@@ -2,6 +2,7 @@ import 'dotenv/config';
 import { readFileSync } from 'fs';
 import os from 'os';
 import path from 'path';
+import { Config } from '@src/types';
 
 function readTestDatabaseUrl() {
   try {
@@ -17,12 +18,7 @@ function readTestDatabaseUrl() {
 
 const databaseUrl = process.env.NODE_ENV === 'test' ? readTestDatabaseUrl() : (process.env.DATABASE_URL || '');
 
-type Config = {
-  database: { url: string };
-  auth: { secrets: { accessToken: string, refreshToken: string } }
-}
-
-const config: Config = {
+export default {
   database: {
     url: databaseUrl,
   },
@@ -32,6 +28,4 @@ const config: Config = {
       refreshToken: process.env.REFRESH_TOKEN_SECRET || '',
     },
   },
-};
-
-export default config;
+} as Config;

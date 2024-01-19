@@ -1,76 +1,82 @@
-import AuthenticationError from '#src/components/auth/authentication.error';
-import logger from '#src/components/logger/logger';
-import config from '#src/config';
+import AuthenticationError from '@src/components/auth/authentication.error';
+import logger from '@src/components/logger/logger';
+import config from '@src/config';
+import { UserDao } from '@src/components/user/types';
+import { AuthService, AuthTokens, ForumJwtPayload, PasswordHasher, TokenGenerator } from '@src/components/auth/types';
 
-class AuthService {
-  #userDao;
+class AuthServiceImpl implements AuthService {
+  private userDao;
+  private pwdHasher;
+  private tokenGenerator;
 
-  #pwdHasher;
-
-  #tokenGenerator;
-
-  constructor(userDao: any, pwdHasher: any, tokenGenerator: any) {
-    this.#userDao = userDao;
-    this.#pwdHasher = pwdHasher;
-    this.#tokenGenerator = tokenGenerator;
+  // TODO a configot is injektáljuk be és úgy teszteljük
+  public constructor(userDao: UserDao, pwdHasher: PasswordHasher, tokenGenerator: TokenGenerator) {
+    this.userDao = userDao;
+    this.pwdHasher = pwdHasher;
+    this.tokenGenerator = tokenGenerator;
   }
 
-  async login(username: string, passwd: string) {
-    const isValidPassword = await this.#verifyPassword(username, passwd);
+  public async login(username: string, passwd: string): Promise<AuthTokens> {
+    const isValidPassword = await this.verifyPassword(username, passwd);
     if (!isValidPassword) {
       throw new AuthenticationError(`Wrong credentials! Username: ${username}`);
     }
 
-    return this.#generateTokens(username);
+    return this.generateTokens(username);
   }
 
-  async #verifyPassword(username: string, rawPwd: string) {
+  private async verifyPassword(username: string, rawPwd: string): Promise<boolean> {
     try {
-      const hashPwd = await this.#userDao.findPwdByUsername(username);
-      return await this.#pwdHasher.verify(hashPwd, rawPwd);
+      const hashPwd = await this.userDao.findPwdByUsername(username) || '';
+      return await this.pwdHasher.verify(hashPwd, rawPwd);
     } catch (err) {
       logger.error(err);
       return false;
     }
   }
 
-  async #generateTokens(username: string) {
-    const accessToken = await this.#signAccessToken(username);
-    const refreshToken = await this.#signRefreshToken(username);
+  private async generateTokens(username: string): Promise<AuthTokens> {
+    const accessToken = await this.signAccessToken(username);
+    const refreshToken = await this.signRefreshToken(username);
     return { accessToken, refreshToken };
   }
 
-  async #signAccessToken(username: string) {
-    return this.#tokenGenerator.signToken({ username }, config.auth.secrets.accessToken, '10m');
+  private async signAccessToken(username: string): Promise<string | undefined> {
+    return this.tokenGenerator.signToken({ username }, config.auth.secrets.accessToken, '10m');
   }
 
-  async #signRefreshToken(username: string) {
-    return this.#tokenGenerator.signToken({ username }, config.auth.secrets.refreshToken, '1d');
+  private async signRefreshToken(username: string): Promise<string | undefined> {
+    return this.tokenGenerator.signToken({ username }, config.auth.secrets.refreshToken, '1d');
   }
 
-  async refreshAccessToken(refreshToken: string) {
-    const payload = await this.#verifyToken(refreshToken, config.auth.secrets.refreshToken);
-    const accessToken = await this.#signAccessToken(payload.username);
+  public async refreshAccessToken(refreshToken: string): Promise<string | undefined> {
+    const payload = await this.verifyToken(refreshToken, config.auth.secrets.refreshToken);
+    const accessToken = await this.signAccessToken(payload.username);
     return accessToken;
   }
 
-  async #verifyToken(token: string, secret: string) {
+  private async verifyToken(token: string, secret: string): Promise<ForumJwtPayload> {
     try {
-      return await this.#tokenGenerator.verifyToken(token, secret);
-    } catch (err: any) {
-      throw new AuthenticationError(err);
+      return await this.tokenGenerator.verifyToken(token, secret);
+    } catch (err: unknown) {
+      logger.error(err);
+      let msg = "Token verification failed!";
+      if (err instanceof Error) {
+        msg += '\n' + err.message;
+      }
+      throw new AuthenticationError(msg);
     }
   }
 
-  async registrate(user: any) {
-    const canRegistrate = !(await this.#userDao.existsByUsername(user.username));
+  public async registrate(user: { username: string, password: string }): Promise<boolean> {
+    const canRegistrate = !(await this.userDao.existsByUsername(user.username));
     if (canRegistrate) {
-      const hashedPwd = await this.#pwdHasher.hash(user.password);
-      await this.#userDao.save({ username: user.username, password: hashedPwd });
+      const hashedPwd = await this.pwdHasher.hash(user.password);
+      await this.userDao.save({ username: user.username, password: hashedPwd });
       return true;
     }
     return false;
   }
 }
 
-export default AuthService;
+export default AuthServiceImpl;

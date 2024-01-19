@@ -1,5 +1,5 @@
 import morgan from 'morgan';
-import logger from '#src/components/logger/logger';
+import logger from '@src/components/logger/logger';
 
 const stream = {
   // Use the http severity
