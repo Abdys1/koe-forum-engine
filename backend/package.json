@@ -2,6 +2,7 @@
   "name": "koe-forum-engine",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "./node_modules/typescript/bin/tsc -p . && tsc-alias",
     "dev": "tsx src/bin/www.ts",

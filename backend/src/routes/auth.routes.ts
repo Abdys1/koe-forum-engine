@@ -1,12 +1,24 @@
-import express from 'express';
 import { authController } from '@src/components/auth';
+import { defineRouter } from '@src/components/routerconf';
+import { HttpMethod } from '@src/components/routerconf/router-config';
 
-const router = express.Router();
-
-router.post('/login', (req, res, next) => authController.login(req, res, next));
-
-router.post('/refresh', (req, res, next) => authController.refresh(req, res, next));
-
-router.post('/registrate', (req, res) => authController.registrate(req, res));
-
-export default router;
+export default defineRouter([
+    { 
+        path: '/login', 
+        method: HttpMethod.POST, 
+        controller: (req, res, next) => authController.login(req, res, next), 
+        public: true
+    },
+    { 
+        path: '/refresh', 
+        method: HttpMethod.POST, 
+        controller: (req, res, next) => authController.refresh(req, res, next), 
+        public: true 
+    },
+    { 
+        path: '/registrate', 
+        method: HttpMethod.POST, 
+        controller: (req, res, next) => authController.registrate(req, res, next), 
+        public: true 
+    }
+]);

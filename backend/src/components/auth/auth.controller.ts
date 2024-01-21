@@ -5,11 +5,11 @@ import { NextFunction, Request, Response } from 'express';
 class AuthController {
   private authService;
 
-  constructor(authService: AuthService) {
+  public constructor(authService: AuthService) {
     this.authService = authService;
   }
 
-  async login(req: Request, res: Response, next: NextFunction) {
+  public async login(req: Request, res: Response, next: NextFunction) {
     try {
       const { username, password } = req.body;
       // TODO szedjük szét verifyUser-re és generateTokens-re
@@ -28,7 +28,7 @@ class AuthController {
     }
   }
 
-  async refresh(req: Request, res: Response, next: NextFunction) {
+  public async refresh(req: Request, res: Response, next: NextFunction) {
     try {
       const { refreshToken } = req.cookies;
       if (!refreshToken) {
@@ -44,7 +44,7 @@ class AuthController {
     }
   }
 
-  async registrate(req: Request, res: Response) {
+  public async registrate(req: Request, res: Response, next: NextFunction) {
     const success = await this.authService.registrate(
       { username: req.body.username, password: req.body.password },
     );

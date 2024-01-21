@@ -2,16 +2,29 @@ import {
   describe, it, expect, vi, beforeEach, Mock,
 } from 'vitest';
 
-import useAuthMiddleware from '@src/components/auth/auth.middleware';
-import { AuthenticationMiddleware } from '@src/components/auth/types';
+import useAuthMiddleware from '@src/middlewares/auth.middleware';
+import { AuthenticationMiddleware } from '@src/middlewares/types';
 import { Request, Response } from 'express';
 
 describe('AuthMidlleware', () => {
   let verifyToken: Mock;
   let authMiddleware: AuthenticationMiddleware;
 
+  beforeEach(() => {
+    verifyToken = vi.fn();
+    authMiddleware = useAuthMiddleware({ verifyToken, secretKey: 'testSecret' });
+  });
+
   function createRequestWithToken(token: string): Partial<Request> {
-    return { headers: { Authorization: token } };
+    const req = { header: vi.fn() };
+    req.header.mockImplementation((name: string) => {
+      if (name.toLocaleLowerCase() == 'authorization') {
+        return token;
+      } else {
+        return undefined;
+      }
+    });
+    return req;
   }
 
   function createResponse(): Partial<Response> {
@@ -28,11 +41,6 @@ describe('AuthMidlleware', () => {
     await authMiddleware(req, res, next);
     return res;
   }
-
-  beforeEach(() => {
-    verifyToken = vi.fn();
-    authMiddleware = useAuthMiddleware(verifyToken, ['/login'], 'testSecret');
-  });
 
   it('should be send forbidden status when token is not present', async () => {
     const req = { headers: {}, path: '/notPublic' } as Request;
@@ -74,14 +82,5 @@ describe('AuthMidlleware', () => {
 
     expect(next).toHaveBeenCalledTimes(1);
     expect(verifyToken).toHaveBeenCalledWith('testToken', 'testSecret');
-  });
-
-  it('should be call next when token is invalid but path is public', async () => {
-    const req = { headers: {}, path: '/login' } as Request;
-    const next = vi.fn();
-
-    await authMiddleware(req, {} as Response, next);
-
-    expect(next).toHaveBeenCalledTimes(1);
   });
 });

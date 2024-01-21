@@ -1,5 +1,4 @@
 import { JwtPayload, Secret } from 'jsonwebtoken';
-import { Request, Response, NextFunction } from 'express';
 
 export interface AuthService {
     login: (username: string, passwd: string) => Promise<AuthTokens>;
@@ -17,6 +16,8 @@ export interface PasswordHasher {
     hash: (password: string) => Promise<string>;
 }
 
+export type TokenVerifierFunc = (token: string, secretKey: Secret) => Promise<ForumJwtPayload>;
+
 export interface ForumJwtPayload extends JwtPayload {
     username: string
 }
@@ -25,7 +26,3 @@ export interface TokenGenerator {
     signToken: (payload: string | Buffer | object, secretKey: Secret, expiresIn: string | number | undefined) => Promise<string | undefined>;
     verifyToken: (token: string, secretKey: Secret) => Promise<ForumJwtPayload>;
 }
-
-export type AuthenticationMiddleware = (req: Request, res: Response, next: NextFunction) => Promise<void>
-
-export type TokenVerifierFunc = (token: string, secretKey: Secret) => Promise<ForumJwtPayload>;

@@ -1,7 +1,6 @@
 import cookieParser from 'cookie-parser';
 import express, { NextFunction, Request, Response } from 'express';
 import AuthenticationError from '@src/components/auth/authentication.error';
-import { authMiddleware } from '@src/components/auth';
 import httpLogger from '@src/components/logger/http-logger';
 import logger from '@src/components/logger/logger';
 
@@ -13,7 +12,6 @@ app.use(httpLogger);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(authMiddleware);
 
 app.use('/api', apiRouter);
 

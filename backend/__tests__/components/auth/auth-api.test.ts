@@ -124,6 +124,17 @@ describe('Authentication api', () => {
     expect(resp.body.accessToken).toBeFalsy();
   });
 
+  // TODO teszteljük, hogy levédett endpointokra nem tudunk bejelentkezni token nélkül
+  /* it('when send request to private path without token then return 403 status', async () => {
+    const resp = await request.post('/test-endpoint');
+    expect(resp.status).toBe(403);
+  });
+
+  it('when send request to private path with invalid token then return 403 status', async () => {
+    const resp = await request.post('/test-endpoint').set('authorization', 'Bearer token');
+    expect(resp.status).toBe(403);
+  }); */
+  
   afterAll(async () => {
     await mongoose.connection.close();
   });
