@@ -6,7 +6,7 @@ export default defineRouter([
     { 
         path: '/login', 
         method: HttpMethod.POST, 
-        controller: (req, res, next) => authController.login(req, res, next), 
+        controller: (req, res, next) => authController.login(req, res, next),
         public: true
     },
     { 
