@@ -52,6 +52,7 @@ class AuthServiceImpl implements AuthService {
   public async refreshAccessToken(refreshToken: string): Promise<string | undefined> {
     const payload = await this.verifyToken(refreshToken, config.auth.secrets.refreshToken);
     const accessToken = await this.signAccessToken(payload.username);
+    logger.info(`New access token has created! Username: ${payload.username}`);
     return accessToken;
   }
 

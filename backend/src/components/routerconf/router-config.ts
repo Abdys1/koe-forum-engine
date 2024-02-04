@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AuthenticationMiddleware } from "@src/middlewares/types";
-import { NextFunction, Request, Response, Router } from "express";
+import { RequestHandler, Router } from "express";
 
 export const HttpMethod = {
     GET: 'GET',
@@ -10,15 +11,24 @@ export const HttpMethod = {
 
 export type HttpMethod = keyof typeof HttpMethod;
 
-export type RouterConfig = { path: string, method: HttpMethod, controller: (req: Request, res: Response, next: NextFunction) => void, public?: boolean }
+export type RouterConfig = { 
+    path: string, 
+    method: HttpMethod, 
+    controller: RequestHandler, 
+    public?: boolean, 
+    middlewares?: any[] 
+}
 
 export function useDefineRouter(authMiddleware: AuthenticationMiddleware) {
     return (config: RouterConfig[]): Router => {
         const router = Router();
         config.forEach(c => {
-            const middlewares = [];
+            const middlewares: any[] = [];
             if (!c.public) {
                 middlewares.push(authMiddleware);
+            }
+            if (c.middlewares) {
+                middlewares.push(...c.middlewares);
             }
             addRoute(router, c.method, c.path, middlewares, c.controller);
         });
@@ -26,8 +36,7 @@ export function useDefineRouter(authMiddleware: AuthenticationMiddleware) {
     }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function addRoute(router: Router, method: HttpMethod, path: string, middlewares: any[], controller: (req: Request, res: Response, next: NextFunction) => void,) {
+function addRoute(router: Router, method: HttpMethod, path: string, middlewares: any[], controller: RequestHandler) {
     switch(method) {
         case HttpMethod.GET:
             router.get(path, middlewares, controller);

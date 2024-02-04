@@ -13,6 +13,7 @@ import UserModel from '@src/components/user/user.model';
 import config from '@src/config';
 
 import { generateUsername, generatePassword } from '@test/utils/test-data-generator';
+import assertValidations from '@test/utils/validation-assert';
 
 describe('Authentication api', () => {
   const BASE_URL = '/api/auth';
@@ -45,6 +46,12 @@ describe('Authentication api', () => {
     expect(resp.body.accessToken).toBeTruthy();
     const payload = await verifyToken(resp.body.accessToken, config.auth.secrets.accessToken);
     expect(payload.username).toBe(expectedUsername);
+  }
+
+  async function assertLoginInputInvalid(user: { username: string, password: string }, expectedErrors: any[]) {
+    const resp = await login({ username: user.username, password: user.password });
+    expect(resp.status).toBe(400);
+    assertValidations(resp.body.errors, expectedErrors);
   }
 
   beforeAll(async () => {
@@ -88,6 +95,15 @@ describe('Authentication api', () => {
 
     expect(resp.status).toBe(401);
     expect(resp.body.accessToken).toBeFalsy();
+  });
+
+  it('when try login with invalid fields then return 400 status', async () => {
+    const expectedUsernameError = { location: 'body', path: 'username', type: 'field' };
+    const expectedPasswordError = { location: 'body', path: 'password', type: 'field' };
+
+    assertLoginInputInvalid({ username: '', password: '' }, [expectedUsernameError, expectedPasswordError]);
+    assertLoginInputInvalid({ username: 'teszt', password: '' }, [expectedPasswordError]);
+    assertLoginInputInvalid({ username: '', password: 'teszt' }, [expectedUsernameError]);
   });
 
   it('when already login then refresh endpoint should return new access token', async () => {

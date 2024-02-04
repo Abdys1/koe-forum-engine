@@ -4,7 +4,7 @@ import os from 'os';
 import path from 'path';
 import { Config } from '@src/types';
 
-function readTestDatabaseUrl() {
+function readTestDatabaseUrl(): string {
   try {
     const variablesDir = path.join(
       os.tmpdir(),
@@ -16,6 +16,7 @@ function readTestDatabaseUrl() {
   }
 }
 
+// TODO dobjunk el exception ha nincsenek meg a szükséges környezetei változók
 const databaseUrl = process.env.NODE_ENV === 'test' ? readTestDatabaseUrl() : (process.env.DATABASE_URL || '');
 
 export default {

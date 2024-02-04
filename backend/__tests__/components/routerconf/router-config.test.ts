@@ -95,4 +95,24 @@ describe('Router configurator', () => {
         assertRoute(routes, '/thirdRoot', 1, 'PUT');
         assertRoute(routes, '/4thRoot', 1, 'DELETE');
     });
+
+    it('defineRouter should set middlewares', () => {
+        const testMiddleware = vi.fn();
+        const router: Router = defineRouter([
+            { path: '/test', method: 'GET', controller: vi.fn(), public: true, middlewares: [testMiddleware] },
+            { path: '/test2', method: 'GET', controller: vi.fn(), public: false, middlewares: [testMiddleware] }
+        ]);
+
+        expect(router).toBeTruthy();
+
+        const routes = getRoutes(router);
+
+        expect(routes.length).toBe(2);
+        assertRoute(routes, '/test', 2, 'GET');
+        assertRoute(routes, '/test2', 3, 'GET');
+        routes[0].stack[0].handle();
+        expect(testMiddleware).toHaveBeenCalledOnce();
+        routes[1].stack[1].handle();
+        expect(testMiddleware).toHaveBeenCalledTimes(2);
+    });
 });

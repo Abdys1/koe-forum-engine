@@ -7,6 +7,7 @@ import logger from '@src/components/logger/logger';
 import { userDao } from '@src/components/user/index';
 import UserModel from '@src/components/user/user.model';
 import config from '@src/config';
+import { ForumUser } from '@src/components/user/types';
 
 describe('User dao ', () => {
   beforeAll(async () => {
@@ -21,6 +22,20 @@ describe('User dao ', () => {
     }
     await UserModel.create({ username: 'test_user', password: 'alma' });
   });
+
+  // TODO ki lehetne emelni majd test utilba
+  async function assertValidationError(user: ForumUser, expectedFields: string[]): Promise<void> {
+    try {
+      await userDao.save(user)
+    } catch(error: unknown) {
+      expect(error).toBeInstanceOf(mongoose.Error.ValidationError);
+      const err = error as mongoose.Error.ValidationError;
+      expect(Object.keys(err.errors).length).toBe(expectedFields.length);
+      expectedFields.forEach((field) => {
+        expect(err.errors[field], `'${field}' field not found in validation errors!`).toBeTruthy();
+      });
+    }
+  }
 
   describe('findPwdByUsername()', () => {
     it('should return password hash when has user', () => {
@@ -53,6 +68,12 @@ describe('User dao ', () => {
       const savedUser = await UserModel.findOne({ username: newUser.username });
       expect(savedUser).toBeTruthy();
       expect(savedUser?.password).toBe(newUser.password);
+    });
+
+    it('should throw exception when try save without required fields', () => {
+      assertValidationError({ username: 'test_user', password: '' }, ['password']);
+      assertValidationError({ username: '', password: 'test_pwd' }, ['username']);
+      assertValidationError({ username: '', password: '' }, ['username', 'password']);
     });
   });
 });

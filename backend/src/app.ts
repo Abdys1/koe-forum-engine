@@ -1,8 +1,7 @@
 import cookieParser from 'cookie-parser';
-import express, { NextFunction, Request, Response } from 'express';
-import AuthenticationError from '@src/components/auth/authentication.error';
+import express from 'express';
 import httpLogger from '@src/components/logger/http-logger';
-import logger from '@src/components/logger/logger';
+import errorHandler from '@src/middlewares/error-handler.middleware';
 
 import apiRouter from '@src/routes/api.routes';
 
@@ -15,14 +14,6 @@ app.use(cookieParser());
 
 app.use('/api', apiRouter);
 
-// TODO legyen külön fájl
-app.use((err: unknown, _: Request, res: Response, next: NextFunction) => {
-  logger.error(err);
-  if (err instanceof AuthenticationError) {
-    res.status(401).send();
-  } else {
-    next(err);
-  }
-});
+app.use(errorHandler);
 
 export default app;
