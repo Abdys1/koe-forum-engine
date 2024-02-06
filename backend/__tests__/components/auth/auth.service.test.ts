@@ -12,8 +12,8 @@ import { PasswordHasher, TokenGenerator, AuthService } from '@src/components/aut
 class TestError extends Error {}
 
 describe('AuthService', () => {
-  let testUser: ForumUser;
-  let pwdHasher: Mocked<PasswordHasher>;
+  let savedUser: ForumUser;
+  let pwdHasher: PasswordHasher;
   let userDao: FakeUserDao;
   let tokenGenerator: Mocked<TokenGenerator>;
   let authService: AuthService;
@@ -24,12 +24,14 @@ describe('AuthService', () => {
       verifyToken: vi.fn(),
     };
     pwdHasher = {
-      hash: vi.fn(),
-      verify: vi.fn(),
+      hash: pwd => Promise.resolve(`HASHED_${pwd}`),
+      verify: (hashedPwd, rawPwd) => Promise.resolve(hashedPwd === `HASHED_${rawPwd}`),
     };
-    testUser = FakeUserDao.createTestUser();
     userDao = new FakeUserDao();
-    await userDao.save(testUser);
+
+    savedUser = FakeUserDao.createTestUser();
+    await userDao.save({username: savedUser.username, password: await pwdHasher.hash(savedUser.password) });
+    
     authService = new AuthServiceImpl(userDao, pwdHasher, tokenGenerator);
   });
 
@@ -37,40 +39,46 @@ describe('AuthService', () => {
     vi.restoreAllMocks();
   });
 
-  describe('login()', () => {
-    it('should be generate verifyable tokens for registered user', async () => {
+  describe('generateTokens()', () => {
+    // TODO teszteljük a configból érkező secretekkel
+    it('should be generate verifyable tokens', async () => {
       const expectedToken = `RANDOM_TOKEN_${Date.now()}`;
       tokenGenerator.signToken.mockResolvedValue(expectedToken);
-      pwdHasher.verify.mockResolvedValueOnce(true);
 
-      const tokens = await authService.login(testUser.username, testUser.password);
+      const { accessToken, refreshToken } = await authService.generateTokens(savedUser.username);
 
-      expect(tokens.accessToken).toBe(expectedToken);
-      expect(tokens.refreshToken).toBe(expectedToken);
+      expect(accessToken).toBe(expectedToken);
+      expect(refreshToken).toBe(expectedToken);
+    });
+  });
+
+  describe('verifyUser()', () => {
+    it('should return true when user is valid', () => {
+      expect(authService.verifyUser(savedUser.username, savedUser.password)).resolves.toBe(true);
     });
 
-    it('should reject with invalid credentials', () => {
-      expect(authService.login('admin5', 'admin2')).rejects.toThrow(AuthenticationError);
+    it('should return false with invalid credentials', () => {
+      expect(authService.verifyUser('admin5', 'admin2')).resolves.toBe(false);
     });
 
     it('should reject with invalid password', () => {
-      expect(authService.login('admin', 'admin2')).rejects.toThrow(AuthenticationError);
+      expect(authService.verifyUser(savedUser.username, 'admin2')).resolves.toBe(false);
     });
 
     it('should reject with invalid username', () => {
-      expect(authService.login('admin3', 'admin')).rejects.toThrow(AuthenticationError);
+      expect(authService.verifyUser('admin3', savedUser.password)).resolves.toBe(false);
     });
 
     it('should reject with empty credentials', () => {
-      expect(authService.login('', '')).rejects.toThrow(AuthenticationError);
+      expect(authService.verifyUser('', '')).resolves.toBe(false);
     });
 
     it('should reject with empty username', () => {
-      expect(authService.login('', 'admin')).rejects.toThrow(AuthenticationError);
+      expect(authService.verifyUser('', savedUser.password)).resolves.toBe(false);
     });
 
     it('should reject with empty password', () => {
-      expect(authService.login('admin', '')).rejects.toThrow(AuthenticationError);
+      expect(authService.verifyUser(savedUser.username, '')).resolves.toBe(false);
     });
   });
 
@@ -100,17 +108,15 @@ describe('AuthService', () => {
 
   describe('registrate()', () => {
     it('dont registrate when user already exists', async () => {
-      pwdHasher.hash.mockImplementation((pwd) => Promise.resolve(pwd));
       vi.spyOn(userDao, 'save');
 
-      const success = await authService.registrate(testUser);
+      const success = await authService.registrate(savedUser);
 
       expect(success).toBe(false);
       expect(userDao.save).toHaveBeenCalledTimes(0);
     });
 
     it('should registrate when user doesnt exists', async () => {
-      pwdHasher.hash.mockImplementation((pwd) => Promise.resolve(pwd));
       vi.spyOn(userDao, 'save');
       const user = FakeUserDao.createTestUser();
 
@@ -120,19 +126,7 @@ describe('AuthService', () => {
 
       expect(success).toBe(true);
       expect(userDao.save).toHaveBeenCalledOnce();
-      expect(userDao.isUserSaved(user)).toBe(true);
-    });
-
-    it('should hash password', async () => {
-      const hashPrefix = `HASHED_${Date.now()}`;
-      pwdHasher.hash.mockImplementation((pwd) => Promise.resolve(`${hashPrefix}_${pwd}`));
-      const user = FakeUserDao.createTestUser();
-
-      const success = await authService.registrate(user);
-      const hashedPwd = await userDao.findPwdByUsername(user.username);
-
-      expect(success).toBe(true);
-      expect(hashedPwd).toBe(`${hashPrefix}_${user.password}`);
+      expect(userDao.isUserSaved({username: user.username, password: await pwdHasher.hash(user.password)})).toBe(true);
     });
   });
 });

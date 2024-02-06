@@ -16,16 +16,7 @@ class AuthServiceImpl implements AuthService {
     this.tokenGenerator = tokenGenerator;
   }
 
-  public async login(username: string, passwd: string): Promise<AuthTokens> {
-    const isValidPassword = await this.verifyPassword(username, passwd);
-    if (!isValidPassword) {
-      throw new AuthenticationError(`Wrong credentials! Username: ${username}`);
-    }
-
-    return this.generateTokens(username);
-  }
-
-  private async verifyPassword(username: string, rawPwd: string): Promise<boolean> {
+  public async verifyUser(username: string, rawPwd: string): Promise<boolean> {
     try {
       const hashPwd = await this.userDao.findPwdByUsername(username) || '';
       return await this.pwdHasher.verify(hashPwd, rawPwd);
@@ -35,7 +26,7 @@ class AuthServiceImpl implements AuthService {
     }
   }
 
-  private async generateTokens(username: string): Promise<AuthTokens> {
+  public async generateTokens(username: string): Promise<AuthTokens> {
     const accessToken = await this.signAccessToken(username);
     const refreshToken = await this.signRefreshToken(username);
     return { accessToken, refreshToken };
@@ -70,8 +61,8 @@ class AuthServiceImpl implements AuthService {
   }
 
   public async registrate(user: { username: string, password: string }): Promise<boolean> {
-    const canRegistrate = !(await this.userDao.existsByUsername(user.username));
-    if (canRegistrate) {
+    const usernameNotExists = !(await this.userDao.existsByUsername(user.username));
+    if (usernameNotExists) {
       const hashedPwd = await this.pwdHasher.hash(user.password);
       await this.userDao.save({ username: user.username, password: hashedPwd });
       return true;

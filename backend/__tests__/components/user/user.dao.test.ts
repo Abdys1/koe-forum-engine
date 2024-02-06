@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import {
-  beforeAll, beforeEach, describe, expect, it,
+  beforeAll, beforeEach, describe, expect, it
 } from 'vitest';
 
 import logger from '@src/components/logger/logger';
@@ -23,10 +23,10 @@ describe('User dao ', () => {
     await UserModel.create({ username: 'test_user', password: 'alma' });
   });
 
-  // TODO ki lehetne emelni majd test utilba
   async function assertValidationError(user: ForumUser, expectedFields: string[]): Promise<void> {
     try {
       await userDao.save(user)
+      throw new Error('Should throw validation error!');
     } catch(error: unknown) {
       expect(error).toBeInstanceOf(mongoose.Error.ValidationError);
       const err = error as mongoose.Error.ValidationError;

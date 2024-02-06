@@ -1,62 +1,23 @@
-import argon2 from 'argon2';
 import mongoose from 'mongoose';
-import supertest, { Response } from 'supertest';
+import supertest from 'supertest';
 import {
   beforeAll, describe, it, expect, afterAll, beforeEach,
 } from 'vitest';
-import TestAgent from 'supertest/lib/agent';
 
 import app from '@src/app';
-import { verifyToken } from '@src/components/auth/jwt-token-generator.js';
 import logger from '@src/components/logger/logger';
 import UserModel from '@src/components/user/user.model';
 import config from '@src/config';
+import AuthClient from '@test/components/auth/auth-client';
+import { createRandomUser, assertAccessToken, assertLoginInputInvalid } from '@test/components/auth/auth-test-utils';
 
-import { generateUsername, generatePassword } from '@test/utils/test-data-generator';
-import assertValidations from '@test/utils/validation-assert';
 
 describe('Authentication api', () => {
-  const BASE_URL = '/api/auth';
-
-  let request: TestAgent;
-  let testUser: { username: string, password: string };
-
-  function createRandomUser() {
-    return { username: generateUsername(), password: generatePassword() };
-  }
-
-  async function registrate(user: { username: string, password: string }): Promise<Response> {
-    return request.post(`${BASE_URL}/registrate`)
-      .send({ username: user.username, password: user.password })
-      .set('Accept', 'application/json');
-  }
-
-  async function login(user: { username: string, password: string }): Promise<Response> {
-    return request.post(`${BASE_URL}/login`)
-      .send({ username: user.username, password: user.password })
-      .set('Accept', 'application/json');
-  }
-
-  async function refresh(cookies: Array<string>): Promise<Response> {
-    return request.post(`${BASE_URL}/refresh`).set('Cookie', cookies);
-  }
-
-  async function checkAccessToken(resp: Response, expectedUsername: string) {
-    expect(resp.status).toBe(200);
-    expect(resp.body.accessToken).toBeTruthy();
-    const payload = await verifyToken(resp.body.accessToken, config.auth.secrets.accessToken);
-    expect(payload.username).toBe(expectedUsername);
-  }
-
-  async function assertLoginInputInvalid(user: { username: string, password: string }, expectedErrors: any[]) {
-    const resp = await login({ username: user.username, password: user.password });
-    expect(resp.status).toBe(400);
-    assertValidations(resp.body.errors, expectedErrors);
-  }
+  let authClient: AuthClient;
 
   beforeAll(async () => {
     await mongoose.connect(config.database.url);
-    request = supertest(app);
+    authClient = new AuthClient(supertest(app));
   });
 
   beforeEach(async () => {
@@ -65,24 +26,19 @@ describe('Authentication api', () => {
     } catch (err) {
       logger.error(err);
     }
-    testUser = createRandomUser();
-    const user = new UserModel({
-      username: testUser.username, password: await argon2.hash(testUser.password),
-    });
-    await user.save();
   });
 
   it('when try login after registrate then should return valid access token', async () => {
     const user = createRandomUser();
-    await registrate(user);
-    const resp = await login(user);
+    await authClient.registrate(user);
+    const resp = await authClient.login(user);
 
-    await checkAccessToken(resp, user.username);
+    await assertAccessToken(resp, user.username);
     expect(resp.headers['set-cookie'][0]).toMatch(/refreshToken=.*;*HttpOnly/);
   });
 
   it('when try login without registration then should return 401 status', async () => {
-    const resp = await login(createRandomUser());
+    const resp = await authClient.login(createRandomUser());
 
     expect(resp.status).toBe(401);
     expect(resp.body.accessToken).toBeFalsy();
@@ -90,8 +46,8 @@ describe('Authentication api', () => {
 
   it('when try login with wrong password then should return 401 status', async () => {
     const user = createRandomUser();
-    await registrate(user);
-    const resp = await login({ username: user.username, password: 'bad_pwd' });
+    await authClient.registrate(user);
+    const resp = await authClient.login({ username: user.username, password: 'bad_pwd' });
 
     expect(resp.status).toBe(401);
     expect(resp.body.accessToken).toBeFalsy();
@@ -101,38 +57,38 @@ describe('Authentication api', () => {
     const expectedUsernameError = { location: 'body', path: 'username', type: 'field' };
     const expectedPasswordError = { location: 'body', path: 'password', type: 'field' };
 
-    assertLoginInputInvalid({ username: '', password: '' }, [expectedUsernameError, expectedPasswordError]);
-    assertLoginInputInvalid({ username: 'teszt', password: '' }, [expectedPasswordError]);
-    assertLoginInputInvalid({ username: '', password: 'teszt' }, [expectedUsernameError]);
+    assertLoginInputInvalid(authClient, { username: '', password: '' }, [expectedUsernameError, expectedPasswordError]);
+    assertLoginInputInvalid(authClient, { username: 'teszt', password: '' }, [expectedPasswordError]);
+    assertLoginInputInvalid(authClient, { username: '', password: 'teszt' }, [expectedUsernameError]);
   });
 
   it('when already login then refresh endpoint should return new access token', async () => {
-    const loginResp = await login(testUser);
-    const resp = await refresh(loginResp.get('Set-Cookie'));
+    const user = createRandomUser();
+    await authClient.registrate(user);
+    const loginResp = await authClient.login(user);
+    const resp = await authClient.refresh(loginResp.get('Set-Cookie'));
 
-    await checkAccessToken(resp, testUser.username);
+    await assertAccessToken(resp, user.username);
   });
 
   it('when try registrate twice then should return 409 status', async () => {
     const user = createRandomUser();
-
-    let resp = await registrate(user);
+    let resp = await authClient.registrate(user);
 
     expect(resp.status).toBe(200);
 
-    resp = await registrate(user);
+    resp = await authClient.registrate(user);
 
     expect(resp.status).toBe(409);
   });
 
   it('when try refresh without token then should return 401 status', async () => {
-    const resp = await refresh([]);
-
+    const resp = await authClient.refresh([]);
     expect(resp.status).toBe(401);
   });
 
   it('when try refresh with invalid token then should return 401 status', async () => {
-    const resp = await refresh([
+    const resp = await authClient.refresh([
       'refreshToken=badToken; Max-Age=86400; Path=/; Expires=Tue, 22 Aug 2023 17:19:27 GMT; HttpOnly; Secure; SameSite=Strict',
     ]);
 

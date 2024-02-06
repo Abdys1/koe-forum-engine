@@ -3,7 +3,7 @@ import logger from "@src/components/logger/logger";
 import RestApiValidationError from "./rest-api-validation.error";
 import { NextFunction, Request, Response } from 'express'; 
 
-export default function errorHandler(err: unknown, _: Request, res: Response, next: NextFunction) {
+function errorHandler(err: unknown, _: Request, res: Response, next: NextFunction) {
     logger.error(err);
     if (err instanceof AuthenticationError) {
       res.status(401).send();
@@ -13,3 +13,5 @@ export default function errorHandler(err: unknown, _: Request, res: Response, ne
       next(err);
     }
 }
+
+export default errorHandler;

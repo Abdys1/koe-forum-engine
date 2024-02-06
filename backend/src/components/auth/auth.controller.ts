@@ -9,21 +9,26 @@ class AuthController {
     this.authService = authService;
   }
 
-  public async login(req: Request, res: Response) {
+  public async login(req: Request, res: Response): Promise<void> {
     const { username, password } = req.body;
-    // TODO szedjük szét verifyUser-re és generateTokens-re
-    const { accessToken, refreshToken } = await this.authService.login(username, password);
-    logger.info(`${username}'s tokens has created`);
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      sameSite: 'strict',
-      secure: true,
-      maxAge: 24 * 60 * 60 * 1000,
-    });
-    res.status(200).send({ accessToken });
+    const isValidUser = await this.authService.verifyUser(username, password);
+    if (isValidUser) {
+      const { accessToken, refreshToken } = await this.authService.generateTokens(username);
+      logger.info(`${username}'s tokens has created`);
+      res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        sameSite: 'strict',
+        secure: true,
+        maxAge: 24 * 60 * 60 * 1000,
+      });
+      res.status(200).send({ accessToken });
+    } else {
+      logger.error(`Wrong credentials! Username: ${username}`);
+      res.status(401).send();
+    }
   }
 
-  public async refresh(req: Request, res: Response) {
+  public async refresh(req: Request, res: Response): Promise<void> {
     const { refreshToken } = req.cookies;
     if (!refreshToken) {
       logger.error('Refresh token not found');
@@ -34,9 +39,9 @@ class AuthController {
     }
   }
 
-  public async registrate(req: Request, res: Response) {
+  public async registrate(req: Request, res: Response): Promise<void> {
     const success = await this.authService.registrate(
-      { username: req.body.username, password: req.body.password },
+      { username: req.body.username, password: req.body.password }
     );
     if (success) {
       res.status(200).send();
