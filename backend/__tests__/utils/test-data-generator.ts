@@ -8,5 +8,5 @@ export function generateUsername(): string {
 
 export function generatePassword(): string {
   passwordNumber += 1;
-  return `test_pwd_${passwordNumber}`;
+  return `Test_pwd_${passwordNumber}`;
 }

@@ -9,7 +9,10 @@ export default defineRouter([
         path: '/login', 
         method: HttpMethod.POST, 
         public: true,
-        middlewares: [body('username').notEmpty(), body('password').notEmpty()],
+        middlewares: [
+            body('username').isLength({ min: 4, max: 255 }), 
+            body('password').isLength({ min: 8, max: 64 })
+        ],
         controller: asyncHandler(async (req, res) => await authController.login(req, res))
     },
     {
@@ -20,8 +23,12 @@ export default defineRouter([
     },
     { 
         path: '/registrate', 
-        method: HttpMethod.POST, 
+        method: HttpMethod.POST,
         public: true,
+        middlewares: [
+            body('username').isLength({ min: 4, max: 255 }), 
+            body('password').isStrongPassword().isLength({ max: 64 })
+        ],
         controller: asyncHandler(async (req, res) => await authController.registrate(req, res))
     }
 ]);

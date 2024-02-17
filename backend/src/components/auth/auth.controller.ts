@@ -46,7 +46,7 @@ class AuthController {
     if (success) {
       res.status(200).send();
     } else {
-      res.status(409).send();
+      res.status(409).send('User already exists!');
     }
   }
 }
