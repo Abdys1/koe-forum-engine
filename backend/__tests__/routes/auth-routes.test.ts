@@ -21,11 +21,7 @@ describe('Authentication api', () => {
   });
 
   beforeEach(async () => {
-    try {
-      await UserModel.collection.drop();
-    } catch (err) {
-      logger.error(err);
-    }
+    await UserModel.deleteMany({});
   });
 
   it('when try login after registrate then should return valid access token', async () => {

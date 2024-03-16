@@ -16,7 +16,7 @@ function readTestDatabaseUrl(): string {
   }
 }
 
-// TODO dobjunk el exception ha nincsenek meg a szükséges környezetei változók
+// TODO dobjunk el exception ha nincsenek meg a szükséges környezeti változók
 const databaseUrl = process.env.NODE_ENV === 'test' ? readTestDatabaseUrl() : (process.env.DATABASE_URL || '');
 
 export default {

@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.menuItem {
+    position: relative;
+    margin-left: 1.8em;
+    font-size: 1.1em;
+    text-transform: uppercase;
+    color: #fff;
+    line-height: 1em;
+    letter-spacing: 2px;
+    cursor: pointer;
+}
+
+.menuItem:hover {
+    color: #c5bfff;
+}
+
+.menuItem a {
+    text-decoration: none;
+}

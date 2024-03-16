@@ -6,7 +6,6 @@ import { verifyToken } from '@src/components/auth/jwt-token-generator';
 import config from '@src/config';
 import AuthClient from '@test/routes/auth-client';
 
-// TODO adni neki egy return típust, ha a controllernek már lesz
 export function createRandomUser(): { username: string, password: string } {
     return { username: generateUsername(), password: generatePassword() };
 }  

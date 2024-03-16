@@ -13,13 +13,13 @@ export default defineRouter([
             body('username').isLength({ min: 4, max: 255 }), 
             body('password').isLength({ min: 8, max: 64 })
         ],
-        controller: asyncHandler(async (req, res) => await authController.login(req, res))
+        controller: asyncHandler(authController.login)
     },
     {
         path: '/refresh', 
         method: HttpMethod.POST, 
         public: true,
-        controller: asyncHandler(async (req, res) => await authController.refresh(req, res))
+        controller: asyncHandler(authController.refresh)
     },
     { 
         path: '/registrate', 
@@ -29,6 +29,6 @@ export default defineRouter([
             body('username').isLength({ min: 4, max: 255 }), 
             body('password').isStrongPassword().isLength({ max: 64 })
         ],
-        controller: asyncHandler(async (req, res) => await authController.registrate(req, res))
+        controller: asyncHandler(authController.registrate)
     }
 ]);

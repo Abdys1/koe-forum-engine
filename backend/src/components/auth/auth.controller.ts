@@ -5,8 +5,11 @@ import { Request, Response } from 'express';
 class AuthController {
   private authService;
 
-  public constructor(authService: AuthService) {
+  constructor(authService: AuthService) {
     this.authService = authService;
+    this.login = this.login.bind(this);
+    this.refresh = this.refresh.bind(this);
+    this.registrate = this.registrate.bind(this);
   }
 
   public async login(req: Request, res: Response): Promise<void> {
