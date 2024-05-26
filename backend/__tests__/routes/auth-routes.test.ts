@@ -8,7 +8,14 @@ import app from '@src/app';
 import UserModel from '@src/components/user/user.model';
 import config from '@src/config';
 import AuthClient from '@test/routes/auth-client';
-import { createRandomUser, assertLogin, assertLoginInputInvalid, assertRegistrationInputInvalid, createUsernameValidationError, createPasswordValidationError } from '@test/routes/auth-test-utils';
+import { 
+  createRandomUser, 
+  assertLogin, 
+  assertLoginInputInvalid, 
+  assertRegistrationInputInvalid, 
+  createUsernameValidationError, 
+  createPasswordValidationError 
+} from '@test/routes/auth-test-utils';
 
 
 describe('Authentication api', () => {
