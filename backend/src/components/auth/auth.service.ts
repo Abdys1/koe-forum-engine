@@ -40,11 +40,12 @@ class AuthServiceImpl implements AuthService {
     return this.tokenGenerator.signToken({ username }, config.auth.secrets.refreshToken, '1d');
   }
 
-  public async refreshAccessToken(refreshToken: string): Promise<string | undefined> {
+  public async refreshTokens(refreshToken: string): Promise<AuthTokens> {
     const payload = await this.verifyToken(refreshToken, config.auth.secrets.refreshToken);
     const accessToken = await this.signAccessToken(payload.username);
+    const newRefreshToken = await this.signRefreshToken(payload.username);
     logger.info(`New access token has created! Username: ${payload.username}`);
-    return accessToken;
+    return { accessToken, refreshToken: newRefreshToken };
   }
 
   private async verifyToken(token: string, secret: string): Promise<ForumJwtPayload> {

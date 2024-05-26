@@ -58,7 +58,7 @@ describe('Character api', () => {
         assertCharacterList(charListResp, [newCharacter]);
     });
 
-    it('when create a new character then should be only in users character list', async () => {
+    it('when create a new character then should be only in user own character list', async () => {
         const user1 = await saveTestUser();
         const user2 = await saveTestUser();
         const newCharacter = createCharacterDto();

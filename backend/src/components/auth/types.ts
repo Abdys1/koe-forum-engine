@@ -3,7 +3,7 @@ import { JwtPayload, Secret } from 'jsonwebtoken';
 export interface AuthService {
     generateTokens: (username: string) => Promise<AuthTokens>;
     verifyUser: (username: string, password: string) => Promise<boolean>
-    refreshAccessToken: (refreshToken: string) => Promise<string | undefined>;
+    refreshTokens: (refreshToken: string) => Promise<AuthTokens>;
     registrate: (user: { username: string, password: string }) => Promise<boolean>
 }
 

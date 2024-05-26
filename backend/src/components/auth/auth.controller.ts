@@ -16,15 +16,9 @@ class AuthController {
     const { username, password } = req.body;
     const isValidUser = await this.authService.verifyUser(username, password);
     if (isValidUser) {
-      const { accessToken, refreshToken } = await this.authService.generateTokens(username);
+      const tokens = await this.authService.generateTokens(username);
       logger.info(`${username}'s tokens has created`);
-      res.cookie('refreshToken', refreshToken, {
-        httpOnly: true,
-        sameSite: 'strict',
-        secure: true,
-        maxAge: 24 * 60 * 60 * 1000,
-      });
-      res.status(200).send({ accessToken });
+      res.status(200).send(tokens);
     } else {
       logger.error(`Wrong credentials! Username: ${username}`);
       res.status(401).send();
@@ -32,13 +26,13 @@ class AuthController {
   }
 
   public async refresh(req: Request, res: Response): Promise<void> {
-    const { refreshToken } = req.cookies;
-    if (!refreshToken) {
+    //TODO express-validator-ral validáljuk, hogy van-e refreshToken
+    if (!req.body.refreshToken) {
       logger.error('Refresh token not found');
       res.status(401).send();
     } else {
-      const accessToken = await this.authService.refreshAccessToken(refreshToken);
-      res.status(200).send({ accessToken });
+      const tokens = await this.authService.refreshTokens(req.body.refreshToken);
+      res.status(200).send(tokens);
     }
   }
 

@@ -1,9 +1,8 @@
 import Image from "next/image";
 import Title from "@/components/Title";
 import { caveat, mrsSaintDelafield, sumana } from "@/app/fonts";
-import LoginLink from "@/app/ui/LoginLink";
-import RegistrationLink from "./ui/RegistrationLink";
-import RegulationLink from "./ui/RegulationLink";
+import PrimaryLink from "@/components/PrimaryLink";
+import SecondaryLink from "@/components/SecondaryLink";
 
 export default function Home() {
   return (
@@ -29,10 +28,10 @@ export default function Home() {
             <h4 className={`text-white ${sumana.className}`}>Te döntöd el, melyik ajtót nyitod ki vele.</h4>
             <div className='relative w-full mt-6 flex justify-start items-center flex-col'>
               <div className='mb-6'>
-                <LoginLink/>
+                <PrimaryLink href="/auth/login">Belépek</PrimaryLink>
               </div>
               <div>
-                <RegistrationLink/>
+                <SecondaryLink href="/auth/registration">Regisztrálok</SecondaryLink>
               </div>
             </div>
           </div>
@@ -52,9 +51,16 @@ export default function Home() {
             </div>
             <div>
               <div className='relative mb-6'>
-                <RegulationLink/>
+                <PrimaryLink href="">
+                  <span className='tracking-widest'>
+                    Szabályzat
+                  </span>
+                  <span className='relative w-auto h-full flex justify-center items-center text-2xl pt-1 ml-1.5'>
+                      {/* <ion-icon name="chevron-forward-sharp"></ion-icon> */}
+                  </span>
+                </PrimaryLink>
               </div>
-              <RegistrationLink/>
+              <SecondaryLink href="/auth/registration">Regisztrálok</SecondaryLink>
             </div>
           </div>
           <div className='relative max-w-[40%] max-h-full flex justify-center items-end'>

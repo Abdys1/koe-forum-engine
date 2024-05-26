@@ -83,26 +83,29 @@ describe('AuthService', () => {
   });
 
   describe('refreshAccessToken()', () => {
-    it('should return access token when refresh token is valid', () => {
-      const token = `AccessToken_${Math.floor(Date.now() + Math.random())}`;
+    it('should return new tokens when refresh token is valid', async () => {
+      const accessToken = `Token_${Math.floor(Date.now() + Math.random())}`;
 
       tokenGenerator.verifyToken.mockResolvedValueOnce({ username: 'teszt' });
-      tokenGenerator.signToken.mockResolvedValueOnce(token);
+      tokenGenerator.signToken.mockResolvedValue(accessToken);
 
-      expect(authService.refreshAccessToken('refreshToken')).resolves.toBe(token);
+      const tokens = await authService.refreshTokens('refreshToken');
+
+      expect(tokens.accessToken).toBe(accessToken);
+      expect(tokens.refreshToken).toBe(accessToken);
     });
 
     it('should throw authentication error when refresh token is invalid', () => {
       tokenGenerator.verifyToken.mockRejectedValueOnce(new Error());
 
-      expect(authService.refreshAccessToken('refreshToken')).rejects.toThrow(AuthenticationError);
+      expect(authService.refreshTokens('refreshToken')).rejects.toThrow(AuthenticationError);
     });
 
     it('should throw unexpected error when cannot sign token', () => {
       tokenGenerator.verifyToken.mockResolvedValueOnce({ username: 'teszt' });
       tokenGenerator.signToken.mockRejectedValueOnce(new TestError());
 
-      expect(authService.refreshAccessToken('refreshToken')).rejects.toThrow(TestError);
+      expect(authService.refreshTokens('refreshToken')).rejects.toThrow(TestError);
     });
   });
 

@@ -22,8 +22,8 @@ class AuthClient {
             .set('Accept', 'application/json');
     }
 
-    public async refresh(cookies: Array<string>): Promise<Response> {
-        return this.request.post(`${AuthClient.BASE_URL}/refresh`).set('Cookie', cookies);
+    public async refresh(refreshToken: string | null | undefined): Promise<Response> {
+        return this.request.post(`${AuthClient.BASE_URL}/refresh`).send({ refreshToken });
     }
 }
 
