@@ -1,8 +1,7 @@
 'use client'
 
-import { login } from "@/app/auth/login/actions";
 import InputField from "@/components/InputField";
-import { signIn } from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
 import { useState } from "react";
 
 export default function LoginPage() {
@@ -14,8 +13,7 @@ export default function LoginPage() {
         await signIn("credentials", {
             username,
             password,
-            redirect: true,
-            callbackUrl: "/"
+            redirect: false
         });
     }
 
@@ -25,6 +23,7 @@ export default function LoginPage() {
                 <InputField label="Felhasználónév" name="username" type="text" onChange={val => setUsername(val)}/>
                 <InputField label="Jelszó" name="password" type="password" onChange={val => setPassword(val)}/>
                 <button type="submit">Bejelentkezem</button>
+                <button type="button" onClick={async () => await signOut()}>Kijelentkezem</button>
             </form>
         </>
     );

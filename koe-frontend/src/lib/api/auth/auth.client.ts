@@ -1,4 +1,4 @@
-import { AuthClient, LoginRequestBody, TokenResponseBody } from "@/lib/api/auth/types";
+import { AuthClient, LoginRequestBody, RefreshTokenBody, TokenResponseBody } from "@/lib/api/auth/types";
 import { HttpClient, HttpResponse } from "@/lib/api/http/http";
 
 export default class AuthClientImpl implements AuthClient {
@@ -12,7 +12,7 @@ export default class AuthClientImpl implements AuthClient {
         return this.http.post('/auth/login', reqData);
     }
 
-    public async refreshToken(): Promise<HttpResponse<TokenResponseBody>> {
-        return this.http.post('/auth/refresh');
+    public async refreshToken(reqData: RefreshTokenBody): Promise<HttpResponse<TokenResponseBody>> {
+        return this.http.post('/auth/refresh', reqData);
     }
 }

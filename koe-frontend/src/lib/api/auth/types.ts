@@ -5,11 +5,16 @@ export type LoginRequestBody = {
     password: string
 };
 
+export type RefreshTokenBody = {
+    refreshToken: string
+};
+
 export type TokenResponseBody = {
-    accessToken: string
+    accessToken: string,
+    refreshToken: string
 };
 
 export interface AuthClient {
     login: (reqData: LoginRequestBody) => Promise<HttpResponse<TokenResponseBody>>,
-    refreshToken: () => Promise<HttpResponse<TokenResponseBody>>
+    refreshToken: (reqData: RefreshTokenBody) => Promise<HttpResponse<TokenResponseBody>>
 };
