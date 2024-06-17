@@ -22,17 +22,24 @@ export const config = {
               password: { label: "Password", type: "password" }
             },
             async authorize(credentials, req): Promise<any> {
-              const resp = await authClient.login({
-                username: credentials?.username || '',
-                password: credentials?.password || ''
-              });
-              const user = {
-                username: credentials?.username, 
-                accessToken: resp.data.accessToken, 
-                refreshToken: resp.data.refreshToken 
-              };
-        
-              return user || null;
+              if (!credentials?.username || !credentials?.password) {
+                return null;
+              }
+
+              try {
+                const resp = await authClient.login({
+                  username: credentials.username,
+                  password: credentials.password
+                });
+
+                return {
+                  username: credentials.username, 
+                  accessToken: resp.data.accessToken, 
+                  refreshToken: resp.data.refreshToken 
+                };
+              } catch (error: unknown) {
+                return null;
+              }
             }
         })
     ],
