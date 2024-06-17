@@ -14,11 +14,27 @@ export class HttpClient {
     }
 
     public async post(path: string, body?: any, headers?: HeadersInit): Promise<HttpResponse<any>> {
+        return this.sendRequest('POST', path, body, headers);
+    }
+
+    public async get(path: string, headers?: HeadersInit): Promise<HttpResponse<any>> {
+        return this.sendRequest('GET', path, undefined, headers);
+    }
+
+    public async put(path: string, body?: any, headers?: HeadersInit): Promise<HttpResponse<any>> {
+        return this.sendRequest('PUT', path, body, headers);
+    }
+
+    public async delete(path: string, headers?: HeadersInit): Promise<HttpResponse<any>> {
+        return this.sendRequest('DELETE', path, undefined, headers);
+    }
+
+    private async sendRequest(method: string, path: string, body?: any, headers?: HeadersInit): Promise<HttpResponse<any>> {
         const resp: Response = await fetch(`${this.baseUrl}${path}`, {
-            method: 'POST',
+            method: method,
             headers: {
-                ...headers,
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                ...headers
             },
             body: JSON.stringify(body)
         });
@@ -36,10 +52,10 @@ export class HttpClient {
 }
 
 export class HttpResponseError extends Error {
-    private resp: Response;
+    public resp: Response;
 
     constructor(resp: Response) {
-        super();
+        super(`Api response with ${resp.status} status from ${resp.url} endpoint.`);
         this.resp = resp;
     }
 }
