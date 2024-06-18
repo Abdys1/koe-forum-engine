@@ -2,7 +2,8 @@ import { withAuth } from "next-auth/middleware";
 
 const PUBLIC_PATHS: string[] = [
     '/', 
-    '/auth/login'
+    '/auth/login',
+    '/character/create'
 ];
 
 export default withAuth({
