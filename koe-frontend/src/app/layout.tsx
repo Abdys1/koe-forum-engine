@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Provider } from "@/components/Provider";
 import { auth } from "@/app/api/auth/[...nextauth]/auth";
+import { roboto, poppins, sumana, caveat, mrsSaintDelafield } from "@/app/fonts";
 
 export const metadata: Metadata = {
   title: "Key of Eternity",
@@ -16,7 +17,7 @@ export default async function RootLayout({
   const session = await auth();
   return (
     <html lang="en">
-      <body>
+      <body className={`${roboto.variable} ${poppins.variable} ${sumana.variable} ${caveat.variable} ${mrsSaintDelafield.variable}`}>
         <Provider session={session}>{ children }</Provider>
       </body>
     </html>

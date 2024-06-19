@@ -1,3 +1,4 @@
+import { poppins } from "@/app/fonts";
 import type { Config } from "tailwindcss";
 
 const config: Config = {
@@ -27,6 +28,13 @@ const config: Config = {
       },
       spacing: {
         '17.5': '4.375rem'
+      },
+      fontFamily: {
+        roboto: ["var(--font-roboto)"],
+        poppins: ["var(--font-poppins)"],
+        caveat: ["var(--font-caveat)"],
+        sumana: ["var(--font-sumana)"],
+        mrsSaintDelafield: ["var(--font-mrsSaintDelafield)"]
       }
     },
   },
