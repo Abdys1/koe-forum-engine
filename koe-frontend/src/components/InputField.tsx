@@ -27,9 +27,9 @@ export default function InputField({ label, name, type, onChange }: InputFieldPr
         <div className='relative'>
             <input id={ inputId } name={ name } type={ type }
                 onChange={handleChange}
-                className="peer pb-1 border-b-2 focus:outline-none"/>
+                className="peer pb-1 border-b-2 border-brownMainHover caret-brownMainHover text-brownMainHover focus:outline-none bg-transparent"/>
             <label htmlFor={ inputId } className={clsx(
-                'absolute cursor-text left-0 peer-focus:-translate-y-5 peer-focus:text-sm peer-focus:cursor-default transition-all ease-in-out duration-150',
+                'absolute text-brownMainHover cursor-text left-0 peer-focus:-translate-y-5 peer-focus:text-sm peer-focus:cursor-default transition-all ease-in-out duration-150',
                 { '-translate-y-5 text-sm cursor-default': hasValue }
             )}>{ label }</label>    
         </div>

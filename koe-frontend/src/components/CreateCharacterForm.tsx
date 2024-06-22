@@ -1,6 +1,6 @@
-import { caveat, sumana } from "@/app/fonts";
 import MultiStepLabel from "@/components/MultiStepLabel";
 import CharacterRaceBtn from "@/components/CharacterRaceBtn";
+import InputField from "@/components/InputField";
 
 export default function CreateCharacterForm() {
     return (
@@ -19,8 +19,7 @@ export default function CreateCharacterForm() {
                 <div className="relative w-full flex justify-center items-center">
                     <div className="relative w-full flex justify-center items-center flex-col">
                         <div className="relative flex justify-center items-center">
-                            <label>Karakter neve</label>
-                            <input type="text" />
+                            <InputField label="Karakternév" name="name" type="text" />
                         </div>
                         <div>
                             <img src="/images/ryldan2.png" alt="sötételf"
