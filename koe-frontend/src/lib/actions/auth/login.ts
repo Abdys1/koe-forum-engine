@@ -3,13 +3,12 @@
 import { signIn } from "next-auth/react";
 import { redirect } from "next/navigation";
 
+// TODO értelmes típust találni neki
 export async function login(formData) {
-    const { username, password } = Object.fromEntries(formData);
-
     try {
         const response = await signIn("credentials", {
-            username,
-            password,
+            usernema: formData.get('username'),
+            password: formData.get('password'),
             redirect: false
         });
 

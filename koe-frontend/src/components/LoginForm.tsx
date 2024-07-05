@@ -1,4 +1,7 @@
-import InputField from "@/components/InputField";
+'use client'
+
+import PasswordField from "@/components/inputs/PasswordField";
+import TextField from "@/components/inputs/TextField";
 import { login } from "@/lib/actions/auth/login";
 import { signOut } from "next-auth/react";
 import { useForm } from "react-hook-form";
@@ -17,13 +20,13 @@ export default function LoginForm() {
 
     return (
         <form onSubmit={handleSubmit(login)} className="flex flex-col gap-8">
-            {errors.username?.type === "required" && <span>Hibás felhasználónév vagy jelszó!</span>}
-            <InputField label="Felhasználónév" name="username" type="text" register={register} required/>
-            {errors.username?.type === "required" && <span>A felhasználónév megadaása kötelező!</span>}
-            <InputField label="Jelszó" name="password" type="password" register={register} required/>
-            {errors.password?.type === "required" && <span>A jelszó megadaása kötelező!</span>}
-            <button type="submit" className="text-brownMainHover">Bejelentkezem</button>
-            <button type="button" className="text-brownMainHover" onClick={async () => await signOut()}>Kijelentkezem</button>
+            {/*errors.username?.type === "required" && <span>Hibás felhasználónév vagy jelszó!</span>*/}
+            <TextField label="Felhasználónév" {...register('username', { required: true })}/>
+            {errors.username?.type === "required" && <span className="text-red-600">A felhasználónév megadaása kötelező!</span>}
+            <PasswordField {...register('password', { required: true })}/>
+            {errors.password?.type === "required" && <span className="text-red-600">A jelszó megadaása kötelező!</span>}
+            <button type="submit" className="text-mainLight">Bejelentkezem</button>
+            <button type="button" className="text-mainLight" onClick={async () => await signOut()}>Kijelentkezem</button>
         </form>
     );
 }

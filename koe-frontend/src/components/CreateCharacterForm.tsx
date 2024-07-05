@@ -3,10 +3,10 @@
 import { caveat, sumana } from "@/app/fonts";
 import MultiStepLabel from "@/components/MultiStepLabel";
 import CharacterRaceBtn from "@/components/CharacterRaceBtn";
-import InputField from "@/components/InputField";
 import SelectableOptionBtn from "@/components/SelectableOptionBtn";
 import { useState } from "react";
 import Link from "next/link";
+import TextField from "@/components/inputs/TextField";
 
 type SelectableRace = "sotetelf" | "ember" | "ork" | "elf" | "torp" | "felszerzet";
 type SelectableSex = "ferfi" | "no";
@@ -40,7 +40,7 @@ export default function CreateCharacterForm() {
                 <div className="relative w-full flex justify-between items-start">
                     <div className="relative w-full h-full flex justify-start items-center flex-col">
                         <div className="relative flex justify-center items-center">
-                            <InputField label="Karakternév" name="characterName" type="text" />
+                            <TextField label="Karakternév" name="characterName"/>
                         </div>
                         <div className="relative w-full flex justify-center items-center">
                             <SelectableOptionBtn title="Férfi" onClick={() => selectSex("ferfi")} active={selectedSex === "ferfi"} />
