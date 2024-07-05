@@ -2,34 +2,28 @@
 
 import clsx from "clsx";
 import { useId, useState } from "react";
+import { UseFormRegister } from "react-hook-form";
 
 type InputFieldProps = {
     label: string,
-    name: string,
     type: string,
-    onChange?: (e: string) => void
+    name: string,
+    required?: boolean,
+    register: UseFormRegister<any>
 };
 
-export default function InputField({ label, name, type, onChange }: InputFieldProps) {
+export default function InputField({ label, name, type, register, required }: InputFieldProps) {
     const inputId = useId();
 
     const [hasValue, setHasValue] = useState(false);
 
-    function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-        const newVal = e.target.value;
-        setHasValue(!!newVal);
-        if (onChange) {
-            onChange(newVal);
-        }
-    }
-
     return (
         <div className='relative'>
-            <input id={inputId} name={name} type={type}
-                onChange={handleChange}
-                className="peer pb-1 mb-4 border-b-2 border-mainLight focus:outline-none bg-transparent text-mainLight font-poppins font-semibold tracking-widest" />
-            <label htmlFor={inputId} className={clsx(
-                'absolute cursor-text left-0 peer-focus:-translate-y-5 peer-focus:text-sm peer-focus:cursor-default transition-all ease-in-out duration-150 text-mainLight font-poppins tracking-widest font-medium',
+            <input {...register(name, { required })} id={ inputId } type={ type }
+                onChange={e => setHasValue(!!e.target.value)}
+                className="peer pb-1 mb-4 border-b-2 border-mainLight focus:outline-none bg-transparent text-mainLight font-poppins font-semibold tracking-widest"/>
+            <label htmlFor={ inputId } className={clsx(
+                'absolute text-brownMainHover cursor-text left-0 peer-focus:-translate-y-5 peer-focus:text-sm peer-focus:cursor-default transition-all ease-in-out duration-150',
                 { '-translate-y-5 text-sm cursor-default': hasValue }
             )}>{label}</label>
         </div>
