@@ -17,14 +17,11 @@ const config: Config = {
         'darkBg': '#050826',
         'blackBg': '#01020f',
         'testone': '#2fad7b',
-        'brownMainLight': '#fff99b',
-        'brownMainMedium': '#be8957',
-        'brownMainHover': '#ffdc7f',
-        'brownBlackBg': '#1b1c21',
-        'brownCardBlackBg': '#191a1c',
-        'brownDarkBtn': '#434343',
+        'cardBlackBg': '#191a1c',
+        'cardMediumBg': '#323438',
+        'darkBtn': '#434343',
         'blackBorder': '#161616',
-        'brownDarkBrown': '#2b2926'
+        'lightBorder': '#7364f5'
       },
       spacing: {
         '17.5': '4.375rem'

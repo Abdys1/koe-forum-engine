@@ -7,7 +7,7 @@ type InputFieldProps = {
     label: string,
     name: string,
     type: string,
-    onChange?: (e: string) => void 
+    onChange?: (e: string) => void
 };
 
 export default function InputField({ label, name, type, onChange }: InputFieldProps) {
@@ -25,13 +25,13 @@ export default function InputField({ label, name, type, onChange }: InputFieldPr
 
     return (
         <div className='relative'>
-            <input id={ inputId } name={ name } type={ type }
+            <input id={inputId} name={name} type={type}
                 onChange={handleChange}
-                className="peer pb-1 border-b-2 border-brownMainHover caret-brownMainHover text-brownMainHover focus:outline-none bg-transparent"/>
-            <label htmlFor={ inputId } className={clsx(
-                'absolute text-brownMainHover cursor-text left-0 peer-focus:-translate-y-5 peer-focus:text-sm peer-focus:cursor-default transition-all ease-in-out duration-150',
+                className="peer pb-1 mb-4 border-b-2 border-mainLight focus:outline-none bg-transparent text-mainLight font-poppins font-semibold tracking-widest" />
+            <label htmlFor={inputId} className={clsx(
+                'absolute cursor-text left-0 peer-focus:-translate-y-5 peer-focus:text-sm peer-focus:cursor-default transition-all ease-in-out duration-150 text-mainLight font-poppins tracking-widest font-medium',
                 { '-translate-y-5 text-sm cursor-default': hasValue }
-            )}>{ label }</label>    
+            )}>{label}</label>
         </div>
     );
 }
