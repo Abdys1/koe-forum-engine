@@ -4,7 +4,9 @@ import { ValidationError } from 'express-validator';
 
 export type AuthenticationMiddleware = (req: Request, res: Response, next: NextFunction) => Promise<void>
 
-export type AuthenticationMiddlewareOptions = { verifyToken: TokenVerifierFunc, secretKey: string };
+export interface AuthenticationMiddlewareOptions {
+    verifyToken: TokenVerifierFunc, secretKey: string
+};
 
 export interface RestApiValidationErrors {
     errors: ValidationError[]

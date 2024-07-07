@@ -7,7 +7,7 @@ export interface AuthService {
     registrate: (user: { username: string, password: string }) => Promise<boolean>
 }
 
-export type AuthTokens = {
+export interface AuthTokens {
     accessToken: string | undefined;
     refreshToken: string | undefined;
 };

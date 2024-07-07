@@ -1,18 +1,18 @@
-export type CreateCharacterRequestDto = {
+export interface CreateCharacterRequestDto {
     name: string,
     appearance: string,
     story: string,
     imageUrl: string
 };
 
-export type CharacterDetailsResponseDto = {
+export interface CharacterDetailsResponseDto {
     name: string,
     appearance: string,
     story: string,
     imageUrl: string
 };
 
-export type CreateCharacterDto = {
+export interface CreateCharacterDto {
     username: string,
     charName: string,
     appearance: string,
@@ -20,7 +20,7 @@ export type CreateCharacterDto = {
     imageUrl: string
 };
 
-export type CharacterDetails = {
+export interface CharacterDetails {
     name: string,
     appearance: string,
     story: string,
@@ -29,7 +29,7 @@ export type CharacterDetails = {
 
 export type CharacterDetailsCollection = CharacterDetails[];
 
-export type Character = {
+export interface Character {
     owner: string,
     name: string,
     appearance: string,

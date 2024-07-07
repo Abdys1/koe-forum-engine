@@ -11,12 +11,12 @@ export const HttpMethod = {
 
 export type HttpMethod = keyof typeof HttpMethod;
 
-export type RouterConfig = { 
-    path: string, 
-    method: HttpMethod, 
-    controller: RequestHandler, 
-    public?: boolean, 
-    middlewares?: any[] 
+export interface RouterConfig {
+    path: string,
+    method: HttpMethod,
+    controller: RequestHandler,
+    public?: boolean,
+    middlewares?: any[]
 }
 
 export function useDefineRouter(authMiddleware: AuthenticationMiddleware) {
@@ -37,7 +37,7 @@ export function useDefineRouter(authMiddleware: AuthenticationMiddleware) {
 }
 
 function addRoute(router: Router, method: HttpMethod, path: string, middlewares: any[], controller: RequestHandler) {
-    switch(method) {
+    switch (method) {
         case HttpMethod.GET:
             router.get(path, middlewares, controller);
             break;
