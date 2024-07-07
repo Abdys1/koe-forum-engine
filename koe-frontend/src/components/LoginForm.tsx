@@ -1,5 +1,6 @@
 'use client'
 
+import InputField from "@/components/inputs/InputField";
 import PasswordField from "@/components/inputs/PasswordField";
 import TextField from "@/components/inputs/TextField";
 import { login } from "@/lib/actions/auth/login";
@@ -20,11 +21,10 @@ export default function LoginForm() {
 
     return (
         <form onSubmit={handleSubmit(login)} className="flex flex-col gap-8">
-            {/*errors.username?.type === "required" && <span>Hibás felhasználónév vagy jelszó!</span>*/}
-            <TextField label="Felhasználónév" {...register('username', { required: true })}/>
-            {errors.username?.type === "required" && <span className="text-red-600">A felhasználónév megadaása kötelező!</span>}
-            <PasswordField {...register('password', { required: true })}/>
-            {errors.password?.type === "required" && <span className="text-red-600">A jelszó megadaása kötelező!</span>}
+            <TextField label="Felhasználónév" {...register('username', { required: true })}
+                error={errors.username?.type === 'required' ? 'A felhasználónév kitöltése kötelező' : undefined}/>
+            <PasswordField {...register('password', { required: true })}
+                error={errors.password?.type === 'required' ? 'A jelszó kitöltése kötelező' : undefined}/>
             <button type="submit" className="text-mainLight">Bejelentkezem</button>
             <button type="button" className="text-mainLight" onClick={async () => await signOut()}>Kijelentkezem</button>
         </form>
