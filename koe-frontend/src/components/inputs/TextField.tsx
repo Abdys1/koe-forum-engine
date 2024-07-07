@@ -9,7 +9,7 @@ type TextFieldProps = {
     onBlur?: React.FocusEventHandler<HTMLInputElement>
 }
 
-export default forwardRef<HTMLInputElement, TextFieldProps>(({ label, name, error, onChange, onBlur }, ref) => {
+export default forwardRef<HTMLInputElement, TextFieldProps>(function TextField({ label, name, error, onChange, onBlur }, ref) {
     return (
         <>
             <InputField label={label} name={name} ref={ref} onBlur={onBlur} onChange={onChange} error={error} type="text"/>

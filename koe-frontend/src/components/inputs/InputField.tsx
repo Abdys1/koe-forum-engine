@@ -13,7 +13,7 @@ type InputFieldProps = {
     onBlur?: React.FocusEventHandler<HTMLInputElement>
 };
 
-export default forwardRef<HTMLInputElement, InputFieldProps>(({ label, name, type, error, onChange, onBlur }, ref) => {
+export default forwardRef<HTMLInputElement, InputFieldProps>(function InputField({ label, name, type, error, onChange, onBlur }, ref) {
     const inputId = useId();
 
     const [hasValue, setHasValue] = useState(false);

@@ -9,7 +9,7 @@ export interface PasswordFieldProps {
 }
 
 
-export default forwardRef<HTMLInputElement, PasswordFieldProps>(({ name, error, onChange, onBlur }, ref) => {
+export default forwardRef<HTMLInputElement, PasswordFieldProps>(function PasswordField({ name, error, onChange, onBlur }, ref) {
     return (
         <>
             <InputField label="Jelszó" name={name} ref={ref} onChange={onChange} onBlur={onBlur} error={error} type="password"/>
