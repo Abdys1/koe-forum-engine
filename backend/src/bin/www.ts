@@ -10,7 +10,7 @@ import config from '@src/config';
  * Normalize a port into a number, string, or false.
  */
 
-function normalizePort(val: any) {
+function normalizePort(val: string) {
   const port = parseInt(val, 10);
 
   if (Number.isNaN(port)) {
@@ -32,7 +32,7 @@ const port = normalizePort(process.env.PORT || '3000');
  * Event listener for HTTP server "error" event.
  */
 
-function onError(error: any) {
+function onError(error) {
   if (error.syscall !== 'listen') {
     throw error;
   }
@@ -67,10 +67,10 @@ const server = http.createServer(app);
  */
 
 function onListening() {
-  const addr: any = server.address();
+  const addr = server.address();
   const bind = typeof addr === 'string'
     ? `pipe ${addr}`
-    : `port ${addr.port}`;
+    : `port ${addr?.port}`;
   logger.debug(`Listening on ${bind}`);
 }
 
