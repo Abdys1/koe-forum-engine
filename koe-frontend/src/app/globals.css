@@ -26,3 +26,18 @@
 .menuItem a {
     text-decoration: none;
 }
+
+.glassBox::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #323438;
+    opacity: 0.9;
+    border-radius: 0.25rem;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    box-shadow: -15px 15px 40px -5px rgba(0, 0, 0, 0.8);
+}
