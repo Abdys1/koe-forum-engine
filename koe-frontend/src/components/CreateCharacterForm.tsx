@@ -3,6 +3,7 @@
 import MultiStepLabel from "@/components/MultiStepLabel";
 import CharacterRaceBtn from "@/components/CharacterRaceBtn";
 import SelectableOptionBtn from "@/components/SelectableOptionBtn";
+import MultiStepNavBtn from "@/components/MultiStepNavBtn";
 import { useState } from "react";
 import Link from "next/link";
 import TextField from "@/components/inputs/TextField";
@@ -27,10 +28,11 @@ export default function CreateCharacterForm() {
             <form className="relative w-full h-full flex justify-center items-center flex-col m-8 py-4 px-8 bg-cardBlackBg rounded shadow-md shadow-[rgba(0,0,0,0.4)] overflow-hidden
                             before:content-[''] before:absolute before:bottom-0 before:left-0 before:h-full before:w-full before:bg-[url('/images/ryldan-nobg.png')] before:bg-no-repeat before:bg-left-bottom before:bg-contain before:opacity-60
                             after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-full after:bg-[url('/images/wave.svg')] after:bg-no-repeat after:bg-left-bottom after:bg-contain after:z-0">
-                <div className="relative w-full flex justify-center items-center flex-col mb-4 z-10">
-                    <h1 className={`relative w-full text-white font-poppins font-medium text-start text-xl uppercase tracking-widest mb-4`}>Karakter létrehozása</h1>
+                <div className="relative w-full mb-2 flex justify-center items-center flex-col z-10">
+                    <h1 className={`relative w-full mb-2 text-white font-poppins font-medium text-start text-xl uppercase tracking-widest`}>Karakter létrehozása</h1>
                     <ul className={`relative w-full max-w-3xl px-16 flex justify-between items-center
-                                   before:content-[''] before:absolute before:top-[30%] before:left-20 before:w-[calc(100%-11rem)] before:h-1.5 before:bg-blackBorder`}>
+                                   before:content-[''] before:absolute before:top-[26%] before:left-20 before:w-[calc(100%-11rem)] before:h-1 before:bg-cardMediumBg
+                                   after:content-[''] after:absolute after:top-[26%] after:left-20 after:w-[calc((100%-11rem)/3*1)] after:h-1 after:bg-mainHover`}>
                         <MultiStepLabel label="Alapok" stepNum={1} status="done" />
                         <MultiStepLabel label="Felszerelés" stepNum={2} status="active" />
                         <MultiStepLabel label="Karakterkép" stepNum={3} status="unfinished" />
@@ -72,11 +74,13 @@ export default function CreateCharacterForm() {
                         <CharacterRaceBtn title="Félszerzet" onClick={() => selectRace("felszerzet")} active={selectedRace === "felszerzet"} />
                     </ul>
                 </div>
-                <div className="relative w-full flex justify-between items-center z-10">
-                    <button type="button">Vissza</button>
-                    <div>
-                        <button type="button">Tovább</button>
-                        <button type="submit">Létrehozás</button>
+                <div className="relative py-2 w-full flex justify-between items-center z-10">
+                    <div className="relative">
+                        <MultiStepNavBtn type="button" title="Vissza" status="disabled" />
+                    </div>
+                    <div className="relative flex justify-end items-center">
+                        <MultiStepNavBtn type="button" title="Tovább" status="hidden" />
+                        <MultiStepNavBtn type="submit" title="Létrehozás" status="active" />
                     </div>
                 </div>
             </form >
