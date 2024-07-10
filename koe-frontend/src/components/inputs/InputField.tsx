@@ -31,7 +31,7 @@ export default forwardRef<HTMLInputElement, InputFieldProps>(function InputField
 
     return (
         <div className={clsx(
-            'relative flex flex-col',
+            'relative mt-4 flex flex-col',
             errorMsg ? 'text-red-600' : 'text-mainLight'
         )}>
             <input id={inputId} type={type} name={name} ref={ref}

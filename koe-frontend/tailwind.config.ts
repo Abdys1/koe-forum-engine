@@ -21,7 +21,11 @@ const config: Config = {
         'cardMediumBg': '#323438',
         'darkBtn': '#434343',
         'blackBorder': '#161616',
-        'lightBorder': '#7364f5'
+        'lightBorder': '#7364f5',
+        'secondary': '#e7cf93',
+        'secondaryMedium': '#e6c575',
+        'secondaryDark': '#ebbe52',
+        'secondaryLight': '#fae7b9'
       },
       spacing: {
         '17.5': '4.375rem'
