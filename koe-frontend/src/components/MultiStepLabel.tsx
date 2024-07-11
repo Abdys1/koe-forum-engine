@@ -3,8 +3,6 @@ import clsx from "clsx";
 type MultiStepLabelProps = {
     label: string,
     stepNum: number,
-    stepIndex: number,
-    lastIndex: number
     status: "active" | "done" | "unfinished"
 };
 

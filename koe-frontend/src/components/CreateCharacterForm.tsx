@@ -69,22 +69,20 @@ export default function CreateCharacterForm() {
     const [selectedSex, setSelectedSex] = useState<SelectableSex>("ferfi");
     const [actualStep, setActualStep] = useState(2);
 
-    function selectRace(race:SelectableRace) {
+    function selectRace(race:SelectableRace): void {
         setSelectedRace(race);
     }
 
-    function selectSex(sex: SelectableSex) {
+    function selectSex(sex: SelectableSex): void {
         setSelectedSex(sex);
     }
 
-    function getStepStatus(stepIndex: number) {
+    function getStepStatus(stepIndex: number): "active" | "done" | "unfinished" {
         if(stepIndex === actualStep) {
             return "active";
-        }
-        else if(stepIndex < actualStep) {
+        } else if(stepIndex < actualStep) {
             return "done";
-        }
-        else {
+        } else {
             return "unfinished";
         }
     }
@@ -102,7 +100,7 @@ export default function CreateCharacterForm() {
                         {
                             multiStepLabels.map((label, i) => {
                                 return(
-                                    <MultiStepLabel label={label} stepNum={i + 1} stepIndex={i} lastIndex={multiStepLabels.length -1} status={getStepStatus(i)} />
+                                    <MultiStepLabel key={i} label={label} stepNum={i + 1} status={getStepStatus(i)} />
                                 );
                             })
                         }
@@ -162,7 +160,7 @@ export default function CreateCharacterForm() {
                         {
                             raceElements.map((raceElement) => {
                                 return (
-                                    <CharacterRaceBtn title={raceElement.title} img={raceElement.buttonImg} onClick={() => selectRace(raceElement)} active={selectedRace.id === raceElement.id} />
+                                    <CharacterRaceBtn key={raceElement.id} title={raceElement.title} img={raceElement.buttonImg} onClick={() => selectRace(raceElement)} active={selectedRace.id === raceElement.id} />
                                 );
                             })
                         }
@@ -170,11 +168,13 @@ export default function CreateCharacterForm() {
                 </div>
                 <div className="relative py-2 w-full flex justify-between items-center z-10">
                     <div className="relative">
-                        <MultiStepNavBtn type="button" title="Vissza" status="disabled" />
+                        <MultiStepNavBtn type="button" title="Vissza" disabled />
                     </div>
                     <div className="relative flex justify-end items-center">
-                        <MultiStepNavBtn type="button" title="Tovább" status="active" />
-                        <MultiStepNavBtn type="submit" title="Létrehozás" status="hidden" />
+                        <MultiStepNavBtn type="button" title="Tovább" />
+                        <div className="hidden">
+                            <MultiStepNavBtn type="submit" title="Létrehozás"/>
+                        </div>
                     </div>
                 </div>
             </form >
