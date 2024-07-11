@@ -67,6 +67,7 @@ const raceElements:SelectableRace[] = [
 export default function CreateCharacterForm() {
     const [selectedRace, setSelectedRace] = useState<SelectableRace>(raceElements[0]);
     const [selectedSex, setSelectedSex] = useState<SelectableSex>("ferfi");
+    const [actualStep, setActualStep] = useState(2);
 
     function selectRace(race:SelectableRace) {
         setSelectedRace(race);
@@ -76,20 +77,32 @@ export default function CreateCharacterForm() {
         setSelectedSex(sex);
     }
 
+    function getStepStatus(stepIndex: number) {
+        if(stepIndex === actualStep) {
+            return "active";
+        }
+        else if(stepIndex < actualStep) {
+            return "done";
+        }
+        else {
+            return "unfinished";
+        }
+    }
+
     return (
         <>
-            <form style={{'--imgUrl': `url(${selectedRace.img})`} as React.CSSProperties} className={`relative w-full h-full flex justify-center items-center flex-col m-8 py-4 px-8 bg-cardBlackBg rounded shadow-md shadow-[rgba(0,0,0,0.4)] overflow-hidden
+            <form style={{'--imgUrl': `url(${selectedRace.img})`, '--progressLine': `${(100 / (multiStepLabels.length - 1)) * actualStep}%`} as React.CSSProperties} className={`relative w-full h-full flex justify-center items-center flex-col m-8 py-4 px-8 bg-cardBlackBg rounded shadow-md shadow-[rgba(0,0,0,0.4)] overflow-hidden
                             before:content-[''] before:absolute before:bottom-0 before:left-0 before:h-full before:w-full before:bg-[image:var(--imgUrl)] before:bg-no-repeat before:bg-left-bottom before:bg-contain before:opacity-60
                             after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-full after:bg-[url('/images/wave.svg')] after:bg-no-repeat after:bg-left-bottom after:bg-contain after:z-0`}>
                 <div className="relative w-full mb-2 flex justify-center items-center flex-col z-10">
                     <h1 className={`relative w-full mb-2 text-secondaryLight font-poppins font-medium text-start text-xl uppercase tracking-widest`}>Karakter létrehozása</h1>
-                    <ul className={`relative w-full max-w-3xl px-16 flex justify-between items-center
-                                   before:content-[''] before:absolute before:top-[26%] before:left-20 before:w-[calc(100%-11rem)] before:h-1 before:bg-cardMediumBg
-                                   after:content-[''] after:absolute after:top-[26%] after:left-20 after:w-[calc(((100%-11rem)/${multiStepLabels.length -1})*1)] after:h-1 after:bg-mainHover`}>
+                    <ul className={`relative w-full max-w-xl mb-6 flex justify-between items-center
+                                   before:content-[''] before:absolute before:top-[50%] before:w-full before:h-[4px] before:translate-y-[-50%] before:bg-cardMediumBg
+                                   after:content-[''] after:absolute after:top-[50%] after:left-0 after:w-[var(--progressLine)] after:h-[4px] after:translate-y-[-50%] after:bg-mainHover`}>
                         {
                             multiStepLabels.map((label, i) => {
                                 return(
-                                    <MultiStepLabel label={label} stepNum={i + 1} stepIndex={i} lastIndex={multiStepLabels.length -1} status="done" />
+                                    <MultiStepLabel label={label} stepNum={i + 1} stepIndex={i} lastIndex={multiStepLabels.length -1} status={getStepStatus(i)} />
                                 );
                             })
                         }
