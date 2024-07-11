@@ -168,13 +168,11 @@ export default function CreateCharacterForm() {
                 </div>
                 <div className="relative py-2 w-full flex justify-between items-center z-10">
                     <div className="relative">
-                        <MultiStepNavBtn type="button" title="Vissza" disabled />
+                        { true && <MultiStepNavBtn type="button" title="Vissza" disabled /> }
                     </div>
                     <div className="relative flex justify-end items-center">
-                        <MultiStepNavBtn type="button" title="Tovább" />
-                        <div className="hidden">
-                            <MultiStepNavBtn type="submit" title="Létrehozás"/>
-                        </div>
+                        { true && <MultiStepNavBtn type="button" title="Tovább" /> }
+                        { false && <MultiStepNavBtn type="submit" title="Létrehozás"/> }
                     </div>
                 </div>
             </form >
