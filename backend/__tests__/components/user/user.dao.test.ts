@@ -1,25 +1,15 @@
 import mongoose from 'mongoose';
 import {
-  beforeAll, beforeEach, describe, expect, it
+  beforeEach, describe, expect, it
 } from 'vitest';
 
-import logger from '@src/components/logger/logger';
 import { userDao } from '@src/components/user/index';
 import UserModel from '@src/components/user/user.model';
-import config from '@src/config';
 import { ForumUser } from '@src/components/user/types';
 
 describe('User dao ', () => {
-  beforeAll(async () => {
-    await mongoose.connect(config.database.url);
-  });
-
   beforeEach(async () => {
-    try {
-      await UserModel.collection.drop();
-    } catch (err) {
-      logger.error(err);
-    }
+    await UserModel.deleteMany({});
     await UserModel.create({ username: 'test_user', password: 'alma' });
   });
 
@@ -27,7 +17,7 @@ describe('User dao ', () => {
     try {
       await userDao.save(user)
       throw new Error('Should throw validation error!');
-    } catch(error: unknown) {
+    } catch (error: unknown) {
       expect(error).toBeInstanceOf(mongoose.Error.ValidationError);
       const err = error as mongoose.Error.ValidationError;
       expect(Object.keys(err.errors).length).toBe(expectedFields.length);

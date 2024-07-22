@@ -1,20 +1,18 @@
-import mongoose from 'mongoose';
 import supertest from 'supertest';
 import {
-  beforeAll, describe, it, expect, afterAll, beforeEach,
+  beforeAll, describe, it, expect, beforeEach,
 } from 'vitest';
 
 import app from '@src/app';
 import UserModel from '@src/components/user/user.model';
-import config from '@src/config';
 import AuthClient from '@test/routes/auth-client';
-import { 
-  createRandomUser, 
-  assertLogin, 
-  assertLoginInputInvalid, 
-  assertRegistrationInputInvalid, 
-  createUsernameValidationError, 
-  createPasswordValidationError 
+import {
+  createRandomUser,
+  assertLogin,
+  assertLoginInputInvalid,
+  assertRegistrationInputInvalid,
+  createUsernameValidationError,
+  createPasswordValidationError
 } from '@test/routes/auth-test-utils';
 
 
@@ -22,7 +20,6 @@ describe('Authentication api', () => {
   let authClient: AuthClient;
 
   beforeAll(async () => {
-    await mongoose.connect(config.database.url);
     authClient = new AuthClient(supertest(app));
   });
 
@@ -65,14 +62,14 @@ describe('Authentication api', () => {
   });
 
   it('when try login with too short fields then return validation error', async () => {
-    await assertLoginInputInvalid(authClient, { username: 'asd', password: 'asdfsgh' }, 
+    await assertLoginInputInvalid(authClient, { username: 'asd', password: 'asdfsgh' },
       [createUsernameValidationError('asd'), createPasswordValidationError('asdfsgh')]);
     await assertLoginInputInvalid(authClient, { username: 'teszt', password: 'asdfsgh' }, [createPasswordValidationError('asdfsgh')]);
     await assertLoginInputInvalid(authClient, { username: 'asd', password: 'teszt_password' }, [createUsernameValidationError('asd')]);
   });
 
   it('when try login with too long fields then return validation error', async () => {
-    await assertLoginInputInvalid(authClient, { username: 'a'.repeat(256), password: 'a'.repeat(65) }, 
+    await assertLoginInputInvalid(authClient, { username: 'a'.repeat(256), password: 'a'.repeat(65) },
       [createUsernameValidationError('a'.repeat(256)), createPasswordValidationError('a'.repeat(65))]);
     await assertLoginInputInvalid(authClient, { username: 'teszt', password: 'a'.repeat(65) }, [createPasswordValidationError('a'.repeat(65))]);
     await assertLoginInputInvalid(authClient, { username: 'a'.repeat(256), password: 'teszt_password' }, [createUsernameValidationError('a'.repeat(256))]);
@@ -99,18 +96,18 @@ describe('Authentication api', () => {
   });
 
   it('when try registrate with too short fields then return validation error', async () => {
-    await assertRegistrationInputInvalid(authClient, { username: 'asd', password: 'Asdfsgh' }, 
+    await assertRegistrationInputInvalid(authClient, { username: 'asd', password: 'Asdfsgh' },
       [createUsernameValidationError('asd'), createPasswordValidationError('Asdfsgh')]);
     await assertRegistrationInputInvalid(authClient, { username: 'teszt', password: 'Asdfsgh1' }, [createPasswordValidationError('Asdfsgh1')]);
     await assertRegistrationInputInvalid(authClient, { username: 'asd', password: 'Teszt_password3' }, [createUsernameValidationError('asd')]);
   });
 
   it('when try registrate with too long fields then return validation error', async () => {
-    await assertRegistrationInputInvalid(authClient, { username: 'a'.repeat(256), password: 'Teszt_password3'.repeat(65) }, 
+    await assertRegistrationInputInvalid(authClient, { username: 'a'.repeat(256), password: 'Teszt_password3'.repeat(65) },
       [createUsernameValidationError('a'.repeat(256)), createPasswordValidationError('Teszt_password3'.repeat(65))]);
-    await assertRegistrationInputInvalid(authClient, { username: 'teszt', password: 'Teszt_password3'.repeat(65) }, 
+    await assertRegistrationInputInvalid(authClient, { username: 'teszt', password: 'Teszt_password3'.repeat(65) },
       [createPasswordValidationError('Teszt_password3'.repeat(65))]);
-    await assertRegistrationInputInvalid(authClient, { username: 'a'.repeat(256), password: 'Teszt_password3' }, 
+    await assertRegistrationInputInvalid(authClient, { username: 'a'.repeat(256), password: 'Teszt_password3' },
       [createUsernameValidationError('a'.repeat(256))]);
   });
 
@@ -151,8 +148,4 @@ describe('Authentication api', () => {
     const resp = await request.post('/test-endpoint').set('authorization', 'Bearer token');
     expect(resp.status).toBe(403);
   }); */
-  
-  afterAll(async () => {
-    await mongoose.connection.close();
-  });
 });

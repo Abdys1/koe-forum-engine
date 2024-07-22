@@ -83,4 +83,14 @@ describe('AuthMidlleware', () => {
     expect(next).toHaveBeenCalledTimes(1);
     expect(verifyToken).toHaveBeenCalledWith('testToken', 'testSecret');
   });
+
+  it('should set up username to request', async () => {
+    verifyToken.mockResolvedValue({ username: 'testUsername' });
+    const req = createRequestWithToken('Bearer testToken') as Request;
+    const next = vi.fn();
+
+    await authMiddleware(req, {} as Response, next);
+
+    expect(req.user.username).toBe('testUsername');
+  });
 });

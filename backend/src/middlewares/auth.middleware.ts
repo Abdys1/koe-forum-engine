@@ -10,7 +10,8 @@ function useAuthMiddleware(options: AuthenticationMiddlewareOptions): Authentica
       if (bearerToken.length != 2) {
         throw new AuthenticationError('Token is not found!');
       }
-      await options.verifyToken(bearerToken[1], options.secretKey);
+      const token = await options.verifyToken(bearerToken[1], options.secretKey);
+      req.user = { username: token.username };
       next();
     } catch (err) {
       logger.error(err);

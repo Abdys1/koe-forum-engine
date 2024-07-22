@@ -7,7 +7,7 @@ import AuthClient from '@test/routes/auth-client';
 
 export function createRandomUser(): { username: string, password: string } {
     return { username: generateUsername(), password: generatePassword() };
-}  
+}
 
 export async function assertLogin(resp: Response, expectedUsername: string): Promise<void> {
     expect(resp.status).toBe(200);
@@ -18,16 +18,16 @@ export async function assertLogin(resp: Response, expectedUsername: string): Pro
     expect(refreshTokenPayload.username).toBe(expectedUsername);
 }
 
-export function createUsernameValidationError(value: string, msg: string = 'Invalid value') {
+export function createUsernameValidationError(value: string, msg = 'Invalid value') {
     return createFieldValidationError(value, "username", msg);
 }
 
-export function createPasswordValidationError(value: string, msg: string = 'Invalid value') {
+export function createPasswordValidationError(value: string, msg = 'Invalid value') {
     return createFieldValidationError(value, "password", msg);
 }
 
 //TODO kiemelni egy egységes util-ba
-export function createFieldValidationError(value: string, path: string, msg: string = 'Invalid value') {
+export function createFieldValidationError(value: string, path: string, msg = 'Invalid value') {
     return { value, path, msg, location: 'body', type: 'field' }
 }
 

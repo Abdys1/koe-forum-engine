@@ -1,7 +1,7 @@
 import { fromCreateDto, toDetails } from "@src/components/character/character.mapper";
-import { CharacterDao, CharacterDetailsCollection, CreateCharacterDto } from "@src/components/character/types";
+import { CharacterDao, CharacterDetailsCollection, CharacterService, CreateCharacterDto } from "@src/components/character/types";
 
-class CharacterService {
+class CharacterServiceImpl implements CharacterService {
     private characterDao: CharacterDao;
 
     constructor(characterDao: CharacterDao) {
@@ -13,15 +13,15 @@ class CharacterService {
         return characters.map(toDetails);
     }
 
-    public async addNewCharacter(newCharacterDto: CreateCharacterDto): Promise<boolean> {
-        const hasRegisteredCharName = await this.characterDao.existByCharacterName(newCharacterDto.charName);
+    public async createCharacter(newCharacterDto: CreateCharacterDto): Promise<boolean> {
+        const hasRegisteredCharName = await this.characterDao.existByCharacterName(newCharacterDto.name);
         if (hasRegisteredCharName) {
             return false;
         }
-        const characterEntity = fromCreateDto(newCharacterDto);
-        await this.characterDao.save(characterEntity);
+        const character = fromCreateDto(newCharacterDto);
+        await this.characterDao.save(character);
         return true;
     }
 }
 
-export default CharacterService;
+export default CharacterServiceImpl;
