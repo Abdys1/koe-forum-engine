@@ -49,7 +49,7 @@ export default function CharacterBasicsStep() {
                             <span className="relative mr-4 text-start text-mainLight text-sm font-poppins font-medium tracking-wide">
                                 Karakter neme:
                             </span>
-                            <SelectableOptionBtn title="Férfi" onClick={() => selectSex("ferfi")} active={selectedSex === "ferfi"} />
+                            <SelectableOptionBtn title="Férfi" onClick={() => selectSex("ferfi")} active={selectedSex === "ferfi"}/>
                             <SelectableOptionBtn title="Nő" onClick={() => selectSex("no")} active={selectedSex === "no"} />
                         </div>
                     </div>

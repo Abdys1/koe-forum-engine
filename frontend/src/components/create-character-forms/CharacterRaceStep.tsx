@@ -104,37 +104,6 @@ export default function CharacterRaceStep() {
                     }
                 </ul>
             </div>
-            {/*<div className="relative w-full max-w-2xl h-full p-4 m-4 flex justify-start items-center flex-col
-                            glassBox border-l-8 border-mainMedium rounded">
-                                <p className="relative mb-2 w-full text-start text-mainLight text-xs font-poppins font-medium tracking-wide">
-                                    Nevezd el karaktered és válaszd ki a nemét:
-                                </p>
-                                <div className="relative w-full flex justify-start items-center">
-                                    <TextField label="Karakternév" name="characterName" />
-                                </div>
-                                <div className="relative flex justify-between items-start flex-col">
-                                    <p className="relative mb-1 text-sm font-roboto text-white tracking-wide">
-                                        <span className="text-mainHover font-medium uppercase mr-0.5">
-                                            Fontos!
-                                        </span>
-                                        Karaktered neve általad alkotott <span className="text-mainHover">fantasy név</span> legyen. <span className="text-mainHover">Nem</span> lehet már létező valós vagy fiktív személy neve. <span className="text-mainHover">Minimum két részből álljon</span>, és ne tartalmazzon idegen nyelvű szavakat. A magyar abc kis és nagy betűin kívül ä, ë illetve ' szerepelhet benne.
-                                    </p>
-                                    <Link href="#"
-                                        className="relative p-1 mb-1 border-solid  tracking-widest font-poppins font-medium text-sm text-secondaryMedium hover:text-secondaryDark
-                                        before:content-[''] before:absolute before:bottom-0 before:left-0 before:w-0 before:h-0.5 before:bg-secondaryDark transition-all before:hover:w-full duration-300 ease-in-out">
-                                        Névalkotásról bővebben
-                                    </Link>
-                                </div>
-                                <div className="relative py-2 w-full flex justify-start items-center">
-                                    <span className="relative mr-4 text-start text-mainLight text-sm font-poppins font-medium tracking-wide">
-                                        Karakter neme:
-                                    </span>
-                                    <SelectableOptionBtn title="Férfi" onClick={() => selectSex("ferfi")} active={selectedSex === "ferfi"} />
-                                    <SelectableOptionBtn title="Nő" onClick={() => selectSex("no")} active={selectedSex === "no"} />
-                                </div>
-                                
-                                
-                        </div>*/}
             <MultiStepPagination/>
         </form >
     );
