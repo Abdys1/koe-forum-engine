@@ -8,11 +8,12 @@ import apiRouter from '@src/routes/api.routes';
 
 const app = express();
 
-declare module 'express' {
+declare module 'express-serve-static-core' {
     export interface Request {
         user: { username: string };
     }
 }
+
 app.use(cors()); // TODO FONTOS configoljuk
 app.use(httpLogger);
 app.use(express.json());
