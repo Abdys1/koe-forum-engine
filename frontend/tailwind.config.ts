@@ -1,5 +1,5 @@
-import { poppins } from "@/app/fonts";
 import type { Config } from "tailwindcss";
+
 
 const config: Config = {
   content: [
@@ -39,6 +39,8 @@ const config: Config = {
       }
     },
   },
-  plugins: [],
+  plugins: [
+    require('tailwind-scrollbar')
+  ],
 };
 export default config;

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { FormContextState, MultiStepFormContext } from "@/components/MultiStepFormContext";
 import CharacterRaceStep from "@/components/create-character-forms/CharacterRaceStep";
 import CharacterBasicsStep from "@/components/create-character-forms/CharacterBasicsStep";
+import CharacterGearStep from "@/components/create-character-forms/CharacterGearStep";
 import { FormStep } from "@/components/types";
 
 const steps:FormStep[] = [
@@ -17,7 +18,7 @@ const steps:FormStep[] = [
     },
     {
         label: "Felszerelés",
-        formComponent: <CharacterRaceStep/>
+        formComponent: <CharacterGearStep/>
     },
     {
         label: "Karakterkép",
@@ -31,7 +32,7 @@ const steps:FormStep[] = [
 
 
 export default function CreateCharacterForm() {
-    const [actualStep, setActualStep] = useState(1);
+    const [actualStep, setActualStep] = useState(2);
 
     function nextStep() {
         setActualStep(actualStep + 1);
