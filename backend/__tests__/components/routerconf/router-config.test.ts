@@ -28,7 +28,7 @@ describe('Router configurator', () => {
         const path = '/';
         const method = 'GET';
         const router: Router = defineRouter([{ path, method, controller: vi.fn(), public: true }]);
-        
+
         expect(router).toBeTruthy();
 
         const routes = getRoutes(router);
@@ -41,13 +41,13 @@ describe('Router configurator', () => {
         const path = '/test';
         const method = 'GET';
         const router: Router = defineRouter([{ path, method, controller: vi.fn(), public: false }]);
-        
+
         expect(router).toBeTruthy();
 
         const routes = getRoutes(router);
         expect(routes.length).toBe(1);
         assertRoute(routes, path, 2, method);
-        routes[0].stack[0].handle();
+        routes[0].stack[0].handle({} as Request, {} as Response);
         expect(authMiddleware).toHaveBeenCalledOnce();
     });
 
@@ -61,7 +61,7 @@ describe('Router configurator', () => {
         const routes = getRoutes(router);
         expect(routes.length).toBe(1);
         assertRoute(routes, path, 2, method);
-        routes[0].stack[0].handle();
+        routes[0].stack[0].handle({} as Request, {} as Response);
         expect(authMiddleware).toHaveBeenCalledOnce();
     });
 
@@ -72,12 +72,12 @@ describe('Router configurator', () => {
         const routes = getRoutes(router);
         expect(routes.length).toBe(1);
         expect(routes[0].stack.length).toBe(1);
-        routes[0].stack[0].handle();
+        routes[0].stack[0].handle({} as Request, {} as Response);
         expect(controllerFunc).toHaveBeenCalledOnce();
     });
 
     it('defineRouter should support all http method', () => {
-        const controllerFunc  = vi.fn();
+        const controllerFunc = vi.fn();
         const router: Router = defineRouter([
             { path: '/firstRoot', method: 'GET', controller: controllerFunc, public: true },
             { path: '/secondRoot', method: 'POST', controller: controllerFunc },
@@ -110,9 +110,9 @@ describe('Router configurator', () => {
         expect(routes.length).toBe(2);
         assertRoute(routes, '/test', 2, 'GET');
         assertRoute(routes, '/test2', 3, 'GET');
-        routes[0].stack[0].handle();
+        routes[0].stack[0].handle({} as Request, {} as Response);
         expect(testMiddleware).toHaveBeenCalledOnce();
-        routes[1].stack[1].handle();
+        routes[1].stack[1].handle({} as Request, {} as Response);
         expect(testMiddleware).toHaveBeenCalledTimes(2);
     });
 });

@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import logger from "@src/components/logger/logger";
+import RestApiValidationError from "@src/middlewares/rest-api-validation.error";
 import { AuthenticationMiddleware } from "@src/middlewares/types";
-import { RequestHandler, Router } from "express";
+import { Request, Response, NextFunction, RequestHandler, Router } from "express";
+import { validationResult } from "express-validator";
 
 export const HttpMethod = {
     GET: 'GET',
@@ -30,9 +33,21 @@ export function useDefineRouter(authMiddleware: AuthenticationMiddleware) {
             if (c.middlewares) {
                 middlewares.push(...c.middlewares);
             }
-            addRoute(router, c.method, c.path, middlewares, c.controller);
+            addRoute(router, c.method, c.path, middlewares, asyncHandler(c.controller));
         });
         return router;
+    }
+}
+
+function asyncHandler(handler: RequestHandler): RequestHandler {
+    return (req: Request, res: Response, next: NextFunction): void => {
+        const validation = validationResult(req);
+        if (!validation.isEmpty()) {
+            logger.error(validation.array());
+            next(new RestApiValidationError(validation));
+        } else {
+            Promise.resolve(handler(req, res, next)).catch(next);
+        }
     }
 }
 
