@@ -1,4 +1,4 @@
-import UserModel from '@src/components/user/user.model';
+import { UserModel } from '@src/components/user/user.model';
 import { ForumUser, UserDao } from '@src/components/user/types';
 
 class UserDaoImpl implements UserDao {

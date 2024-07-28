@@ -4,7 +4,7 @@ import {
 } from 'vitest';
 
 import { userDao } from '@src/components/user/index';
-import UserModel from '@src/components/user/user.model';
+import { UserModel } from '@src/components/user/user.model';
 import { ForumUser } from '@src/components/user/types';
 
 describe('User dao ', () => {

@@ -6,13 +6,13 @@ class FakeCharacterDao implements CharacterDao {
     constructor() {
         this.characters = new Map<string, Character[]>();
     }
-    
+
     public async findAllCharacterByUsername(username: string): Promise<Character[]> {
         return Promise.resolve(this.characters.get(username) || []);
     }
 
-    public async existByCharacterName(name: string): Promise<boolean> {
-        for(const characterValues of this.characters.values()) {
+    public async existsByCharacterName(name: string): Promise<boolean> {
+        for (const characterValues of this.characters.values()) {
             if (characterValues.some(character => character.name === name)) {
                 return Promise.resolve(true);
             }

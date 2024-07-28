@@ -53,7 +53,7 @@ export interface Character {
 
 export interface CharacterDao {
     findAllCharacterByUsername: (username: string) => Promise<Character[]>;
-    existByCharacterName: (characterName: string) => Promise<boolean>;
+    existsByCharacterName: (characterName: string) => Promise<boolean>;
     save: (character: Character) => Promise<void>;
 }
 

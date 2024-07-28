@@ -14,7 +14,7 @@ class CharacterServiceImpl implements CharacterService {
     }
 
     public async createCharacter(newCharacterDto: CreateCharacterDto): Promise<boolean> {
-        const hasRegisteredCharName = await this.characterDao.existByCharacterName(newCharacterDto.name);
+        const hasRegisteredCharName = await this.characterDao.existsByCharacterName(newCharacterDto.name);
         if (hasRegisteredCharName) {
             return false;
         }

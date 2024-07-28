@@ -1,12 +1,12 @@
 import supertest, { Response } from "supertest";
 import { describe, it } from "vitest";
 import app from '@src/app';
-import UserModel from "@src/components/user/user.model";
+import { UserModel } from "@src/components/user/user.model";
 import { ForumUser } from "@src/components/user/types";
 import { generatePassword, generateUsername } from "@test/utils/test-data-generator";
 import CharacterClient from "@test/routes/character-client";
 import { CreateCharacterRequestDto, Sex } from "@src/components/character/types";
-import CharacterModel from "@src/components/character/character.model";
+import { CharacterModel } from "@src/components/character/character.model";
 
 function createCharacterDto(): CreateCharacterRequestDto {
     return {

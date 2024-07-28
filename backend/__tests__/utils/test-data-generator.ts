@@ -1,4 +1,4 @@
-import UserModel from "@src/components/user/user.model";
+import { UserModel } from "@src/components/user/user.model";
 import { UserEntity } from "@src/components/user/types";
 
 let usernameNumber = 0;

@@ -10,13 +10,13 @@ function fromCreateDto(dto: CreateCharacterDto): Character {
     }
 }
 
-function fromEntity(username: string, schema: CharacterEntity): Character {
+function fromEntity(username: string, entity: CharacterEntity): Character {
     return {
-        name: schema.name,
+        name: entity.name,
         owner: username,
-        race: schema.race,
-        sex: schema.sex,
-        imageUrl: schema.imageUrl
+        race: entity.race,
+        sex: entity.sex,
+        imageUrl: entity.imageUrl
     };
 }
 
@@ -31,6 +31,6 @@ function toDetails(character: Character): CharacterDetails {
 
 export {
     fromCreateDto,
-    fromEntity as fromSchema,
+    fromEntity,
     toDetails
 };

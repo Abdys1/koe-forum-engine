@@ -1,8 +1,8 @@
 import CharacterController from "@src/components/character/character.controller";
+import CharacterDaoImpl from "@src/components/character/character.dao";
 import CharacterServiceImpl from "@src/components/character/character.service";
-import FakeCharacterDao from "@src/components/character/fake-character.dao";
 
-const characterDao = new FakeCharacterDao();
+const characterDao = new CharacterDaoImpl();
 const characterService = new CharacterServiceImpl(characterDao);
 const characterController = new CharacterController(characterService);
 

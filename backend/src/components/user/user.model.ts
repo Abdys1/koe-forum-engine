@@ -6,4 +6,4 @@ const userSchema = new mongoose.Schema<UserEntity>({
   password: { type: String, required: true },
 });
 
-export default mongoose.model<UserEntity>('ForumUser', userSchema);
+export const UserModel = mongoose.model<UserEntity>('ForumUser', userSchema);

@@ -4,7 +4,7 @@ import {
 } from 'vitest';
 
 import app from '@src/app';
-import UserModel from '@src/components/user/user.model';
+import { UserModel } from '@src/components/user/user.model';
 import AuthClient from '@test/routes/auth-client';
 import {
   createRandomUser,
