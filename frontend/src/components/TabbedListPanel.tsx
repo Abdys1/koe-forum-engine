@@ -9,7 +9,8 @@ interface ListElement {
 
 export interface ListOption {
     name: string,
-    elements: ListElement[]
+    elements: ListElement[],
+    onChooseElement: (elementTitle: string) => void
 }
 
 interface TabbedListPanelProps {
@@ -32,7 +33,7 @@ export default function TabbedListPanel(props: TabbedListPanelProps) {
                     props.options.map((option, i) => {
                         return(
                             <div style={{'--btnWidth': `${100 / props.options.length}%`} as React.CSSProperties} className="relative w-[var(--btnWidth)] h-full">
-                                <PanelNavBtn title={option.name} onClick={() => handleOption(i)} active={activeOption === i}/>
+                                <PanelNavBtn key={option.name} title={option.name} onClick={() => handleOption(i)} active={activeOption === i}/>
                             </div>
                             
                         );
@@ -44,7 +45,7 @@ export default function TabbedListPanel(props: TabbedListPanelProps) {
                     {
                         props.options[activeOption].elements.map((element) => {
                             return (
-                                <PanelListElement title={element.title} desc={element.desc}/>
+                                <PanelListElement key={props.options[activeOption].name + element.title} title={element.title} desc={element.desc} onClick={() => props.options[activeOption].onChooseElement(element.title)}/>
                             );
                         })
                     }

@@ -3,7 +3,8 @@ import { useState } from "react";
 
 type PanelListElementProps = {
     title: string,
-    desc: string
+    desc: string,
+    onClick: React.MouseEventHandler<HTMLElement>
 };
 
 export default function PanelListElement(props: PanelListElementProps) {
@@ -12,6 +13,7 @@ export default function PanelListElement(props: PanelListElementProps) {
     function descToggle() {
         setIsActiveDesc(!isActiveDesc);
     }
+
 
     return (
         <li className="relative w-[calc(100% - 4rem)]">
@@ -23,8 +25,8 @@ export default function PanelListElement(props: PanelListElementProps) {
             )}
             onClick={descToggle}
             >
-                 {props.title}
-                <button className="relative h-full pr-2 flex justify-start items-center bg-secondary hover:bg-secondaryMedium text-cardMediumBg text-sm font-medium tracking-widest cursor-pointer z-10
+                {props.title}
+                <button type="button" onClick={props.onClick} className="relative h-full pr-2 flex justify-start items-center bg-secondary hover:bg-secondaryMedium text-cardMediumBg text-sm font-medium tracking-widest cursor-pointer z-10
                             before:content-[''] before:absolute before:top-0 before:-left-[20px] before:h-[150%] before:w-[60px] before:bg-secondary before:hover:bg-secondaryMedium before:rotate-[25deg] before:-z-10">
                     Kiválaszt
                 </button>
