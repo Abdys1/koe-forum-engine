@@ -1,7 +1,10 @@
+import clsx from "clsx";
+
 type SelectedGearElementProps = {
     optionTitle: string,
     gearTitle: string,
-    onClear: React.MouseEventHandler<HTMLElement>
+    onClear: React.MouseEventHandler<HTMLElement>,
+    isActiveClearBtn: boolean
 }
 
 export default function SelectedGearElement(props: SelectedGearElementProps) {
@@ -15,8 +18,11 @@ export default function SelectedGearElement(props: SelectedGearElementProps) {
                 <span className="relative text-sm font-poppins text-white tracking-widest">
                     {props.gearTitle}
                 </span>
-                <button onClick={props.onClear} type="button" className="relative w-4 h-4 ml-2 p-0 flex justify-center items-center bg-secondary rounded-[50%] font-poppins text-xs font-medium
-                            hover:bg-secondaryMedium">
+                <button onClick={props.onClear} type="button" className={clsx(`relative w-4 h-4 ml-2 p-0 justify-center items-center bg-secondary rounded-[50%] font-poppins text-xs font-medium
+                            hover:bg-secondaryMedium`,
+                            {'flex': props.isActiveClearBtn},
+                            {'hidden': !props.isActiveClearBtn}
+                            )}>
                     x
                 </button>
             </div> 

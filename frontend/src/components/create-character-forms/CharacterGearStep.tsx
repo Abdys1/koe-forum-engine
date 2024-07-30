@@ -3,7 +3,6 @@ import MultiStepPagination from "@/components/MultiStepPagination";
 import SelectableOptionBtn from "@/components/SelectableOptionBtn";
 import TabbedListPanel, { ListOption } from "@/components/TabbedListPanel";
 import SelectedGearElement from "@/components/SelectedGearElement";
-import { title } from "process";
 import { useState } from "react";
 
 type GearOption = "fegyver" | "pancel";
@@ -262,20 +261,19 @@ export default function CharacterGearStep() {
                                 </h3>
                                 <div className="relative w-full flex justify-between items-start mr-2">
                                     <div className="relative w-full max-w-[50%] flex justify-start items-start flex-col">
-                                        <SelectedGearElement optionTitle="Elsődleges fegyver" gearTitle={primaryWeapon} onClear={() => setPrimaryWeapon(DEFAULT_GEAR_OPTION)}/>
-                                        <SelectedGearElement optionTitle="Másodlagos fegyver" gearTitle={secondaryWeapon} onClear={() => setSecondaryWeapon(DEFAULT_GEAR_OPTION)}/>
-                                        <SelectedGearElement optionTitle="Pajzs" gearTitle={shield} onClear={() => setShield(DEFAULT_GEAR_OPTION)}/>
+                                        <SelectedGearElement optionTitle="Elsődleges fegyver" gearTitle={primaryWeapon} onClear={() => setPrimaryWeapon(DEFAULT_GEAR_OPTION)} isActiveClearBtn={primaryWeapon !== DEFAULT_GEAR_OPTION}/>
+                                        <SelectedGearElement optionTitle="Másodlagos fegyver" gearTitle={secondaryWeapon} onClear={() => setSecondaryWeapon(DEFAULT_GEAR_OPTION)} isActiveClearBtn={secondaryWeapon !== DEFAULT_GEAR_OPTION}/>
+                                        <SelectedGearElement optionTitle="Pajzs" gearTitle={shield} onClear={() => setShield(DEFAULT_GEAR_OPTION)} isActiveClearBtn={shield !== DEFAULT_GEAR_OPTION}/>
                                     </div>
                                     <div className="relative w-full max-w-[50%] flex flex-col">
-                                        <SelectedGearElement optionTitle="Testpáncél" gearTitle={bodyArmor} onClear={() => setBodyArmor(DEFAULT_GEAR_OPTION)}/>
-                                        <SelectedGearElement optionTitle="Kéz és lábvért" gearTitle={secondaryArmor} onClear={() => setSecondaryArmor(DEFAULT_GEAR_OPTION)}/>
-                                        <SelectedGearElement optionTitle="Sisak" gearTitle={helmet} onClear={() => setHelmet(DEFAULT_GEAR_OPTION)}/>
+                                        <SelectedGearElement optionTitle="Testpáncél" gearTitle={bodyArmor} onClear={() => setBodyArmor(DEFAULT_GEAR_OPTION)} isActiveClearBtn={bodyArmor !== DEFAULT_GEAR_OPTION}/>
+                                        <SelectedGearElement optionTitle="Kéz és lábvért" gearTitle={secondaryArmor} onClear={() => setSecondaryArmor(DEFAULT_GEAR_OPTION)} isActiveClearBtn={secondaryArmor !== DEFAULT_GEAR_OPTION}/>
+                                        <SelectedGearElement optionTitle="Sisak" gearTitle={helmet} onClear={() => setHelmet(DEFAULT_GEAR_OPTION)} isActiveClearBtn={helmet !== DEFAULT_GEAR_OPTION}/>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
                 <MultiStepPagination/>
         </form>
