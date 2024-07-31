@@ -5,6 +5,7 @@ import { FormContextState, MultiStepFormContext } from "@/components/MultiStepFo
 import CharacterRaceStep from "@/components/create-character-forms/CharacterRaceStep";
 import CharacterBasicsStep from "@/components/create-character-forms/CharacterBasicsStep";
 import CharacterGearStep from "@/components/create-character-forms/CharacterGearStep";
+import CharacterImageStep from "@/components/create-character-forms/CharacterImageStep";
 import { FormStep } from "@/components/types";
 
 const steps:FormStep[] = [
@@ -22,7 +23,7 @@ const steps:FormStep[] = [
     },
     {
         label: "Karakterkép",
-        formComponent: <CharacterRaceStep/>
+        formComponent: <CharacterImageStep/>
     },
     {
         label: "Áttekintés",
@@ -32,7 +33,7 @@ const steps:FormStep[] = [
 
 
 export default function CreateCharacterForm() {
-    const [actualStep, setActualStep] = useState(2);
+    const [actualStep, setActualStep] = useState(3);
 
     function nextStep() {
         setActualStep(actualStep + 1);
