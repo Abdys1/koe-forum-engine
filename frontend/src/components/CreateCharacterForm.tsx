@@ -6,6 +6,7 @@ import CharacterRaceStep from "@/components/create-character-forms/CharacterRace
 import CharacterBasicsStep from "@/components/create-character-forms/CharacterBasicsStep";
 import CharacterGearStep from "@/components/create-character-forms/CharacterGearStep";
 import CharacterImageStep from "@/components/create-character-forms/CharacterImageStep";
+import CharacterSummaryStep from "@/components/create-character-forms/CharacterSummaryStep";
 import { FormStep } from "@/components/types";
 
 const steps:FormStep[] = [
@@ -27,13 +28,13 @@ const steps:FormStep[] = [
     },
     {
         label: "Áttekintés",
-        formComponent: <CharacterRaceStep/>
+        formComponent: <CharacterSummaryStep/>
     }
 ];
 
 
 export default function CreateCharacterForm() {
-    const [actualStep, setActualStep] = useState(3);
+    const [actualStep, setActualStep] = useState(4);
 
     function nextStep() {
         setActualStep(actualStep + 1);
