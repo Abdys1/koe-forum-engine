@@ -3,7 +3,7 @@ import clsx from "clsx";
 type SelectedGearElementProps = {
     optionTitle: string,
     gearTitle: string,
-    onClear: React.MouseEventHandler<HTMLElement>,
+    onClear?: React.MouseEventHandler<HTMLElement>,
     isActiveClearBtn: boolean
 }
 

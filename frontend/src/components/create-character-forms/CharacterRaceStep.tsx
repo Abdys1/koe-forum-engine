@@ -5,6 +5,8 @@ import { useState } from "react";
 import Link from "next/link";
 import MultiStepBar from "@/components/MultiStepBar";
 import MultiStepPagination from "@/components/MultiStepPagination";
+import ComponentHeading from "@/components/ComponentHeading";
+import StepHeading from "@/components/StepHeading";
 
 interface SelectableRace {
     id: string,
@@ -71,14 +73,12 @@ export default function CharacterRaceStep() {
             before:content-[''] before:absolute before:bottom-0 before:left-0 before:h-full before:w-full before:bg-[image:var(--imgUrl)] before:bg-no-repeat before:bg-left-bottom before:bg-contain before:opacity-60
             after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-full after:bg-[url('/images/wave.svg')] after:bg-no-repeat after:bg-left-bottom after:bg-contain after:z-0`}>
             <div className="relative w-full mb-2 flex justify-center items-center flex-col z-10">
-                <h1 className={`relative w-full mb-2 text-secondaryLight font-poppins font-medium text-start text-xl uppercase tracking-widest`}>Karakter létrehozása</h1>
+                <ComponentHeading title="Karakter létrehozása" />
                 <MultiStepBar />
             </div>
             <div className="relative mt-2 w-full flex justify-end items-start z-10">
                 <div className="relative w-full max-w-[50%] flex justify-start items-start flex-col mr-14">
-                    <h2 className="relative py-2 px-5 w-full flex justify-start items-center text-secondary font-poppins text-2xl font-semibold tracking-widest">
-                        1. Válaszd ki a karaktered faját:
-                    </h2>
+                    <StepHeading title="1. Válaszd ki a karaktered faját:"/>
                     <div className="relative w-full p-4 m-4 mt-2 flex justify-center items-start flex-col z-10 
                     glassBox border-l-8 border-mainHover rounded">
                         <h3 className="relative pb-0.5 mb-2 text-mainHover uppercase tracking-widest font-poppins font-semibold ">
@@ -103,8 +103,12 @@ export default function CharacterRaceStep() {
                         })
                     }
                 </ul>
+                
             </div>
             <MultiStepPagination/>
+            <p className="absolute bottom-24 left-10 text-gray-400 text-xs font-poppins tracking-widest">
+                    * illusztráció a kiválasztott fajról
+            </p>
         </form >
     );
 }
