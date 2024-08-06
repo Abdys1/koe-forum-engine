@@ -8,33 +8,49 @@ import CharacterGearStep from "@/components/create-character-forms/CharacterGear
 import CharacterImageStep from "@/components/create-character-forms/CharacterImageStep";
 import CharacterSummaryStep from "@/components/create-character-forms/CharacterSummaryStep";
 import { FormStep } from "@/components/types";
+import { useForm } from "react-hook-form";
 
-const steps:FormStep[] = [
-    {
-        label: "Faj",
-        formComponent: <CharacterRaceStep/>
-    },
-    {
-        label: "Alapok",
-        formComponent: <CharacterBasicsStep/>
-    },
-    {
-        label: "Felszerelés",
-        formComponent: <CharacterGearStep/>
-    },
-    {
-        label: "Karakterkép",
-        formComponent: <CharacterImageStep/>
-    },
-    {
-        label: "Áttekintés",
-        formComponent: <CharacterSummaryStep/>
-    }
-];
+export interface CharacterInputs {
+    raceId: string,
+    raceTitle: string,
+    characterName: string,
+    charaterSex: string,
+    primaryWeaponTitle: string,
+    secondaryWeaponTitle: string,
+    shieldTitle: string,
+    bodyArmorTitle: string,
+    secondaryArmorTitle: string,
+    helmetTitle: string
+}
 
 
 export default function CreateCharacterForm() {
-    const [actualStep, setActualStep] = useState(4);
+    const [actualStep, setActualStep] = useState(0);
+
+    const form = useForm<CharacterInputs>();
+
+    const steps:FormStep[] = [
+        {
+            label: "Faj",
+            formComponent: <CharacterRaceStep form={form}/>
+        },
+        {
+            label: "Alapok",
+            formComponent: <CharacterBasicsStep form={form}/>
+        },
+        {
+            label: "Felszerelés",
+            formComponent: <CharacterGearStep form={form}/>
+        },
+        {
+            label: "Karakterkép",
+            formComponent: <CharacterImageStep/>
+        },
+        {
+            label: "Áttekintés",
+            formComponent: <CharacterSummaryStep/>
+        }
+    ];
 
     function nextStep() {
         setActualStep(actualStep + 1);

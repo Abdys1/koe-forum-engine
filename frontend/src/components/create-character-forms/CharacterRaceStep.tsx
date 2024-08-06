@@ -7,6 +7,8 @@ import MultiStepBar from "@/components/MultiStepBar";
 import MultiStepPagination from "@/components/MultiStepPagination";
 import ComponentHeading from "@/components/ComponentHeading";
 import StepHeading from "@/components/StepHeading";
+import { UseFormReturn } from "react-hook-form";
+import { CharacterInputs } from "@/components/CreateCharacterForm";
 
 interface SelectableRace {
     id: string,
@@ -61,8 +63,16 @@ const raceElements:SelectableRace[] = [
     },
 ];
 
-export default function CharacterRaceStep() {
+interface CharacterRaceStepProps {
+    form: UseFormReturn<CharacterInputs, any, undefined>
+}
+
+export default function CharacterRaceStep(props: CharacterRaceStepProps) {
     const [selectedRace, setSelectedRace] = useState<SelectableRace>(raceElements[0]);
+
+    const {
+        register
+    } = props.form;
 
     function selectRace(race:SelectableRace): void {
         setSelectedRace(race);
@@ -103,7 +113,8 @@ export default function CharacterRaceStep() {
                         })
                     }
                 </ul>
-                
+                <input type="hidden" {...register("raceId", {value: selectedRace.id})}/>
+                <input type="hidden" {...register("raceTitle", {value: selectedRace.title})}/>
             </div>
             <MultiStepPagination/>
             <p className="absolute bottom-24 left-10 text-gray-400 text-xs font-poppins tracking-widest">

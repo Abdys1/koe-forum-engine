@@ -6,11 +6,20 @@ import ComponentHeading from "@/components/ComponentHeading";
 import StepHeading from "@/components/StepHeading";
 import Link from "next/link";
 import { useState } from "react";
+import { UseFormReturn } from "react-hook-form";
+import { CharacterInputs } from "@/components/CreateCharacterForm";
 
 type SelectableSex = "ferfi" | "no";
 
-export default function CharacterBasicsStep() {
+interface CharacterBasicsStepProps {
+    form: UseFormReturn<CharacterInputs, any, undefined>
+}
+
+export default function CharacterBasicsStep(props: CharacterBasicsStepProps) {
     const [selectedSex, setSelectedSex] = useState<SelectableSex>("ferfi");
+    const {
+        register
+    } = props.form;
 
     function selectSex(sex: SelectableSex): void {
         setSelectedSex(sex);
@@ -30,7 +39,7 @@ export default function CharacterBasicsStep() {
                     <div className="relative w-full p-4 m-4 mt-2 flex justify-center items-start flex-col z-10 
                     glassBox border-l-8 border-mainHover rounded">
                         <div className="relative w-full flex justify-start items-center">
-                            <TextField label="Karakternév" name="characterName" />
+                            <TextField label="Karakternév" {...register("characterName")}/>
                         </div>
                         <div className="relative flex justify-between items-start flex-col">
                             <p className="relative mb-1 text-sm font-roboto text-white tracking-wide">
@@ -51,6 +60,7 @@ export default function CharacterBasicsStep() {
                             </span>
                             <SelectableOptionBtn title="Férfi" onClick={() => selectSex("ferfi")} active={selectedSex === "ferfi"}/>
                             <SelectableOptionBtn title="Nő" onClick={() => selectSex("no")} active={selectedSex === "no"} />
+                                <input type="hidden" {...register("charaterSex", {value: selectedSex})}/>
                         </div>
                     </div>
                 </div>

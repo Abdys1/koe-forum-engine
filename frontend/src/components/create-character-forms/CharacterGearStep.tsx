@@ -6,12 +6,18 @@ import SelectedGearElement from "@/components/SelectedGearElement";
 import ComponentHeading from "@/components/ComponentHeading";
 import StepHeading from "@/components/StepHeading";
 import { useState } from "react";
+import { UseFormReturn } from "react-hook-form";
+import { CharacterInputs } from "@/components/CreateCharacterForm";
 
 type GearOption = "fegyver" | "pancel";
 
+interface CharacterGearStepProps {
+    form: UseFormReturn<CharacterInputs, any, undefined>
+}
+
 const DEFAULT_GEAR_OPTION = "Nincs";
 
-export default function CharacterGearStep() {
+export default function CharacterGearStep(props: CharacterGearStepProps) {
     const [activeGearOption, setActiveGearOption] = useState<GearOption>("fegyver");
     const [primaryWeapon, setPrimaryWeapon] = useState(DEFAULT_GEAR_OPTION);
     const [secondaryWeapon, setSecondaryWeapon] = useState(DEFAULT_GEAR_OPTION);
@@ -19,6 +25,10 @@ export default function CharacterGearStep() {
     const [bodyArmor, setBodyArmor] = useState(DEFAULT_GEAR_OPTION);
     const [secondaryArmor, setSecondaryArmor] = useState(DEFAULT_GEAR_OPTION);
     const [helmet, setHelmet]= useState(DEFAULT_GEAR_OPTION);
+
+    const {
+        register
+    } = props.form;
 
     const weapons:ListOption[] = [
         {
@@ -262,13 +272,19 @@ export default function CharacterGearStep() {
                                 <div className="relative w-full flex justify-between items-start mr-2">
                                     <div className="relative w-full max-w-[50%] flex justify-start items-start flex-col">
                                         <SelectedGearElement optionTitle="Elsődleges fegyver" gearTitle={primaryWeapon} onClear={() => setPrimaryWeapon(DEFAULT_GEAR_OPTION)} isActiveClearBtn={primaryWeapon !== DEFAULT_GEAR_OPTION}/>
+                                        <input type="hidden" {...register("primaryWeaponTitle", {value: primaryWeapon})}/>
                                         <SelectedGearElement optionTitle="Másodlagos fegyver" gearTitle={secondaryWeapon} onClear={() => setSecondaryWeapon(DEFAULT_GEAR_OPTION)} isActiveClearBtn={secondaryWeapon !== DEFAULT_GEAR_OPTION}/>
+                                        <input type="hidden" {...register("secondaryWeaponTitle", {value: secondaryWeapon})}/>
                                         <SelectedGearElement optionTitle="Pajzs" gearTitle={shield} onClear={() => setShield(DEFAULT_GEAR_OPTION)} isActiveClearBtn={shield !== DEFAULT_GEAR_OPTION}/>
+                                        <input type="hidden" {...register("shieldTitle", {value: shield})}/>
                                     </div>
                                     <div className="relative w-full max-w-[50%] flex flex-col">
                                         <SelectedGearElement optionTitle="Testpáncél" gearTitle={bodyArmor} onClear={() => setBodyArmor(DEFAULT_GEAR_OPTION)} isActiveClearBtn={bodyArmor !== DEFAULT_GEAR_OPTION}/>
+                                        <input type="hidden" {...register("bodyArmorTitle", {value: bodyArmor})}/>
                                         <SelectedGearElement optionTitle="Kéz és lábvért" gearTitle={secondaryArmor} onClear={() => setSecondaryArmor(DEFAULT_GEAR_OPTION)} isActiveClearBtn={secondaryArmor !== DEFAULT_GEAR_OPTION}/>
+                                        <input type="hidden" {...register("secondaryArmorTitle", {value: secondaryArmor})}/>
                                         <SelectedGearElement optionTitle="Sisak" gearTitle={helmet} onClear={() => setHelmet(DEFAULT_GEAR_OPTION)} isActiveClearBtn={helmet !== DEFAULT_GEAR_OPTION}/>
+                                        <input type="hidden" {...register("helmetTitle", {value: helmet})}/>
                                     </div>
                                 </div>
                             </div>
