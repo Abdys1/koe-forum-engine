@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { FormContextState, MultiStepFormContext } from "@/components/MultiStepFormContext";
 import CharacterRaceStep from "@/components/create-character-forms/CharacterRaceStep";
-import CharacterBasicsStep from "@/components/create-character-forms/CharacterBasicsStep";
+import CharacterBasicsStep, { SelectableSex } from "@/components/create-character-forms/CharacterBasicsStep";
 import CharacterGearStep from "@/components/create-character-forms/CharacterGearStep";
 import CharacterImageStep from "@/components/create-character-forms/CharacterImageStep";
 import CharacterSummaryStep from "@/components/create-character-forms/CharacterSummaryStep";
@@ -14,13 +14,14 @@ export interface CharacterInputs {
     raceId: string,
     raceTitle: string,
     characterName: string,
-    charaterSex: string,
+    charaterSex: SelectableSex,
     primaryWeaponTitle: string,
     secondaryWeaponTitle: string,
     shieldTitle: string,
     bodyArmorTitle: string,
     secondaryArmorTitle: string,
-    helmetTitle: string
+    helmetTitle: string,
+    characterImg: FileList
 }
 
 
@@ -44,7 +45,7 @@ export default function CreateCharacterForm() {
         },
         {
             label: "Karakterkép",
-            formComponent: <CharacterImageStep/>
+            formComponent: <CharacterImageStep form={form}/>
         },
         {
             label: "Áttekintés",

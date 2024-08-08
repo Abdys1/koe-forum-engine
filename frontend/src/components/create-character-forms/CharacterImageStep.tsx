@@ -4,10 +4,23 @@ import ComponentHeading from "@/components/ComponentHeading";
 import StepHeading from "@/components/StepHeading";
 import { useState } from "react";
 import Link from "next/link";
+import { UseFormReturn } from "react-hook-form";
+import { CharacterInputs } from "@/components/CreateCharacterForm";
+import { useMultiStepFormContext } from "@/components/MultiStepFormContext";
 
-export default function CharacterImageStep() {
-    const IMAGE_PLACEHOLDER = "";
+interface CharacterImageStepProps {
+    form: UseFormReturn<CharacterInputs, any, undefined>
+}
+
+const IMAGE_PLACEHOLDER = "";
+
+export default function CharacterImageStep(props: CharacterImageStepProps) {
+    const formState = useMultiStepFormContext();
     const [characterImage, setCharacterImage] = useState(IMAGE_PLACEHOLDER);
+
+    const {
+        register
+    } = props.form;
 
     function handleImageChange(event: React.ChangeEvent<HTMLInputElement>) {
         const images = event.target.files;
@@ -55,7 +68,9 @@ export default function CharacterImageStep() {
                                 </>
                             }
                         </label>
-                        <input onChange={handleImageChange} type="file" id="characterImg" className="hidden"/>
+                        <input type="file" id="characterImg" className="hidden"
+                            {...register("characterImg", {onChange: handleImageChange})}
+                        />
                     {/*</div>*/}
                     {/*<div className="relative w-[50%] flex justify-start items-start">*/}
                             <div className="relative w-full max-w-2xl p-4 mb-2 flex justify-center items-start flex-col z-10 
