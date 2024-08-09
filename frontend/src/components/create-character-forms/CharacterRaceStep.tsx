@@ -1,7 +1,7 @@
 "use client"
 
 import CharacterRaceBtn from "@/components/CharacterRaceBtn";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import MultiStepBar from "@/components/MultiStepBar";
 import MultiStepPagination from "@/components/MultiStepPagination";
@@ -68,14 +68,54 @@ interface CharacterRaceStepProps {
 }
 
 export default function CharacterRaceStep(props: CharacterRaceStepProps) {
-    const [selectedRace, setSelectedRace] = useState<SelectableRace>(raceElements[0]);
-
     const {
-        register
+        register,
+        getValues,
+        setValue
     } = props.form;
+
+    const [selectedRace, setSelectedRace] = useState<SelectableRace>(getActualRace());
+
+    
+
+    /*useEffect(() => {
+        let actualRace: SelectableRace | undefined;
+        const raceId = getValues("raceId");
+        if(raceId) {
+            actualRace = raceElements.find((element) => {
+                return element.id === raceId;
+            });
+        } else {
+            actualRace = raceElements[0];
+        }
+        if(!actualRace) {
+           throw Error("Hiba a kiválasztott faj betöltése során!"); 
+        }
+        selectRace(actualRace);
+    }, []);*/
+
+    
+
+    function getActualRace() {
+        let actualRace: SelectableRace | undefined;
+        const raceId = getValues("raceId");
+        if(raceId) {
+            actualRace = raceElements.find((element) => {
+                return element.id === raceId;
+            });
+        } else {
+            actualRace = raceElements[0];
+        }
+        if(!actualRace) {
+           throw Error("Hiba a kiválasztott faj betöltése során!"); 
+        }
+        return actualRace;
+    }
 
     function selectRace(race:SelectableRace): void {
         setSelectedRace(race);
+        setValue("raceId", race.id);
+        setValue("raceTitle", race.title);
     }
 
     return (
@@ -113,8 +153,8 @@ export default function CharacterRaceStep(props: CharacterRaceStepProps) {
                         })
                     }
                 </ul>
-                <input type="hidden" {...register("raceId", {value: selectedRace.id})}/>
-                <input type="hidden" {...register("raceTitle", {value: selectedRace.title})}/>
+                <input type="hidden" {...register("raceId", {value: raceElements[0].id})}/>
+                <input type="hidden" {...register("raceTitle", {value: raceElements[0].title})}/>
             </div>
             <MultiStepPagination/>
             <p className="absolute bottom-24 left-10 text-gray-400 text-xs font-poppins tracking-widest">

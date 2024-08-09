@@ -28,7 +28,11 @@ export interface CharacterInputs {
 export default function CreateCharacterForm() {
     const [actualStep, setActualStep] = useState(0);
 
-    const form = useForm<CharacterInputs>();
+    const form = useForm<CharacterInputs>({
+        defaultValues: {
+            charaterSex: "ferfi"
+        }
+    });
 
     const steps:FormStep[] = [
         {

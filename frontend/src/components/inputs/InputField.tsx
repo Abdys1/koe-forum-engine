@@ -30,20 +30,20 @@ export default forwardRef<HTMLInputElement, InputFieldProps>(function InputField
 
     return (
         <div className={clsx(
-            'relative mt-4 flex flex-col',
-            errorMsg ? 'text-red-600' : 'text-secondary'
+            'relative mt-4 flex flex-col font-poppins',
+            errorMsg ? 'text-red-500' : 'text-secondary'
         )}>
             <input id={inputId} type={type} name={name} ref={ref}
                 onChange={handleChange} onBlur={onBlur}
                 className={clsx(
                     'peer pb-1 mb-4 border-b-2 focus:outline-none bg-transparent font-poppins font-semibold tracking-widest',
-                    errorMsg ? 'border-red-600' : 'border-secondary'
+                    errorMsg ? 'border-red-500' : 'border-secondary'
                 )} />
             <label htmlFor={inputId} className={clsx(
                 'absolute cursor-text left-0 peer-focus:-translate-y-5 peer-focus:text-sm peer-focus:cursor-default transition-all ease-in-out duration-150 tracking-widest font-poppins font-medium',
                 { '-translate-y-5 text-sm cursor-default': hasValue }
             )}>{label}</label>
-            {errorMsg && <span role="alert">{errorMsg}</span>}
+            {errorMsg && <span role="alert" className="font-roboto">{errorMsg}</span>}
         </div>
     );
 });

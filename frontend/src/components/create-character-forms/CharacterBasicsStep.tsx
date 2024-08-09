@@ -27,13 +27,7 @@ export default function CharacterBasicsStep(props: CharacterBasicsStepProps) {
         formState: {errors}
     } = props.form;
 
-    const [selectedSex, setSelectedSex] = useState<SelectableSex>();
-
-    useEffect(() => {
-        const charSexVal = getValues("charaterSex") || "ferfi";
-        setValue("charaterSex", charSexVal);
-        setSelectedSex(charSexVal);
-    }, []);
+    const [selectedSex, setSelectedSex] = useState<SelectableSex>(getValues("charaterSex"));
 
     function selectSex(sex: SelectableSex): void {
         setSelectedSex(sex);
