@@ -4,7 +4,7 @@ import { useState } from "react";
 import { FormContextState, MultiStepFormContext } from "@/components/MultiStepFormContext";
 import CharacterRaceStep from "@/components/create-character-forms/CharacterRaceStep";
 import CharacterBasicsStep, { SelectableSex } from "@/components/create-character-forms/CharacterBasicsStep";
-import CharacterGearStep from "@/components/create-character-forms/CharacterGearStep";
+import CharacterGearStep, { DEFAULT_GEAR_OPTION } from "@/components/create-character-forms/CharacterGearStep";
 import CharacterImageStep from "@/components/create-character-forms/CharacterImageStep";
 import CharacterSummaryStep from "@/components/create-character-forms/CharacterSummaryStep";
 import { FormStep } from "@/components/types";
@@ -30,7 +30,13 @@ export default function CreateCharacterForm() {
 
     const form = useForm<CharacterInputs>({
         defaultValues: {
-            charaterSex: "ferfi"
+            charaterSex: "ferfi",
+            primaryWeaponTitle: DEFAULT_GEAR_OPTION,
+            secondaryWeaponTitle: DEFAULT_GEAR_OPTION,
+            shieldTitle: DEFAULT_GEAR_OPTION,
+            bodyArmorTitle: DEFAULT_GEAR_OPTION,
+            secondaryArmorTitle: DEFAULT_GEAR_OPTION,
+            helmetTitle: DEFAULT_GEAR_OPTION
         }
     });
 
@@ -53,7 +59,7 @@ export default function CreateCharacterForm() {
         },
         {
             label: "Áttekintés",
-            formComponent: <CharacterSummaryStep/>
+            formComponent: <CharacterSummaryStep form={form}/>
         }
     ];
 

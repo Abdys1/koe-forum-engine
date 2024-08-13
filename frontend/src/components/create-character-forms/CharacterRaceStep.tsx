@@ -57,7 +57,7 @@ const raceElements:SelectableRace[] = [
     {
         id: 'felszerzet',
         title: 'Félszerzet',
-        desc: 'Félszerzetek lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora. Tempora voluptas, quis explicabo officiis similique numquam nihil nulla? Vel, quia? Cumque corporis earum autem qui explicabo nobis. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.',
+        desc: 'Félszerzetek lorem ipsum dolor sit amet consecteturreprehenderit assumenda mollitia tempora.',
         img: '/images/ryldan-nobg.png',
         buttonImg: '/images/ryldan-nobg.png'
     },

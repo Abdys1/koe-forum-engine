@@ -25,7 +25,7 @@ export default function TabbedListPanel(props: TabbedListPanelProps) {
     }
 
     return (
-        <div className="relative w-full max-w-lg h-72  flex justify-center items-start flex-col rounded overflow-hidden
+        <div className="relative w-full max-w-lg h-72  flex justify-center items-start flex-col rounded overflow-hidden bg-[rgba(25,26,28,0.9)]
                         before:content-[''] before:absolute before:bottom-0 before:left-0 before:w-full before:h-[2rem] before:bg-gradient-to-b before:from-transparent before:to-cardBlackBg before:opacity-70 before:z-30
                         after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2rem] after:bg-gradient-to-b after:from-transparent after:to-cardBlackBg after:opacity-40 after:z-30">
             <nav className="absolute top-0 left-0 w-full h-8 flex justify-between items-center bg-cardMediumBg z-20 border-b-[0.5px] border-solid border-[rgba(255,255,255,0.3)]">

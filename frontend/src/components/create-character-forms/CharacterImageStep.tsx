@@ -42,13 +42,13 @@ export default function CharacterImageStep(props: CharacterImageStepProps) {
             </div>
             <div className="relative mt-2 w-full flex justify-start items-start flex-col z-10">
                 <StepHeading title="4. Töltsd fel karakterképed:" />
-                <div className="relative w-full flex justify-evenly items-start">
+                <div className="relative w-full mt-2 flex justify-evenly items-start">
                     {/*<div className="relative w-[50%] flex justify-center items-start">*/}
                         <label htmlFor="characterImg" 
                             className="relative w-[185px] h-[308px] mr-4 flex justify-center items-center rounded-sm bg-[rgba(235,190,82,0.1)] border-[2px] border-solid border-secondaryLight outline outline-1 outline-offset-2 outline-secondaryLight cursor-pointer"
                         >
                             { characterImage === IMAGE_PLACEHOLDER && 
-                                <div className="relative w-full h-full flex justify-center item flex-col pb-4">
+                                <div className="relative w-full h-full pb-4 flex justify-center item flex-col">
                                     <span className="relative w-full mb-2 flex justify-center items-center text-6xl font-poppins font-medium text-secondaryLight">
                                         +
                                     </span>
