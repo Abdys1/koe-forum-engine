@@ -25,6 +25,7 @@ export default function CharacterSummaryStep(props:CharacterSummaryStepProps) {
     const selectedBodyArmor = getValues("bodyArmorTitle");
     const selectedSecondaryArmor = getValues("secondaryArmorTitle");
     const selectedHelmet = getValues("helmetTitle");
+    const characterImage = createCharacterImgUrl();
 
     function getCharSex() {
         let charSex;
@@ -36,6 +37,12 @@ export default function CharacterSummaryStep(props:CharacterSummaryStepProps) {
             charSex = "nő";
         }
         return charSex;
+    }
+
+    function createCharacterImgUrl() {
+        const files = getValues("characterImg");
+        const imgUrl = URL.createObjectURL(files[0]);
+        return imgUrl;
     }
 
     return (
@@ -58,7 +65,7 @@ export default function CharacterSummaryStep(props:CharacterSummaryStepProps) {
                     </div>*/}
                         <div className="relative w-full mt-2 flex justify-center items-start flex-row-reverse">
                             <div className="relative w-[185px] h-[308px] flex justify-center items-center rounded-sm bg-[rgba(255,255,255,0.02)] border-[2px] border-solid border-mainLight outline outline-1 outline-offset-2 outline-mainLight cursor-pointer">
-                                <img src="/images/ryldan2.png" alt="Az általad kiválasztott karakterkép"
+                                <img src={characterImage} alt="Az általad kiválasztott karakterkép"
                                     className="relative w-full h-full object-cover z-40"
                                 />
                             </div>

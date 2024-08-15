@@ -16,11 +16,14 @@ const IMAGE_PLACEHOLDER = "";
 
 export default function CharacterImageStep(props: CharacterImageStepProps) {
     const formState = useMultiStepFormContext();
-    const [characterImage, setCharacterImage] = useState(IMAGE_PLACEHOLDER);
 
     const {
-        register
+        register,
+        getValues,
+        trigger
     } = props.form;
+
+    const [characterImage, setCharacterImage] = useState(getCharacterImg());
 
     function handleImageChange(event: React.ChangeEvent<HTMLInputElement>) {
         const images = event.target.files;
@@ -31,6 +34,26 @@ export default function CharacterImageStep(props: CharacterImageStepProps) {
             return;
         }
         setCharacterImage(URL.createObjectURL(images[0]));
+    }
+
+    function getCharacterImg() {
+        let imgUrl;
+        const images = getValues("characterImg");
+        if(images?.length > 0) {
+            imgUrl = URL.createObjectURL(images[0]);
+        } else {
+            imgUrl = IMAGE_PLACEHOLDER;
+        }
+        return imgUrl;
+    }
+
+    async function nextStep(e: React.MouseEvent<HTMLElement>) {
+        const isValidStep = await trigger("characterImg");
+        console.log(getValues("characterImg"));
+        console.log(isValidStep);
+        if(isValidStep) {
+            formState.onNextStep(e);
+        }
     }
 
     return (
@@ -69,7 +92,7 @@ export default function CharacterImageStep(props: CharacterImageStepProps) {
                             }
                         </label>
                         <input type="file" id="characterImg" className="hidden"
-                            {...register("characterImg", {onChange: handleImageChange})}
+                            {...register("characterImg", {onChange: handleImageChange, required: true})}
                         />
                     {/*</div>*/}
                     {/*<div className="relative w-[50%] flex justify-start items-start">*/}
@@ -96,7 +119,7 @@ export default function CharacterImageStep(props: CharacterImageStepProps) {
                     {/*</div>*/}
                 </div>
             </div>
-            <MultiStepPagination/>
+            <MultiStepPagination onNextStep={nextStep}/>
         </form>
     );
 }
