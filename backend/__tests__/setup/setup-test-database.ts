@@ -17,7 +17,7 @@ async function shareDatabaseConfig(databaseUrl: string) {
 
 export async function setup() {
   container = await new MongoDBContainer('mongo:6.0.1').start();
-  const connectionUrl = `mongodb://127.0.0.1:${container.getMappedPort(27017)}/koe-forum-engine?directConnection=true`;
+  const connectionUrl = `mongodb://127.0.0.1:${container.getMappedPort(27017)}/koe-forum-engine?directConnection=true&w=majority`;
   await shareDatabaseConfig(connectionUrl);
 }
 

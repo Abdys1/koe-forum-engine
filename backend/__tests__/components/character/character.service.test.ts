@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { Character, CharacterService, CreateCharacterDto, Sex } from "@src/components/character/types";
+import { Character, CharacterService, CreateCharacterDto, CreateCharacterStatus, Sex } from "@src/components/character/types";
 import { fromCreateDto, toDetails } from "@src/components/character/character.mapper";
 import { generateUsername } from "@test/utils/test-data-generator";
 import CharacterServiceImpl from "@src/components/character/character.service";
@@ -61,10 +61,10 @@ describe('CharacterService', () => {
     });
 
     describe('createCharacter()', () => {
-        it('when character was added to character list then should return true', async () => {
+        it('when character was added to character list then should return character created status', async () => {
             const newCharacter = createCreateCharacterDto('Legolas', generateUsername());
 
-            expect(await characterService.createCharacter(newCharacter)).toBe(true);
+            expect(await characterService.createCharacter(newCharacter)).toStrictEqual({ status: CreateCharacterStatus.CREATED });
         });
 
         it('when add new character then should save to character list', async () => {
@@ -73,16 +73,16 @@ describe('CharacterService', () => {
             const newCharacter = createCreateCharacterDto('Aragorn', username);
             const expectedCharacters: Character[] = [...oldCharacters, fromCreateDto(newCharacter)];
 
-            expect(await characterService.createCharacter(newCharacter)).toBe(true);
+            expect(await characterService.createCharacter(newCharacter)).toStrictEqual({ status: CreateCharacterStatus.CREATED });
             expect(await characterDao.findAllCharacterByUsername(username)).toStrictEqual(expectedCharacters);
         });
 
-        it('when character name already exists in all character list then should return false', async () => {
+        it('when character name already exists in all character list then should return already exists status', async () => {
             const username = generateUsername();
             const characters = addTestCharactersToDb(username);
             const newCharacter = createCreateCharacterDto(characters[0].name, username);
 
-            expect(await characterService.createCharacter(newCharacter)).toBe(false);
+            expect(await characterService.createCharacter(newCharacter)).toStrictEqual({ status: CreateCharacterStatus.ALREADY_EXISTS });
             expect(await characterDao.findAllCharacterByUsername(username)).toStrictEqual(characters);
         });
     });

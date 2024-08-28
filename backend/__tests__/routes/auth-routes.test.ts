@@ -14,6 +14,7 @@ import {
   createUsernameValidationError,
   createPasswordValidationError
 } from '@test/routes/auth-test-utils';
+import logger from '@src/components/logger/logger';
 
 
 describe('Authentication api', () => {

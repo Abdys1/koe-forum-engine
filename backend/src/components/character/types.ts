@@ -22,7 +22,7 @@ export interface CharacterDetailsResponseDto {
 
 export interface CharacterService {
     getCharactersByUsername: (username: string) => Promise<CharacterDetailsCollection>,
-    createCharacter: (newCharacterDto: CreateCharacterDto) => Promise<boolean>
+    createCharacter: (newCharacterDto: CreateCharacterDto) => Promise<CreateCharacterStatusDto>
 }
 
 export interface CreateCharacterDto {
@@ -41,6 +41,15 @@ export interface CharacterDetails {
 };
 
 export type CharacterDetailsCollection = CharacterDetails[];
+
+export interface CreateCharacterStatusDto {
+    status: CreateCharacterStatus
+}
+
+export enum CreateCharacterStatus {
+    CREATED = 'CHARACTER_CREATED',
+    ALREADY_EXISTS = 'CHARACTER_ALREADY_EXISTS'
+}
 
 export interface Character {
     id?: string,
