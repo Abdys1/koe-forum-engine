@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-import mongoose from 'mongoose';
 import http from 'http';
 import app from '@src/app';
 import logger from '@src/components/logger/logger';
@@ -83,13 +82,6 @@ app.set('port', port);
 /**
  * Listen on provided port, on all network interfaces.
  */
-mongoose.connect(config.database.url).then(() => {
-  logger.info('Database connected!');
-  server.listen(port);
-  server.on('error', onError);
-  server.on('listening', onListening);
-}).catch((err) => {
-  logger.error('Database connection failed!');
-  logger.error(err);
-  process.exit(1);
-});
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);

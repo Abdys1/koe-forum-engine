@@ -1,35 +1,18 @@
-import { mkdir, writeFile } from 'fs/promises';
-import os from 'os';
-import path from 'path';
-import { PostgreSqlContainer, StartedPostgreSqlContainer } from '@testcontainers/postgresql';
 import { execSync } from 'child_process';
+import { DockerComposeEnvironment, StartedDockerComposeEnvironment } from 'testcontainers';
 
-let container: StartedPostgreSqlContainer | undefined;
+let environment: StartedDockerComposeEnvironment | undefined;
 let teardownHappened = false;
 
-async function shareDatabaseConfig(databaseUrl: string) {
-  const variablesDir = path.join(
-    os.tmpdir(),
-    'testcontainer_global_setup',
-  );
-  await mkdir(variablesDir, { recursive: true });
-  await writeFile(path.join(variablesDir, 'databaseUrl'), databaseUrl);
-}
-
 export async function setup() {
-  container = await new PostgreSqlContainer().start();
-
-  const databaseUrl = `postgresql://${container.getUsername()}:${container.getPassword()}@${container.getHost()}:${container.getPort()}/${container.getDatabase()}`;
-
-  execSync(`DATABASE_URL=${databaseUrl} npx prisma migrate deploy`);
-
-  await shareDatabaseConfig(databaseUrl);
+  environment = await new DockerComposeEnvironment('./__tests__/api/setup', 'docker-compose.yml').up();
+  execSync(`npm run migrate:test`);
 }
 
 export async function teardown() {
   if (teardownHappened) {
     throw new Error('Teardown happened twice');
   }
-  await container?.stop();
+  await environment?.down();
   teardownHappened = true;
 }

@@ -8,8 +8,9 @@
     "dev": "tsx src/bin/www.ts",
     "watch:dev": "tsx watch src/bin/www.ts",
     "lint": "eslint ./src",
-    "test:unit": "vitest --project unit",
-    "test:e2e": "vitest --project integration"
+    "migrate:test": "dotenv -e .env.test -- npx prisma migrate deploy",
+    "test:unit": "dotenv -e .env.test -- vitest --project unit",
+    "test:e2e": "dotenv -e .env.test -- vitest --project integration"
   },
   "dependencies": {
     "@prisma/client": "5.19.0",
@@ -38,6 +39,7 @@
     "@types/supertest": "6.0.2",
     "@typescript-eslint/eslint-plugin": "6.19.0",
     "@typescript-eslint/parser": "6.19.0",
+    "dotenv-cli": "7.4.2",
     "eslint": "8.57.0",
     "eslint-config-prettier": "9.1.0",
     "npm-run-all": "4.1.5",
