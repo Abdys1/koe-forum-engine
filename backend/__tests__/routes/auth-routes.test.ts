@@ -1,10 +1,9 @@
 import supertest from 'supertest';
 import {
-  beforeAll, describe, it, expect, beforeEach,
+  beforeAll, describe, it, expect, afterEach,
 } from 'vitest';
 
 import app from '@src/app';
-import { UserModel } from '@src/components/user/user.model';
 import AuthClient from '@test/routes/auth-client';
 import {
   createRandomUser,
@@ -14,8 +13,7 @@ import {
   createUsernameValidationError,
   createPasswordValidationError
 } from '@test/routes/auth-test-utils';
-import logger from '@src/components/logger/logger';
-
+import { db } from '@src/prisma-client';
 
 describe('Authentication api', () => {
   let authClient: AuthClient;
@@ -24,13 +22,17 @@ describe('Authentication api', () => {
     authClient = new AuthClient(supertest(app));
   });
 
-  beforeEach(async () => {
-    await UserModel.deleteMany({});
+  afterEach(async () => {
+    await db.forumUser.deleteMany({});
+    await db.character.deleteMany({});
   });
 
   it('when try login after registrate then should return valid access token', async () => {
     const user = createRandomUser();
-    await authClient.registrate(user);
+    const regResp = await authClient.registrate(user);
+
+    expect(regResp.status).toBe(200);
+
     const resp = await authClient.login(user);
 
     await assertLogin(resp, user.username);
@@ -46,8 +48,11 @@ describe('Authentication api', () => {
 
   it('when try login with wrong password then should return 401 status', async () => {
     const user = createRandomUser();
-    await authClient.registrate(user);
-    const resp = await authClient.login({ username: user.username, password: 'too_bad_pwd' });
+    let resp = await authClient.registrate(user);
+
+    expect(resp.status).toBe(200);
+
+    resp = await authClient.login({ username: user.username, password: 'too_bad_pwd' });
 
     expect(resp.status).toBe(401);
     expect(resp.body.accessToken).toBeFalsy();

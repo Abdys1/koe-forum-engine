@@ -12,12 +12,15 @@ class FakeUserDao implements UserDao {
     return { username: generateUsername(), password: generatePassword() };
   }
 
-  public async findPwdByUsername(username: string): Promise<string | undefined> {
+  public async findPwdByUsername(username: string): Promise<string> {
     if (!username) {
       throw new Error('Username undefined!');
     }
     const result = this.fakeUsers.find((user) => user.username === username);
-    return result?.password;
+    if (!result) {
+      throw new Error('No ForumUser found');
+    }
+    return result.password;
   }
 
   public async existsByUsername(username: string): Promise<boolean> {

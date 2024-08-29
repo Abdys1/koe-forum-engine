@@ -1,12 +1,11 @@
 import supertest, { Response } from "supertest";
 import { describe, it } from "vitest";
 import app from '@src/app';
-import { UserModel } from "@src/components/user/user.model";
 import { saveTestUserToDb } from "@test/utils/test-data-generator";
 import CharacterClient from "@test/routes/character-client";
 import { CreateCharacterRequestDto, Sex } from "@src/components/character/types";
-import { CharacterModel } from "@src/components/character/character.model";
 import logger from "@src/components/logger/logger";
+import { db } from "@src/prisma-client";
 
 function createCharacterDto(): CreateCharacterRequestDto {
     return {
@@ -31,9 +30,9 @@ describe('/api/characters', () => {
     });
 
     describe('POST /', () => {
-        beforeEach(async () => {
-            await UserModel.deleteMany({});
-            await CharacterModel.deleteMany({});
+        afterEach(async () => {
+            await db.character.deleteMany({});
+            await db.forumUser.deleteMany({});
         });
 
         it('when create a new character then should be in the user character list', async () => {

@@ -1,34 +1,33 @@
 import { Character, CharacterDao, CharacterEntity, Sex } from "@src/components/character/types";
-import { CharacterModel } from "@src/components/character/character.model";
-import { UserModel } from "@src/components/user/user.model";
 import { describe } from "vitest";
-import { UserEntity } from "@src/components/user/types";
 import { fromEntity } from "@src/components/character/character.mapper";
 import { saveTestUserToDb } from "@test/utils/test-data-generator";
 import CharacterDaoImpl from "@src/components/character/character.dao";
-import UserNotFoundError from "@src/components/user/user-not-found.error";
+import { db } from "@src/prisma-client";
 
-async function saveCharactersToDb(user: UserEntity): Promise<Character[]> {
-    const entities: CharacterEntity[] = [
-        {
+async function saveCharactersToDb(user: { id: number, username: string }): Promise<Character[]> {
+    const entity: CharacterEntity = await db.character.create({
+        data: {
             name: 'Legolas',
             sex: Sex.FEMALE,
             race: 'elf',
             imageUrl: '/legolas.jpg',
-            userRef: user._id
+            user: { connect: { id: user.id } }
         }
-    ];
-    await CharacterModel.create(entities);
-    return entities.map(entity => fromEntity(user.username, entity));
+    });
+    return [fromEntity(user.username, entity)];
 }
 
 describe('Character dao', () => {
     let characterDao: CharacterDao;
 
-    beforeEach(async () => {
-        characterDao = new CharacterDaoImpl();
-        await UserModel.deleteMany({});
-        await CharacterModel.deleteMany({});
+    beforeEach(() => {
+        characterDao = new CharacterDaoImpl(db);
+    });
+
+    afterEach(async () => {
+        await db.character.deleteMany({});
+        await db.forumUser.deleteMany({});
     });
 
     describe('findAllCharacterByUsername()', () => {
@@ -72,10 +71,9 @@ describe('Character dao', () => {
                 owner: user.username
             }
 
-            expect(await CharacterModel.countDocuments()).toBe(0);
+            expect(await db.character.count()).toBe(0);
             await characterDao.save(expected);
-            const character = await CharacterModel.findOne({ name: 'test' });
-            assert(!!character);
+            const character = await db.character.findFirstOrThrow({ where: { name: 'test' } });
             expect(fromEntity(user.username, character)).toStrictEqual(expected);
         });
 
@@ -88,9 +86,7 @@ describe('Character dao', () => {
                 owner: 'not-exists'
             }
 
-            expect(characterDao.save(expected)).rejects.toThrowError(
-                new UserNotFoundError('User with username ' + expected.owner + ' not found!')
-            );
+            expect(characterDao.save(expected)).rejects.toThrowError('An operation failed because it depends on one or more records that were required but not found.');
         })
     });
 });

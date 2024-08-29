@@ -1,5 +1,3 @@
-import { Types } from "mongoose"
-
 // https://en.wikipedia.org/wiki/ISO/IEC_5218
 export enum Sex {
     MALE = 1,
@@ -67,10 +65,10 @@ export interface CharacterDao {
 }
 
 export interface CharacterEntity {
-    _id?: Types.ObjectId,
+    id: number,
     name: string,
     sex: number,
     race: string,
     imageUrl: string,
-    userRef: Types.ObjectId
+    userId: number
 }
