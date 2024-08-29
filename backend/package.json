@@ -8,7 +8,8 @@
     "dev": "tsx src/bin/www.ts",
     "watch:dev": "tsx watch src/bin/www.ts",
     "lint": "eslint ./src",
-    "test": "vitest"
+    "test:unit": "vitest --project unit",
+    "test:e2e": "vitest --project integration"
   },
   "dependencies": {
     "@prisma/client": "5.19.0",

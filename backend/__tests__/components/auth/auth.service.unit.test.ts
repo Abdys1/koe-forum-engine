@@ -5,11 +5,11 @@ import {
 import AuthServiceImpl from '@src/components/auth/auth.service';
 import AuthenticationError from '@src/components/auth/authentication.error.js';
 
-import FakeUserDao from '@test/components/user/fake-user.dao';
+import FakeUserDao from '@test/components/user/utils/fake-user.dao';
 import { ForumUser } from '@src/components/user/types';
 import { PasswordHasher, TokenGenerator, AuthService } from '@src/components/auth/types';
 
-class TestError extends Error {}
+class TestError extends Error { }
 
 describe('AuthService', () => {
   let savedUser: ForumUser;
@@ -30,8 +30,8 @@ describe('AuthService', () => {
     userDao = new FakeUserDao();
 
     savedUser = FakeUserDao.createTestUser();
-    await userDao.save({username: savedUser.username, password: await pwdHasher.hash(savedUser.password) });
-    
+    await userDao.save({ username: savedUser.username, password: await pwdHasher.hash(savedUser.password) });
+
     authService = new AuthServiceImpl(userDao, pwdHasher, tokenGenerator);
   });
 
@@ -129,7 +129,7 @@ describe('AuthService', () => {
 
       expect(success).toBe(true);
       expect(userDao.save).toHaveBeenCalledOnce();
-      expect(userDao.isUserSaved({username: user.username, password: await pwdHasher.hash(user.password)})).toBe(true);
+      expect(userDao.isUserSaved({ username: user.username, password: await pwdHasher.hash(user.password) })).toBe(true);
     });
   });
 });

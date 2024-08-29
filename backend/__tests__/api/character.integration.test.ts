@@ -2,7 +2,7 @@ import supertest, { Response } from "supertest";
 import { describe, it } from "vitest";
 import app from '@src/app';
 import { saveTestUserToDb } from "@test/utils/test-data-generator";
-import CharacterClient from "@test/routes/character-client";
+import CharacterClient from "@test/api/utils/character-client";
 import { CreateCharacterRequestDto, Sex } from "@src/components/character/types";
 import logger from "@src/components/logger/logger";
 import { db } from "@src/prisma-client";

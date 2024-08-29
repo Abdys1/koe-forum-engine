@@ -1,9 +1,9 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
 import { Character, CharacterService, CreateCharacterDto, CreateCharacterStatus, Sex } from "@src/components/character/types";
 import { fromCreateDto, toDetails } from "@src/components/character/character.mapper";
 import { generateUsername } from "@test/utils/test-data-generator";
 import CharacterServiceImpl from "@src/components/character/character.service";
-import FakeCharacterDao from "@test/components/character/fake-character.dao";
+import FakeCharacterDao from "@test/components/character/utils/fake-character.dao";
 
 describe('CharacterService', () => {
     let characterDao: FakeCharacterDao;

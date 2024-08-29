@@ -4,7 +4,7 @@ import {
 } from 'vitest';
 
 import app from '@src/app';
-import AuthClient from '@test/routes/auth-client';
+import AuthClient from '@test/api/utils/auth-client';
 import {
   createRandomUser,
   assertLogin,
@@ -12,7 +12,7 @@ import {
   assertRegistrationInputInvalid,
   createUsernameValidationError,
   createPasswordValidationError
-} from '@test/routes/auth-test-utils';
+} from '@test/api/utils/auth-test-utils';
 import { db } from '@src/prisma-client';
 
 describe('Authentication api', () => {
@@ -23,8 +23,8 @@ describe('Authentication api', () => {
   });
 
   afterEach(async () => {
-    await db.forumUser.deleteMany({});
     await db.character.deleteMany({});
+    await db.forumUser.deleteMany({});
   });
 
   it('when try login after registrate then should return valid access token', async () => {
