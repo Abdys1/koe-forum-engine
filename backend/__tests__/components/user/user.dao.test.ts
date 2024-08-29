@@ -1,39 +1,30 @@
-import mongoose from 'mongoose';
 import {
-  beforeEach, describe, expect, it
+  afterEach, describe, expect, it
 } from 'vitest';
 
 import { userDao } from '@src/components/user/index';
-import { UserModel } from '@src/components/user/user.model';
-import { ForumUser } from '@src/components/user/types';
+import { db } from '@src/prisma-client';
+import { generateUsername } from '@test/utils/test-data-generator';
 
 describe('User dao ', () => {
+
   beforeEach(async () => {
-    await UserModel.deleteMany({});
-    await UserModel.create({ username: 'test_user', password: 'alma' });
+    await db.forumUser.create({
+      data: { username: 'test_user', password: 'alma' }
+    });
   });
 
-  async function assertValidationError(user: ForumUser, expectedFields: string[]): Promise<void> {
-    try {
-      await userDao.save(user)
-      throw new Error('Should throw validation error!');
-    } catch (error: unknown) {
-      expect(error).toBeInstanceOf(mongoose.Error.ValidationError);
-      const err = error as mongoose.Error.ValidationError;
-      expect(Object.keys(err.errors).length).toBe(expectedFields.length);
-      expectedFields.forEach((field) => {
-        expect(err.errors[field], `'${field}' field not found in validation errors!`).toBeTruthy();
-      });
-    }
-  }
+  afterEach(async () => {
+    await db.forumUser.deleteMany({});
+  });
 
   describe('findPwdByUsername()', () => {
     it('should return password hash when has user', () => {
       expect(userDao.findPwdByUsername('test_user')).resolves.toBe('alma');
     });
 
-    it('should return undefined when has not user with username', () => {
-      expect(userDao.findPwdByUsername('fake_user')).resolves.toBeUndefined();
+    it('should throw error when has not user with username', () => {
+      expect(userDao.findPwdByUsername('fake_user')).rejects.toThrowError(new Error('No ForumUser found'));
     });
   });
 
@@ -53,17 +44,11 @@ describe('User dao ', () => {
 
   describe('save()', () => {
     it('should create a new entry on user collection', async () => {
-      const newUser = { username: 'test_user_2', password: 'alma_2' };
+      const newUser = { username: generateUsername(), password: 'alma_2' };
       await userDao.save(newUser);
-      const savedUser = await UserModel.findOne({ username: newUser.username });
+      const savedUser = await db.forumUser.findFirstOrThrow({ where: { username: newUser.username } });
       expect(savedUser).toBeTruthy();
-      expect(savedUser?.password).toBe(newUser.password);
-    });
-
-    it('should throw exception when try save without required fields', () => {
-      assertValidationError({ username: 'test_user', password: '' }, ['password']);
-      assertValidationError({ username: '', password: 'test_pwd' }, ['username']);
-      assertValidationError({ username: '', password: '' }, ['username', 'password']);
+      expect(savedUser.password).toBe(newUser.password);
     });
   });
 });

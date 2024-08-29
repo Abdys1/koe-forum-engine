@@ -18,8 +18,8 @@ class AuthServiceImpl implements AuthService {
 
   public async verifyUser(username: string, rawPwd: string): Promise<boolean> {
     try {
-      const hashPwd = await this.userDao.findPwdByUsername(username) || '';
-      return await this.pwdHasher.verify(hashPwd, rawPwd);
+      const hashPwd = await this.userDao.findPwdByUsername(username);
+      return this.pwdHasher.verify(hashPwd, rawPwd);
     } catch (err) {
       logger.error(err);
       return false;

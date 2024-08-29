@@ -1,9 +1,10 @@
-import { MongoDBContainer, StartedMongoDBContainer } from '@testcontainers/mongodb';
 import { mkdir, writeFile } from 'fs/promises';
 import os from 'os';
 import path from 'path';
+import { PostgreSqlContainer, StartedPostgreSqlContainer } from '@testcontainers/postgresql';
+import { execSync } from 'child_process';
 
-let container: StartedMongoDBContainer | undefined;
+let container: StartedPostgreSqlContainer | undefined;
 let teardownHappened = false;
 
 async function shareDatabaseConfig(databaseUrl: string) {
@@ -16,9 +17,13 @@ async function shareDatabaseConfig(databaseUrl: string) {
 }
 
 export async function setup() {
-  container = await new MongoDBContainer('mongo:6.0.1').start();
-  const connectionUrl = `mongodb://127.0.0.1:${container.getMappedPort(27017)}/koe-forum-engine?directConnection=true&w=majority`;
-  await shareDatabaseConfig(connectionUrl);
+  container = await new PostgreSqlContainer().start();
+
+  const databaseUrl = `postgresql://${container.getUsername()}:${container.getPassword()}@${container.getHost()}:${container.getPort()}/${container.getDatabase()}`;
+
+  execSync(`DATABASE_URL=${databaseUrl} npx prisma migrate deploy`);
+
+  await shareDatabaseConfig(databaseUrl);
 }
 
 export async function teardown() {
