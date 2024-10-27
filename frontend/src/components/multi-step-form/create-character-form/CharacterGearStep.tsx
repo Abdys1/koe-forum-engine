@@ -1,30 +1,27 @@
-import MultiStepBar from "@/components/MultiStepBar";
-import MultiStepPagination from "@/components/MultiStepPagination";
+'use client'
+
+import MultiStepBar from "@/components/multi-step-form/MultiStepBar";
+import MultiStepPagination from "@/components/multi-step-form/MultiStepPagination";
 import SelectableOptionBtn from "@/components/SelectableOptionBtn";
 import TabbedListPanel, { ListOption } from "@/components/TabbedListPanel";
 import SelectedGearElement from "@/components/SelectedGearElement";
 import ComponentHeading from "@/components/ComponentHeading";
 import StepHeading from "@/components/StepHeading";
 import { useState } from "react";
-import { UseFormReturn } from "react-hook-form";
-import { CharacterInputs } from "@/components/CreateCharacterForm";
+import { useMultiStepFormContext } from "@/components/multi-step-form/MultiStepFormContext";
 
 type GearOption = "fegyver" | "pancel";
 
-interface CharacterGearStepProps {
-    form: UseFormReturn<CharacterInputs, any, undefined>
-}
-
 export const DEFAULT_GEAR_OPTION = "Nincs";
 
-export default function CharacterGearStep(props: CharacterGearStepProps) {
-    
+export default function CharacterGearStep() {
+    const formContext = useMultiStepFormContext();
 
     const {
         register,
         getValues,
         setValue
-    } = props.form;
+    } = formContext.form;
 
     const [activeGearOption, setActiveGearOption] = useState<GearOption>("fegyver");
     const [primaryWeapon, setPrimaryWeapon] = useState(getValues("primaryWeaponTitle"));
@@ -279,7 +276,7 @@ export default function CharacterGearStep(props: CharacterGearStepProps) {
     }
 
     return (
-        <form className={`relative w-full h-[calc(100vh - 4rem)] flex justify-between items-center flex-col m-8 py-4 px-8 bg-cardBlackBg rounded shadow-md shadow-[rgba(0,0,0,0.4)] overflow-hidden
+        <div className={`relative w-full h-[calc(100vh - 4rem)] flex justify-between items-center flex-col m-8 py-4 px-8 bg-cardBlackBg rounded shadow-md shadow-[rgba(0,0,0,0.4)] overflow-hidden
                         before:content-[''] before:absolute before:bottom-0 before:right-[5%] before:h-full before:w-[50%] before:bg-[url(/images/knight-withoutbg.png)] before:bg-no-repeat before:bg-left-bottom before:bg-contain before:opacity-40
             after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-full after:bg-[url('/images/wave.svg')] after:bg-no-repeat after:bg-left-bottom after:bg-contain after:z-0`}>
                 <div className="relative w-full mb-2 flex justify-center items-center flex-col z-10">
@@ -326,6 +323,6 @@ export default function CharacterGearStep(props: CharacterGearStepProps) {
                     </div>
                 </div>
                 <MultiStepPagination/>
-        </form>
+        </div>
     );
 }

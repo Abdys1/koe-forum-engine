@@ -1,5 +1,5 @@
-import MultiStepNavBtn from "@/components/MultiStepNavBtn";
-import { useMultiStepFormContext } from "@/components/MultiStepFormContext";
+import MultiStepNavBtn from "@/components/multi-step-form/MultiStepNavBtn";
+import { useMultiStepFormContext } from "@/components/multi-step-form/MultiStepFormContext";
 
 interface MultiStepPaginationProps {
     onPrevStep?: React.MouseEventHandler<HTMLElement>,

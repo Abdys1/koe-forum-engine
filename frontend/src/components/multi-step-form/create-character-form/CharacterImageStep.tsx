@@ -1,27 +1,23 @@
-import MultiStepBar from "@/components/MultiStepBar";
-import MultiStepPagination from "@/components/MultiStepPagination";
+'use client'
+
+import MultiStepBar from "@/components/multi-step-form/MultiStepBar";
+import MultiStepPagination from "@/components/multi-step-form/MultiStepPagination";
 import ComponentHeading from "@/components/ComponentHeading";
 import StepHeading from "@/components/StepHeading";
 import { useState } from "react";
 import Link from "next/link";
-import { UseFormReturn } from "react-hook-form";
-import { CharacterInputs } from "@/components/CreateCharacterForm";
-import { useMultiStepFormContext } from "@/components/MultiStepFormContext";
-
-interface CharacterImageStepProps {
-    form: UseFormReturn<CharacterInputs, any, undefined>
-}
+import { useMultiStepFormContext } from "@/components/multi-step-form/MultiStepFormContext";
 
 const IMAGE_PLACEHOLDER = "";
 
-export default function CharacterImageStep(props: CharacterImageStepProps) {
-    const formState = useMultiStepFormContext();
+export default function CharacterImageStep() {
+    const formContext = useMultiStepFormContext();
 
     const {
         register,
         getValues,
         trigger
-    } = props.form;
+    } = formContext.form;
 
     const [characterImage, setCharacterImage] = useState(getCharacterImg());
 
@@ -52,12 +48,12 @@ export default function CharacterImageStep(props: CharacterImageStepProps) {
         console.log(getValues("characterImg"));
         console.log(isValidStep);
         if(isValidStep) {
-            formState.onNextStep(e);
+            formContext.onNextStep(e);
         }
     }
 
     return (
-        <form className="relative w-full h-[calc(100vh - 4rem)] flex justify-between items-center flex-col m-8 py-4 px-8 bg-cardBlackBg rounded shadow-md shadow-[rgba(0,0,0,0.4)] overflow-hidden
+        <div className="relative w-full h-[calc(100vh - 4rem)] flex justify-between items-center flex-col m-8 py-4 px-8 bg-cardBlackBg rounded shadow-md shadow-[rgba(0,0,0,0.4)] overflow-hidden
             after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-full after:bg-[url('/images/wave.svg')] after:bg-no-repeat after:bg-left-bottom after:bg-contain after:z-0">
             <div className="relative w-full mb-2 flex justify-center items-center flex-col z-10">
                 <ComponentHeading title="Karakter létrehozása"/>
@@ -120,6 +116,6 @@ export default function CharacterImageStep(props: CharacterImageStepProps) {
                 </div>
             </div>
             <MultiStepPagination onNextStep={nextStep}/>
-        </form>
+        </div>
     );
 }

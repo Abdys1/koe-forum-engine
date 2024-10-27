@@ -1,23 +1,19 @@
-import MultiStepBar from "@/components/MultiStepBar";
-import MultiStepPagination from "@/components/MultiStepPagination";
+'use client'
+
+import MultiStepBar from "@/components/multi-step-form/MultiStepBar";
+import MultiStepPagination from "@/components/multi-step-form/MultiStepPagination";
 import TextField from "@/components/inputs/TextField";
 import SelectableOptionBtn from "@/components/SelectableOptionBtn";
 import ComponentHeading from "@/components/ComponentHeading";
 import StepHeading from "@/components/StepHeading";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { UseFormReturn } from "react-hook-form";
-import { CharacterInputs } from "@/components/CreateCharacterForm";
-import { useMultiStepFormContext } from "@/components/MultiStepFormContext";
+import { useState } from "react";
+import { useMultiStepFormContext } from "@/components/multi-step-form/MultiStepFormContext";
 
 export type SelectableSex = "ferfi" | "no";
 
-interface CharacterBasicsStepProps {
-    form: UseFormReturn<CharacterInputs, any, undefined>
-}
-
-export default function CharacterBasicsStep(props: CharacterBasicsStepProps) {
-    const formState = useMultiStepFormContext();
+export default function CharacterBasicsStep() {
+    const formContext = useMultiStepFormContext();
     
     const {
         register,
@@ -25,7 +21,7 @@ export default function CharacterBasicsStep(props: CharacterBasicsStepProps) {
         getValues,
         setValue,
         formState: {errors}
-    } = props.form;
+    } = formContext.form;
 
     const [selectedSex, setSelectedSex] = useState<SelectableSex>(getValues("charaterSex"));
 
@@ -37,7 +33,7 @@ export default function CharacterBasicsStep(props: CharacterBasicsStepProps) {
     async function nextStep(e: React.MouseEvent<HTMLElement>) {
         const isValidStep = await trigger("characterName", {shouldFocus: true});
         if(isValidStep) {
-            formState.onNextStep(e);
+            formContext.onNextStep(e);
         }
     }
 
@@ -85,6 +81,6 @@ export default function CharacterBasicsStep(props: CharacterBasicsStepProps) {
             <p className="absolute bottom-24 left-10 text-gray-400 text-xs font-poppins tracking-widest">
                     * illusztráció a kiválasztott fajról
             </p>
-        </form >
+        </form>
     );
 }

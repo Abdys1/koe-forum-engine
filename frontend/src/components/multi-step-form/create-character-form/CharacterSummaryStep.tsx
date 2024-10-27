@@ -1,20 +1,18 @@
-import MultiStepBar from "@/components/MultiStepBar";
-import MultiStepPagination from "@/components/MultiStepPagination";
+'use client'
+
+import MultiStepBar from "@/components/multi-step-form/MultiStepBar";
+import MultiStepPagination from "@/components/multi-step-form/MultiStepPagination";
 import SelectedGearElement from "@/components/SelectedGearElement";
 import ComponentHeading from "@/components/ComponentHeading";
 import StepHeading from "@/components/StepHeading";
-import { UseFormReturn } from "react-hook-form";
-import { CharacterInputs } from "@/components/CreateCharacterForm";
+import { useMultiStepFormContext } from "@/components/multi-step-form/MultiStepFormContext";
 
-interface CharacterSummaryStepProps {
-    form: UseFormReturn<CharacterInputs, any, undefined>
-}
-
-export default function CharacterSummaryStep(props:CharacterSummaryStepProps) {
+export default function CharacterSummaryStep() {
+    const formContext = useMultiStepFormContext();
 
     const {
         getValues
-    } = props.form;
+    } = formContext.form;
 
     const characterName = getValues("characterName");
     const characterRace = getValues("raceTitle");
@@ -46,7 +44,7 @@ export default function CharacterSummaryStep(props:CharacterSummaryStepProps) {
     }
 
     return (
-        <form className="relative w-full h-[calc(100vh - 4rem)] flex justify-between items-center flex-col m-8 py-4 px-8 bg-cardBlackBg rounded shadow-md shadow-[rgba(0,0,0,0.4)] overflow-hidden
+        <div className="relative w-full h-[calc(100vh - 4rem)] flex justify-between items-center flex-col m-8 py-4 px-8 bg-cardBlackBg rounded shadow-md shadow-[rgba(0,0,0,0.4)] overflow-hidden
             after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-full after:bg-[url('/images/wave.svg')] after:bg-no-repeat after:bg-left-bottom after:bg-contain after:z-0">
             <div className="relative w-full mb-2 flex justify-center items-center flex-col z-10">
                 <ComponentHeading title="Karakter létrehozása"/>
@@ -96,6 +94,6 @@ export default function CharacterSummaryStep(props:CharacterSummaryStepProps) {
                         </div>
             </div>
             <MultiStepPagination/>
-        </form>
+        </div>
     );
 }

@@ -9,10 +9,18 @@ export interface PasswordFieldProps {
     onBlur?: React.FocusEventHandler<HTMLInputElement>
 }
 
-export default forwardRef<HTMLInputElement, PasswordFieldProps>(function PasswordField({ name, errors, onChange, onBlur }, ref) {
-    return (
-        <>
-            <InputField label="Jelszó" name={name} ref={ref} onChange={onChange} onBlur={onBlur} errors={errors} type="password"/>
-        </>
-    );
-});
+export default forwardRef<HTMLInputElement, PasswordFieldProps>(
+    function PasswordField({ name, errors, onChange, onBlur }, ref) {
+        return (
+            <>
+                <InputField label="Jelszó" 
+                    name={name} 
+                    ref={ref} 
+                    onChange={onChange} 
+                    onBlur={onBlur} 
+                    errors={errors} 
+                    type="password"/>
+            </>
+        );
+    }
+);

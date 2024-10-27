@@ -1,14 +1,13 @@
 "use client"
 
-import CharacterRaceBtn from "@/components/CharacterRaceBtn";
-import { useEffect, useState } from "react";
+import CharacterRaceBtn from "@/components/multi-step-form/create-character-form/CharacterRaceBtn";
+import { useState } from "react";
 import Link from "next/link";
-import MultiStepBar from "@/components/MultiStepBar";
-import MultiStepPagination from "@/components/MultiStepPagination";
+import MultiStepBar from "@/components/multi-step-form/MultiStepBar";
+import MultiStepPagination from "@/components/multi-step-form/MultiStepPagination";
 import ComponentHeading from "@/components/ComponentHeading";
 import StepHeading from "@/components/StepHeading";
-import { UseFormReturn } from "react-hook-form";
-import { CharacterInputs } from "@/components/CreateCharacterForm";
+import { useMultiStepFormContext } from "@/components/multi-step-form/MultiStepFormContext";
 
 interface SelectableRace {
     id: string,
@@ -63,20 +62,15 @@ const raceElements:SelectableRace[] = [
     },
 ];
 
-interface CharacterRaceStepProps {
-    form: UseFormReturn<CharacterInputs, any, undefined>
-}
-
-export default function CharacterRaceStep(props: CharacterRaceStepProps) {
-    const {
+export default function CharacterRaceStep() {
+     const formContext = useMultiStepFormContext();
+     const {
         register,
         getValues,
         setValue
-    } = props.form;
+    } = formContext.form;
 
     const [selectedRace, setSelectedRace] = useState<SelectableRace>(getActualRace());
-
-    
 
     /*useEffect(() => {
         let actualRace: SelectableRace | undefined;
@@ -93,8 +87,6 @@ export default function CharacterRaceStep(props: CharacterRaceStepProps) {
         }
         selectRace(actualRace);
     }, []);*/
-
-    
 
     function getActualRace() {
         let actualRace: SelectableRace | undefined;
@@ -119,7 +111,7 @@ export default function CharacterRaceStep(props: CharacterRaceStepProps) {
     }
 
     return (
-        <form style={{'--imgUrl': `url(${selectedRace.img})`} as React.CSSProperties} className={`relative w-full h-[calc(100vh - 4rem)] flex justify-between items-center flex-col m-8 py-4 px-8 bg-cardBlackBg rounded shadow-md shadow-[rgba(0,0,0,0.4)] overflow-hidden
+        <div style={{'--imgUrl': `url(${selectedRace.img})`} as React.CSSProperties} className={`relative w-full h-[calc(100vh - 4rem)] flex justify-between items-center flex-col m-8 py-4 px-8 bg-cardBlackBg rounded shadow-md shadow-[rgba(0,0,0,0.4)] overflow-hidden
             before:content-[''] before:absolute before:bottom-0 before:left-0 before:h-full before:w-full before:bg-[image:var(--imgUrl)] before:bg-no-repeat before:bg-left-bottom before:bg-contain before:opacity-60
             after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-full after:bg-[url('/images/wave.svg')] after:bg-no-repeat after:bg-left-bottom after:bg-contain after:z-0`}>
             <div className="relative w-full mb-2 flex justify-center items-center flex-col z-10">
@@ -160,6 +152,6 @@ export default function CharacterRaceStep(props: CharacterRaceStepProps) {
             <p className="absolute bottom-24 left-10 text-gray-400 text-xs font-poppins tracking-widest">
                     * illusztráció a kiválasztott fajról
             </p>
-        </form >
+        </div>
     );
 }

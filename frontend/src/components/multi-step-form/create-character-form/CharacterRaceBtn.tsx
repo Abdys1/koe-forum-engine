@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import Image from "next/image";
 
 type CharacterRaceBtnProps = {
     title: string,
@@ -14,10 +15,9 @@ export default function CharacterRaceBtn({ title, img, active = false, onClick }
             after:content-[''] after:absolute after:-bottom-4 after:-right-8 after:h-32 after:w-20 after:bg-slate-400 after:rotate-[20deg] after:opacity-[.035]`,
             { 'outline-mainLight before:bg-gradient-to-t before:from-[#9F96FE] before:to-transparent before:opacity-50': active },
             { 'outline-cardMediumBg before:bg-gradient-to-t before:from-[#101112] before:to-transparent before:opacity-80 ': !active }
-        )}
-            onClick={onClick}>
+        )} onClick={onClick}>
             {/*<span style={{'--imgUrl': `url(${img})`} as React.CSSProperties} className="relative flex justify-start items-center  h-full w-10 bg-[image:var(--imgUrl)] bg-no-repeat bg-left-bottom bg-contain"></span>*/}
-            <img src={img} className="relative flex justify-start items-center h-full w-auto"/>
+            <img src={img} className="relative flex justify-start items-center h-full w-auto" alt="faj"/>
             <span className="relative px-4 text-white tracking-widest font-poppins">
                 {title}
             </span>

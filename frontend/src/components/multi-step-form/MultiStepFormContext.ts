@@ -1,9 +1,11 @@
 import { createContext, useContext } from "react";
-import { FormStep } from "@/components/types";
+import { UseFormReturn } from "react-hook-form";
 
+// TODO legyen generikus
 export interface FormContextState {
+    form: UseFormReturn<any, any, undefined>,
     actualStep: number,
-    steps: FormStep[],
+    steps: string[],
     onPrevStep: React.MouseEventHandler<HTMLElement>,
     onNextStep: React.MouseEventHandler<HTMLElement>
 };
@@ -12,7 +14,7 @@ export const MultiStepFormContext = createContext<FormContextState | undefined>(
 
 export function useMultiStepFormContext() {
     const context = useContext(MultiStepFormContext);
-    if(!context) {
+    if (!context) {
         throw new Error('MultiStepFormContext undefined!');
     }
     return context;

@@ -1,4 +1,4 @@
-import CreateCharacterForm from "@/components/CreateCharacterForm";
+import CreateCharacterForm from "@/components/multi-step-form/create-character-form/CreateCharacterForm";
 
 export default function CharacterCreatePage() {
     return (

@@ -1,5 +1,5 @@
-import { useMultiStepFormContext } from "@/components/MultiStepFormContext";
-import MultiStepLabel from "@/components/MultiStepLabel";
+import { useMultiStepFormContext } from "@/components/multi-step-form/MultiStepFormContext";
+import MultiStepLabel from "@/components/multi-step-form/MultiStepLabel";
 
 export default function MultiStepBar() {
     const formState = useMultiStepFormContext();
@@ -21,7 +21,7 @@ export default function MultiStepBar() {
         {
         formState.steps.map((step, i) => {
             return(
-                <MultiStepLabel key={i} label={step.label} stepNum={i + 1} status={getStepStatus(i)} />
+                <MultiStepLabel key={i} label={step} stepNum={i + 1} status={getStepStatus(i)} />
             );
         })
         }
