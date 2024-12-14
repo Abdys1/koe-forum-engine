@@ -1,10 +1,7 @@
 'use client'
 
-import MultiStepBar from "@/components/multi-step-form/MultiStepBar";
-import MultiStepPagination from "@/components/multi-step-form/MultiStepPagination";
 import TextField from "@/components/inputs/TextField";
 import SelectableOptionBtn from "@/components/SelectableOptionBtn";
-import ComponentHeading from "@/components/ComponentHeading";
 import StepHeading from "@/components/StepHeading";
 import Link from "next/link";
 import { useState } from "react";
@@ -38,13 +35,7 @@ export default function CharacterBasicsStep() {
     }
 
     return (
-        <form className={`relative w-full h-[calc(100vh - 4rem)] flex justify-between items-center flex-col m-8 py-4 px-8 bg-cardBlackBg rounded shadow-md shadow-[rgba(0,0,0,0.4)] overflow-hidden
-            before:content-[''] before:absolute before:bottom-0 before:left-0 before:h-full before:w-full before:bg-[url('/images/ryldan-nobg.png')] before:bg-no-repeat before:bg-left-bottom before:bg-contain before:opacity-60
-            after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-full after:bg-[url('/images/wave.svg')] after:bg-no-repeat after:bg-left-bottom after:bg-contain after:z-0`}>
-            <div className="relative w-full mb-2 flex justify-center items-center flex-col z-10">
-                <ComponentHeading title="Karakter létrehozása" />
-                <MultiStepBar />
-            </div>
+        <form className={`relative w-full h-[calc(100vh - 4rem)] flex justify-between items-center flex-col m-8 py-4 px-8 overflow-hidden`}>
             <div className="relative mt-2 w-full flex justify-end items-start z-10">
                 <div className="relative w-full max-w-[70%] flex justify-start items-start flex-col mr-14">
                     <StepHeading title="2. Nevezd el karaktered és válaszd ki a nemét:" />
@@ -77,10 +68,6 @@ export default function CharacterBasicsStep() {
                     </div>
                 </div>
             </div>
-            <MultiStepPagination onNextStep={nextStep}/>
-            <p className="absolute bottom-24 left-10 text-gray-400 text-xs font-poppins tracking-widest">
-                    * illusztráció a kiválasztott fajról
-            </p>
         </form>
     );
 }

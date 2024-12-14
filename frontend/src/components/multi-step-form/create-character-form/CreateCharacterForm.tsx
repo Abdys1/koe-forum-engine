@@ -37,13 +37,13 @@ export default function CreateCharacterForm() {
 
     return (
         <MultiStepForm form={form}>
-            <MultiStepForm.Step label="Faj">
+            <MultiStepForm.Step label="Faj" style={{'--raceUrl': `url('/images/ryldan-nobg.png')`} as React.CSSProperties} className="raceStepBg">
                 <CharacterRaceStep/>
             </MultiStepForm.Step>
-            <MultiStepForm.Step label="Alapok">
+            <MultiStepForm.Step label="Alapok" style={{'--raceUrl': `url('/images/ryldan-nobg.png')`} as React.CSSProperties} className="raceStepBg">
                 <CharacterBasicsStep/>
             </MultiStepForm.Step>
-            <MultiStepForm.Step label="Felszerelés">
+            <MultiStepForm.Step label="Felszerelés" className="gearStepBg">
                <CharacterGearStep/>
             </MultiStepForm.Step>
             <MultiStepForm.Step label="Karakterkép">

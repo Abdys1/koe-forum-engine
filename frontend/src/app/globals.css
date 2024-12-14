@@ -41,3 +41,32 @@
     border-bottom-left-radius: 0;
     box-shadow: -15px 15px 40px -5px rgba(0, 0, 0, 0.8);
 }
+
+.gearStepBg::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 5%;
+    width: 50%;
+    height: 100%;
+    background: url('/images/knight-withoutbg.png');
+    background-repeat: no-repeat;
+    background-position: left bottom;
+    background-size: contain;
+    opacity: 0.4;
+}
+
+.raceStepBg::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 5%;
+    width: 100%;
+    height: 100%;
+    background: var(--raceUrl);
+    background-repeat: no-repeat;
+    background-position: left bottom;
+    background-size: contain;
+    opacity: 0.4;
+}

@@ -9,6 +9,7 @@
     "watch:dev": "tsx watch src/bin/www.ts",
     "lint": "eslint ./src",
     "migrate:test": "dotenv -e .env.test -- npx prisma migrate deploy",
+    "migrate:dev": "dotenv -e .env -- npx prisma migrate deploy",
     "test:unit": "dotenv -e .env.test -- vitest --project unit",
     "test:e2e": "dotenv -e .env.test -- vitest --project integration"
   },

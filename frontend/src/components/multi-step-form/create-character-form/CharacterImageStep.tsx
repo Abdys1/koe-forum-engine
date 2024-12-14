@@ -1,8 +1,5 @@
 'use client'
 
-import MultiStepBar from "@/components/multi-step-form/MultiStepBar";
-import MultiStepPagination from "@/components/multi-step-form/MultiStepPagination";
-import ComponentHeading from "@/components/ComponentHeading";
 import StepHeading from "@/components/StepHeading";
 import { useState } from "react";
 import Link from "next/link";
@@ -53,12 +50,7 @@ export default function CharacterImageStep() {
     }
 
     return (
-        <div className="relative w-full h-[calc(100vh - 4rem)] flex justify-between items-center flex-col m-8 py-4 px-8 bg-cardBlackBg rounded shadow-md shadow-[rgba(0,0,0,0.4)] overflow-hidden
-            after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-full after:bg-[url('/images/wave.svg')] after:bg-no-repeat after:bg-left-bottom after:bg-contain after:z-0">
-            <div className="relative w-full mb-2 flex justify-center items-center flex-col z-10">
-                <ComponentHeading title="Karakter létrehozása"/>
-                <MultiStepBar />
-            </div>
+        <div className="relative w-full h-[calc(100vh - 4rem)] flex justify-between items-center flex-col m-8 py-4 px-8 overflow-hidden">
             <div className="relative mt-2 w-full flex justify-start items-start flex-col z-10">
                 <StepHeading title="4. Töltsd fel karakterképed:" />
                 <div className="relative w-full mt-2 flex justify-evenly items-start">
@@ -115,7 +107,6 @@ export default function CharacterImageStep() {
                     {/*</div>*/}
                 </div>
             </div>
-            <MultiStepPagination onNextStep={nextStep}/>
         </div>
     );
 }

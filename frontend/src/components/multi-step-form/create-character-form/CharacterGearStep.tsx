@@ -1,11 +1,8 @@
 'use client'
 
-import MultiStepBar from "@/components/multi-step-form/MultiStepBar";
-import MultiStepPagination from "@/components/multi-step-form/MultiStepPagination";
 import SelectableOptionBtn from "@/components/SelectableOptionBtn";
 import TabbedListPanel, { ListOption } from "@/components/TabbedListPanel";
 import SelectedGearElement from "@/components/SelectedGearElement";
-import ComponentHeading from "@/components/ComponentHeading";
 import StepHeading from "@/components/StepHeading";
 import { useState } from "react";
 import { useMultiStepFormContext } from "@/components/multi-step-form/MultiStepFormContext";
@@ -276,13 +273,7 @@ export default function CharacterGearStep() {
     }
 
     return (
-        <div className={`relative w-full h-[calc(100vh - 4rem)] flex justify-between items-center flex-col m-8 py-4 px-8 bg-cardBlackBg rounded shadow-md shadow-[rgba(0,0,0,0.4)] overflow-hidden
-                        before:content-[''] before:absolute before:bottom-0 before:right-[5%] before:h-full before:w-[50%] before:bg-[url(/images/knight-withoutbg.png)] before:bg-no-repeat before:bg-left-bottom before:bg-contain before:opacity-40
-            after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-full after:bg-[url('/images/wave.svg')] after:bg-no-repeat after:bg-left-bottom after:bg-contain after:z-0`}>
-                <div className="relative w-full mb-2 flex justify-center items-center flex-col z-10">
-                    <ComponentHeading title="Karakter létrehozása"/>
-                    <MultiStepBar />
-                </div>
+        <div className="relative w-full h-[calc(100vh - 4rem)] flex justify-between items-center flex-col m-8 py-4 px-8 overflow-hidden">
                 <div className="relative mt-2 w-full flex justify-start items-start flex-col z-10">
                     <StepHeading title="3. Válassz fegyverzetet:" />
                     <div className="relative mt-2 w-full flex justify-between items-start">
@@ -322,7 +313,6 @@ export default function CharacterGearStep() {
                         </div>
                     </div>
                 </div>
-                <MultiStepPagination/>
         </div>
     );
 }
