@@ -18,7 +18,7 @@ export default forwardRef<HTMLInputElement, InputFieldProps>(
     function InputField({ label, name, type, errors, onChange, onBlur }, ref) {
         const inputId = useId();
 
-        const [hasValue, setHasValue] = useState(false);
+        const [hasValue, setHasValue] = useState(!!ref);
 
         const errorMsg = errors?.[name]?.message as string | undefined;
 
