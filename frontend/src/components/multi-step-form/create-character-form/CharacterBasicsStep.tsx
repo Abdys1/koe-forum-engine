@@ -4,34 +4,24 @@ import TextField from "@/components/inputs/TextField";
 import SelectableOptionBtn from "@/components/SelectableOptionBtn";
 import StepHeading from "@/components/StepHeading";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMultiStepFormContext } from "@/components/multi-step-form/MultiStepFormContext";
 
 export type SelectableSex = "ferfi" | "no";
 
 export default function CharacterBasicsStep() {
     const formContext = useMultiStepFormContext();
-    
     const {
         register,
-        trigger,
         getValues,
         setValue,
         formState: {errors}
     } = formContext.form;
-
     const [selectedSex, setSelectedSex] = useState<SelectableSex>(getValues("charaterSex"));
 
     function selectSex(sex: SelectableSex): void {
         setSelectedSex(sex);
         setValue("charaterSex", sex);
-    }
-
-    async function nextStep(e: React.MouseEvent<HTMLElement>) {
-        const isValidStep = await trigger("characterName", {shouldFocus: true});
-        if(isValidStep) {
-            formContext.onNextStep(e);
-        }
     }
 
     return (

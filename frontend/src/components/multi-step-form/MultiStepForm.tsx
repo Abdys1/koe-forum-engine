@@ -1,6 +1,6 @@
 import ComponentHeading from "@/components/ComponentHeading";
 import MultiStepBar from "@/components/multi-step-form/MultiStepBar";
-import { FormContextState, MultiStepFormContext } from "@/components/multi-step-form/MultiStepFormContext";
+import { FormContextState, MultiStepFormContext, useMultiStepFormContext } from "@/components/multi-step-form/MultiStepFormContext";
 import MultiStepPagination from "@/components/multi-step-form/MultiStepPagination";
 import React, { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
@@ -24,9 +24,9 @@ function MultiStepForm({ form, children }: MultiStepFormProps) {
     const steps: string[] = React.Children.map(children, child => child.props.label);
     
     const formState: FormContextState = {
-        form: form,
-        steps: steps,
-        actualStep: actualStep,
+        form,
+        steps,
+        actualStep,
         onPrevStep: prevStep,
         onNextStep: nextStep
     };
@@ -42,12 +42,22 @@ function MultiStepForm({ form, children }: MultiStepFormProps) {
 
 interface StepProps {
     label: string,
+    validate?: () => Promise<boolean>,
     className?: string,
     style?: React.CSSProperties
     children: JSX.Element
 }
 
-function Step({ children, style, className }: StepProps) {
+function Step({ children, validate, style, className }: StepProps) {
+    const { onNextStep } = useMultiStepFormContext();
+
+    async function nextStep(e: React.MouseEvent<HTMLButtonElement>) {
+        if (validate && !(await validate())) {
+            return;
+        }
+        onNextStep(e);
+    }
+
     return(
         <form style={style} className={`relative w-full h-[calc(100vh - 4rem)] flex justify-between items-center flex-col m-8 py-4 px-8 bg-cardBlackBg rounded shadow-md shadow-[rgba(0,0,0,0.4)] overflow-hidden
             ${className ?? ""}
@@ -57,7 +67,7 @@ function Step({ children, style, className }: StepProps) {
                 <MultiStepBar/>
             </div>
             {children}
-            <MultiStepPagination/>
+            <MultiStepPagination onNextStep={nextStep}/>
         </form>
     );
 }

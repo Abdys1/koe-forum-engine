@@ -9,13 +9,10 @@ const IMAGE_PLACEHOLDER = "";
 
 export default function CharacterImageStep() {
     const formContext = useMultiStepFormContext();
-
     const {
         register,
-        getValues,
-        trigger
+        getValues
     } = formContext.form;
-
     const [characterImage, setCharacterImage] = useState(getCharacterImg());
 
     function handleImageChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -38,15 +35,6 @@ export default function CharacterImageStep() {
             imgUrl = IMAGE_PLACEHOLDER;
         }
         return imgUrl;
-    }
-
-    async function nextStep(e: React.MouseEvent<HTMLElement>) {
-        const isValidStep = await trigger("characterImg");
-        console.log(getValues("characterImg"));
-        console.log(isValidStep);
-        if(isValidStep) {
-            formContext.onNextStep(e);
-        }
     }
 
     return (

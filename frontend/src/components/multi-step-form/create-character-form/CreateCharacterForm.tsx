@@ -40,13 +40,16 @@ export default function CreateCharacterForm() {
             <MultiStepForm.Step label="Faj" style={{'--raceUrl': `url('/images/ryldan-nobg.png')`} as React.CSSProperties} className="raceStepBg">
                 <CharacterRaceStep/>
             </MultiStepForm.Step>
-            <MultiStepForm.Step label="Alapok" style={{'--raceUrl': `url('/images/ryldan-nobg.png')`} as React.CSSProperties} className="raceStepBg">
+            <MultiStepForm.Step label="Alapok" 
+                                validate={() => form.trigger('characterName', { shouldFocus: true })} 
+                                style={{'--raceUrl': `url('/images/ryldan-nobg.png')`} as React.CSSProperties} 
+                                className="raceStepBg">
                 <CharacterBasicsStep/>
             </MultiStepForm.Step>
             <MultiStepForm.Step label="Felszerelés" className="gearStepBg">
                <CharacterGearStep/>
             </MultiStepForm.Step>
-            <MultiStepForm.Step label="Karakterkép">
+            <MultiStepForm.Step label="Karakterkép" validate={() => form.trigger('characterImg')}>
                 <CharacterImageStep/>
             </MultiStepForm.Step>
             <MultiStepForm.Step label="Áttekintés">
