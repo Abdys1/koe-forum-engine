@@ -1,19 +1,20 @@
-import { fromRequestDto, toDetails } from "@src/components/character/character-dto.mapper";
-import { CharacterService, CreateCharacterRequestDto, CreateCharacterStatus } from "@src/components/character/types";
+import { fromRequestDto } from "@src/components/character/character-dto.mapper";
+import { CharacterCollection } from "@src/components/character/usecases/collection/types";
+import { CharacterRegistration, CreateCharacterInput, CreateCharacterStatus } from "@src/components/character/usecases/registration/types";
 import { Request, Response } from "express";
 
-class CharacterController {
-    private characterService: CharacterService;
+export default class CharacterController {
+    private characterRegistration: CharacterRegistration;
+    private characterCollection: CharacterCollection;
 
-    constructor(characterService: CharacterService) {
-        this.characterService = characterService;
-        this.createCharacter = this.createCharacter.bind(this);
-        this.listCharacters = this.listCharacters.bind(this);
+    constructor(characterRegistration: CharacterRegistration, characterCollection: CharacterCollection) {
+        this.characterRegistration = characterRegistration;
+        this.characterCollection = characterCollection;
     }
 
-    public async createCharacter(req: Request, res: Response): Promise<void> {
-        const createCharRequestDto: CreateCharacterRequestDto = req.body;
-        const { status } = await this.characterService.createCharacter(fromRequestDto(req.user.username, createCharRequestDto));
+    createCharacter = async (req: Request, res: Response): Promise<void> => {
+        const createCharInput: CreateCharacterInput = fromRequestDto(req.user, req.body);
+        const { status } = await this.characterRegistration.execute(createCharInput);
         if (status === CreateCharacterStatus.ALREADY_EXISTS) {
             res.status(409).json({ errorCode: status }).send();
             return;
@@ -21,11 +22,8 @@ class CharacterController {
         res.status(200).send();
     }
 
-    public async listCharacters(req: Request, res: Response): Promise<void> {
-        const characters = await this.characterService.getCharactersByUsername(req.user.username);
-        const detailsCollection = characters.map(toDetails);
-        res.status(200).send(detailsCollection);
+    listCharacters = async (req: Request, res: Response): Promise<void> => {
+        const characters = await this.characterCollection.execute(req.user.username);
+        res.status(200).send(characters);
     }
 }
-
-export default CharacterController;

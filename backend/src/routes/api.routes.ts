@@ -1,6 +1,6 @@
 import express from 'express';
 import authRouter from '@src/routes/auth.routes';
-import characterRouter from '@src/routes/character.routes';
+import characterRouter from '@src/components/character/character.routes';
 
 const router = express.Router();
 

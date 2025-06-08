@@ -5,7 +5,8 @@ export default defineWorkspace([
         extends: './vitest.config.ts',
         test: {
             name: 'unit',
-            include: ['**/*.unit.test.ts']
+            include: ['**/*.unit.test.ts'],
+            exclude: ['config/**']
         },
     },
     {
@@ -13,6 +14,7 @@ export default defineWorkspace([
         test: {
             name: 'integration',
             include: ['**/*.integration.test.ts'],
+            exclude: ['config/**'],
             globals: true,
             globalSetup: ['./__tests__/api/setup/setup-test-database.ts']
         },

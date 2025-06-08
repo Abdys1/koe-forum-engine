@@ -1,3 +1,4 @@
+import { ForumUser } from '@prisma/client';
 import { TokenVerifierFunc } from '@src/components/auth/types';
 import { Request, Response, NextFunction } from 'express';
 import { ValidationError } from 'express-validator';
@@ -6,6 +7,7 @@ export type AuthenticationMiddleware = (req: Request, res: Response, next: NextF
 
 export interface AuthenticationMiddlewareOptions {
     verifyToken: TokenVerifierFunc, secretKey: string
+    findUserByUsername: (username: string) => Promise<ForumUser>
 };
 
 export interface RestApiValidationErrors {

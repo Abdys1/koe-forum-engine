@@ -9,13 +9,10 @@ import { generateUsername } from '@test/utils/test-data-generator';
 describe('User dao ', () => {
 
   beforeEach(async () => {
+    await db.forumUser.deleteMany({});
     await db.forumUser.create({
       data: { username: 'test_user', password: 'alma' }
     });
-  });
-
-  afterEach(async () => {
-    await db.forumUser.deleteMany({});
   });
 
   describe('findPwdByUsername()', () => {

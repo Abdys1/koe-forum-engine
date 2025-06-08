@@ -22,9 +22,11 @@ describe('Authentication api', () => {
     authClient = new AuthClient(supertest(app));
   });
 
-  afterEach(async () => {
-    await db.character.deleteMany({});
-    await db.forumUser.deleteMany({});
+  beforeEach(async () => {
+    const deleteCharacters = db.character.deleteMany();
+    const deleteUsers = db.forumUser.deleteMany();
+
+    await db.$transaction([deleteCharacters, deleteUsers]);
   });
 
   it('when try login after registrate then should return valid access token', async () => {

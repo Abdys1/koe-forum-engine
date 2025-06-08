@@ -10,7 +10,7 @@ const app = express();
 
 declare module 'express-serve-static-core' {
     export interface Request {
-        user: { username: string };
+        user: { id: number, username: string };
     }
 }
 

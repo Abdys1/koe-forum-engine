@@ -12,7 +12,9 @@ describe('AuthMidlleware', () => {
 
   beforeEach(() => {
     verifyToken = vi.fn();
-    authMiddleware = useAuthMiddleware({ verifyToken, secretKey: 'testSecret' });
+    const findUserByUsername = vi.fn();
+    findUserByUsername.mockResolvedValue({ id: 1, username: 'testUsername' });
+    authMiddleware = useAuthMiddleware({ verifyToken, findUserByUsername, secretKey: 'testSecret' });
   });
 
   function createRequestWithToken(token: string): Partial<Request> {
@@ -84,13 +86,13 @@ describe('AuthMidlleware', () => {
     expect(verifyToken).toHaveBeenCalledWith('testToken', 'testSecret');
   });
 
-  it('should set up username to request', async () => {
+  it('should set up user to request', async () => {
     verifyToken.mockResolvedValue({ username: 'testUsername' });
     const req = createRequestWithToken('Bearer testToken') as Request;
     const next = vi.fn();
 
     await authMiddleware(req, {} as Response, next);
 
-    expect(req.user.username).toBe('testUsername');
+    expect(req.user).toStrictEqual({ id: 1, username: 'testUsername' });
   });
 });

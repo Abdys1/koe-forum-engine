@@ -13,6 +13,10 @@ class UserDaoImpl implements UserDao {
     return result.password;
   }
 
+  public async findByUsername(username: string): Promise<ForumUser> {
+    return this.db.forumUser.findFirstOrThrow({ where: { username } });
+  }
+
   public async existsByUsername(username: string): Promise<boolean> {
     const count = await this.db.forumUser.count({ where: { username } });
     return count > 0;

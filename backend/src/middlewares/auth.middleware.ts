@@ -11,7 +11,9 @@ function useAuthMiddleware(options: AuthenticationMiddlewareOptions): Authentica
         throw new AuthenticationError('Token is not found!');
       }
       const token = await options.verifyToken(bearerToken[1], options.secretKey);
-      req.user = { username: token.username };
+      const user = await options.findUserByUsername(token.username);
+      logger.debug(user);
+      req.user = { id: user.id, username: user.username };
       next();
     } catch (err) {
       logger.error(err);
