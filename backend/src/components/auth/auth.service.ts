@@ -1,8 +1,8 @@
 import AuthenticationError from '@src/components/auth/authentication.error';
-import logger from '@src/components/logger/logger';
-import config from '@src/config';
-import { UserDao } from '@src/components/user/types';
 import { AuthService, AuthTokens, ForumJwtPayload, PasswordHasher, TokenGenerator } from '@src/components/auth/types';
+import logger from '@src/components/logger/logger';
+import { UserDao } from '@src/components/user/types';
+import config from '@src/config';
 
 class AuthServiceImpl implements AuthService {
   private userDao;

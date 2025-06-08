@@ -1,5 +1,5 @@
-import jwt, { Secret, VerifyErrors } from 'jsonwebtoken';
 import { ForumJwtPayload } from '@src/components/auth/types';
+import jwt, { Secret, VerifyErrors } from 'jsonwebtoken';
 
 async function signToken(payload: string | Buffer | object, secretKey: Secret, expiresIn: string | number | undefined): Promise<string | undefined> {
   return new Promise((resolve, reject) => {

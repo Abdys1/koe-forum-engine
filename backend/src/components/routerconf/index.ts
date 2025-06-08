@@ -1,8 +1,8 @@
-import { useDefineRouter } from "@src/components/routerconf/router-config";
-import useAuthMiddleware from "@src/middlewares/auth.middleware";
 import { verifyToken } from "@src/components/auth/jwt-token-generator";
-import config from "@src/config";
+import { useDefineRouter } from "@src/components/routerconf/router-config";
 import { userDao } from "@src/components/user";
+import config from "@src/config";
+import useAuthMiddleware from "@src/middlewares/auth.middleware";
 
 const authMiddleware = useAuthMiddleware({
     verifyToken,

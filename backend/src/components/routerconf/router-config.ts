@@ -2,7 +2,7 @@
 import logger from "@src/components/logger/logger";
 import RestApiValidationError from "@src/middlewares/rest-api-validation.error";
 import { AuthenticationMiddleware } from "@src/middlewares/types";
-import { Request, Response, NextFunction, RequestHandler, Router } from "express";
+import { NextFunction, Request, RequestHandler, Response, Router } from "express";
 import { validationResult } from "express-validator";
 
 export const HttpMethod = {

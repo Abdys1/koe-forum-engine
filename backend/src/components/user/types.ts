@@ -6,7 +6,7 @@ export interface UserDao {
 }
 
 export interface ForumUser {
-    id: number;
+    id?: number;
     username: string;
     password: string;
 }

@@ -1,7 +1,7 @@
-import { NextFunction, Request, Response } from "express";
-import logger from "@src/components/logger/logger";
 import AuthenticationError from "@src/components/auth/authentication.error";
+import logger from "@src/components/logger/logger";
 import { AuthenticationMiddleware, AuthenticationMiddlewareOptions } from "@src/middlewares/types";
+import { NextFunction, Request, Response } from "express";
 
 function useAuthMiddleware(options: AuthenticationMiddlewareOptions): AuthenticationMiddleware {
   return async (req: Request, res: Response, next: NextFunction): Promise<void> => {

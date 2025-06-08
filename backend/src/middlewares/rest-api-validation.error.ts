@@ -1,5 +1,5 @@
-import { Result, ValidationError } from "express-validator";
 import { RestApiValidationErrors } from "@src/middlewares/types";
+import { Result, ValidationError } from "express-validator";
 
 class RestApiValidationError extends Error {
     private validation: Result<ValidationError>

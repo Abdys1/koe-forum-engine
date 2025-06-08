@@ -1,9 +1,8 @@
 #!/usr/bin/env node
 
-import http from 'http';
 import app from '@src/app';
 import logger from '@src/components/logger/logger';
-import config from '@src/config';
+import http from 'http';
 
 /**
  * Normalize a port into a number, string, or false.
@@ -31,7 +30,8 @@ const port = normalizePort(process.env.PORT || '3000');
  * Event listener for HTTP server "error" event.
  */
 
-function onError(error) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function onError(error: any) {
   if (error.syscall !== 'listen') {
     throw error;
   }

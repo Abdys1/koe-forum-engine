@@ -1,5 +1,5 @@
-import logger from '@src/components/logger/logger';
 import { AuthService } from '@src/components/auth/types';
+import logger from '@src/components/logger/logger';
 import { Request, Response } from 'express';
 
 class AuthController {

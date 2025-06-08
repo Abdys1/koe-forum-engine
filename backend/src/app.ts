@@ -1,10 +1,9 @@
-import cookieParser from 'cookie-parser';
-import express from 'express';
-import cors from 'cors';
 import httpLogger from '@src/components/logger/http-logger';
 import errorHandler from '@src/middlewares/error-handler.middleware';
-
 import apiRouter from '@src/routes/api.routes';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import express from 'express';
 
 const app = express();
 
