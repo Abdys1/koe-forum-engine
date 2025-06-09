@@ -10,7 +10,7 @@ export default class CharacterRegistrationImpl implements CharacterRegistration 
         this.characterRepository = characterDao;
     }
 
-    execute = async (createCharacterDto: CreateCharacterInput): Promise<CreateCharacterOutput> => {
+    public execute = async (createCharacterDto: CreateCharacterInput): Promise<CreateCharacterOutput> => {
         const hasRegisteredCharName = await this.characterRepository.existsByCharacterName(createCharacterDto.name);
         if (hasRegisteredCharName) {
             return { status: CreateCharacterStatus.ALREADY_EXISTS };

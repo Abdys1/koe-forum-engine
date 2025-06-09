@@ -9,8 +9,8 @@ export default class CharacterRepositoryImpl implements CharacterRepository {
         this.db = db;
     }
 
-    public async findAllCharacterByUsername(username: string): Promise<CharacterEntity[]> {
-        return this.db.character.findMany({ where: { user: { username } } });
+    public async findAllCharacterByUserId(userId: number): Promise<CharacterEntity[]> {
+        return this.db.character.findMany({ where: { user: { id: userId } } });
     }
 
     public async existsByCharacterName(characterName: string): Promise<boolean> {

@@ -38,20 +38,20 @@ describe('Character repository', () => {
         await db.$transaction([deleteCharacters, deleteUsers]);
     });
 
-    describe('findAllCharacterByUsername()', () => {
+    describe('findAllCharacterByUserId()', () => {
         it('should return an empty array when not exists user', async () => {
-            expect(await characterDao.findAllCharacterByUsername('not-exists')).toStrictEqual([]);
+            expect(await characterDao.findAllCharacterByUserId(-1)).toStrictEqual([]);
         });
 
         it('should return an empty array when not exists characters for user', async () => {
             const newUser = await saveTestUserToDb();
-            expect(await characterDao.findAllCharacterByUsername(newUser.username)).toStrictEqual([]);
+            expect(await characterDao.findAllCharacterByUserId(newUser.id)).toStrictEqual([]);
         });
 
         it('should return characters for user', async () => {
             const user = await saveTestUserToDb();
             const characters = await saveCharactersToDb(user);
-            expect(await characterDao.findAllCharacterByUsername(user.username)).toStrictEqual(characters);
+            expect(await characterDao.findAllCharacterByUserId(user.id)).toStrictEqual(characters);
         });
     });
 

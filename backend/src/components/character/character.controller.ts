@@ -23,7 +23,7 @@ export default class CharacterController {
     }
 
     listCharacters = async (req: Request, res: Response): Promise<void> => {
-        const characters = await this.characterCollection.execute(req.user.username);
+        const characters = await this.characterCollection.execute(req.user.id);
         res.status(200).send(characters);
     }
 }

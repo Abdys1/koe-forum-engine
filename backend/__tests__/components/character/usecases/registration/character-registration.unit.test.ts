@@ -15,15 +15,16 @@ describe('Character registration usecase', () => {
     });
 
     it('when character registration executed with unique name then should save character', async () => {
+        const charName = 'Aragorn';
         expect(characterRepository.characters.length).toBe(0);
 
-        const testCharacter = createCharacterRegistrationInput('Aragorn');
+        const testCharacter = createCharacterRegistrationInput(charName);
         const result = await characterRegistrationUseCase.execute(testCharacter);
 
         expect(result.status).toBe(CreateCharacterStatus.CREATED);
         const savedCharacter = characterRepository.characters[0];
         expect(characterRepository.characters.length).toBe(1);
-        expect(savedCharacter.name).toBe('Aragorn');
+        expect(savedCharacter.name).toBe(charName);
         expect(savedCharacter.sex).toBe(testCharacter.sex);
         expect(savedCharacter.race).toBe(testCharacter.race);
         expect(savedCharacter.imageUrl).toBe(testCharacter.imageUrl);
@@ -37,12 +38,13 @@ describe('Character registration usecase', () => {
     });
 
     it('when character registration executed with the same name then should return character already exists', async () => {
-        characterRepository.create(createCharacterEntity('Legolas', 1));
+        const charName = 'Legolas';
+        characterRepository.create(createCharacterEntity(charName, 1));
         expect(characterRepository.characters.length).toBe(1);
-        const result = await characterRegistrationUseCase.execute(createCharacterRegistrationInput('Legolas'));
+        const result = await characterRegistrationUseCase.execute(createCharacterRegistrationInput(charName));
         expect(result.status).toBe(CreateCharacterStatus.ALREADY_EXISTS);
         expect(characterRepository.characters.length).toBe(1);
-        expect(characterRepository.characters[0].name).toBe('Legolas');
+        expect(characterRepository.characters[0].name).toBe(charName);
     });
 
     function createCharacterRegistrationInput(characterName: string): CreateCharacterInput {

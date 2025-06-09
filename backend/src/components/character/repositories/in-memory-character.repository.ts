@@ -8,8 +8,8 @@ export default class InMemoryCharacterRepository implements CharacterRepository 
         this.characters = [];
     }
 
-    public async findAllCharacterByUsername(username: string): Promise<CharacterEntity[]> {
-        return Promise.resolve(this.characters.filter(character => character.name === username));
+    public async findAllCharacterByUserId(userId: number): Promise<CharacterEntity[]> {
+        return Promise.resolve(this.characters.filter(character => character.userId === userId));
     }
 
     public async existsByCharacterName(characterName: string): Promise<boolean> {

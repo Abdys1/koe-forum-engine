@@ -1,7 +1,7 @@
 import { CharacterEquipement, Sex } from "@src/components/character/types";
 
 export interface CharacterCollection {
-    execute: (username: string) => Promise<CharacterCollectionOutput>
+    execute: (userId: number) => Promise<CharacterCollectionOutput>
 }
 
 export interface CharacterCollectionDetails {

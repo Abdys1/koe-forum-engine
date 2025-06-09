@@ -9,8 +9,8 @@ export default class CharacterCollectionImpl implements CharacterCollection {
         this.characterRepository = characterRepository;
     }
 
-    execute = async (username: string): Promise<CharacterCollectionOutput> => {
-        const characters = await this.characterRepository.findAllCharacterByUsername(username);
+    public execute = async (userId: number): Promise<CharacterCollectionOutput> => {
+        const characters = await this.characterRepository.findAllCharacterByUserId(userId);
         return toOutput(characters);
     }
 }
