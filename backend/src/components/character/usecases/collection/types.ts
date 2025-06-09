@@ -1,4 +1,4 @@
-import { Sex } from "@src/components/character/types";
+import { CharacterEquipement, Sex } from "@src/components/character/types";
 
 export interface CharacterCollection {
     execute: (username: string) => Promise<CharacterCollectionOutput>
@@ -9,6 +9,7 @@ export interface CharacterCollectionDetails {
     name: string,
     sex: Sex,
     race: string,
+    equipement: CharacterEquipement,
     imageUrl: string
 };
 

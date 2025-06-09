@@ -18,13 +18,19 @@ export default class CharacterRepositoryImpl implements CharacterRepository {
         return count > 0;
     }
 
-    public async save(character: CharacterEntity): Promise<void> {
+    public async create(character: CharacterEntity): Promise<void> {
         await this.db.character.create({
             data: {
                 name: character.name,
                 sex: character.sex,
                 race: character.race,
                 imageUrl: character.imageUrl,
+                helmet: character.helmet,
+                primaryWeapon: character.primaryWeapon,
+                secondaryWeapon: character.secondaryWeapon,
+                bodyArmor: character.bodyArmor,
+                secondaryArmor: character.secondaryArmor,
+                shield: character.shield,
                 user: { connect: { id: character.userId } }
             }
         });

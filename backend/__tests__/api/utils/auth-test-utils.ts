@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { generateUsername, generatePassword } from '@test/utils/test-data-generator';
-import { Response } from 'supertest';
 import { verifyToken } from '@src/components/auth/jwt-token-generator';
 import config from '@src/config';
 import AuthClient from '@test/api/utils/auth-client';
+import { generatePassword, generateUsername } from '@test/utils/test-data-generator';
+import { Response } from 'supertest';
 
 export function createRandomUser(): { username: string, password: string } {
     return { username: generateUsername(), password: generatePassword() };

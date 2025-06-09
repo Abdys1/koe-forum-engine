@@ -1,14 +1,14 @@
-import {
-  afterEach, describe, expect, it
-} from 'vitest';
-
 import { userDao } from '@src/components/user/index';
 import { db } from '@src/prisma-client';
 import { generateUsername } from '@test/utils/test-data-generator';
+import {
+  describe, expect, it
+} from 'vitest';
 
 describe('User dao ', () => {
 
   beforeEach(async () => {
+    await db.character.deleteMany({});
     await db.forumUser.deleteMany({});
     await db.forumUser.create({
       data: { username: 'test_user', password: 'alma' }

@@ -1,8 +1,8 @@
 import { signToken } from '@src/components/auth/jwt-token-generator';
-import TestAgent from "supertest/lib/agent";
-import { Response } from "supertest"
 import { CharacterRegistrationRequestDto } from '@src/components/character/types';
 import config from '@src/config';
+import { Response } from "supertest"
+import TestAgent from "supertest/lib/agent";
 
 class CharacterClient {
     private static BASE_URL = '/api/characters';

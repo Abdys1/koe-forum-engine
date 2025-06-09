@@ -16,7 +16,7 @@ export default class CharacterRegistrationImpl implements CharacterRegistration 
             return { status: CreateCharacterStatus.ALREADY_EXISTS };
         }
         const character = fromInput(createCharacterDto);
-        await this.characterRepository.save(character);
+        await this.characterRepository.create(character);
         return { status: CreateCharacterStatus.CREATED };
     }
 }

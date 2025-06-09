@@ -1,5 +1,5 @@
-import { generateUsername, generatePassword } from '@test/utils/test-data-generator';
 import { ForumUser, UserDao } from '@src/components/user/types';
+import { generatePassword, generateUsername } from '@test/utils/test-data-generator';
 
 class FakeUserDao implements UserDao {
   private fakeUsers: ForumUser[];
@@ -10,6 +10,10 @@ class FakeUserDao implements UserDao {
 
   public static createTestUser(): ForumUser {
     return { username: generateUsername(), password: generatePassword() };
+  }
+
+  public async findByUsername(username: string): Promise<ForumUser | undefined> {
+    return Promise.resolve(this.fakeUsers.find((user) => user.username === username));
   }
 
   public async findPwdByUsername(username: string): Promise<string> {

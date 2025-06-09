@@ -1,4 +1,4 @@
-import { Sex } from "@src/components/character/types"
+import { CharacterEquipement, Sex } from "@src/components/character/types"
 
 export interface CharacterRegistration {
     execute: (newCharacterDto: CreateCharacterInput) => Promise<CreateCharacterOutput>
@@ -9,6 +9,7 @@ export interface CreateCharacterInput {
     name: string,
     sex: Sex,
     race: string,
+    equipement: CharacterEquipement,
     imageUrl: string
 };
 

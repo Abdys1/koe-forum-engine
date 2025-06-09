@@ -1,6 +1,6 @@
 export interface UserDao {
     findPwdByUsername: (username: string) => Promise<string>;
-    findByUsername: (username: string) => Promise<ForumUser>;
+    findByUsername: (username: string) => Promise<ForumUser | undefined>;
     existsByUsername: (username: string) => Promise<boolean>;
     save: (user: ForumUser) => Promise<void>;
 }

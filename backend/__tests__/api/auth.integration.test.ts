@@ -1,19 +1,18 @@
-import supertest from 'supertest';
-import {
-  beforeAll, describe, it, expect, afterEach,
-} from 'vitest';
-
 import app from '@src/app';
+import { db } from '@src/prisma-client';
 import AuthClient from '@test/api/utils/auth-client';
 import {
-  createRandomUser,
   assertLogin,
   assertLoginInputInvalid,
   assertRegistrationInputInvalid,
-  createUsernameValidationError,
-  createPasswordValidationError
+  createPasswordValidationError,
+  createRandomUser,
+  createUsernameValidationError
 } from '@test/api/utils/auth-test-utils';
-import { db } from '@src/prisma-client';
+import supertest from 'supertest';
+import {
+  beforeAll, describe, expect, it,
+} from 'vitest';
 
 describe('Authentication api', () => {
   let authClient: AuthClient;
