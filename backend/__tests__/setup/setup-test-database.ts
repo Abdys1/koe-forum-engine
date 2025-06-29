@@ -5,7 +5,7 @@ let environment: StartedDockerComposeEnvironment | undefined;
 let teardownHappened = false;
 
 export async function setup() {
-  environment = await new DockerComposeEnvironment('./__tests__/api/setup', 'docker-compose.yml').up();
+  environment = await new DockerComposeEnvironment('./__tests__/setup', 'docker-compose.yml').up();
   execSync(`npm run migrate:test`);
 }
 

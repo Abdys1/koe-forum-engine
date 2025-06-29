@@ -16,7 +16,8 @@ export default defineWorkspace([
             include: ['**/*.integration.test.ts'],
             exclude: ['config/**'],
             globals: true,
-            globalSetup: ['./__tests__/api/setup/setup-test-database.ts']
+            globalSetup: ['./__tests__/setup/setup-test-database.ts'],
+            setupFiles: ['./__tests__/setup/clean-test-database.ts']
         },
     }
 ]);

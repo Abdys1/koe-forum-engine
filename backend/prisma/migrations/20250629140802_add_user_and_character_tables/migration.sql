@@ -14,12 +14,12 @@ CREATE TABLE "Character" (
     "name" VARCHAR(64) NOT NULL,
     "sex" SMALLINT NOT NULL,
     "race" VARCHAR(64) NOT NULL,
-    "primaryWeapon" VARCHAR(255) NOT NULL,
-    "secondaryWeapon" VARCHAR(255) NOT NULL,
-    "helmet" VARCHAR(255) NOT NULL,
-    "bodyArmor" VARCHAR(255) NOT NULL,
-    "secondaryArmor" VARCHAR(255) NOT NULL,
-    "shield" VARCHAR(255) NOT NULL,
+    "primaryWeapon" VARCHAR(255),
+    "secondaryWeapon" VARCHAR(255),
+    "helmet" VARCHAR(255),
+    "bodyArmor" VARCHAR(255),
+    "secondaryArmor" VARCHAR(255),
+    "shield" VARCHAR(255),
     "imageUrl" TEXT NOT NULL,
 
     CONSTRAINT "Character_pkey" PRIMARY KEY ("id")

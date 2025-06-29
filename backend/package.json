@@ -11,7 +11,7 @@
     "migrate:test": "dotenv -e .env.test -- npx prisma migrate deploy",
     "migrate:dev": "dotenv -e .env -- npx prisma migrate deploy",
     "test:unit": "dotenv -e .env.test -- vitest --project unit",
-    "test:e2e": "dotenv -e .env.test -- vitest --project integration --no-file-parallelism"
+    "test:integ": "dotenv -e .env.test -- vitest --project integration --no-file-parallelism"
   },
   "dependencies": {
     "@prisma/client": "5.19.0",
@@ -35,7 +35,7 @@
     "@types/jsonwebtoken": "9.0.5",
     "@types/morgan": "1.9.9",
     "@types/node": "20.11.5",
-    "@types/supertest": "6.0.2",
+    "@types/supertest": "^6.0.3",
     "dotenv-cli": "7.4.2",
     "eslint": "9.28.0",
     "eslint-config-prettier": "10.1.5",

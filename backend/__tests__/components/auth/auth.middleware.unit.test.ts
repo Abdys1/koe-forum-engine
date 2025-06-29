@@ -1,10 +1,10 @@
-import {
-  describe, it, expect, vi, beforeEach, Mock,
-} from 'vitest';
-
 import useAuthMiddleware from '@src/middlewares/auth.middleware';
 import { AuthenticationMiddleware } from '@src/middlewares/types';
 import { Request, Response } from 'express';
+import {
+  beforeEach, describe, expect, it, Mock,
+  vi,
+} from 'vitest';
 
 describe('AuthMidlleware', () => {
   let verifyToken: Mock;

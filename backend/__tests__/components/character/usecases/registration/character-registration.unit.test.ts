@@ -28,12 +28,12 @@ describe('Character registration usecase', () => {
         expect(savedCharacter.sex).toBe(testCharacter.sex);
         expect(savedCharacter.race).toBe(testCharacter.race);
         expect(savedCharacter.imageUrl).toBe(testCharacter.imageUrl);
-        expect(savedCharacter.helmet).toBe(testCharacter.equipement.helmet);
-        expect(savedCharacter.primaryWeapon).toBe(testCharacter.equipement.primaryWeapon);
-        expect(savedCharacter.secondaryWeapon).toBe(testCharacter.equipement.secondaryWeapon);
-        expect(savedCharacter.bodyArmor).toBe(testCharacter.equipement.bodyArmor);
-        expect(savedCharacter.secondaryArmor).toBe(testCharacter.equipement.secondaryArmor);
-        expect(savedCharacter.shield).toBe(testCharacter.equipement.shield);
+        expect(savedCharacter.helmet).toBe(testCharacter.equipement?.helmet);
+        expect(savedCharacter.primaryWeapon).toBe(testCharacter.equipement?.primaryWeapon);
+        expect(savedCharacter.secondaryWeapon).toBe(testCharacter.equipement?.secondaryWeapon);
+        expect(savedCharacter.bodyArmor).toBe(testCharacter.equipement?.bodyArmor);
+        expect(savedCharacter.secondaryArmor).toBe(testCharacter.equipement?.secondaryArmor);
+        expect(savedCharacter.shield).toBe(testCharacter.equipement?.shield);
         expect(savedCharacter.userId).toBe(testCharacter.owner.id);
     });
 

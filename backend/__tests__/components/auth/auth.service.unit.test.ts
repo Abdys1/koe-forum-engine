@@ -1,13 +1,12 @@
-import {
-  describe, it, expect, vi, beforeEach, afterEach, Mocked,
-} from 'vitest';
-
 import AuthServiceImpl from '@src/components/auth/auth.service';
 import AuthenticationError from '@src/components/auth/authentication.error.js';
-
-import FakeUserDao from '@test/components/user/utils/fake-user.dao';
+import { AuthService, PasswordHasher, TokenGenerator } from '@src/components/auth/types';
 import { ForumUser } from '@src/components/user/types';
-import { PasswordHasher, TokenGenerator, AuthService } from '@src/components/auth/types';
+import FakeUserDao from '@test/components/user/utils/fake-user.dao';
+import {
+  afterEach, beforeEach, describe, expect, it, Mocked,
+  vi,
+} from 'vitest';
 
 class TestError extends Error { }
 

@@ -1,14 +1,8 @@
-import TestAgent from "supertest/lib/agent";
+import BaseClient from '@test/clients/base-client';
 import { Response } from 'supertest';
 
-class AuthClient {
+class AuthClient extends BaseClient {
     private static BASE_URL = '/api/auth';
-
-    private request: TestAgent;
-
-    constructor(request: TestAgent) {
-        this.request = request;
-    }
 
     public async registrate(user: { username: string, password: string }): Promise<Response> {
         return this.request.post(`${AuthClient.BASE_URL}/registrate`)

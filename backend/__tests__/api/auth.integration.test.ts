@@ -1,15 +1,9 @@
-import app from '@src/app';
-import { db } from '@src/prisma-client';
-import AuthClient from '@test/api/utils/auth-client';
-import {
-  assertLogin,
-  assertLoginInputInvalid,
-  assertRegistrationInputInvalid,
-  createPasswordValidationError,
-  createRandomUser,
-  createUsernameValidationError
-} from '@test/api/utils/auth-test-utils';
-import supertest from 'supertest';
+import { verifyToken } from '@src/components/auth/jwt-token-generator';
+import config from '@src/config';
+import AuthClient from '@test/clients/auth-client';
+import { createRandomUser } from '@test/utils/test-data-generator';
+import { assertFieldError } from '@test/utils/validator-test-helper';
+import { Response } from 'supertest';
 import {
   beforeAll, describe, expect, it,
 } from 'vitest';
@@ -18,14 +12,7 @@ describe('Authentication api', () => {
   let authClient: AuthClient;
 
   beforeAll(async () => {
-    authClient = new AuthClient(supertest(app));
-  });
-
-  beforeEach(async () => {
-    const deleteCharacters = db.character.deleteMany();
-    const deleteUsers = db.forumUser.deleteMany();
-
-    await db.$transaction([deleteCharacters, deleteUsers]);
+    authClient = new AuthClient();
   });
 
   it('when try login after registrate then should return valid access token', async () => {
@@ -60,26 +47,39 @@ describe('Authentication api', () => {
   });
 
   it('when try login with empty fields then return validation error', async () => {
-    const expectedUsernameError = createUsernameValidationError('');
-    const expectedPasswordError = createPasswordValidationError('');
+    let resp = await authClient.registrate({ username: '', password: '' });
+    assertFieldError(resp, 'username', ['Invalid value']);
+    assertFieldError(resp, 'password', ['Invalid value']);
 
-    await assertLoginInputInvalid(authClient, { username: '', password: '' }, [expectedUsernameError, expectedPasswordError]);
-    await assertLoginInputInvalid(authClient, { username: 'teszt', password: '' }, [expectedPasswordError]);
-    await assertLoginInputInvalid(authClient, { username: '', password: 'teszt_password' }, [expectedUsernameError]);
+    resp = await authClient.registrate({ username: 'teszt', password: '' });
+    assertFieldError(resp, 'password', ['Invalid value']);
+
+    resp = await authClient.registrate({ username: '', password: 'Teszt_password2' });
+    assertFieldError(resp, 'username', ['Invalid value']);
   });
 
   it('when try login with too short fields then return validation error', async () => {
-    await assertLoginInputInvalid(authClient, { username: 'asd', password: 'asdfsgh' },
-      [createUsernameValidationError('asd'), createPasswordValidationError('asdfsgh')]);
-    await assertLoginInputInvalid(authClient, { username: 'teszt', password: 'asdfsgh' }, [createPasswordValidationError('asdfsgh')]);
-    await assertLoginInputInvalid(authClient, { username: 'asd', password: 'teszt_password' }, [createUsernameValidationError('asd')]);
+    let resp = await authClient.registrate({ username: 'asd', password: 'Asdfsgh' });
+    assertFieldError(resp, 'username', ['Invalid value']);
+    assertFieldError(resp, 'password', ['Invalid value']);
+
+    resp = await authClient.registrate({ username: 'teszt', password: 'Asdfsgh' });
+    assertFieldError(resp, 'password', ['Invalid value']);
+
+    resp = await authClient.registrate({ username: 'asd', password: 'teszt_password' });
+    assertFieldError(resp, 'username', ['Invalid value']);
   });
 
   it('when try login with too long fields then return validation error', async () => {
-    await assertLoginInputInvalid(authClient, { username: 'a'.repeat(256), password: 'a'.repeat(65) },
-      [createUsernameValidationError('a'.repeat(256)), createPasswordValidationError('a'.repeat(65))]);
-    await assertLoginInputInvalid(authClient, { username: 'teszt', password: 'a'.repeat(65) }, [createPasswordValidationError('a'.repeat(65))]);
-    await assertLoginInputInvalid(authClient, { username: 'a'.repeat(256), password: 'teszt_password' }, [createUsernameValidationError('a'.repeat(256))]);
+    let resp = await authClient.registrate({ username: 'a'.repeat(256), password: 'a'.repeat(65) });
+    assertFieldError(resp, 'username', ['Invalid value']);
+    assertFieldError(resp, 'password', ['Invalid value', 'Invalid value']);
+
+    resp = await authClient.registrate({ username: 'teszt', password: 'a'.repeat(65) });
+    assertFieldError(resp, 'password', ['Invalid value', 'Invalid value']);
+
+    resp = await authClient.registrate({ username: 'a'.repeat(256), password: 'teszt_password' });
+    assertFieldError(resp, 'username', ['Invalid value']);
   });
 
   it('when try registrate twice then should return 409 status', async () => {
@@ -94,34 +94,50 @@ describe('Authentication api', () => {
   });
 
   it('when try registrate with empty fields then return validation error', async () => {
-    const expectedUsernameError = createUsernameValidationError('');
-    const expectedPasswordError = createPasswordValidationError('');
+    let resp = await authClient.registrate({ username: '', password: '' });
+    assertFieldError(resp, 'username', ['Invalid value']);
+    assertFieldError(resp, 'password', ['Invalid value']);
 
-    await assertRegistrationInputInvalid(authClient, { username: '', password: '' }, [expectedUsernameError, expectedPasswordError]);
-    await assertRegistrationInputInvalid(authClient, { username: 'teszt', password: '' }, [expectedPasswordError]);
-    await assertRegistrationInputInvalid(authClient, { username: '', password: 'Teszt_password2' }, [expectedUsernameError]);
+    resp = await authClient.registrate({ username: 'teszt', password: '' });
+    assertFieldError(resp, 'password', ['Invalid value']);
+
+    resp = await authClient.registrate({ username: '', password: 'Teszt_password2' });
+    assertFieldError(resp, 'username', ['Invalid value']);
   });
 
   it('when try registrate with too short fields then return validation error', async () => {
-    await assertRegistrationInputInvalid(authClient, { username: 'asd', password: 'Asdfsgh' },
-      [createUsernameValidationError('asd'), createPasswordValidationError('Asdfsgh')]);
-    await assertRegistrationInputInvalid(authClient, { username: 'teszt', password: 'Asdfsgh1' }, [createPasswordValidationError('Asdfsgh1')]);
-    await assertRegistrationInputInvalid(authClient, { username: 'asd', password: 'Teszt_password3' }, [createUsernameValidationError('asd')]);
+    let resp = await authClient.registrate({ username: 'asd', password: 'Asdfsgh' });
+    assertFieldError(resp, 'username', ['Invalid value']);
+    assertFieldError(resp, 'password', ['Invalid value']);
+
+    resp = await authClient.registrate({ username: 'teszt', password: 'Asdfsgh' });
+    assertFieldError(resp, 'password', ['Invalid value']);
+
+    resp = await authClient.registrate({ username: 'asd', password: 'Teszt_password3' });
+    assertFieldError(resp, 'username', ['Invalid value']);
   });
 
   it('when try registrate with too long fields then return validation error', async () => {
-    await assertRegistrationInputInvalid(authClient, { username: 'a'.repeat(256), password: 'Teszt_password3'.repeat(65) },
-      [createUsernameValidationError('a'.repeat(256)), createPasswordValidationError('Teszt_password3'.repeat(65))]);
-    await assertRegistrationInputInvalid(authClient, { username: 'teszt', password: 'Teszt_password3'.repeat(65) },
-      [createPasswordValidationError('Teszt_password3'.repeat(65))]);
-    await assertRegistrationInputInvalid(authClient, { username: 'a'.repeat(256), password: 'Teszt_password3' },
-      [createUsernameValidationError('a'.repeat(256))]);
+    let resp = await authClient.registrate({ username: 'a'.repeat(256), password: 'Teszt_password3'.repeat(65) });
+    assertFieldError(resp, 'username', ['Invalid value']);
+    assertFieldError(resp, 'password', ['Invalid value']);
+
+    resp = await authClient.registrate({ username: 'teszt', password: 'Teszt_password3'.repeat(65) });
+    assertFieldError(resp, 'password', ['Invalid value']);
+
+    resp = await authClient.registrate({ username: 'a'.repeat(256), password: 'Teszt_password3' });
+    assertFieldError(resp, 'username', ['Invalid value']);
   });
 
   it('when try registrate with weak password then return validation error', async () => {
-    await assertRegistrationInputInvalid(authClient, { username: 'teszt', password: 'weak_password' }, [createPasswordValidationError('weak_password')]);
-    await assertRegistrationInputInvalid(authClient, { username: 'teszt', password: 'weakpassword2' }, [createPasswordValidationError('weakpassword2')]);
-    await assertRegistrationInputInvalid(authClient, { username: 'teszt', password: 'Weakpassword' }, [createPasswordValidationError('Weakpassword')]);
+    let resp = await authClient.registrate({ username: 'teszt', password: 'weak_password' });
+    assertFieldError(resp, 'password', ['Invalid value']);
+
+    resp = await authClient.registrate({ username: 'teszt', password: 'weakpassword2' });
+    assertFieldError(resp, 'password', ['Invalid value']);
+
+    resp = await authClient.registrate({ username: 'teszt', password: 'Weakpassword' });
+    assertFieldError(resp, 'password', ['Invalid value']);
   });
 
   it('when already login then refresh endpoint should return new tokens', async () => {
@@ -156,3 +172,12 @@ describe('Authentication api', () => {
     expect(resp.status).toBe(403);
   }); */
 });
+
+export async function assertLogin(resp: Response, expectedUsername: string): Promise<void> {
+  expect(resp.status).toBe(200);
+  expect(resp.body.accessToken).toBeTruthy();
+  const accessTokenPayload = await verifyToken(resp.body.accessToken, config.auth.secrets.accessToken);
+  expect(accessTokenPayload.username).toBe(expectedUsername);
+  const refreshTokenPayload = await verifyToken(resp.body.refreshToken, config.auth.secrets.refreshToken);
+  expect(refreshTokenPayload.username).toBe(expectedUsername);
+}

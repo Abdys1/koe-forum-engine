@@ -5,18 +5,18 @@ export enum Sex {
 }
 
 export interface CharacterEquipement {
-    helmet: string,
-    primaryWeapon: string,
-    secondaryWeapon: string,
-    shield: string,
-    bodyArmor: string,
-    secondaryArmor: string
+    helmet: string | null,
+    primaryWeapon: string | null,
+    secondaryWeapon: string | null,
+    shield: string | null,
+    bodyArmor: string | null,
+    secondaryArmor: string | null
 }
 
 export interface CharacterRegistrationRequestDto {
     name: string,
     sex: Sex,
     race: string,
-    equipement: CharacterEquipement,
-    imageUrl: string
+    imageUrl: string,
+    equipement: CharacterEquipement
 };

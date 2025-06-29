@@ -27,11 +27,11 @@ model Character {
   name String @unique @db.VarChar(64)
   sex Int @db.SmallInt
   race String @db.VarChar(64)
-  primaryWeapon String @db.VarChar(255)
-  secondaryWeapon String @db.VarChar(255)
-  helmet String @db.VarChar(255)
-  bodyArmor String @db.VarChar(255)
-  secondaryArmor String @db.VarChar(255)
-  shield String @db.VarChar(255)
+  primaryWeapon String? @db.VarChar(255)
+  secondaryWeapon String? @db.VarChar(255)
+  helmet String? @db.VarChar(255)
+  bodyArmor String? @db.VarChar(255)
+  secondaryArmor String? @db.VarChar(255)
+  shield String? @db.VarChar(255)
   imageUrl String
 }
