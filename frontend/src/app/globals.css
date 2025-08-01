@@ -39,7 +39,7 @@
     border-radius: 0.25rem;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
-    box-shadow: -15px 15px 40px -5px rgba(0, 0, 0, 0.8);
+    box-shadow: -15px 15px 40px -5px rgba(0, 0, 0, 0.4);
 }
 
 .gearStepBg::before {

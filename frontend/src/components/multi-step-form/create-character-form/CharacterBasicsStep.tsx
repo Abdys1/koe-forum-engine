@@ -53,7 +53,7 @@ export default function CharacterBasicsStep() {
                             </span>
                             <SelectableOptionBtn title="Férfi" onClick={() => selectSex("ferfi")} active={selectedSex === "ferfi"}/>
                             <SelectableOptionBtn title="Nő" onClick={() => selectSex("no")} active={selectedSex === "no"} />
-                                <input type="hidden" {...register("charaterSex")}/>
+                                <input type="hidden" {...register("characterSex")}/>
                         </div>
                     </div>
                 </div>

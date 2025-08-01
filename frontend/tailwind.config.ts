@@ -25,7 +25,8 @@ const config: Config = {
         'secondary': '#e7cf93',
         'secondaryMedium': '#e6c575',
         'secondaryDark': '#ebbe52',
-        'secondaryLight': '#fae7b9'
+        'secondaryLight': '#fae7b9',
+        'white': '#ffffff',
       },
       spacing: {
         '17.5': '4.375rem'
