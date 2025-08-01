@@ -6,13 +6,13 @@ class CharacterClient extends BaseClient {
     private static BASE_URL = '/api/characters';
 
     public async createCharacter(username: string, createCharReqDto: CharacterRegistrationRequestDto): Promise<Response> {
-        return this.request.post(`${CharacterClient.BASE_URL}`)
+        return this.request.post(CharacterClient.BASE_URL)
             .set(await this.getAuthorizationHeader({ username }))
             .send(createCharReqDto);
     }
 
     public async getCharacters(username: string): Promise<Response> {
-        return this.request.get(`${CharacterClient.BASE_URL}`).set(await this.getAuthorizationHeader({ username }));
+        return this.request.get(CharacterClient.BASE_URL).set(await this.getAuthorizationHeader({ username }));
     }
 }
 

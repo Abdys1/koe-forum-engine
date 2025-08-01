@@ -39,7 +39,7 @@ describe('/api/characters', () => {
         it('when create character without equipement then should save character without equipement', async () => {
             const user = await saveTestUserToDb();
             const newCharacter = createCharacterRegistrationReq();
-            newCharacter.equipement = {
+            newCharacter.equipment = {
                 helmet: null,
                 primaryWeapon: null,
                 secondaryWeapon: null,
@@ -98,6 +98,7 @@ describe('/api/characters', () => {
 
         it('when try create character with invalid sex number then should return character sex invalid error', async () => {
             const character = createCharacterRegistrationReq();
+            // @ts-expect-error tesztelni kell, hogy mi van ha nem jó érték jön
             character.sex = 3;
             const resp = await createCharacterToRandomUser(character);
             assertFieldError(resp, 'sex', [ErrorMessages.CHARACTER_SEX_INVALID]);
@@ -105,6 +106,7 @@ describe('/api/characters', () => {
 
         it('when try create character with string sex then should return character sex invalid error', async () => {
             const character = createCharacterRegistrationReq();
+            // @ts-expect-error tesztelni kell, hogy mi van ha nem jó érték jön
             character.sex = 'INVALID_VALUE';
             const resp = await createCharacterToRandomUser(character);
             assertFieldError(resp, 'sex', [ErrorMessages.CHARACTER_SEX_INVALID]);
@@ -112,6 +114,7 @@ describe('/api/characters', () => {
 
         it('when try create character without sex then should return character sex sex invalid error', async () => {
             const character = createCharacterRegistrationReq();
+            // @ts-expect-error tesztelni kell, hogy mi van ha nem jön érték
             delete character.sex;
             const resp = await createCharacterToRandomUser(character);
             assertFieldError(resp, 'sex', [ErrorMessages.CHARACTER_SEX_INVALID]);
@@ -162,7 +165,7 @@ describe('/api/characters', () => {
             expect(character.name).toBe(expectedCharacter.name);
             expect(character.sex).toBe(expectedCharacter.sex);
             expect(character.race).toBe(expectedCharacter.race);
-            expect(character.equipement).toStrictEqual(expectedCharacter.equipement);
+            expect(character.equipment).toStrictEqual(expectedCharacter.equipment);
             expect(character.imageUrl).toBe(expectedCharacter.imageUrl);
         }
     }
@@ -177,7 +180,7 @@ function createCharacterRegistrationReqWithName(characterName: string): Characte
         name: characterName,
         sex: Sex.MALE,
         race: 'human',
-        equipement: {
+        equipment: {
             helmet: 'Helmet',
             primaryWeapon: 'Sword',
             secondaryWeapon: 'Longbow',

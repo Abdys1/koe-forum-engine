@@ -11,7 +11,7 @@ function toDetails(character: CharacterEntity): CharacterCollectionDetails {
         name: character.name,
         sex: character.sex,
         race: character.race,
-        equipement: {
+        equipment: {
             helmet: character.helmet,
             primaryWeapon: character.primaryWeapon,
             secondaryWeapon: character.secondaryWeapon,

@@ -28,12 +28,12 @@ describe('Character registration usecase', () => {
         expect(savedCharacter.sex).toBe(testCharacter.sex);
         expect(savedCharacter.race).toBe(testCharacter.race);
         expect(savedCharacter.imageUrl).toBe(testCharacter.imageUrl);
-        expect(savedCharacter.helmet).toBe(testCharacter.equipement?.helmet);
-        expect(savedCharacter.primaryWeapon).toBe(testCharacter.equipement?.primaryWeapon);
-        expect(savedCharacter.secondaryWeapon).toBe(testCharacter.equipement?.secondaryWeapon);
-        expect(savedCharacter.bodyArmor).toBe(testCharacter.equipement?.bodyArmor);
-        expect(savedCharacter.secondaryArmor).toBe(testCharacter.equipement?.secondaryArmor);
-        expect(savedCharacter.shield).toBe(testCharacter.equipement?.shield);
+        expect(savedCharacter.helmet).toBe(testCharacter.equipment?.helmet);
+        expect(savedCharacter.primaryWeapon).toBe(testCharacter.equipment?.primaryWeapon);
+        expect(savedCharacter.secondaryWeapon).toBe(testCharacter.equipment?.secondaryWeapon);
+        expect(savedCharacter.bodyArmor).toBe(testCharacter.equipment?.bodyArmor);
+        expect(savedCharacter.secondaryArmor).toBe(testCharacter.equipment?.secondaryArmor);
+        expect(savedCharacter.shield).toBe(testCharacter.equipment?.shield);
         expect(savedCharacter.userId).toBe(testCharacter.owner.id);
     });
 
@@ -53,7 +53,7 @@ describe('Character registration usecase', () => {
             sex: Sex.MALE,
             race: 'elf',
             imageUrl: 'legolas.jpg',
-            equipement: {
+            equipment: {
                 helmet: 'cap',
                 primaryWeapon: 'bow',
                 secondaryWeapon: 'dagger',

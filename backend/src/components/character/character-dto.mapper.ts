@@ -7,7 +7,7 @@ export function fromRequestDto(user: { id: number, username: string }, dto: Char
         owner: user,
         sex: dto.sex,
         race: dto.race,
-        equipement: dto.equipement,
+        equipment: dto.equipment,
         imageUrl: dto.imageUrl
     };
 }

@@ -35,3 +35,19 @@ model Character {
   shield String? @db.VarChar(255)
   imageUrl String
 }
+
+model Equipment {
+  id Int @id @default(autoincrement())
+  name String @unique @db.VarChar(255)
+  type EquipmentType
+  description String
+}
+
+enum EquipmentType {
+  PRIMARY_WEAPON
+  SECONDARY_WEAPON
+  HELMET
+  BODY_ARMOR
+  SECONDARY_ARMOR
+  SHIELD
+}

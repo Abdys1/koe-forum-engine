@@ -4,7 +4,7 @@ export enum Sex {
     FEMALE = 2
 }
 
-export interface CharacterEquipement {
+export interface CharacterEquipment {
     helmet: string | null,
     primaryWeapon: string | null,
     secondaryWeapon: string | null,
@@ -18,5 +18,5 @@ export interface CharacterRegistrationRequestDto {
     sex: Sex,
     race: string,
     imageUrl: string,
-    equipement: CharacterEquipement
+    equipment: CharacterEquipment
 };

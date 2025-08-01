@@ -7,12 +7,12 @@ export function fromInput(dto: CreateCharacterInput): CharacterEntity {
         name: dto.name,
         race: dto.race,
         sex: dto.sex,
-        helmet: dto.equipement.helmet,
-        primaryWeapon: dto.equipement.primaryWeapon,
-        secondaryWeapon: dto.equipement.secondaryWeapon,
-        bodyArmor: dto.equipement.bodyArmor,
-        secondaryArmor: dto.equipement.secondaryArmor,
-        shield: dto.equipement.shield,
+        helmet: dto.equipment.helmet,
+        primaryWeapon: dto.equipment.primaryWeapon,
+        secondaryWeapon: dto.equipment.secondaryWeapon,
+        bodyArmor: dto.equipment.bodyArmor,
+        secondaryArmor: dto.equipment.secondaryArmor,
+        shield: dto.equipment.shield,
         imageUrl: dto.imageUrl
     };
 }
