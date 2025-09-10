@@ -1,7 +1,9 @@
 import { db } from "@src/prisma-client";
 import { seedEquipment } from "prisma/seeds/equipment";
+import { seedUsers } from "./user";
 
 async function main() {
+  await seedUsers();
   await seedEquipment();
 }
 

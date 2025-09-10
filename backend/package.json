@@ -13,6 +13,7 @@
     "lint": "eslint ./src",
     "migrate:test": "dotenv -e .env.test -- npx prisma migrate deploy",
     "migrate:dev": "dotenv -e .env -- npx prisma migrate deploy",
+    "seed:dev": "dotenv -e .env -- tsx prisma/seeds/index.ts",
     "test:unit": "dotenv -e .env.test -- vitest --project unit",
     "test:integ": "dotenv -e .env.test -- vitest --project integration --no-file-parallelism"
   },
