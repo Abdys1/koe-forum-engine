@@ -27,20 +27,35 @@ model Character {
   name String @unique @db.VarChar(64)
   sex Int @db.SmallInt
   race String @db.VarChar(64)
-  primaryWeapon String? @db.VarChar(255)
-  secondaryWeapon String? @db.VarChar(255)
-  helmet String? @db.VarChar(255)
-  bodyArmor String? @db.VarChar(255)
-  secondaryArmor String? @db.VarChar(255)
-  shield String? @db.VarChar(255)
+  primaryWeaponId Int? @db.Integer
+  primaryWeapon Equipment? @relation(name: "CharacterPrimaryWeapon_fk", fields: [primaryWeaponId], references: [id])
+  secondaryWeaponId Int? @db.Integer
+  secondaryWeapon Equipment? @relation(name: "CharacterSecondaryWeapon_fk", fields: [secondaryWeaponId], references: [id])
+  helmetId Int? @db.Integer
+  helmet Equipment? @relation(name: "CharacterHelmet_fk", fields: [helmetId], references: [id])
+  bodyArmorId Int? @db.Integer
+  bodyArmor Equipment? @relation(name: "CharacterBodyArmor_fk", fields: [bodyArmorId], references: [id])
+  secondaryArmorId Int? @db.Integer
+  secondaryArmor Equipment? @relation(name: "CharacterSecondaryArmor_fk", fields: [secondaryArmorId], references: [id])
+  shieldId Int? @db.Integer
+  shield Equipment? @relation(name: "CharacterShield_fk", fields: [shieldId], references: [id])
   imageUrl String
 }
 
 model Equipment {
   id Int @id @default(autoincrement())
-  name String @unique @db.VarChar(255)
+  name String @db.VarChar(255)
   type EquipmentType
   description String
+
+  characterPrimaryWeapon Character[] @relation(name: "CharacterPrimaryWeapon_fk")
+  characterSecondaryWeapon Character[] @relation(name: "CharacterSecondaryWeapon_fk")
+  characterHelmet Character[] @relation(name: "CharacterHelmet_fk")
+  characterBodyArmor Character[] @relation(name: "CharacterBodyArmor_fk")
+  characterSecondaryArmor Character[] @relation(name: "CharacterSecondaryArmor_fk")
+  characterShield Character[] @relation(name: "CharacterShield_fk")
+
+  @@unique([name, type])
 }
 
 enum EquipmentType {

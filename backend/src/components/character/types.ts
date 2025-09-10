@@ -1,22 +1,22 @@
 // https://en.wikipedia.org/wiki/ISO/IEC_5218
 export enum Sex {
-    MALE = 1,
-    FEMALE = 2
+  MALE = 1,
+  FEMALE = 2,
 }
 
 export interface CharacterEquipment {
-    helmet: string | null,
-    primaryWeapon: string | null,
-    secondaryWeapon: string | null,
-    shield: string | null,
-    bodyArmor: string | null,
-    secondaryArmor: string | null
+  helmet?: number | null;
+  primaryWeapon?: number | null;
+  secondaryWeapon?: number | null;
+  shield?: number | null;
+  bodyArmor?: number | null;
+  secondaryArmor?: number | null;
 }
 
 export interface CharacterRegistrationRequestDto {
-    name: string,
-    sex: Sex,
-    race: string,
-    imageUrl: string,
-    equipment: CharacterEquipment
-};
+  name: string;
+  sex: Sex;
+  race: string;
+  imageUrl: string;
+  equipment: CharacterEquipment;
+}

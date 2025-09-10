@@ -1,22 +1,34 @@
 import { CharacterRepository } from "@src/components/character/repositories/types";
 import { fromInput } from "@src/components/character/usecases/registration/mapper";
-import { CharacterRegistration, CreateCharacterInput, CreateCharacterOutput, CreateCharacterStatus } from "@src/components/character/usecases/registration/types";
+import {
+  CharacterRegistration,
+  CreateCharacterInput,
+  CreateCharacterOutput,
+  CreateCharacterStatus,
+} from "@src/components/character/usecases/registration/types";
 
-export default class CharacterRegistrationImpl implements CharacterRegistration {
+export default class CharacterRegistrationImpl
+  implements CharacterRegistration
+{
+  private characterRepository: CharacterRepository;
 
-    private characterRepository: CharacterRepository;
+  constructor(characterDao: CharacterRepository) {
+    this.characterRepository = characterDao;
+  }
 
-    constructor(characterDao: CharacterRepository) {
-        this.characterRepository = characterDao;
+  public execute = async (
+    createCharacterDto: CreateCharacterInput,
+  ): Promise<CreateCharacterOutput> => {
+    const hasRegisteredCharName =
+      await this.characterRepository.existsByCharacterName(
+        createCharacterDto.name,
+      );
+    if (hasRegisteredCharName) {
+      return { status: CreateCharacterStatus.ALREADY_EXISTS };
     }
-
-    public execute = async (createCharacterDto: CreateCharacterInput): Promise<CreateCharacterOutput> => {
-        const hasRegisteredCharName = await this.characterRepository.existsByCharacterName(createCharacterDto.name);
-        if (hasRegisteredCharName) {
-            return { status: CreateCharacterStatus.ALREADY_EXISTS };
-        }
-        const character = fromInput(createCharacterDto);
-        await this.characterRepository.create(character);
-        return { status: CreateCharacterStatus.CREATED };
-    }
+    const character = fromInput(createCharacterDto);
+    console.log("Character to be created:", character);
+    await this.characterRepository.create(character);
+    return { status: CreateCharacterStatus.CREATED };
+  };
 }

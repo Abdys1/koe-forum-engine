@@ -5,9 +5,10 @@ import { defineRouter } from "@src/components/routerconf";
 const equipmentController = new EquipmentController(equipmentCollection);
 
 export default defineRouter([
-    {
-        path: '/',
-        method: 'GET',
-        controller: equipmentController.getAll
-    }
+  {
+    path: "/",
+    method: "GET",
+    public: true,
+    controller: equipmentController.getAll,
+  },
 ]);
