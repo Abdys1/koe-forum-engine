@@ -3,16 +3,16 @@ import argon2 from "argon2";
 
 const users = [
 	{
-		username: "testuser1",
-		password: "alma",
+		username: "user1",
+		password: "Alma1234567",
 	},
 	{
-		username: "testuser2",
-		password: "alma",
+		username: "user2",
+		password: "Alma1234567",
 	},
 	{
-		username: "testuser3",
-		password: "alma",
+		username: "user3",
+		password: "Alma1234567",
 	},
 ];
 
