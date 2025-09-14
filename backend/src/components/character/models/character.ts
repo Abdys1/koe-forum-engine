@@ -4,11 +4,11 @@ export default interface CharacterEntity {
   name: string;
   race: string;
   sex: number;
-  helmet?: number | null;
-  primaryWeapon?: number | null;
-  secondaryWeapon?: number | null;
-  bodyArmor?: number | null;
-  secondaryArmor?: number | null;
-  shield?: number | null;
+  helmetId?: number | null;
+  primaryWeaponId?: number | null;
+  secondaryWeaponId?: number | null;
+  bodyArmorId?: number | null;
+  secondaryArmorId?: number | null;
+  shieldId?: number | null;
   imageUrl: string;
 }

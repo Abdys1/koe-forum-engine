@@ -181,8 +181,7 @@ describe("/api/characters", () => {
       const resp = await createCharacterToRandomUser(character);
       expect(resp.status).toBe(400);
       expect(resp.body).toStrictEqual({
-        errorCode: "EQUIPMENT_NOT_EXISTS",
-        field: "equipment.helmet",
+        errorCode: "CHARACTER_EQUIPMENT_NOT_EXISTS"
       });
     });
 

@@ -47,7 +47,7 @@ const format = winston.format.combine(
   ),
 );
 
-const isTestEnv = false; //process.env.NODE_ENV === 'test';
+const isTestEnv = process.env.NODE_ENV === 'test';
 
 // Define which transports the logger must use to print out messages.
 // In this example, we are using three different transports

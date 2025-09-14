@@ -29,23 +29,23 @@ export default class CharacterRepositoryImpl implements CharacterRepository {
         sex: character.sex,
         race: character.race,
         imageUrl: character.imageUrl,
-        helmet: character.helmet
-          ? { connect: { id: character.helmet } }
+        helmet: character.helmetId != null
+          ? { connect: { id: character.helmetId } }
           : undefined,
-        primaryWeapon: character.primaryWeapon
-          ? { connect: { id: character.primaryWeapon } }
+        primaryWeapon: character.primaryWeaponId != null
+          ? { connect: { id: character.primaryWeaponId } }
           : undefined,
-        secondaryWeapon: character.secondaryWeapon
-          ? { connect: { id: character.secondaryWeapon } }
+        secondaryWeapon: character.secondaryWeaponId != null
+          ? { connect: { id: character.secondaryWeaponId } }
           : undefined,
-        bodyArmor: character.bodyArmor
-          ? { connect: { id: character.bodyArmor } }
+        bodyArmor: character.bodyArmorId != null
+          ? { connect: { id: character.bodyArmorId } }
           : undefined,
-        secondaryArmor: character.secondaryArmor
-          ? { connect: { id: character.secondaryArmor } }
+        secondaryArmor: character.secondaryArmorId != null
+          ? { connect: { id: character.secondaryArmorId } }
           : undefined,
-        shield: character.shield
-          ? { connect: { id: character.shield } }
+        shield: character.shieldId != null
+          ? { connect: { id: character.shieldId } }
           : undefined,
         user: { connect: { id: character.userId } },
       },

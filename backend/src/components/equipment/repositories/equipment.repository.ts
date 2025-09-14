@@ -21,6 +21,24 @@ export default class EquipmentRepositoryImpl implements EquipmentRepository {
         });
     };
 
+    public findAllByIds = async (ids: number[]): Promise<EquipmentEntity[]> => {
+        const result = await this.db.equipment.findMany({
+            where: {
+                id: {
+                    in: ids
+                }
+            }
+        });
+        return result.map((equipment) => {
+            return {
+                id: equipment.id,
+                name: equipment.name,
+                type: equipment.type as EquipmentType,
+                description: equipment.description
+            }
+        });
+    };
+
     public create = (entity: EquipmentEntity): Promise<void> => {
         throw new Error("Method not implemented.");
     };

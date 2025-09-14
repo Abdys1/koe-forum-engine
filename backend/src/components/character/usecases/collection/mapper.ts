@@ -12,12 +12,12 @@ function toDetails(character: CharacterEntity): CharacterCollectionDetails {
         sex: character.sex,
         race: character.race,
         equipment: {
-            helmet: character.helmet,
-            primaryWeapon: character.primaryWeapon,
-            secondaryWeapon: character.secondaryWeapon,
-            bodyArmor: character.bodyArmor,
-            secondaryArmor: character.secondaryArmor,
-            shield: character.shield
+            helmet: character.helmetId,
+            primaryWeapon: character.primaryWeaponId,
+            secondaryWeapon: character.secondaryWeaponId,
+            bodyArmor: character.bodyArmorId,
+            secondaryArmor: character.secondaryArmorId,
+            shield: character.shieldId
         },
         imageUrl: character.imageUrl
     }

@@ -15,11 +15,24 @@ export default class CharacterController {
     createCharacter = async (req: Request, res: Response): Promise<void> => {
         const createCharInput: CreateCharacterInput = fromRequestDto(req.user, req.body);
         const { status } = await this.characterRegistration.execute(createCharInput);
-        if (status === CreateCharacterStatus.ALREADY_EXISTS) {
-            res.status(409).json({ errorCode: status }).send();
+        if (status !== CreateCharacterStatus.CREATED) {
+            this.sendCreateCharErrorByStatus(res, status);
             return;
         }
+
         res.status(200).send();
+    }
+
+    private sendCreateCharErrorByStatus = (res: Response, status: CreateCharacterStatus): void => {
+        switch (status) {
+            case CreateCharacterStatus.ALREADY_EXISTS:
+                res.status(409);
+                break;
+            case CreateCharacterStatus.EQUIPMENT_NOT_EXISTS:
+                res.status(400);
+                break;
+        }
+        res.json({ errorCode: status }).send();
     }
 
     listCharacters = async (req: Request, res: Response): Promise<void> => {
