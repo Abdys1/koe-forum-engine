@@ -86,7 +86,7 @@ describe("/api/characters", () => {
       );
       expect(createResp.status).toBe(409);
       expect(createResp.body).toStrictEqual({
-        errorCode: "CHARACTER_ALREADY_EXISTS",
+        errorCode: ErrorMessages.CHARACTER_ALREADY_EXISTS,
       });
       await assertUserCharacterList(user.username, [newCharacter]);
 
@@ -96,7 +96,7 @@ describe("/api/characters", () => {
       );
       expect(anotherUserCreateResp.status).toBe(409);
       expect(anotherUserCreateResp.body).toStrictEqual({
-        errorCode: "CHARACTER_ALREADY_EXISTS",
+        errorCode: ErrorMessages.CHARACTER_ALREADY_EXISTS,
       });
       await assertUserCharacterList(user2.username, []);
     });
@@ -181,7 +181,7 @@ describe("/api/characters", () => {
       const resp = await createCharacterToRandomUser(character);
       expect(resp.status).toBe(400);
       expect(resp.body).toStrictEqual({
-        errorCode: "CHARACTER_EQUIPMENT_NOT_EXISTS"
+        errorCode: ErrorMessages.EQUIPMENT_NOT_EXISTS
       });
     });
 

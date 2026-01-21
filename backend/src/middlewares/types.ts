@@ -1,4 +1,4 @@
-import { ForumUser } from '@prisma/client';
+import { ForumUser } from '@src/components/user/types';
 import { TokenVerifierFunc } from '@src/components/auth/types';
 import { NextFunction, Request, Response } from 'express';
 import { ValidationError } from 'express-validator';

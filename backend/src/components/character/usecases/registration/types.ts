@@ -1,7 +1,7 @@
-import { CharacterEquipment, Sex } from "@src/components/character/types"
+import { CharacterEquipmentInputDto, Sex } from "@src/components/character/types"
 
 export interface CharacterRegistration {
-    execute: (newCharacterDto: CreateCharacterInput) => Promise<CreateCharacterOutput>
+    execute: (newCharacterDto: CreateCharacterInput) => Promise<void>
 }
 
 export interface CreateCharacterInput {
@@ -9,16 +9,6 @@ export interface CreateCharacterInput {
     name: string,
     sex: Sex,
     race: string,
-    equipment: CharacterEquipment,
+    equipment: CharacterEquipmentInputDto,
     imageUrl: string
 };
-
-export interface CreateCharacterOutput {
-    status: CreateCharacterStatus
-}
-
-export enum CreateCharacterStatus {
-    CREATED = 'CHARACTER_CREATED',
-    ALREADY_EXISTS = 'CHARACTER_ALREADY_EXISTS',
-    EQUIPMENT_NOT_EXISTS = 'CHARACTER_EQUIPMENT_NOT_EXISTS'
-}

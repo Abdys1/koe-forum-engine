@@ -12,8 +12,10 @@ function useAuthMiddleware(options: AuthenticationMiddlewareOptions): Authentica
       }
       const token = await options.verifyToken(bearerToken[1], options.secretKey);
       const user = await options.findUserByUsername(token.username);
-      logger.debug(user);
-      req.user = { id: user.id, username: user.username };
+      if (!user || !user.id) {
+        throw new AuthenticationError(`${token.username} User not found!`);
+      }
+      req.user = { id: user.id, username: user.username }
       next();
     } catch (err) {
       logger.error(err);

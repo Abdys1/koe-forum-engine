@@ -2,12 +2,13 @@ import CharacterController from "@src/components/character/character.controller"
 import { Sex } from "@src/components/character/types";
 import { characterCollection } from "@src/components/character/usecases/collection";
 import { characterRegistration } from "@src/components/character/usecases/registration";
+import { characterUpdateValidator } from "@src/components/character/usecases/update_validator";
 import { defineRouter } from "@src/components/routerconf";
 import { HttpMethod } from "@src/components/routerconf/router-config";
 import { ErrorMessages } from "@src/messages";
 import { body } from "express-validator";
 
-const characterController = new CharacterController(characterRegistration, characterCollection);
+const characterController = new CharacterController(characterRegistration, characterCollection, characterUpdateValidator);
 
 export default defineRouter([
     {
