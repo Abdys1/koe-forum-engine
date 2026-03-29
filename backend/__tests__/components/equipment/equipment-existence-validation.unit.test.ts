@@ -1,11 +1,11 @@
-import EquipmentValidationServiceImpl from '@src/components/equipment/services/equipment-validation.service.impl';
-import { EquipmentValidationService } from '@src/components/equipment/services/equipment-validation.service';
+import EquipmentExistenceValidationImpl from '@src/components/equipment/usecases/validation/equipment-existence-validation';
+import { EquipmentExistenceValidation } from '@src/components/equipment/usecases/validation/types';
 import { EquipmentRepository } from '@src/components/equipment/repositories/types';
 import { beforeEach, describe, expect, it, vi, Mocked } from 'vitest';
 
-describe('EquipmentValidationService', () => {
+describe('EquipmentExistenceValidation', () => {
     let equipmentRepository: Mocked<EquipmentRepository>;
-    let equipmentValidationService: EquipmentValidationService;
+    let equipmentExistenceValidation: EquipmentExistenceValidation;
 
     beforeEach(() => {
         equipmentRepository = {
@@ -13,17 +13,17 @@ describe('EquipmentValidationService', () => {
             findAllByIds: vi.fn(),
             create: vi.fn(),
         };
-        equipmentValidationService = new EquipmentValidationServiceImpl(equipmentRepository);
+        equipmentExistenceValidation = new EquipmentExistenceValidationImpl(equipmentRepository);
     });
 
-    describe('allExist()', () => {
+    describe('execute()', () => {
         it('should return true when all ids exist', async () => {
             equipmentRepository.findAllByIds.mockResolvedValue([
                 { id: 1, name: 'Sword', type: 'PRIMARY_WEAPON' as any, description: '' },
                 { id: 2, name: 'Shield', type: 'SHIELD' as any, description: '' },
             ]);
 
-            const result = await equipmentValidationService.allExist([1, 2]);
+            const result = await equipmentExistenceValidation.execute([1, 2]);
 
             expect(result).toBe(true);
         });
@@ -33,7 +33,7 @@ describe('EquipmentValidationService', () => {
                 { id: 1, name: 'Sword', type: 'PRIMARY_WEAPON' as any, description: '' },
             ]);
 
-            const result = await equipmentValidationService.allExist([1, 99]);
+            const result = await equipmentExistenceValidation.execute([1, 99]);
 
             expect(result).toBe(false);
         });
@@ -41,7 +41,7 @@ describe('EquipmentValidationService', () => {
         it('should return false when no ids exist', async () => {
             equipmentRepository.findAllByIds.mockResolvedValue([]);
 
-            const result = await equipmentValidationService.allExist([99, 100]);
+            const result = await equipmentExistenceValidation.execute([99, 100]);
 
             expect(result).toBe(false);
         });
@@ -49,7 +49,7 @@ describe('EquipmentValidationService', () => {
         it('should return true when ids list is empty', async () => {
             equipmentRepository.findAllByIds.mockResolvedValue([]);
 
-            const result = await equipmentValidationService.allExist([]);
+            const result = await equipmentExistenceValidation.execute([]);
 
             expect(result).toBe(true);
         });
@@ -58,7 +58,7 @@ describe('EquipmentValidationService', () => {
             equipmentRepository.findAllByIds.mockResolvedValue([]);
             const ids = [1, 2, 3];
 
-            await equipmentValidationService.allExist(ids);
+            await equipmentExistenceValidation.execute(ids);
 
             expect(equipmentRepository.findAllByIds).toHaveBeenCalledWith(ids);
         });

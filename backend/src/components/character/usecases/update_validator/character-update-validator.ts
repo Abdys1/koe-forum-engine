@@ -1,16 +1,16 @@
 import { CharacterRepository } from "@src/components/character/repositories/types";
 import { CharacterEquipmentInputDto } from "@src/components/character/types";
-import { EquipmentValidationService } from "@src/components/equipment/services/equipment-validation.service";
+import { EquipmentExistenceValidation } from "@src/components/equipment/usecases/validation/types";
 
 import { CharacterUpdateValidator, ValidateCharacterUpdateInput, ValidateCharacterUpdateOutput, ValidateCharacterUpdateResult } from "./types";
 
 export default class CharacterUpdateValidatorImpl implements CharacterUpdateValidator {
     private characterRepository: CharacterRepository;
-    private equipmentValidationService: EquipmentValidationService;
+    private equipmentExistenceValidation: EquipmentExistenceValidation;
 
-    constructor(characterRepository: CharacterRepository, equipmentValidationService: EquipmentValidationService) {
+    constructor(characterRepository: CharacterRepository, equipmentExistenceValidation: EquipmentExistenceValidation) {
         this.characterRepository = characterRepository;
-        this.equipmentValidationService = equipmentValidationService;
+        this.equipmentExistenceValidation = equipmentExistenceValidation;
     }
 
     public execute = async (input: ValidateCharacterUpdateInput): Promise<ValidateCharacterUpdateOutput> => {
@@ -29,6 +29,6 @@ export default class CharacterUpdateValidatorImpl implements CharacterUpdateVali
 
     private hasInvalidEquipment = async (equipment: CharacterEquipmentInputDto): Promise<boolean> => {
         const equipmentIds: number[] = Object.values(equipment).filter((id) => id !== null);
-        return !(await this.equipmentValidationService.allExist(equipmentIds));
+        return !(await this.equipmentExistenceValidation.execute(equipmentIds));
     };
 }

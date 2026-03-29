@@ -1,11 +1,11 @@
 import { EquipmentRepository } from "@src/components/equipment/repositories/types";
 
-import { EquipmentValidationService } from "./equipment-validation.service";
+import { EquipmentExistenceValidation } from "./types";
 
-export default class EquipmentValidationServiceImpl implements EquipmentValidationService {
+export default class EquipmentExistenceValidationImpl implements EquipmentExistenceValidation {
     constructor(private readonly equipmentRepository: EquipmentRepository) {}
 
-    public allExist = async (ids: number[]): Promise<boolean> => {
+    public execute = async (ids: number[]): Promise<boolean> => {
         const found = await this.equipmentRepository.findAllByIds(ids);
         return found.length === ids.length;
     };
