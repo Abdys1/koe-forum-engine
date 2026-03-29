@@ -20,7 +20,7 @@ describe('Router configurator', () => {
         const currentRoute = routes.find(r => r.path === path);
         expect(currentRoute).toBeTruthy();
         expect(currentRoute.stack.length).toBe(stackSize);
-        const currentStack = currentRoute.stack.find(s => s.method.toLowerCase() === method.toLowerCase());
+        const currentStack = currentRoute.stack.find((s: any) => s.method.toLowerCase() === method.toLowerCase());
         expect(currentStack).toBeTruthy();
     }
 
