@@ -1,7 +1,8 @@
-import CharacterUpdateValidatorImpl from "./character-update-validator";
-import { equipmentRepository } from "@src/components/equipment/repositories";
 import { characterRepository } from "@src/components/character/repositories";
+import { equipmentValidationService } from "@src/components/equipment/services";
 
-const characterUpdateValidator = new CharacterUpdateValidatorImpl(characterRepository, equipmentRepository);
+import CharacterUpdateValidatorImpl from "./character-update-validator";
+
+const characterUpdateValidator = new CharacterUpdateValidatorImpl(characterRepository, equipmentValidationService);
 
 export { characterUpdateValidator };
