@@ -1,9 +1,9 @@
 import CharacterRegistrationRequestMapper from "@src/components/character/character-dto.mapper";
 import { CharacterCollection } from "@src/components/character/usecases/collection/types";
 import { CharacterRegistration, CreateCharacterInput } from "@src/components/character/usecases/registration/types";
-import { Request, Response } from "express";
 import { CharacterUpdateValidator, ValidateCharacterUpdateResult } from "@src/components/character/usecases/update_validator/types";
 import { ErrorMessages } from "@src/messages";
+import { Request, Response } from "express";
 
 export default class CharacterController {
     private characterRegistration: CharacterRegistration;

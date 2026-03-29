@@ -39,7 +39,7 @@ export default class EquipmentRepositoryImpl implements EquipmentRepository {
         });
     };
 
-    public create = (entity: EquipmentEntity): Promise<void> => {
+    public create = (_: EquipmentEntity): Promise<void> => {
         throw new Error("Method not implemented.");
     };
 }
