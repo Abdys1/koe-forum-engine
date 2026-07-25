@@ -9,14 +9,9 @@ export interface CharacterRegistrationRequestDto {
   sex: Sex;
   race: string;
   imageUrl: string;
-  equipment: CharacterEquipmentInputDto;
-}
-
-export interface CharacterEquipmentInputDto {
-  helmet?: number | null;
-  primaryWeapon?: number | null;
-  secondaryWeapon?: number | null;
-  shield?: number | null;
-  bodyArmor?: number | null;
-  secondaryArmor?: number | null;
+  /**
+   * Ismétlődést engedő lista: `[4, 4, 7]` két darab 4-es felszerelést jelent.
+   * A request bodyból kimaradhat, ilyenkor a mapper üres listára normalizálja.
+   */
+  equipmentIds: number[];
 }

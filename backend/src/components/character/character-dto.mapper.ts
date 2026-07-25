@@ -10,7 +10,7 @@ export default class CharacterRegistrationRequestMapper {
             owner: user,
             sex: dto.sex,
             race: dto.race,
-            equipment: dto.equipment,
+            equipmentIds: CharacterRegistrationRequestMapper.toEquipmentIds(dto),
             imageUrl: dto.imageUrl
         };
     }
@@ -21,9 +21,16 @@ export default class CharacterRegistrationRequestMapper {
             owner: user,
             sex: dto.sex,
             race: dto.race,
-            equipment: dto.equipment,
+            equipmentIds: CharacterRegistrationRequestMapper.toEquipmentIds(dto),
             imageUrl: dto.imageUrl
         };
     }
-}
 
+    /**
+     * Az `equipmentIds` a bodyból kimaradhat, ezért itt, a HTTP-határon
+     * normalizáljuk üres listára — a use case-ek már mindig tömböt kapnak.
+     */
+    private static toEquipmentIds(dto: CharacterRegistrationRequestDto): number[] {
+        return dto.equipmentIds ?? [];
+    }
+}

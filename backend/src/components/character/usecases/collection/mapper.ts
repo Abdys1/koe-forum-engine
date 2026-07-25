@@ -1,5 +1,6 @@
-import CharacterEntity from "@src/components/character/models/character";
-import { CharacterCollectionDetails, CharacterCollectionOutput } from "@src/components/character/usecases/collection/types";
+import CharacterEntity, { CharacterEquipmentAssignmentEntity } from "@src/components/character/models/character";
+import { CharacterCollectionDetails, CharacterCollectionOutput, CharacterEquipmentDetails } from "@src/components/character/usecases/collection/types";
+import { toEquipmentDetails } from "@src/components/equipment/usecases/collection/mapper";
 
 export function toOutput(characters: CharacterEntity[]): CharacterCollectionOutput {
     return characters.map(toDetails);
@@ -11,14 +12,18 @@ function toDetails(character: CharacterEntity): CharacterCollectionDetails {
         name: character.name,
         sex: character.sex,
         race: character.race,
-        equipment: {
-            helmet: character.helmetId,
-            primaryWeapon: character.primaryWeaponId,
-            secondaryWeapon: character.secondaryWeaponId,
-            bodyArmor: character.bodyArmorId,
-            secondaryArmor: character.secondaryArmorId,
-            shield: character.shieldId
-        },
+        equipment: (character.equipment ?? []).map(toAssignmentDetails),
         imageUrl: character.imageUrl
     }
+}
+
+/**
+ * A hozzárendeléseket NEM vonjuk össze: ha ugyanaz a felszerelés kétszer van
+ * hozzárendelve, két elemként kell megjelennie, eltérő `assignmentId`-val.
+ */
+function toAssignmentDetails(assignment: CharacterEquipmentAssignmentEntity): CharacterEquipmentDetails {
+    return {
+        assignmentId: assignment.assignmentId,
+        ...toEquipmentDetails(assignment.equipment)
+    };
 }

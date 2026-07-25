@@ -19,7 +19,11 @@ export default defineRouter([
                 .matches(/^[a-zA-ZaäáeëéiíoóöőuúüűAÄÁEÉËIÍOÓÖŐUÚÜŰ\s']*$/).withMessage(ErrorMessages.CHARACTER_NAME_INVALID_LETTERS),
             body('sex').isIn(Object.values(Sex)).withMessage(ErrorMessages.CHARACTER_SEX_INVALID),
             body('race').notEmpty().withMessage(ErrorMessages.CHARACTER_RACE_REQUIRED),
-            body('imageUrl').notEmpty().withMessage(ErrorMessages.CHARACTER_IMAGE_URL_REQUIRED)
+            body('imageUrl').notEmpty().withMessage(ErrorMessages.CHARACTER_IMAGE_URL_REQUIRED),
+            // Felső korlát a lista hosszára: a duplikáció engedésével egy request
+            // akár több ezer join-sort is beírathatna. Egyediséget NEM ellenőrzünk.
+            body('equipmentIds').optional().isArray({ max: 100 }).withMessage(ErrorMessages.CHARACTER_EQUIPMENT_IDS_INVALID),
+            body('equipmentIds.*').isInt().withMessage(ErrorMessages.CHARACTER_EQUIPMENT_ID_INVALID)
         ],
         controller: characterController.createCharacter
     },

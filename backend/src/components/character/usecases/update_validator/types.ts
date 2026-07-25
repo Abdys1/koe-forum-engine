@@ -1,4 +1,4 @@
-import { CharacterEquipmentInputDto, Sex } from "../../types"
+import { Sex } from "../../types"
 
 export interface CharacterUpdateValidator {
     execute: (input: ValidateCharacterUpdateInput) => Promise<ValidateCharacterUpdateOutput>
@@ -9,7 +9,7 @@ export interface ValidateCharacterUpdateInput {
     name: string,
     sex: Sex,
     race: string,
-    equipment: CharacterEquipmentInputDto,
+    equipmentIds: number[],
     imageUrl: string
 };
 
