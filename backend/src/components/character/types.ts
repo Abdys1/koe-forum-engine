@@ -9,9 +9,5 @@ export interface CharacterRegistrationRequestDto {
   sex: Sex;
   race: string;
   imageUrl: string;
-  /**
-   * Ismétlődést engedő lista: `[4, 4, 7]` két darab 4-es felszerelést jelent.
-   * A request bodyból kimaradhat, ilyenkor a mapper üres listára normalizálja.
-   */
   equipmentIds: number[];
 }

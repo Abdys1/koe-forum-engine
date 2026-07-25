@@ -2,7 +2,6 @@ import { PrismaClient } from "@prisma/client";
 import { EquipmentEntity } from "@src/components/equipment/models/equipment";
 import { EquipmentRepository } from "@src/components/equipment/repositories/types";
 
-/** A típus join-olva jön, hogy a válaszban `{ id, label }` objektumként mehessen. */
 const FIELDS = {
     id: true,
     name: true,

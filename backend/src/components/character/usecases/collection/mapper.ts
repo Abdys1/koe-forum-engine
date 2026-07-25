@@ -17,10 +17,6 @@ function toDetails(character: CharacterEntity): CharacterCollectionDetails {
     }
 }
 
-/**
- * A hozzárendeléseket NEM vonjuk össze: ha ugyanaz a felszerelés kétszer van
- * hozzárendelve, két elemként kell megjelennie, eltérő `assignmentId`-val.
- */
 function toAssignmentDetails(assignment: CharacterEquipmentAssignmentEntity): CharacterEquipmentDetails {
     return {
         assignmentId: assignment.assignmentId,

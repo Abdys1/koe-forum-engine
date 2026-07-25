@@ -16,7 +16,6 @@ export default class EquipmentModificationImpl implements EquipmentModification 
             return { status: EquipmentModificationResult.TYPE_NOT_EXISTS };
         }
 
-        // A saját, változatlan (name, typeId) párjára mentés nem ütközés.
         const equipmentWithName = await this.equipmentRepository.findByNameAndTypeId(input.name, input.typeId);
         if (equipmentWithName && equipmentWithName.id !== input.id) {
             return { status: EquipmentModificationResult.ALREADY_EXISTS };

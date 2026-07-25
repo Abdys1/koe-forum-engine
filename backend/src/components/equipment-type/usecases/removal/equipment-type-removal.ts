@@ -14,9 +14,6 @@ export default class EquipmentTypeRemovalImpl implements EquipmentTypeRemoval {
             return { status: EquipmentTypeRemovalResult.NOT_FOUND };
         }
 
-        // Létezés-alapú tiltás: ha bármennyi felszerelés hivatkozik a típusra, nem
-        // törölhető. A Prisma default Restrict amúgy is megakadályozná, de nyers
-        // DB-hiba helyett explicit választ adunk.
         const referencingEquipmentCount = await this.equipmentTypeRepository.countEquipmentByTypeId(input.id);
         if (referencingEquipmentCount > 0) {
             return { status: EquipmentTypeRemovalResult.IN_USE };

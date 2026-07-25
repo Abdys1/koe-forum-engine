@@ -11,9 +11,6 @@ export default class EquipmentCreationImpl implements EquipmentCreation {
             return { status: EquipmentCreationResult.TYPE_NOT_EXISTS };
         }
 
-        // A (name, typeId) pár unique a DB-ben; use case szinten ellenőrizzük, hogy
-        // 409-et adhassunk a nyers Prisma constraint hiba helyett. Ugyanaz a név más
-        // típussal viszont érvényes.
         const existingEquipment = await this.equipmentRepository.findByNameAndTypeId(input.name, input.typeId);
         if (existingEquipment) {
             return { status: EquipmentCreationResult.ALREADY_EXISTS };

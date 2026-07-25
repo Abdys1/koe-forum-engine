@@ -26,10 +26,6 @@ export default class CharacterUpdateValidatorImpl implements CharacterUpdateVali
         return { status: ValidateCharacterUpdateResult.VALID };
     };
 
-    /**
-     * A nyers, ismétlődéseket tartalmazó listát adjuk át: a duplikáció érvényes
-     * bemenet, a deduplikálás a létezés-ellenőrzés belső részlete.
-     */
     private hasInvalidEquipment = async (equipmentIds: number[]): Promise<boolean> => {
         return !(await this.equipmentExistenceValidation.execute(equipmentIds));
     };
