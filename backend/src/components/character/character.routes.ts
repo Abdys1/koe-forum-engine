@@ -10,6 +10,89 @@ import { body } from "express-validator";
 
 const characterController = new CharacterController(characterRegistration, characterCollection, characterUpdateValidator);
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     CharacterEquipment:
+ *       allOf:
+ *         - $ref: '#/components/schemas/Equipment'
+ *         - type: object
+ *           properties:
+ *             assignmentId:
+ *               type: integer
+ *     Character:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *         name:
+ *           type: string
+ *         sex:
+ *           type: integer
+ *           enum: [1, 2]
+ *           description: 1 = male, 2 = female (ISO/IEC 5218)
+ *         race:
+ *           type: string
+ *         imageUrl:
+ *           type: string
+ *         equipment:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/CharacterEquipment'
+ */
+
+/**
+ * @openapi
+ * /characters:
+ *   get:
+ *     tags: [Character]
+ *     summary: List the current user's characters
+ *     responses:
+ *       200:
+ *         description: List of characters
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Character'
+ *   post:
+ *     tags: [Character]
+ *     summary: Create a new character for the current user
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [name, sex, race, imageUrl]
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 minLength: 3
+ *                 maxLength: 64
+ *                 description: Letters, spaces and apostrophes only
+ *               sex:
+ *                 type: integer
+ *                 enum: [1, 2]
+ *               race:
+ *                 type: string
+ *               imageUrl:
+ *                 type: string
+ *               equipmentIds:
+ *                 type: array
+ *                 maxItems: 100
+ *                 items:
+ *                   type: integer
+ *     responses:
+ *       200:
+ *         description: Character created
+ *       400:
+ *         description: One of the referenced equipment ids does not exist
+ *       409:
+ *         description: A character with this name already exists
+ */
 export default defineRouter([
     {
         path: '/',

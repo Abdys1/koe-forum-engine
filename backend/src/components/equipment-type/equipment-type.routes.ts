@@ -20,6 +20,115 @@ const labelValidation = body('label').trim().isLength({ min: 1, max: 128 })
 
 const idValidation = param('id').isInt().withMessage(ErrorMessages.EQUIPMENT_TYPE_NOT_EXISTS);
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     EquipmentType:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *         label:
+ *           type: string
+ */
+
+/**
+ * @openapi
+ * /equipment/type:
+ *   get:
+ *     tags: [EquipmentType]
+ *     summary: List all equipment types
+ *     responses:
+ *       200:
+ *         description: List of equipment types
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 equipmentTypes:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/EquipmentType'
+ *   post:
+ *     tags: [EquipmentType]
+ *     summary: Create a new equipment type
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [label]
+ *             properties:
+ *               label:
+ *                 type: string
+ *                 minLength: 1
+ *                 maxLength: 128
+ *     responses:
+ *       201:
+ *         description: Equipment type created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/EquipmentType'
+ *       409:
+ *         description: An equipment type with this label already exists
+ */
+
+/**
+ * @openapi
+ * /equipment/type/{id}:
+ *   put:
+ *     tags: [EquipmentType]
+ *     summary: Rename an existing equipment type
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [label]
+ *             properties:
+ *               label:
+ *                 type: string
+ *                 minLength: 1
+ *                 maxLength: 128
+ *     responses:
+ *       200:
+ *         description: Equipment type updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/EquipmentType'
+ *       404:
+ *         description: Equipment type not found
+ *       409:
+ *         description: An equipment type with this label already exists
+ *   delete:
+ *     tags: [EquipmentType]
+ *     summary: Delete an equipment type
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       204:
+ *         description: Equipment type deleted
+ *       404:
+ *         description: Equipment type not found
+ *       409:
+ *         description: Equipment type is still in use and cannot be deleted
+ */
 export default defineRouter([
     {
         path: '/',
