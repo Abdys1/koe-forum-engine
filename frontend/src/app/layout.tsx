@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Provider } from "@/components/Provider";
+import "@/styles/global-styles.css";
+import { Provider } from "@/components/Provider/Provider";
 import { auth } from "@/app/api/auth/[...nextauth]/auth";
 import { roboto, poppins, sumana, caveat, mrsSaintDelafield } from "@/app/fonts";
 

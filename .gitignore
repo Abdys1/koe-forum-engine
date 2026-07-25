@@ -5,7 +5,8 @@ npm-debug.log
 .nyc
 .env
 .DS_Store
-.vscode
+.vscode/*
+!.vscode/launch.json
 package-lock.json
 .db
 *.log
