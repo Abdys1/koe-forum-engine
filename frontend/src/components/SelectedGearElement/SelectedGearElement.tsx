@@ -22,7 +22,9 @@ export default function SelectedGearElement(props: SelectedGearElementProps) {
                     className={clsx(styles.clearBtn,
                         props.isActiveClearBtn ? styles.clearBtnVisible : styles.clearBtnHidden
                     )}>
-                    x
+                    <span className="material-icons">
+                        cancel
+                    </span>
                 </button>
             </div>
         </div>
