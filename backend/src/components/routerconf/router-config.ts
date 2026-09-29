@@ -3,7 +3,7 @@ import logger from "@src/components/logger/logger";
 import RestApiValidationError from "@src/middlewares/rest-api-validation.error";
 import { AuthenticationMiddleware } from "@src/middlewares/types";
 import { NextFunction, Request, RequestHandler, Response, Router } from "express";
-import { validationResult } from "express-validator";
+import { ValidationError, validationResult } from "express-validator";
 
 export const HttpMethod = {
     GET: 'GET',
@@ -39,11 +39,21 @@ export function useDefineRouter(authMiddleware: AuthenticationMiddleware) {
     }
 }
 
+const SENSITIVE_FIELDS = ['password'];
+
+function redactSensitiveFields(errors: ValidationError[]): ValidationError[] {
+    return errors.map(error =>
+        error.type === 'field' && SENSITIVE_FIELDS.includes(error.path)
+            ? { ...error, value: '[REDACTED]' }
+            : error
+    );
+}
+
 function asyncHandler(handler: RequestHandler): RequestHandler {
     return (req: Request, res: Response, next: NextFunction): void => {
         const validation = validationResult(req);
         if (!validation.isEmpty()) {
-            logger.error(validation.array());
+            logger.error(redactSensitiveFields(validation.array()));
             next(new RestApiValidationError(validation));
         } else {
             Promise.resolve(handler(req, res, next)).catch(next);

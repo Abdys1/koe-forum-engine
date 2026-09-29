@@ -118,7 +118,7 @@ export default defineRouter([
         public: true,
         middlewares: [
             body('username').isLength({ min: 4, max: 255 }),
-            body('password').isLength({ min: 8, max: 64 }) // TODO ne írja ki, hogy milyen értéket adott meg a felhasználó, ha nem valid
+            body('password').isLength({ min: 8, max: 64 })
         ],
         controller: authController.login
     },

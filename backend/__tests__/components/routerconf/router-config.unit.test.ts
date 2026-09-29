@@ -1,5 +1,8 @@
-import { Router } from "express";
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import express, { NextFunction, Request, Response, Router } from "express";
+import { body } from "express-validator";
+import request from "supertest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import logger from "@src/components/logger/logger";
 import { AuthenticationMiddleware } from "@src/middlewares/types";
 import { RouterConfig, useDefineRouter } from "@src/components/routerconf/router-config";
 
@@ -10,6 +13,10 @@ describe('Router configurator', () => {
     beforeEach(() => {
         authMiddleware = vi.fn();
         defineRouter = useDefineRouter(authMiddleware);
+    });
+
+    afterEach(() => {
+        vi.restoreAllMocks();
     });
 
     function getRoutes(router: Router): Array<any> {
@@ -114,5 +121,28 @@ describe('Router configurator', () => {
         expect(testMiddleware).toHaveBeenCalledOnce();
         routes[1].stack[1].handle({} as Request, {} as Response);
         expect(testMiddleware).toHaveBeenCalledTimes(2);
+    });
+
+    it('should redact sensitive field values before logging validation errors', async () => {
+        const loggerErrorSpy = vi.spyOn(logger, 'error').mockImplementation(() => logger);
+        const router = defineRouter([{
+            path: '/login',
+            method: 'POST',
+            public: true,
+            middlewares: [body('password').isLength({ min: 8 })],
+            controller: (req: Request, res: Response) => res.status(200).send()
+        }]);
+
+        const app = express();
+        app.use(express.json());
+        app.use(router);
+        app.use((err: unknown, req: Request, res: Response, next: NextFunction) => res.status(400).send());
+
+        await request(app).post('/login').send({ password: 'short' });
+
+        expect(loggerErrorSpy).toHaveBeenCalledOnce();
+        const loggedErrors = loggerErrorSpy.mock.calls[0][0] as Array<{ path: string, value: unknown }>;
+        const passwordError = loggedErrors.find(e => e.path === 'password');
+        expect(passwordError?.value).toBe('[REDACTED]');
     });
 });
