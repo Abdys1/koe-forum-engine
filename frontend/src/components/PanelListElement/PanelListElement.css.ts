@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { colors, fonts } from '@/styles/tokens';
+import { colors, fonts, gradients } from '@/styles/tokens';
 
 export const listItem = style({
   position: 'relative'
@@ -33,7 +33,7 @@ export const row = style({
       left: 0,
       width: '100%',
       height: '5px',
-      background: 'linear-gradient(to top, transparent, rgba(0,0,0,0.3))',
+      background: gradients.blackVeilDown,
       zIndex: 20,
     },
     '&::after': {
@@ -127,7 +127,7 @@ export const desc = style({
       left: 0,
       width: '100%',
       height: '5px',
-      background: 'linear-gradient(to top, transparent, rgba(0,0,0,0.3))',
+      background: gradients.blackVeilDown,
       zIndex: 20,
     },
   },

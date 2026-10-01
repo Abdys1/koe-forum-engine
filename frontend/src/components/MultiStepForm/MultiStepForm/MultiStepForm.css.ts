@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { colors } from '@/styles/tokens';
+import { colors, shadows } from '@/styles/tokens';
 
 export const step = style({
   position: 'relative',
@@ -16,7 +16,7 @@ export const step = style({
   paddingRight: '2rem',
   background: colors.cardBlackBg,
   borderRadius: '0.25rem',
-  boxShadow: '0 4px 6px -1px rgba(0,0,0,0.4)',
+  boxShadow: shadows.card,
   overflow: 'hidden',
   selectors: {
     '&::after': {

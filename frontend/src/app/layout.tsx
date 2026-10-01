@@ -6,7 +6,7 @@ import { roboto, poppins, sumana, caveat, mrsSaintDelafield, splash, pirataOne, 
 import 'material-icons/iconfont/material-icons.css';
 
 export const metadata: Metadata = {
-  title: "Key of Eternity",
+  title: "Gloamfall",
   description: "Fórumos szerepjáték",
 };
 

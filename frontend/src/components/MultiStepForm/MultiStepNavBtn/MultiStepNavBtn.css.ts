@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { colors, fonts } from '@/styles/tokens';
+import { alphaColors, colors, fonts } from '@/styles/tokens';
 
 export const btn = style({
   position: 'relative',
@@ -32,7 +32,7 @@ export const btnEnabled = style({
 export const btnDisabled = style({
   display: 'inline-block',
   borderColor: colors.white,
-  background: 'rgba(0,0,0,0.3)',
+  background: alphaColors.blackVeil,
   color: colors.white,
   cursor: 'default',
 });

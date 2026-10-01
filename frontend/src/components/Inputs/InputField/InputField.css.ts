@@ -36,6 +36,7 @@ export const input = style({
   fontFamily: fonts.poppins,
   letterSpacing: '0.1em',
   color: colors.white,
+  width: '100%',
 });
 
 export const inputDefault = style({

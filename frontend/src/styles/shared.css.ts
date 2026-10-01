@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { colors } from './tokens';
+import { alphaColors, colors, gradients, shadows } from './tokens';
 
 export const glassBox = style({
   selectors: {
@@ -55,4 +55,13 @@ export const raceStepBg = style({
       opacity: 0.4,
     },
   },
+});
+
+export const glassPanel = style({
+  background: gradients.glassSurface,
+  backdropFilter: 'blur(14px)',
+  WebkitBackdropFilter: 'blur(14px)',
+  border: `1px solid ${alphaColors.primaryBorder}`,
+  borderRadius: '0.75rem',
+  boxShadow: shadows.glass,
 });
