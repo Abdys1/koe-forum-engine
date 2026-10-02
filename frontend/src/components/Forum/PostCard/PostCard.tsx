@@ -1,10 +1,10 @@
 import Image from "next/image";
-import { Post } from "@/dummydata/posts";
+import { LocationPost } from "@/lib/api/posts/types";
 import * as styles from "./PostCard.css";
 
 type PostCardProps = {
-    post: Post,
-    characterPostCount: number
+    post: LocationPost,
+    postNumber: number
 }
 
 const dateFormatter = new Intl.DateTimeFormat("hu-HU", {
@@ -15,17 +15,22 @@ const dateFormatter = new Intl.DateTimeFormat("hu-HU", {
     timeZone: "Europe/Budapest"
 });
 
-export default function PostCard({ post, characterPostCount }: PostCardProps) {
+export default function PostCard({ post, postNumber }: PostCardProps) {
     return (
         <article className={styles.card}>
             <aside className={styles.author}>
-                <Image src={post.character.imageUrl} alt={post.character.name} width={192} height={307}
+                <Image src={post.character.imageUrl} alt={post.character.name} width={224} height={358}
                     className={styles.avatar} />
                 <span className={styles.characterName}>{post.character.name}</span>
-                <span className={styles.postCount}>{characterPostCount} hozzászólás</span>
-                <button type="button" className={styles.iconBtn} title="Privát üzenet küldése">
-                    <span className="material-icons">mail</span>
-                </button>
+                <span className={styles.postCount}>{post.character.postCount} hozzászólás</span>
+                <div className={styles.actions}>
+                    <button type="button" className={styles.iconBtn} title="Privát üzenet küldése">
+                        <span className="material-icons">mail</span>
+                    </button>
+                    <button type="button" className={styles.iconBtn} title="Értesítés beállítása">
+                        <span className="material-icons">notifications</span>
+                    </button>
+                </div>
             </aside>
             <div className={styles.body}>
                 <header className={styles.postHeader}>
@@ -36,9 +41,7 @@ export default function PostCard({ post, characterPostCount }: PostCardProps) {
                         </time>
                     </div>
                     <div className={styles.actions}>
-                        <button type="button" className={styles.iconBtn} title="Feliratkozás">
-                            <span className="material-icons">notifications</span>
-                        </button>
+                        <span className={styles.postNumber}>#{postNumber}</span>
                         <button type="button" className={styles.iconBtn} title="Szerkesztés">
                             <span className="material-icons">edit</span>
                         </button>

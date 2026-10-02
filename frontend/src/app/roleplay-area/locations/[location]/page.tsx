@@ -1,12 +1,15 @@
 import LocationPosts from "@/components/Forum/LocationPosts/LocationPosts";
 import { locations } from "@/dummydata/locations";
-import { posts } from "@/dummydata/posts";
+import { postsClient } from "@/lib/api/posts";
+import { parsePageRequest } from "@/lib/api/posts/pagination";
 import * as styles from "./location.css";
 
 export default async function LocationPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ location: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const { location } = await params;
 
@@ -20,7 +23,7 @@ export default async function LocationPage({
     );
   }
 
-  const locationPosts = posts.filter(post => post.locationId === location);
+  const postsPage = await postsClient.getLocationPosts(location, parsePageRequest(await searchParams));
 
   return (
     <main className={styles.page}>
@@ -31,7 +34,11 @@ export default async function LocationPage({
         </div>
       </header>
       <div className={styles.stream}>
-        <LocationPosts locationId={location} initialPosts={locationPosts} />
+        <LocationPosts
+          key={`${postsPage.page}-${postsPage.pageSize}`}
+          locationId={location}
+          postsPage={postsPage}
+        />
       </div>
     </main>
   );

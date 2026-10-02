@@ -18,7 +18,7 @@ export const card = style([glassPanel, {
 export const author = style({
   position: 'relative',
   flexShrink: 0,
-  width: '15rem',
+  width: '16rem',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'flex-start',
@@ -41,8 +41,8 @@ export const author = style({
 });
 
 export const avatar = style({
-  width: '12rem',
-  height: '19.2rem',
+  width: '14rem',
+  height: '22.4rem',
   objectFit: 'cover',
   objectPosition: 'top',
   borderRadius: '0.5rem',
@@ -96,7 +96,16 @@ export const date = style({
 
 export const actions = style({
   display: 'flex',
+  alignItems: 'center',
   gap: '0.25rem',
+});
+
+export const postNumber = style({
+  marginRight: '0.5rem',
+  fontFamily: fonts.cinzel,
+  fontSize: '0.95rem',
+  fontWeight: '700',
+  color: alphaColors.textMuted,
 });
 
 export const iconBtn = style({
@@ -119,6 +128,7 @@ export const iconBtn = style({
 export const content = style({
   padding: '1.25rem 1.5rem',
   fontFamily: fonts.roboto,
+  fontSize: '1.25rem',
   lineHeight: '1.7',
   color: alphaColors.textBody,
   whiteSpace: 'pre-wrap',

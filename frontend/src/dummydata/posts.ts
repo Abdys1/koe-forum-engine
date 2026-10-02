@@ -34,7 +34,19 @@ const LONG_LOREM = [
   "Donec sed odio dui. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Sed posuere consectetur est at lobortis. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.",
 ].join("\n\n");
 
+const GAME_TITLES = ["Vihar a dokkok felett", "Egy pohár rum", "Suttogások a kikötőben"];
+
+const olderPosts: Post[] = Array.from({ length: 41 }, (_, index) => ({
+  id: `older-${index + 1}`,
+  locationId: "fogado-a-feher-siralyhoz",
+  gameTitle: GAME_TITLES[index % GAME_TITLES.length],
+  content: LOREM,
+  createdAt: new Date(Date.UTC(2026, 7, 1 + index, 18, 30)).toISOString(),
+  character: dummyCharacter,
+}));
+
 export const posts: Post[] = [
+  ...olderPosts,
   {
     id: "1",
     locationId: "fogado-a-feher-siralyhoz",
