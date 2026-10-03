@@ -62,7 +62,7 @@ Each feature in `src/components/` follows the same structure: controller → use
 - `src/config.ts` — environment config loader
 - `src/types.ts` — shared TypeScript types
 - `src/routes/api.routes.ts` — all API routes (`/api/auth`, `/api/characters`, `/api/equipment`)
-- `prisma/schema.prisma` — DB schema (ForumUser, Character, Equipment with 6 equipment slots)
+- `prisma/schema.prisma` — DB schema (ForumUser, Character, Equipment, EquipmentType, and a configurable `Slot` per equipment type capping how many of that type — weighted by each equipment's `slotCost` — a character can equip)
 
 **Storage** is pluggable via a factory pattern — `STORAGE_TYPE=local` or `STORAGE_TYPE=s3`.
 
@@ -103,3 +103,4 @@ npx dotenv -e .env.test -- vitest --project unit --run
 - ESLint enforces **sorted imports** (`simple-import-sort`) — run `npm run lint` to catch violations.
 - Prettier is integrated with ESLint; uses default Prettier settings.
 - TypeScript strict mode is enabled.
+- Do not add code comments unless the developer explicitly asks for them.
