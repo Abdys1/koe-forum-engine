@@ -240,7 +240,6 @@ export const recentName = style({
   color: colors.white,
 });
 
-// Section 2 – World
 export const worldSplit = style({
   gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1.3fr)',
   alignItems: 'start',
@@ -249,7 +248,6 @@ export const worldSplit = style({
   },
 });
 
-// Section 3 – Character creation
 export const characterSection = style({
   background: `linear-gradient(to bottom, transparent 0%, ${alphaColors.cardBlackVeil} 20%, ${alphaColors.cardBlackVeil} 80%, transparent 100%)`,
 });
