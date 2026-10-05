@@ -3,6 +3,7 @@
 import clsx from "clsx";
 import { useId } from "react";
 import { useForm } from "react-hook-form";
+import Button from "@/components/Button/Button";
 import * as styles from "./NewPostForm.css";
 
 export interface NewPostInputs {
@@ -58,9 +59,7 @@ export default function NewPostForm({ onSubmit }: NewPostFormProps) {
                 </span>
             </div>
             <div className={styles.actions}>
-                <button type="submit" className={styles.submitBtn} disabled={!canSubmit}>
-                    Hozzászólás küldése
-                </button>
+                <Button type="submit" variant="gold" title="Hozzászólás küldése" disabled={!canSubmit} />
             </div>
         </form>
     );

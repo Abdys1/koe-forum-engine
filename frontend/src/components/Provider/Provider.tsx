@@ -6,6 +6,7 @@ import { ReactNode } from "react";
 import Header from "@/components/Navigation/Header";
 import Footer from "@/components/Main/Footer";
 import Sidebar from "@/components/Navigation/Sidebar";
+import { socialLinks } from "@/lib/socialLinks";
 import * as styles from "./Provider.css";
 
 interface ProviderProps {
@@ -21,7 +22,7 @@ export function Provider({ children, session }: ProviderProps) {
                 <Sidebar />
                 <div className={styles.content}>{children}</div>
             </div>
-            <Footer />
+            <Footer socialLinks={socialLinks} />
         </SessionProvider>
     );
 }

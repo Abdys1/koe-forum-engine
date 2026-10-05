@@ -1,17 +1,11 @@
 import { style } from '@vanilla-extract/css';
+import { mainBg } from '@/styles/shared.css';
 import { alphaColors, colors, fonts, shadows } from '@/styles/tokens';
 
-export const page = style({
+export const page = style([mainBg, {
   width: '100%',
   minHeight: '100vh',
-  backgroundColor: colors.pageDarkBg,
-  backgroundImage: [
-    'radial-gradient(ellipse 60% 40% at 10% 35%, rgba(92,70,156,0.2) 0%, transparent 70%)',
-    'radial-gradient(ellipse 50% 35% at 90% 65%, rgba(159,150,254,0.1) 0%, transparent 70%)',
-    'radial-gradient(ellipse 60% 40% at 30% 95%, rgba(92,70,156,0.12) 0%, transparent 70%)',
-  ].join(', '),
-  backgroundAttachment: 'fixed',
-});
+}]);
 
 export const hero = style({
   position: 'relative',

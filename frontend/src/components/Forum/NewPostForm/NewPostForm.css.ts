@@ -71,27 +71,3 @@ export const actions = style({
   display: 'flex',
   justifyContent: 'flex-end',
 });
-
-export const submitBtn = style({
-  padding: '0.6rem 2rem',
-  border: `2px solid ${colors.secondary}`,
-  borderRadius: '0.25rem',
-  background: colors.secondary,
-  color: colors.darkText,
-  fontFamily: fonts.poppins,
-  fontSize: '1rem',
-  fontWeight: '700',
-  letterSpacing: '0.05em',
-  cursor: 'pointer',
-  transition: 'all 0.5s ease-in-out',
-  ':hover': {
-    background: colors.secondaryLight,
-    borderColor: colors.secondaryDark,
-    letterSpacing: '0.1em',
-  },
-  ':disabled': {
-    opacity: 0.5,
-    cursor: 'default',
-    letterSpacing: '0.05em',
-  },
-});
