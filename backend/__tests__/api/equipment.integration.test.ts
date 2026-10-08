@@ -204,7 +204,7 @@ describe('/api/equipment', () => {
             expect(created.slotCost).toBeNull();
         });
 
-        it('when the equipment type has no slot then a slot cost in the body should be ignored', async () => {
+        it('when the equipment type has no slot then a slot cost in the body should be rejected', async () => {
             const type = await saveEquipmentTypeToDb();
             const name = generateEquipmentName();
 
@@ -215,10 +215,12 @@ describe('/api/equipment', () => {
                 slotCost: 5
             });
 
-            expect(createResp.status).toBe(201);
+            expect(createResp.status).toBe(422);
+            expect(createResp.body).toStrictEqual({
+                errorCode: ErrorMessages.EQUIPMENT_SLOT_COST_NOT_ALLOWED
+            });
             const listResp = await equipmentClient.getAllEquipment();
-            const created = listResp.body.equipments.find((item: EquipmentResponseItem) => item.name === name);
-            expect(created.slotCost).toBeNull();
+            expect(listResp.body.equipments.find((item: EquipmentResponseItem) => item.name === name)).toBeUndefined();
         });
 
         it('when the equipment type has a slot then slot cost should be required', async () => {

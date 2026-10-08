@@ -21,5 +21,6 @@ export enum EquipmentCreationResult {
     ALREADY_EXISTS,
     TYPE_NOT_EXISTS,
     SLOT_COST_REQUIRED,
+    SLOT_COST_NOT_ALLOWED,
     SLOT_COST_EXCEEDS_CAPACITY
 }

@@ -43,6 +43,9 @@ export default class EquipmentController {
             case EquipmentCreationResult.SLOT_COST_REQUIRED:
                 res.status(422).json({ errorCode: ErrorMessages.EQUIPMENT_SLOT_COST_REQUIRED });
                 return;
+            case EquipmentCreationResult.SLOT_COST_NOT_ALLOWED:
+                res.status(422).json({ errorCode: ErrorMessages.EQUIPMENT_SLOT_COST_NOT_ALLOWED });
+                return;
             case EquipmentCreationResult.SLOT_COST_EXCEEDS_CAPACITY:
                 res.status(422).json({ errorCode: ErrorMessages.EQUIPMENT_SLOT_COST_EXCEEDS_CAPACITY });
                 return;

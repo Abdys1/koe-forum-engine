@@ -90,7 +90,7 @@ const idValidation = param("id").isInt().withMessage(ErrorMessages.EQUIPMENT_NOT
  *               slotCost:
  *                 type: integer
  *                 minimum: 1
- *                 description: Required if the equipment type has a slot; omit otherwise
+ *                 description: Required if the equipment type has a slot; must be omitted otherwise
  *     responses:
  *       201:
  *         description: Equipment created
@@ -101,7 +101,7 @@ const idValidation = param("id").isInt().withMessage(ErrorMessages.EQUIPMENT_NOT
  *       409:
  *         description: Equipment with this name already exists
  *       422:
- *         description: The referenced equipment type does not exist, slotCost is missing although required, or slotCost exceeds the slot's max capacity
+ *         description: The referenced equipment type does not exist, slotCost is missing although required, slotCost is given although the type has no slot, or slotCost exceeds the slot's max capacity
  */
 
 /**

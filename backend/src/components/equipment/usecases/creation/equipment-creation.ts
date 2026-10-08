@@ -17,7 +17,7 @@ export default class EquipmentCreationImpl implements EquipmentCreation {
             return { status: EquipmentCreationResult.TYPE_NOT_EXISTS };
         }
 
-        const slot = equipmentType.slotId ? await this.slotRepository.findById(equipmentType.slotId) : null;
+        const slot = equipmentType.slotId !== null && equipmentType.slotId !== undefined ? await this.slotRepository.findById(equipmentType.slotId) : null;
         if (slot) {
             if (input.slotCost === undefined) {
                 return { status: EquipmentCreationResult.SLOT_COST_REQUIRED };
@@ -25,6 +25,8 @@ export default class EquipmentCreationImpl implements EquipmentCreation {
             if (input.slotCost > slot.maxCapacity) {
                 return { status: EquipmentCreationResult.SLOT_COST_EXCEEDS_CAPACITY };
             }
+        } else if (input.slotCost !== undefined) {
+            return { status: EquipmentCreationResult.SLOT_COST_NOT_ALLOWED };
         }
 
         const existingEquipment = await this.equipmentRepository.findByNameAndTypeId(input.name, input.typeId);
@@ -36,7 +38,7 @@ export default class EquipmentCreationImpl implements EquipmentCreation {
             name: input.name,
             typeId: input.typeId,
             description: input.description,
-            slotCost: slot ? input.slotCost ?? null : null
+            slotCost: input.slotCost ?? null
         });
         return { status: EquipmentCreationResult.CREATED, equipment: toEquipmentDetails(equipment) };
     };
