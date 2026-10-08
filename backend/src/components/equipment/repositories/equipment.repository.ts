@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { EquipmentEntity } from "@src/components/equipment/models/equipment";
+import { EquipmentSlotUsage } from "@src/components/equipment/models/equipment-slot-usage";
 import { EquipmentRepository } from "@src/components/equipment/repositories/types";
 
 const FIELDS = {
@@ -7,6 +8,7 @@ const FIELDS = {
     name: true,
     typeId: true,
     description: true,
+    slotCost: true,
     type: { select: { id: true, label: true } }
 } as const;
 
@@ -37,22 +39,44 @@ export default class EquipmentRepositoryImpl implements EquipmentRepository {
         return this.db.characterEquipment.count({ where: { equipmentId: id } });
     };
 
-    public existsTypeById = async (typeId: number): Promise<boolean> => {
-        return (await this.db.equipmentType.count({ where: { id: typeId } })) > 0;
+    public findSlotUsageByIds = async (ids: number[]): Promise<EquipmentSlotUsage[]> => {
+        const equipment = await this.db.equipment.findMany({
+            where: { id: { in: ids } },
+            select: {
+                id: true,
+                slotCost: true,
+                type: { select: { slot: { select: { id: true, maxCapacity: true } } } }
+            }
+        });
+
+        return equipment.map((item) => ({
+            id: item.id,
+            slotCost: item.slotCost,
+            slotId: item.type.slot?.id ?? null,
+            slotMaxCapacity: item.type.slot?.maxCapacity ?? null
+        }));
     };
 
     public create = async (equipment: EquipmentEntity): Promise<EquipmentEntity> => {
         return this.db.equipment.create({
             select: FIELDS,
-            data: { name: equipment.name, typeId: equipment.typeId, description: equipment.description }
+            data: {
+                name: equipment.name,
+                typeId: equipment.typeId,
+                description: equipment.description,
+                slotCost: equipment.slotCost === null ? undefined : equipment.slotCost
+            }
         });
     };
 
-    public update = async (id: number, equipment: EquipmentEntity): Promise<EquipmentEntity> => {
+    public update = async (id: number, equipment: Pick<EquipmentEntity, "name" | "description">): Promise<EquipmentEntity> => {
         return this.db.equipment.update({
             select: FIELDS,
             where: { id },
-            data: { name: equipment.name, typeId: equipment.typeId, description: equipment.description }
+            data: {
+                name: equipment.name,
+                description: equipment.description
+            }
         });
     };
 

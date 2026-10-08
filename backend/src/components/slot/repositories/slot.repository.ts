@@ -4,7 +4,7 @@ import { SlotRepository } from "@src/components/slot/repositories/types";
 
 const FIELDS = {
     id: true,
-    equipmentTypeId: true,
+    label: true,
     maxCapacity: true
 } as const;
 
@@ -18,7 +18,7 @@ export default class SlotRepositoryImpl implements SlotRepository {
     public findAll = async (): Promise<SlotEntity[]> => {
         return this.db.slot.findMany({
             select: FIELDS,
-            orderBy: { equipmentTypeId: "asc" }
+            orderBy: { label: "asc" }
         });
     };
 
@@ -26,14 +26,17 @@ export default class SlotRepositoryImpl implements SlotRepository {
         return this.db.slot.findUnique({ select: FIELDS, where: { id } });
     };
 
-    public findByEquipmentTypeId = async (equipmentTypeId: number): Promise<SlotEntity | null> => {
-        return this.db.slot.findUnique({ select: FIELDS, where: { equipmentTypeId } });
+    public findByLabelIgnoreCase = async (label: string): Promise<SlotEntity | null> => {
+        return this.db.slot.findFirst({
+            select: FIELDS,
+            where: { label: { equals: label, mode: "insensitive" } }
+        });
     };
 
     public create = async (slot: SlotEntity): Promise<SlotEntity> => {
         return this.db.slot.create({
             select: FIELDS,
-            data: { equipmentTypeId: slot.equipmentTypeId, maxCapacity: slot.maxCapacity }
+            data: { label: slot.label, maxCapacity: slot.maxCapacity }
         });
     };
 

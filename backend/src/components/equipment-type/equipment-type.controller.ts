@@ -29,12 +29,21 @@ export default class EquipmentTypeController {
     };
 
     public create = async (req: Request, res: Response): Promise<void> => {
-        const { status, equipmentType } = await this.equipmentTypeCreation.execute({ label: req.body.label });
-        if (status === EquipmentTypeCreationResult.ALREADY_EXISTS) {
-            res.status(409).json({ errorCode: ErrorMessages.EQUIPMENT_TYPE_ALREADY_EXISTS });
-            return;
+        const { status, equipmentType } = await this.equipmentTypeCreation.execute({
+            label: req.body.label,
+            slotId: req.body.slotId === undefined ? undefined : Number(req.body.slotId)
+        });
+
+        switch (status) {
+            case EquipmentTypeCreationResult.ALREADY_EXISTS:
+                res.status(409).json({ errorCode: ErrorMessages.EQUIPMENT_TYPE_ALREADY_EXISTS });
+                return;
+            case EquipmentTypeCreationResult.SLOT_NOT_EXISTS:
+                res.status(422).json({ errorCode: ErrorMessages.SLOT_NOT_EXISTS });
+                return;
+            default:
+                res.status(201).send(equipmentType);
         }
-        res.status(201).send(equipmentType);
     };
 
     public update = async (req: Request, res: Response): Promise<void> => {

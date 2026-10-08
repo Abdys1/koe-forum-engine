@@ -6,6 +6,7 @@ beforeEach(async () => {
         db.character.deleteMany(),
         db.forumUser.deleteMany(),
         db.equipment.deleteMany(),
-        db.equipmentType.deleteMany()
+        db.equipmentType.deleteMany(),
+        db.slot.deleteMany()
     ]);
 });

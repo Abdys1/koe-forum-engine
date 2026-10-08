@@ -11,19 +11,13 @@ export default class EquipmentModificationImpl implements EquipmentModification 
             return { status: EquipmentModificationResult.NOT_FOUND };
         }
 
-        const typeExists = await this.equipmentRepository.existsTypeById(input.typeId);
-        if (!typeExists) {
-            return { status: EquipmentModificationResult.TYPE_NOT_EXISTS };
-        }
-
-        const equipmentWithName = await this.equipmentRepository.findByNameAndTypeId(input.name, input.typeId);
+        const equipmentWithName = await this.equipmentRepository.findByNameAndTypeId(input.name, currentEquipment.typeId);
         if (equipmentWithName && equipmentWithName.id !== input.id) {
             return { status: EquipmentModificationResult.ALREADY_EXISTS };
         }
 
         const equipment = await this.equipmentRepository.update(input.id, {
             name: input.name,
-            typeId: input.typeId,
             description: input.description
         });
         return { status: EquipmentModificationResult.UPDATED, equipment: toEquipmentDetails(equipment) };

@@ -9,6 +9,7 @@ import {
     generateEquipmentTypeLabel,
     saveEquipmentToDb,
     saveEquipmentTypeToDb,
+    saveSlotToDb,
     saveTestUserToDb
 } from "@test/utils/test-data-generator";
 import { describe, it } from "vitest";
@@ -43,7 +44,7 @@ describe('/api/equipment/type', () => {
             const resp = await equipmentTypeClient.getAllEquipmentTypes();
 
             expect(resp.status).toBe(200);
-            expect(resp.body.equipmentTypes).toStrictEqual([{ id: type.id, label: 'Pajzs' }]);
+            expect(resp.body.equipmentTypes).toStrictEqual([{ id: type.id, label: 'Pajzs', slotId: null }]);
         });
 
         /*
@@ -154,6 +155,36 @@ describe('/api/equipment/type', () => {
 
             expect(createResp.status).toBe(400);
         });
+
+        it('when create a type with an existing slotId then it should be assigned to that slot', async () => {
+            const slot = await saveSlotToDb();
+
+            const createResp = await equipmentTypeClient.createEquipmentType({ label: generateEquipmentTypeLabel(), slotId: slot.id });
+
+            expect(createResp.status).toBe(201);
+            expect(createResp.body.slotId).toBe(slot.id);
+        });
+
+        it('when create a type with a non-existent slotId then should return not exists error', async () => {
+            const createResp = await equipmentTypeClient.createEquipmentType({ label: generateEquipmentTypeLabel(), slotId: -1 });
+
+            expect(createResp.status).toBe(422);
+            expect(createResp.body).toStrictEqual({
+                errorCode: ErrorMessages.SLOT_NOT_EXISTS
+            });
+        });
+
+        it('when two types are created with the same slotId then both should be assigned to it', async () => {
+            const slot = await saveSlotToDb();
+
+            const firstResp = await equipmentTypeClient.createEquipmentType({ label: generateEquipmentTypeLabel(), slotId: slot.id });
+            const secondResp = await equipmentTypeClient.createEquipmentType({ label: generateEquipmentTypeLabel(), slotId: slot.id });
+
+            expect(firstResp.status).toBe(201);
+            expect(secondResp.status).toBe(201);
+            expect(firstResp.body.slotId).toBe(slot.id);
+            expect(secondResp.body.slotId).toBe(slot.id);
+        });
     });
 
     describe('PUT /:id', () => {
@@ -164,7 +195,7 @@ describe('/api/equipment/type', () => {
 
             expect(updateResp.status).toBe(200);
             const listResp = await equipmentTypeClient.getAllEquipmentTypes();
-            expect(listResp.body.equipmentTypes).toStrictEqual([{ id: type.id, label: 'Új név' }]);
+            expect(listResp.body.equipmentTypes).toStrictEqual([{ id: type.id, label: 'Új név', slotId: null }]);
         });
 
         /*
@@ -180,7 +211,7 @@ describe('/api/equipment/type', () => {
             expect(updateResp.status).toBe(200);
             const listResp = await equipmentClient.getAllEquipment();
             const found = listResp.body.equipments.find((item: { id: number }) => item.id === equipment.id);
-            expect(found.type).toStrictEqual({ id: type.id, label: 'Új név' });
+            expect(found.type).toStrictEqual({ id: type.id, label: 'Új név', slotId: null });
         });
 
         it('when save a type with its own unchanged label then should not be a conflict', async () => {
@@ -305,7 +336,8 @@ describe('/api/equipment/type', () => {
             const createEquipmentResp = await equipmentClient.createEquipment({
                 name: equipmentName,
                 typeId,
-                description: 'Az új típusba tartozó felszerelés'
+                description: 'Az új típusba tartozó felszerelés',
+                slotCost: 1
             });
             expect(createEquipmentResp.status).toBe(201);
             const equipmentId = createEquipmentResp.body.id;
@@ -324,7 +356,7 @@ describe('/api/equipment/type', () => {
             const equipment = charactersResp.body[0].equipment;
             expect(equipment.length).toBe(2);
             equipment.forEach((item: { type: EquipmentTypeResponseItem }) => {
-                expect(item.type).toStrictEqual({ id: typeId, label });
+                expect(item.type).toStrictEqual({ id: typeId, label, slotId: null });
             });
         });
     });

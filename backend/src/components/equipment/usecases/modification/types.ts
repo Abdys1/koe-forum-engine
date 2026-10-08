@@ -7,7 +7,6 @@ export interface EquipmentModification {
 export interface ModifyEquipmentInput {
     id: number,
     name: string,
-    typeId: number,
     description: string
 }
 
@@ -19,6 +18,5 @@ export interface ModifyEquipmentOutput {
 export enum EquipmentModificationResult {
     UPDATED,
     NOT_FOUND,
-    ALREADY_EXISTS,
-    TYPE_NOT_EXISTS
+    ALREADY_EXISTS
 }

@@ -32,12 +32,19 @@ export default class EquipmentController {
         const { status, equipment } = await this.equipmentCreation.execute({
             name: req.body.name,
             typeId: Number(req.body.typeId),
-            description: req.body.description
+            description: req.body.description,
+            slotCost: req.body.slotCost === undefined ? undefined : Number(req.body.slotCost)
         });
 
         switch (status) {
             case EquipmentCreationResult.TYPE_NOT_EXISTS:
-                res.status(400).json({ errorCode: ErrorMessages.EQUIPMENT_TYPE_NOT_EXISTS });
+                res.status(422).json({ errorCode: ErrorMessages.EQUIPMENT_TYPE_NOT_EXISTS });
+                return;
+            case EquipmentCreationResult.SLOT_COST_REQUIRED:
+                res.status(422).json({ errorCode: ErrorMessages.EQUIPMENT_SLOT_COST_REQUIRED });
+                return;
+            case EquipmentCreationResult.SLOT_COST_EXCEEDS_CAPACITY:
+                res.status(422).json({ errorCode: ErrorMessages.EQUIPMENT_SLOT_COST_EXCEEDS_CAPACITY });
                 return;
             case EquipmentCreationResult.ALREADY_EXISTS:
                 res.status(409).json({ errorCode: ErrorMessages.EQUIPMENT_ALREADY_EXISTS });
@@ -51,16 +58,12 @@ export default class EquipmentController {
         const { status, equipment } = await this.equipmentModification.execute({
             id: Number(req.params.id),
             name: req.body.name,
-            typeId: Number(req.body.typeId),
             description: req.body.description
         });
 
         switch (status) {
             case EquipmentModificationResult.NOT_FOUND:
                 res.status(404).json({ errorCode: ErrorMessages.EQUIPMENT_NOT_EXISTS });
-                return;
-            case EquipmentModificationResult.TYPE_NOT_EXISTS:
-                res.status(400).json({ errorCode: ErrorMessages.EQUIPMENT_TYPE_NOT_EXISTS });
                 return;
             case EquipmentModificationResult.ALREADY_EXISTS:
                 res.status(409).json({ errorCode: ErrorMessages.EQUIPMENT_ALREADY_EXISTS });

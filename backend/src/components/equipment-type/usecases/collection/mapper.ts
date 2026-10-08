@@ -8,6 +8,7 @@ export function toEquipmentTypeCollectionOutput(equipmentTypes: EquipmentTypeEnt
 export function toEquipmentTypeDetails(equipmentType: EquipmentTypeEntity): EquipmentTypeDetails {
     return {
         id: equipmentType.id,
-        label: equipmentType.label
+        label: equipmentType.label,
+        slotId: equipmentType.slotId ?? null
     };
 }

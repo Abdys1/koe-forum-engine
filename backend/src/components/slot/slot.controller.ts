@@ -26,14 +26,11 @@ export default class SlotController {
 
     public create = async (req: Request, res: Response): Promise<void> => {
         const { status, slot } = await this.slotCreation.execute({
-            equipmentTypeId: Number(req.body.equipmentTypeId),
+            label: req.body.label,
             maxCapacity: Number(req.body.maxCapacity)
         });
 
         switch (status) {
-            case SlotCreationResult.EQUIPMENT_TYPE_NOT_EXISTS:
-                res.status(400).json({ errorCode: ErrorMessages.EQUIPMENT_TYPE_NOT_EXISTS });
-                return;
             case SlotCreationResult.ALREADY_EXISTS:
                 res.status(409).json({ errorCode: ErrorMessages.SLOT_ALREADY_EXISTS });
                 return;

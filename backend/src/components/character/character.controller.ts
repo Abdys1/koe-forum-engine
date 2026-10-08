@@ -35,7 +35,10 @@ export default class CharacterController {
                 res.status(409).json({ errorCode: ErrorMessages.CHARACTER_ALREADY_EXISTS });
                 break;
             case ValidateCharacterUpdateResult.EQUIPMENT_NOT_EXISTS:
-                res.status(400).json({ errorCode: ErrorMessages.EQUIPMENT_NOT_EXISTS });
+                res.status(422).json({ errorCode: ErrorMessages.EQUIPMENT_NOT_EXISTS });
+                break;
+            case ValidateCharacterUpdateResult.SLOT_CAPACITY_EXCEEDED:
+                res.status(422).json({ errorCode: ErrorMessages.CHARACTER_SLOT_CAPACITY_EXCEEDED });
                 break;
         }
         res.send();

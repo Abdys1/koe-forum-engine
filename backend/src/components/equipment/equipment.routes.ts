@@ -15,10 +15,15 @@ const equipmentController = new EquipmentController(
   equipmentRemoval
 );
 
-const writeValidations = [
+const updateValidations = [
   body("name").trim().isLength({ min: 1, max: 255 }).withMessage(ErrorMessages.EQUIPMENT_NAME_INVALID),
-  body("typeId").isInt().withMessage(ErrorMessages.EQUIPMENT_TYPE_ID_INVALID),
   body("description").trim().notEmpty().withMessage(ErrorMessages.EQUIPMENT_DESCRIPTION_REQUIRED),
+];
+
+const createValidations = [
+  ...updateValidations,
+  body("typeId").isInt().withMessage(ErrorMessages.EQUIPMENT_TYPE_ID_INVALID),
+  body("slotCost").optional().isInt({ min: 1 }).withMessage(ErrorMessages.EQUIPMENT_SLOT_COST_INVALID),
 ];
 
 const idValidation = param("id").isInt().withMessage(ErrorMessages.EQUIPMENT_NOT_EXISTS);
@@ -36,6 +41,10 @@ const idValidation = param("id").isInt().withMessage(ErrorMessages.EQUIPMENT_NOT
  *           type: string
  *         description:
  *           type: string
+ *         slotCost:
+ *           type: integer
+ *           nullable: true
+ *           description: Only meaningful (and required on creation) when the equipment's type has a slot; null otherwise
  *         type:
  *           $ref: '#/components/schemas/EquipmentType'
  */
@@ -78,6 +87,10 @@ const idValidation = param("id").isInt().withMessage(ErrorMessages.EQUIPMENT_NOT
  *                 type: integer
  *               description:
  *                 type: string
+ *               slotCost:
+ *                 type: integer
+ *                 minimum: 1
+ *                 description: Required if the equipment type has a slot; omit otherwise
  *     responses:
  *       201:
  *         description: Equipment created
@@ -85,10 +98,10 @@ const idValidation = param("id").isInt().withMessage(ErrorMessages.EQUIPMENT_NOT
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Equipment'
- *       400:
- *         description: The referenced equipment type does not exist
  *       409:
  *         description: Equipment with this name already exists
+ *       422:
+ *         description: The referenced equipment type does not exist, slotCost is missing although required, or slotCost exceeds the slot's max capacity
  */
 
 /**
@@ -96,7 +109,7 @@ const idValidation = param("id").isInt().withMessage(ErrorMessages.EQUIPMENT_NOT
  * /equipment/{id}:
  *   put:
  *     tags: [Equipment]
- *     summary: Update an existing piece of equipment
+ *     summary: Update an existing piece of equipment (name and description only; type and slotCost cannot be changed after creation)
  *     parameters:
  *       - in: path
  *         name: id
@@ -109,14 +122,12 @@ const idValidation = param("id").isInt().withMessage(ErrorMessages.EQUIPMENT_NOT
  *         application/json:
  *           schema:
  *             type: object
- *             required: [name, typeId, description]
+ *             required: [name, description]
  *             properties:
  *               name:
  *                 type: string
  *                 minLength: 1
  *                 maxLength: 255
- *               typeId:
- *                 type: integer
  *               description:
  *                 type: string
  *     responses:
@@ -126,8 +137,6 @@ const idValidation = param("id").isInt().withMessage(ErrorMessages.EQUIPMENT_NOT
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Equipment'
- *       400:
- *         description: The referenced equipment type does not exist
  *       404:
  *         description: Equipment not found
  *       409:
@@ -159,13 +168,13 @@ export default defineRouter([
   {
     path: "/",
     method: HttpMethod.POST,
-    middlewares: writeValidations,
+    middlewares: createValidations,
     controller: equipmentController.create,
   },
   {
     path: "/:id",
     method: HttpMethod.PUT,
-    middlewares: [idValidation, ...writeValidations],
+    middlewares: [idValidation, ...updateValidations],
     controller: equipmentController.update,
   },
   {

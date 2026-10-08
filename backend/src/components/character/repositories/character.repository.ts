@@ -2,7 +2,6 @@ import { PrismaClient } from "@prisma/client";
 import CharacterEntity from "@src/components/character/models/character";
 import { CharacterRepository } from "@src/components/character/repositories/types";
 
-/** A karakter felszerelés-hozzárendelései a hozzárendelt felszereléssel és annak típusával. */
 const ASSIGNMENTS = {
   select: {
     id: true,
@@ -12,6 +11,7 @@ const ASSIGNMENTS = {
         name: true,
         typeId: true,
         description: true,
+        slotCost: true,
         type: { select: { id: true, label: true } }
       }
     }
@@ -64,8 +64,6 @@ export default class CharacterRepositoryImpl implements CharacterRepository {
         race: character.race,
         imageUrl: character.imageUrl,
         user: { connect: { id: character.userId } },
-        // Nested `create` és nem `connect`/`connectOrCreate`: minden tömbelemre külön
-        // sor íródik, tehát a duplikátumok megmaradnak.
         equipment: {
           create: character.equipmentIds.map((equipmentId) => ({ equipmentId })),
         },

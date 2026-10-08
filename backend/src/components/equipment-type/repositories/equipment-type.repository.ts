@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { EquipmentTypeEntity } from "@src/components/equipment-type/models/equipment-type";
 import { EquipmentTypeRepository } from "@src/components/equipment-type/repositories/types";
 
-const FIELDS = { id: true, label: true } as const;
+const FIELDS = { id: true, label: true, slotId: true } as const;
 
 export default class EquipmentTypeRepositoryImpl implements EquipmentTypeRepository {
     private db: PrismaClient;
@@ -36,7 +36,7 @@ export default class EquipmentTypeRepositoryImpl implements EquipmentTypeReposit
     public create = async (equipmentType: EquipmentTypeEntity): Promise<EquipmentTypeEntity> => {
         return this.db.equipmentType.create({
             select: FIELDS,
-            data: { label: equipmentType.label }
+            data: { label: equipmentType.label, slotId: equipmentType.slotId ?? null }
         });
     };
 

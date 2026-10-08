@@ -5,7 +5,7 @@ export interface SlotCreation {
 }
 
 export interface CreateSlotInput {
-    equipmentTypeId: number,
+    label: string,
     maxCapacity: number
 }
 
@@ -16,6 +16,5 @@ export interface CreateSlotOutput {
 
 export enum SlotCreationResult {
     CREATED,
-    ALREADY_EXISTS,
-    EQUIPMENT_TYPE_NOT_EXISTS
+    ALREADY_EXISTS
 }

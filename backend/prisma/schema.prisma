@@ -37,6 +37,7 @@ model Equipment {
   typeId Int
   type EquipmentType @relation(fields: [typeId], references: [id])
   description String
+  slotCost Int?
   characterLinks CharacterEquipment[]
 
   @@unique([name, typeId])
@@ -46,7 +47,17 @@ model EquipmentType {
   id Int @id @default(autoincrement())
   label String @unique @db.VarChar(128)
   createdAt DateTime @default(now())
+  slotId Int?
+  slot Slot? @relation(fields: [slotId], references: [id], onDelete: SetNull)
   equipment Equipment[]
+}
+
+model Slot {
+  id Int @id @default(autoincrement())
+  label String @unique @db.VarChar(128)
+  maxCapacity Int
+  createdAt DateTime @default(now())
+  equipmentTypes EquipmentType[]
 }
 
 model CharacterEquipment {

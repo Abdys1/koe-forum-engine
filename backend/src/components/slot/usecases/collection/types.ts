@@ -4,7 +4,7 @@ export interface SlotCollection {
 
 export interface SlotDetails {
     id?: number;
-    equipmentTypeId: number;
+    label: string;
     maxCapacity: number;
 }
 

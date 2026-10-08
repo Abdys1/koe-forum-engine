@@ -8,6 +8,7 @@ import {
     saveEquipmentListToDb,
     saveEquipmentToDb,
     saveEquipmentTypeToDb,
+    saveSlotToDb,
     saveTestUserToDb
 } from "@test/utils/test-data-generator";
 import { describe, it } from "vitest";
@@ -16,6 +17,7 @@ interface EquipmentResponseItem {
     id: number;
     name: string;
     description: string;
+    slotCost: number | null;
     type: { id: number; label: string };
 }
 
@@ -54,7 +56,7 @@ describe('/api/equipment', () => {
 
             expect(resp.status).toBe(200);
             expect(resp.body.equipments.length).toBe(1);
-            expect(resp.body.equipments[0].type).toStrictEqual({ id: type.id, label: 'Pajzs' });
+            expect(resp.body.equipments[0].type).toStrictEqual({ id: type.id, label: 'Pajzs', slotId: null });
         });
 
         it('when there is no equipment then should return an empty list', async () => {
@@ -81,7 +83,7 @@ describe('/api/equipment', () => {
             const created = listResp.body.equipments.find((item: EquipmentResponseItem) => item.name === name);
             expect(created).toBeDefined();
             expect(created.description).toBe('Egy vadonatúj felszerelés');
-            expect(created.type).toStrictEqual({ id: type.id, label: type.label });
+            expect(created.type).toStrictEqual({ id: type.id, label: type.label, slotId: null });
         });
 
         it('when create equipment then should return the created equipment with its id', async () => {
@@ -106,7 +108,7 @@ describe('/api/equipment', () => {
                 description: 'Leírás'
             });
 
-            expect(createResp.status).toBe(400);
+            expect(createResp.status).toBe(422);
             expect(createResp.body).toStrictEqual({
                 errorCode: ErrorMessages.EQUIPMENT_TYPE_NOT_EXISTS
             });
@@ -172,6 +174,103 @@ describe('/api/equipment', () => {
 
             expect(createResp.status).toBe(400);
         });
+
+        it('when create equipment with a slot cost below one then should return validation error', async () => {
+            const type = await saveEquipmentTypeToDb();
+
+            const createResp = await equipmentClient.createEquipment({
+                name: generateEquipmentName(),
+                typeId: type.id,
+                description: 'Leírás',
+                slotCost: 0
+            });
+
+            expect(createResp.status).toBe(400);
+        });
+
+        it('when the equipment type has no slot then slot cost should not be required', async () => {
+            const type = await saveEquipmentTypeToDb();
+            const name = generateEquipmentName();
+
+            const createResp = await equipmentClient.createEquipment({
+                name,
+                typeId: type.id,
+                description: 'Leírás'
+            });
+
+            expect(createResp.status).toBe(201);
+            const listResp = await equipmentClient.getAllEquipment();
+            const created = listResp.body.equipments.find((item: EquipmentResponseItem) => item.name === name);
+            expect(created.slotCost).toBeNull();
+        });
+
+        it('when the equipment type has no slot then a slot cost in the body should be ignored', async () => {
+            const type = await saveEquipmentTypeToDb();
+            const name = generateEquipmentName();
+
+            const createResp = await equipmentClient.createEquipment({
+                name,
+                typeId: type.id,
+                description: 'Leírás',
+                slotCost: 5
+            });
+
+            expect(createResp.status).toBe(201);
+            const listResp = await equipmentClient.getAllEquipment();
+            const created = listResp.body.equipments.find((item: EquipmentResponseItem) => item.name === name);
+            expect(created.slotCost).toBeNull();
+        });
+
+        it('when the equipment type has a slot then slot cost should be required', async () => {
+            const slot = await saveSlotToDb({ maxCapacity: 1 });
+            const type = await saveEquipmentTypeToDb(undefined, slot.id);
+
+            const createResp = await equipmentClient.createEquipment({
+                name: generateEquipmentName(),
+                typeId: type.id,
+                description: 'Leírás'
+            });
+
+            expect(createResp.status).toBe(422);
+            expect(createResp.body).toStrictEqual({
+                errorCode: ErrorMessages.EQUIPMENT_SLOT_COST_REQUIRED
+            });
+        });
+
+        it('when the equipment type has a slot then a slot cost exceeding its max capacity should be rejected', async () => {
+            const slot = await saveSlotToDb({ maxCapacity: 1 });
+            const type = await saveEquipmentTypeToDb(undefined, slot.id);
+
+            const createResp = await equipmentClient.createEquipment({
+                name: generateEquipmentName(),
+                typeId: type.id,
+                description: 'Leírás',
+                slotCost: 2
+            });
+
+            expect(createResp.status).toBe(422);
+            expect(createResp.body).toStrictEqual({
+                errorCode: ErrorMessages.EQUIPMENT_SLOT_COST_EXCEEDS_CAPACITY
+            });
+        });
+
+        it('when the equipment type has a slot then a slot cost equal to its max capacity should be accepted', async () => {
+            const slot = await saveSlotToDb({ maxCapacity: 2 });
+            const type = await saveEquipmentTypeToDb(undefined, slot.id);
+            const name = generateEquipmentName();
+
+            const createResp = await equipmentClient.createEquipment({
+                name,
+                typeId: type.id,
+                description: 'Kétkezes fegyver',
+                slotCost: 2
+            });
+
+            expect(createResp.status).toBe(201);
+            const listResp = await equipmentClient.getAllEquipment();
+            const created = listResp.body.equipments.find((item: EquipmentResponseItem) => item.name === name);
+            expect(created.slotCost).toBe(2);
+        });
     });
 
     describe('PUT /:id', () => {
@@ -182,7 +281,6 @@ describe('/api/equipment', () => {
 
             const updateResp = await equipmentClient.updateEquipment(equipment.id, {
                 name: newName,
-                typeId: type.id,
                 description: 'Frissített leírás'
             });
 
@@ -193,7 +291,7 @@ describe('/api/equipment', () => {
             expect(listResp.body.equipments[0].description).toBe('Frissített leírás');
         });
 
-        it('when update equipment to another type then the response should contain the new type', async () => {
+        it('when update equipment with a different type id in the body then it should be ignored', async () => {
             const firstType = await saveEquipmentTypeToDb();
             const secondType = await saveEquipmentTypeToDb();
             const equipment = await saveEquipmentToDb({ typeId: firstType.id });
@@ -205,16 +303,14 @@ describe('/api/equipment', () => {
             });
 
             expect(updateResp.status).toBe(200);
+            expect(updateResp.body.type).toStrictEqual({ id: firstType.id, label: firstType.label, slotId: null });
             const listResp = await equipmentClient.getAllEquipment();
-            expect(listResp.body.equipments[0].type).toStrictEqual({ id: secondType.id, label: secondType.label });
+            expect(listResp.body.equipments[0].type).toStrictEqual({ id: firstType.id, label: firstType.label, slotId: null });
         });
 
         it('when update a non-existent equipment then should return not exists error', async () => {
-            const type = await saveEquipmentTypeToDb();
-
             const updateResp = await equipmentClient.updateEquipment(-1, {
                 name: generateEquipmentName(),
-                typeId: type.id,
                 description: 'Leírás'
             });
 
@@ -224,19 +320,19 @@ describe('/api/equipment', () => {
             });
         });
 
-        it('when update equipment to a non-existent type then should return equipment type not exists error', async () => {
-            const equipment = await saveEquipmentToDb();
+        it('when update equipment with a slot cost in the body then it should be ignored', async () => {
+            const equipment = await saveEquipmentToDb({ slotCost: 2 });
 
             const updateResp = await equipmentClient.updateEquipment(equipment.id, {
                 name: equipment.name,
-                typeId: -1,
-                description: equipment.description
+                description: equipment.description,
+                slotCost: 5
             });
 
-            expect(updateResp.status).toBe(400);
-            expect(updateResp.body).toStrictEqual({
-                errorCode: ErrorMessages.EQUIPMENT_TYPE_NOT_EXISTS
-            });
+            expect(updateResp.status).toBe(200);
+            expect(updateResp.body.slotCost).toBe(2);
+            const listResp = await equipmentClient.getAllEquipment();
+            expect(listResp.body.equipments[0].slotCost).toBe(2);
         });
     });
 

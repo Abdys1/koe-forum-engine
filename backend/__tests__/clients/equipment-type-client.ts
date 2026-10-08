@@ -3,6 +3,7 @@ import { Response } from "supertest";
 
 export interface EquipmentTypeWriteRequestBody {
     label?: string | null;
+    slotId?: number | string | null;
 }
 
 export default class EquipmentTypeClient extends BaseClient {

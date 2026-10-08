@@ -20,5 +20,6 @@ export interface ValidateCharacterUpdateOutput {
 export enum ValidateCharacterUpdateResult {
     VALID,
     ALREADY_EXISTS,
-    EQUIPMENT_NOT_EXISTS
+    EQUIPMENT_NOT_EXISTS,
+    SLOT_CAPACITY_EXCEEDED
 }

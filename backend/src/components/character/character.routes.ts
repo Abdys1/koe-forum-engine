@@ -88,10 +88,10 @@ const characterController = new CharacterController(characterRegistration, chara
  *     responses:
  *       200:
  *         description: Character created
- *       400:
- *         description: One of the referenced equipment ids does not exist
  *       409:
  *         description: A character with this name already exists
+ *       422:
+ *         description: One of the referenced equipment ids does not exist, or the equipment list exceeds a slot's capacity
  */
 export default defineRouter([
     {

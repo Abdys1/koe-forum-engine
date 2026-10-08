@@ -1,102 +1,69 @@
 import { db } from "@src/prisma-client";
 
-/**
- * A 6 alaptípus megjelenített neve. A kulcsok a korábbi Prisma enum értékei —
- * csak a seed olvashatóságát segítik, a DB-ben egyedül a label azonosít.
- */
-export const EquipmentTypeLabels = {
-  PRIMARY_WEAPON: "Elsődleges fegyver",
-  SECONDARY_WEAPON: "Másodlagos fegyver",
+const EquipmentTypeLabels = {
+  WEAPON: "Fegyver",
   HELMET: "Fejvédő",
   BODY_ARMOR: "Testpáncél",
   SECONDARY_ARMOR: "Másodlagos páncél",
   SHIELD: "Pajzs",
 } as const;
 
+const maxCapacityByLabel: Record<string, number> = {
+  [EquipmentTypeLabels.WEAPON]: 2,
+  [EquipmentTypeLabels.BODY_ARMOR]: 1,
+  [EquipmentTypeLabels.SECONDARY_ARMOR]: 1,
+  [EquipmentTypeLabels.HELMET]: 1,
+  [EquipmentTypeLabels.SHIELD]: 1,
+};
+
 const equipment = [
   {
     name: "Hosszúkard",
-    type: EquipmentTypeLabels.PRIMARY_WEAPON,
+    type: EquipmentTypeLabels.WEAPON,
     description:
       "A hosszúkard lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
   },
   {
     name: "Rövidkard",
-    type: EquipmentTypeLabels.PRIMARY_WEAPON,
+    type: EquipmentTypeLabels.WEAPON,
     description:
       "Rövidkard ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
   },
   {
     name: "Fokos",
-    type: EquipmentTypeLabels.PRIMARY_WEAPON,
+    type: EquipmentTypeLabels.WEAPON,
     description:
       "A fokos lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
   },
   {
     name: "Pöröly",
-    type: EquipmentTypeLabels.PRIMARY_WEAPON,
+    type: EquipmentTypeLabels.WEAPON,
     description:
       "A pöröly lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
   },
   {
     name: "Csatabárd",
-    type: EquipmentTypeLabels.PRIMARY_WEAPON,
+    type: EquipmentTypeLabels.WEAPON,
     description:
       "Csatabárddal lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
   },
   {
     name: "Lándzsa",
-    type: EquipmentTypeLabels.PRIMARY_WEAPON,
+    type: EquipmentTypeLabels.WEAPON,
     description:
       "A lándzsa lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
   },
   {
     name: "Szegecses kesztyű",
-    type: EquipmentTypeLabels.PRIMARY_WEAPON,
+    type: EquipmentTypeLabels.WEAPON,
     description:
       "Vedd fel a kesztyűt vagy lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
   },
   {
     name: "Szablya",
-    type: EquipmentTypeLabels.SECONDARY_WEAPON,
+    type: EquipmentTypeLabels.WEAPON,
     description:
       "A szablya lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Rövidkard",
-    type: EquipmentTypeLabels.SECONDARY_WEAPON,
-    description:
-      "Rövidkard ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Fokos",
-    type: EquipmentTypeLabels.SECONDARY_WEAPON,
-    description:
-      "A fokos lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Pöröly",
-    type: EquipmentTypeLabels.SECONDARY_WEAPON,
-    description:
-      "A pöröly lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Csatabárd",
-    type: EquipmentTypeLabels.SECONDARY_WEAPON,
-    description:
-      "Csatabárddal lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Lándzsa",
-    type: EquipmentTypeLabels.SECONDARY_WEAPON,
-    description:
-      "A lándzsa lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Szegecses kesztyű",
-    type: EquipmentTypeLabels.SECONDARY_WEAPON,
-    description:
-      "Vedd fel a kesztyűt vagy lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
   },
   {
     name: "Kerek fapajzs",
@@ -268,21 +235,37 @@ const equipment = [
   },
 ];
 
-export async function seedEquipmentTypes(): Promise<Map<string, number>> {
+async function seedSlots(): Promise<Map<string, number>> {
+  const slotIdsByLabel = new Map<string, number>();
+  for (const [label, maxCapacity] of Object.entries(maxCapacityByLabel)) {
+    const slot = await db.slot.upsert({
+      where: { label },
+      update: { maxCapacity },
+      create: { label, maxCapacity },
+    });
+    slotIdsByLabel.set(label, slot.id);
+  }
+  return slotIdsByLabel;
+}
+
+async function seedEquipmentTypes(slotIdsByLabel: Map<string, number>): Promise<Map<string, number>> {
   const typeIdsByLabel = new Map<string, number>();
   for (const label of Object.values(EquipmentTypeLabels)) {
+    const slotId = slotIdsByLabel.get(label) ?? null;
     const equipmentType = await db.equipmentType.upsert({
       where: { label },
-      update: {},
-      create: { label },
+      update: { slotId },
+      create: { label, slotId },
     });
     typeIdsByLabel.set(label, equipmentType.id);
   }
   return typeIdsByLabel;
 }
 
-export async function seedEquipment() {
-  const typeIdsByLabel = await seedEquipmentTypes();
+export async function seedEquipment(): Promise<void> {
+  const slotIdsByLabel = await seedSlots();
+  const typeIdsByLabel = await seedEquipmentTypes(slotIdsByLabel);
+
   for (const item of equipment) {
     const typeId = typeIdsByLabel.get(item.type);
     if (typeId === undefined) {
@@ -295,6 +278,7 @@ export async function seedEquipment() {
         name: item.name,
         typeId,
         description: item.description,
+        slotCost: 1,
       },
     });
   }

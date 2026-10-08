@@ -7,7 +7,8 @@ export interface EquipmentCreation {
 export interface CreateEquipmentInput {
     name: string,
     typeId: number,
-    description: string
+    description: string,
+    slotCost?: number
 }
 
 export interface CreateEquipmentOutput {
@@ -18,5 +19,7 @@ export interface CreateEquipmentOutput {
 export enum EquipmentCreationResult {
     CREATED,
     ALREADY_EXISTS,
-    TYPE_NOT_EXISTS
+    TYPE_NOT_EXISTS,
+    SLOT_COST_REQUIRED,
+    SLOT_COST_EXCEEDS_CAPACITY
 }

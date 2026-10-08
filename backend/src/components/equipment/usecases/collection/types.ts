@@ -8,6 +8,7 @@ export interface EquipmentCollectionDetails {
     id?: number;
     name: string;
     description: string;
+    slotCost: number | null;
     type?: EquipmentTypeDetails;
 }
 

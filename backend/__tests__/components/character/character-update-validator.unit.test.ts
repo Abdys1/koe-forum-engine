@@ -2,12 +2,13 @@ import { CharacterRepository } from '@src/components/character/repositories/type
 import { Sex } from '@src/components/character/types';
 import CharacterUpdateValidatorImpl from '@src/components/character/usecases/update_validator/character-update-validator';
 import { CharacterUpdateValidator, ValidateCharacterUpdateInput, ValidateCharacterUpdateResult } from '@src/components/character/usecases/update_validator/types';
-import { EquipmentExistenceValidation } from '@src/components/equipment/usecases/validation/types';
+import { EquipmentExistenceValidation, SlotCapacityValidation } from '@src/components/equipment/usecases/validation/types';
 import { beforeEach, describe, expect, it, Mocked, vi } from 'vitest';
 
 describe('CharacterUpdateValidator', () => {
     let characterRepository: Mocked<CharacterRepository>;
     let equipmentExistenceValidation: Mocked<EquipmentExistenceValidation>;
+    let slotCapacityValidation: Mocked<SlotCapacityValidation>;
     let characterUpdateValidator: CharacterUpdateValidator;
 
     beforeEach(() => {
@@ -17,7 +18,8 @@ describe('CharacterUpdateValidator', () => {
             existsByCharacterName: vi.fn().mockResolvedValue(false),
         };
         equipmentExistenceValidation = { execute: vi.fn().mockResolvedValue(true) };
-        characterUpdateValidator = new CharacterUpdateValidatorImpl(characterRepository, equipmentExistenceValidation);
+        slotCapacityValidation = { execute: vi.fn().mockResolvedValue(true) };
+        characterUpdateValidator = new CharacterUpdateValidatorImpl(characterRepository, equipmentExistenceValidation, slotCapacityValidation);
     });
 
     describe('execute()', () => {
@@ -79,6 +81,28 @@ describe('CharacterUpdateValidator', () => {
             const result = await characterUpdateValidator.execute(inputWithEquipmentIds([4, 4, -1]));
 
             expect(result.status).toBe(ValidateCharacterUpdateResult.EQUIPMENT_NOT_EXISTS);
+        });
+
+        it('should return SLOT_CAPACITY_EXCEEDED when the equipment list exceeds a slot capacity', async () => {
+            slotCapacityValidation.execute.mockResolvedValue(false);
+
+            const result = await characterUpdateValidator.execute(inputWithEquipmentIds([1, 2, 3]));
+
+            expect(result.status).toBe(ValidateCharacterUpdateResult.SLOT_CAPACITY_EXCEEDED);
+        });
+
+        it('should not check slot capacity when the equipment does not exist', async () => {
+            equipmentExistenceValidation.execute.mockResolvedValue(false);
+
+            await characterUpdateValidator.execute(inputWithEquipmentIds([1, -1]));
+
+            expect(slotCapacityValidation.execute).not.toHaveBeenCalled();
+        });
+
+        it('should pass the equipment id list to the slot capacity validation', async () => {
+            await characterUpdateValidator.execute(inputWithEquipmentIds([3, 8]));
+
+            expect(slotCapacityValidation.execute).toHaveBeenCalledWith([3, 8]);
         });
     });
 

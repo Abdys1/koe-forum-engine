@@ -11,6 +11,7 @@ export function toEquipmentDetails(equipment: EquipmentEntity): EquipmentCollect
         id: equipment.id,
         name: equipment.name,
         description: equipment.description,
+        slotCost: equipment.slotCost,
         type: equipment.type ? toEquipmentTypeDetails(equipment.type) : undefined
     };
 }

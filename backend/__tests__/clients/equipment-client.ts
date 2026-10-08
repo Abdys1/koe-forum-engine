@@ -5,6 +5,7 @@ export interface EquipmentWriteRequestBody {
     name?: string;
     typeId?: number | string | null;
     description?: string;
+    slotCost?: number | string | null;
 }
 
 export default class EquipmentClient extends BaseClient {

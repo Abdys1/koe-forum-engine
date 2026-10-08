@@ -9,7 +9,7 @@ import { body, param } from "express-validator";
 
 const slotController = new SlotController(slotCollection, slotCreation, slotRemoval);
 
-const equipmentTypeIdValidation = body("equipmentTypeId").isInt().withMessage(ErrorMessages.EQUIPMENT_TYPE_ID_INVALID);
+const labelValidation = body("label").trim().isLength({ min: 1, max: 128 }).withMessage(ErrorMessages.SLOT_LABEL_INVALID);
 const maxCapacityValidation = body("maxCapacity").isInt({ min: 1 }).withMessage(ErrorMessages.SLOT_MAX_CAPACITY_INVALID);
 const idValidation = param("id").isInt().withMessage(ErrorMessages.SLOT_NOT_EXISTS);
 
@@ -22,8 +22,8 @@ const idValidation = param("id").isInt().withMessage(ErrorMessages.SLOT_NOT_EXIS
  *       properties:
  *         id:
  *           type: integer
- *         equipmentTypeId:
- *           type: integer
+ *         label:
+ *           type: string
  *         maxCapacity:
  *           type: integer
  */
@@ -48,17 +48,19 @@ const idValidation = param("id").isInt().withMessage(ErrorMessages.SLOT_NOT_EXIS
  *                     $ref: '#/components/schemas/Slot'
  *   post:
  *     tags: [Slot]
- *     summary: Create a slot for an equipment type
+ *     summary: Create a slot (a shared equip-capacity pool that one or more equipment types can be assigned to)
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
- *             required: [equipmentTypeId, maxCapacity]
+ *             required: [label, maxCapacity]
  *             properties:
- *               equipmentTypeId:
- *                 type: integer
+ *               label:
+ *                 type: string
+ *                 minLength: 1
+ *                 maxLength: 128
  *               maxCapacity:
  *                 type: integer
  *                 minimum: 1
@@ -69,10 +71,8 @@ const idValidation = param("id").isInt().withMessage(ErrorMessages.SLOT_NOT_EXIS
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Slot'
- *       400:
- *         description: The referenced equipment type does not exist
  *       409:
- *         description: The referenced equipment type already has a slot
+ *         description: A slot with this label already exists
  */
 
 /**
@@ -102,7 +102,7 @@ export default defineRouter([
     {
         path: '/',
         method: HttpMethod.POST,
-        middlewares: [equipmentTypeIdValidation, maxCapacityValidation],
+        middlewares: [labelValidation, maxCapacityValidation],
         controller: slotController.create
     },
     {

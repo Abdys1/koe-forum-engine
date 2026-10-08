@@ -1,5 +1,5 @@
 export interface SlotEntity {
   id?: number;
-  equipmentTypeId: number;
+  label: string;
   maxCapacity: number;
 }

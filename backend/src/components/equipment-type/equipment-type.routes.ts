@@ -18,6 +18,8 @@ const equipmentTypeController = new EquipmentTypeController(
 const labelValidation = body('label').trim().isLength({ min: 1, max: 128 })
     .withMessage(ErrorMessages.EQUIPMENT_TYPE_LABEL_INVALID);
 
+const slotIdValidation = body('slotId').optional().isInt().withMessage(ErrorMessages.EQUIPMENT_TYPE_SLOT_ID_INVALID);
+
 const idValidation = param('id').isInt().withMessage(ErrorMessages.EQUIPMENT_TYPE_NOT_EXISTS);
 
 /**
@@ -31,6 +33,9 @@ const idValidation = param('id').isInt().withMessage(ErrorMessages.EQUIPMENT_TYP
  *           type: integer
  *         label:
  *           type: string
+ *         slotId:
+ *           type: integer
+ *           nullable: true
  */
 
 /**
@@ -66,6 +71,9 @@ const idValidation = param('id').isInt().withMessage(ErrorMessages.EQUIPMENT_TYP
  *                 type: string
  *                 minLength: 1
  *                 maxLength: 128
+ *               slotId:
+ *                 type: integer
+ *                 description: Optional — assigns this type to an existing Slot (several types may share the same Slot)
  *     responses:
  *       201:
  *         description: Equipment type created
@@ -75,6 +83,8 @@ const idValidation = param('id').isInt().withMessage(ErrorMessages.EQUIPMENT_TYP
  *               $ref: '#/components/schemas/EquipmentType'
  *       409:
  *         description: An equipment type with this label already exists
+ *       422:
+ *         description: The referenced slotId does not exist
  */
 
 /**
@@ -138,7 +148,7 @@ export default defineRouter([
     {
         path: '/',
         method: HttpMethod.POST,
-        middlewares: [labelValidation],
+        middlewares: [labelValidation, slotIdValidation],
         controller: equipmentTypeController.create
     },
     {

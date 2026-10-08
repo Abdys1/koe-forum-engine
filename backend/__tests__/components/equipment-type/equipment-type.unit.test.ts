@@ -7,10 +7,12 @@ import EquipmentTypeModificationImpl from '@src/components/equipment-type/usecas
 import { EquipmentTypeModification, EquipmentTypeModificationResult } from '@src/components/equipment-type/usecases/modification/types';
 import EquipmentTypeRemovalImpl from '@src/components/equipment-type/usecases/removal/equipment-type-removal';
 import { EquipmentTypeRemoval, EquipmentTypeRemovalResult } from '@src/components/equipment-type/usecases/removal/types';
+import { SlotRepository } from '@src/components/slot/repositories/types';
 import { beforeEach, describe, expect, it, Mocked, vi } from 'vitest';
 
 describe('equipment-type use cases', () => {
     let equipmentTypeRepository: Mocked<EquipmentTypeRepository>;
+    let slotRepository: Mocked<SlotRepository>;
 
     beforeEach(() => {
         equipmentTypeRepository = {
@@ -21,6 +23,13 @@ describe('equipment-type use cases', () => {
             create: vi.fn().mockImplementation(async (entity) => ({ id: 1, ...entity })),
             update: vi.fn().mockImplementation(async (id, label) => ({ id, label })),
             delete: vi.fn().mockResolvedValue(undefined),
+        };
+        slotRepository = {
+            findAll: vi.fn().mockResolvedValue([]),
+            findById: vi.fn().mockResolvedValue({ id: 1, label: 'Fegyver', maxCapacity: 2 }),
+            findByLabelIgnoreCase: vi.fn().mockResolvedValue(null),
+            create: vi.fn(),
+            delete: vi.fn(),
         };
     });
 
@@ -33,15 +42,15 @@ describe('equipment-type use cases', () => {
 
         it('should return the types provided by the database', async () => {
             equipmentTypeRepository.findAll.mockResolvedValue([
-                { id: 2, label: 'Fejvédő' },
-                { id: 1, label: 'Pajzs' },
+                { id: 2, label: 'Fejvédő', slotId: 9 },
+                { id: 1, label: 'Pajzs', slotId: null },
             ]);
 
             const result = await equipmentTypeCollection.execute();
 
             expect(result).toStrictEqual([
-                { id: 2, label: 'Fejvédő' },
-                { id: 1, label: 'Pajzs' },
+                { id: 2, label: 'Fejvédő', slotId: 9 },
+                { id: 1, label: 'Pajzs', slotId: null },
             ]);
         });
 
@@ -56,14 +65,14 @@ describe('equipment-type use cases', () => {
         let equipmentTypeCreation: EquipmentTypeCreation;
 
         beforeEach(() => {
-            equipmentTypeCreation = new EquipmentTypeCreationImpl(equipmentTypeRepository);
+            equipmentTypeCreation = new EquipmentTypeCreationImpl(equipmentTypeRepository, slotRepository);
         });
 
         it('should create the type and return CREATED', async () => {
             const result = await equipmentTypeCreation.execute({ label: 'Gyűrű' });
 
             expect(result.status).toBe(EquipmentTypeCreationResult.CREATED);
-            expect(result.equipmentType).toStrictEqual({ id: 1, label: 'Gyűrű' });
+            expect(result.equipmentType).toStrictEqual({ id: 1, label: 'Gyűrű', slotId: null });
         });
 
         it('should return ALREADY_EXISTS when the label is taken', async () => {
@@ -78,14 +87,14 @@ describe('equipment-type use cases', () => {
         it('should trim the label before saving it', async () => {
             await equipmentTypeCreation.execute({ label: '  Gyűrű  ' });
 
-            expect(equipmentTypeRepository.create).toHaveBeenCalledWith({ label: 'Gyűrű' });
+            expect(equipmentTypeRepository.create).toHaveBeenCalledWith({ label: 'Gyűrű', slotId: null });
         });
 
         it('should check uniqueness with the trimmed label', async () => {
             equipmentTypeRepository.findByLabelIgnoreCase.mockResolvedValue({ id: 5, label: 'Gyűrű' });
             await equipmentTypeCreation.execute({ label: '  Gyűrű  ' });
 
-            expect(equipmentTypeRepository.create).not.toHaveBeenCalledWith({ label: 'Gyűrű' });
+            expect(equipmentTypeRepository.create).not.toHaveBeenCalled();
         });
 
         it('should return ALREADY_EXISTS when only the casing differs', async () => {
@@ -94,6 +103,22 @@ describe('equipment-type use cases', () => {
             const result = await equipmentTypeCreation.execute({ label: 'pajzs' });
 
             expect(result.status).toBe(EquipmentTypeCreationResult.ALREADY_EXISTS);
+        });
+
+        it('should create the type with the given slotId when the slot exists', async () => {
+            const result = await equipmentTypeCreation.execute({ label: 'Fegyver', slotId: 1 });
+
+            expect(result.status).toBe(EquipmentTypeCreationResult.CREATED);
+            expect(equipmentTypeRepository.create).toHaveBeenCalledWith({ label: 'Fegyver', slotId: 1 });
+        });
+
+        it('should return SLOT_NOT_EXISTS when the referenced slot does not exist', async () => {
+            slotRepository.findById.mockResolvedValue(null);
+
+            const result = await equipmentTypeCreation.execute({ label: 'Fegyver', slotId: 404 });
+
+            expect(result.status).toBe(EquipmentTypeCreationResult.SLOT_NOT_EXISTS);
+            expect(equipmentTypeRepository.create).not.toHaveBeenCalled();
         });
     });
 

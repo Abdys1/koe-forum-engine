@@ -9,6 +9,7 @@ import {
   saveEquipmentListToDb,
   saveEquipmentToDb,
   saveEquipmentTypeToDb,
+  saveSlotToDb,
   saveTestUserToDb,
 } from "@test/utils/test-data-generator";
 import { assertFieldError } from "@test/utils/validator-test-helper";
@@ -196,7 +197,7 @@ describe("/api/characters", () => {
       expect(equipment[0].id).toBe(potion.id);
       expect(equipment[0].name).toBe("Gyógyító ital");
       expect(equipment[0].description).toBe("Gyógyít");
-      expect(equipment[0].type).toStrictEqual({ id: type.id, label: "Bájital" });
+      expect(equipment[0].type).toStrictEqual({ id: type.id, label: "Bájital", slotId: null });
     });
 
     it("when character already exists then should not be added", async () => {
@@ -300,7 +301,7 @@ describe("/api/characters", () => {
     it("when try create character with non-existent equipment then should return equipment not exists error", async () => {
       const character = characterReq({ equipmentIds: [-1] });
       const resp = await createCharacterToRandomUser(character);
-      expect(resp.status).toBe(400);
+      expect(resp.status).toBe(422);
       expect(resp.body).toStrictEqual({
         errorCode: ErrorMessages.EQUIPMENT_NOT_EXISTS,
       });
@@ -312,7 +313,7 @@ describe("/api/characters", () => {
         equipmentIds: [potion.id, potion.id, -1],
       });
       const resp = await createCharacterToRandomUser(character);
-      expect(resp.status).toBe(400);
+      expect(resp.status).toBe(422);
       expect(resp.body).toStrictEqual({
         errorCode: ErrorMessages.EQUIPMENT_NOT_EXISTS,
       });
@@ -360,6 +361,129 @@ describe("/api/characters", () => {
       assertFieldError(resp, "imageUrl", [
         ErrorMessages.CHARACTER_IMAGE_URL_REQUIRED,
       ]);
+    });
+  });
+
+  describe("slot capacity", () => {
+    it("when equipment is within its slot capacity then the character should be created", async () => {
+      const slot = await saveSlotToDb({ maxCapacity: 2 });
+      const type = await saveEquipmentTypeToDb(undefined, slot.id);
+      const equipment = await saveEquipmentListToDb(2, type.id);
+      const character = characterReq({
+        equipmentIds: equipment.map((item) => item.id),
+      });
+
+      const resp = await createCharacterToRandomUser(character);
+
+      expect(resp.status).toBe(200);
+    });
+
+    it("when equipment exceeds its slot capacity then should return slot capacity exceeded error", async () => {
+      const slot = await saveSlotToDb({ maxCapacity: 2 });
+      const type = await saveEquipmentTypeToDb(undefined, slot.id);
+      const equipment = await saveEquipmentListToDb(3, type.id);
+      const character = characterReq({
+        equipmentIds: equipment.map((item) => item.id),
+      });
+
+      const resp = await createCharacterToRandomUser(character);
+
+      expect(resp.status).toBe(422);
+      expect(resp.body).toStrictEqual({
+        errorCode: ErrorMessages.CHARACTER_SLOT_CAPACITY_EXCEEDED,
+      });
+    });
+
+    it("when equipment exceeds its slot capacity then should not save the character", async () => {
+      const user = await saveTestUserToDb();
+      const slot = await saveSlotToDb({ maxCapacity: 1 });
+      const type = await saveEquipmentTypeToDb(undefined, slot.id);
+      const equipment = await saveEquipmentListToDb(2, type.id);
+      const character = characterReq({
+        equipmentIds: equipment.map((item) => item.id),
+      });
+
+      await characterClient.createCharacter(user.username, character);
+
+      await assertUserCharacterList(user.username, []);
+    });
+
+    it("when the same equipment repeated exceeds its slot capacity then should return slot capacity exceeded error", async () => {
+      const slot = await saveSlotToDb({ maxCapacity: 2 });
+      const type = await saveEquipmentTypeToDb(undefined, slot.id);
+      const potion = await saveEquipmentToDb({ typeId: type.id });
+      const character = characterReq({
+        equipmentIds: [potion.id, potion.id, potion.id],
+      });
+
+      const resp = await createCharacterToRandomUser(character);
+
+      expect(resp.status).toBe(422);
+      expect(resp.body).toStrictEqual({
+        errorCode: ErrorMessages.CHARACTER_SLOT_CAPACITY_EXCEEDED,
+      });
+    });
+
+    it("when equipment with a slot cost above one is combined with another item then it should count accordingly toward the capacity", async () => {
+      const slot = await saveSlotToDb({ maxCapacity: 2 });
+      const type = await saveEquipmentTypeToDb(undefined, slot.id);
+      const twoHanded = await saveEquipmentToDb({ typeId: type.id, slotCost: 2 });
+      const oneHanded = await saveEquipmentToDb({ typeId: type.id, slotCost: 1 });
+      const character = characterReq({
+        equipmentIds: [twoHanded.id, oneHanded.id],
+      });
+
+      const resp = await createCharacterToRandomUser(character);
+
+      expect(resp.status).toBe(422);
+      expect(resp.body).toStrictEqual({
+        errorCode: ErrorMessages.CHARACTER_SLOT_CAPACITY_EXCEEDED,
+      });
+    });
+
+    it("when two different equipment types share the same slot then their slot costs pool together", async () => {
+      const slot = await saveSlotToDb({ maxCapacity: 2 });
+      const primaryWeaponType = await saveEquipmentTypeToDb(undefined, slot.id);
+      const secondaryWeaponType = await saveEquipmentTypeToDb(undefined, slot.id);
+      const sword = await saveEquipmentToDb({ typeId: primaryWeaponType.id, slotCost: 1 });
+      const dagger = await saveEquipmentToDb({ typeId: secondaryWeaponType.id, slotCost: 1 });
+      const character = characterReq({
+        equipmentIds: [sword.id, dagger.id],
+      });
+
+      const resp = await createCharacterToRandomUser(character);
+
+      expect(resp.status).toBe(200);
+    });
+
+    it("when two different equipment types share the same slot then exceeding the pooled capacity is rejected", async () => {
+      const slot = await saveSlotToDb({ maxCapacity: 2 });
+      const primaryWeaponType = await saveEquipmentTypeToDb(undefined, slot.id);
+      const secondaryWeaponType = await saveEquipmentTypeToDb(undefined, slot.id);
+      const sword = await saveEquipmentToDb({ typeId: primaryWeaponType.id, slotCost: 1 });
+      const axe = await saveEquipmentToDb({ typeId: primaryWeaponType.id, slotCost: 1 });
+      const dagger = await saveEquipmentToDb({ typeId: secondaryWeaponType.id, slotCost: 1 });
+      const character = characterReq({
+        equipmentIds: [sword.id, axe.id, dagger.id],
+      });
+
+      const resp = await createCharacterToRandomUser(character);
+
+      expect(resp.status).toBe(422);
+      expect(resp.body).toStrictEqual({
+        errorCode: ErrorMessages.CHARACTER_SLOT_CAPACITY_EXCEEDED,
+      });
+    });
+
+    it("when an equipment type has no slot then there should be no capacity limit on it", async () => {
+      const equipment = await saveEquipmentListToDb(5);
+      const character = characterReq({
+        equipmentIds: equipment.map((item) => item.id),
+      });
+
+      const resp = await createCharacterToRandomUser(character);
+
+      expect(resp.status).toBe(200);
     });
   });
 

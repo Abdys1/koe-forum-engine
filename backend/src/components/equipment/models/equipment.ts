@@ -5,5 +5,6 @@ export interface EquipmentEntity {
     name: string;
     typeId: number;
     description: string;
+    slotCost: number | null;
     type?: EquipmentTypeEntity;
 }

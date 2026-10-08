@@ -8,7 +8,7 @@ export function toSlotCollectionOutput(slots: SlotEntity[]): SlotCollectionOutpu
 export function toSlotDetails(slot: SlotEntity): SlotDetails {
     return {
         id: slot.id,
-        equipmentTypeId: slot.equipmentTypeId,
+        label: slot.label,
         maxCapacity: slot.maxCapacity
     };
 }
