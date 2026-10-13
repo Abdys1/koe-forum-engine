@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import CharacterEntity from "@src/components/character/models/character";
 import { CharacterRepository } from "@src/components/character/repositories/types";
 
@@ -19,6 +19,24 @@ const ASSIGNMENTS = {
   orderBy: { id: "asc" }
 } as const;
 
+type CharacterWithAssignments = Prisma.CharacterGetPayload<{ include: { equipment: typeof ASSIGNMENTS } }>;
+
+function toCharacterEntity(character: CharacterWithAssignments): CharacterEntity {
+  return {
+    id: character.id,
+    userId: character.userId,
+    name: character.name,
+    race: character.race,
+    sex: character.sex,
+    imageUrl: character.imageUrl,
+    equipmentIds: character.equipment.map((assignment) => assignment.equipment.id),
+    equipment: character.equipment.map((assignment) => ({
+      assignmentId: assignment.id,
+      equipment: assignment.equipment,
+    })),
+  };
+}
+
 export default class CharacterRepositoryImpl implements CharacterRepository {
   private db: PrismaClient;
 
@@ -34,19 +52,7 @@ export default class CharacterRepositoryImpl implements CharacterRepository {
       include: { equipment: ASSIGNMENTS },
     });
 
-    return characters.map((character) => ({
-      id: character.id,
-      userId: character.userId,
-      name: character.name,
-      race: character.race,
-      sex: character.sex,
-      imageUrl: character.imageUrl,
-      equipmentIds: character.equipment.map((assignment) => assignment.equipment.id),
-      equipment: character.equipment.map((assignment) => ({
-        assignmentId: assignment.id,
-        equipment: assignment.equipment,
-      })),
-    }));
+    return characters.map(toCharacterEntity);
   }
 
   public async existsByCharacterName(characterName: string): Promise<boolean> {
@@ -56,8 +62,8 @@ export default class CharacterRepositoryImpl implements CharacterRepository {
     return count > 0;
   }
 
-  public async create(character: CharacterEntity): Promise<void> {
-    await this.db.character.create({
+  public async create(character: CharacterEntity): Promise<CharacterEntity> {
+    const created = await this.db.character.create({
       data: {
         name: character.name,
         sex: character.sex,
@@ -68,6 +74,8 @@ export default class CharacterRepositoryImpl implements CharacterRepository {
           create: character.equipmentIds.map((equipmentId) => ({ equipmentId })),
         },
       },
+      include: { equipment: ASSIGNMENTS },
     });
+    return toCharacterEntity(created);
   }
 }

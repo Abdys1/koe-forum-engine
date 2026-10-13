@@ -11,8 +11,23 @@ export interface Config {
   };
 }
 
-export interface Repository<T> {
-  create: (entity: T) => Promise<void>;
+export interface Readable<T> {
+  findAll: () => Promise<T[]>;
+  findById: (id: number) => Promise<T | null>;
 }
+
+export interface Creatable<T> {
+  create: (entity: T) => Promise<T>;
+}
+
+export interface Updatable<T, TUpdate> {
+  update: (id: number, data: TUpdate) => Promise<T>;
+}
+
+export interface Deletable {
+  delete: (id: number) => Promise<void>;
+}
+
+export interface CrudRepository<T, TUpdate> extends Readable<T>, Creatable<T>, Updatable<T, TUpdate>, Deletable {}
 
 export type StorageType = 'local' | 'aws';

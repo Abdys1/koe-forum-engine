@@ -1,9 +1,6 @@
 import { SlotEntity } from "@src/components/slot/models/slot";
+import { Creatable, Deletable, Readable } from "@src/types";
 
-export interface SlotRepository {
-    findAll: () => Promise<SlotEntity[]>,
-    findById: (id: number) => Promise<SlotEntity | null>,
-    findByLabelIgnoreCase: (label: string) => Promise<SlotEntity | null>,
-    create: (slot: SlotEntity) => Promise<SlotEntity>,
-    delete: (id: number) => Promise<void>
+export interface SlotRepository extends Readable<SlotEntity>, Creatable<SlotEntity>, Deletable {
+    findByLabelIgnoreCase: (label: string) => Promise<SlotEntity | null>
 }

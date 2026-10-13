@@ -1,14 +1,10 @@
 import { Equipment, EquipmentUpdate } from "@src/components/equipment/models/equipment";
 import { EquipmentSlotUsage } from "@src/components/equipment/models/equipment-slot-usage";
+import { CrudRepository } from "@src/types";
 
-export interface EquipmentRepository {
-    findAll: () => Promise<Equipment[]>,
+export interface EquipmentRepository extends CrudRepository<Equipment, EquipmentUpdate> {
     findAllByIds: (ids: number[]) => Promise<Equipment[]>,
-    findById: (id: number) => Promise<Equipment | null>,
     findByNameAndTypeId: (name: string, typeId: number) => Promise<Equipment | null>,
     countAssignmentsById: (id: number) => Promise<number>,
-    findSlotUsageByIds: (ids: number[]) => Promise<EquipmentSlotUsage[]>,
-    create: (equipment: Equipment) => Promise<Equipment>,
-    update: (id: number, equipment: EquipmentUpdate) => Promise<Equipment>,
-    delete: (id: number) => Promise<void>
+    findSlotUsageByIds: (ids: number[]) => Promise<EquipmentSlotUsage[]>
 }
