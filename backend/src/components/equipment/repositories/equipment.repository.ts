@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { EquipmentEntity } from "@src/components/equipment/models/equipment";
+import { EquipmentEntity, EquipmentUpdate } from "@src/components/equipment/models/equipment";
 import { EquipmentSlotUsage } from "@src/components/equipment/models/equipment-slot-usage";
 import { EquipmentRepository } from "@src/components/equipment/repositories/types";
 
@@ -35,7 +35,7 @@ export default class EquipmentRepositoryImpl implements EquipmentRepository {
         return this.db.equipment.findUnique({ select: FIELDS, where: { name_typeId: { name, typeId } } });
     };
 
-    public countAssignmentsByEquipmentId = async (id: number): Promise<number> => {
+    public countAssignmentsById = async (id: number): Promise<number> => {
         return this.db.characterEquipment.count({ where: { equipmentId: id } });
     };
 
@@ -49,12 +49,16 @@ export default class EquipmentRepositoryImpl implements EquipmentRepository {
             }
         });
 
-        return equipment.map((item) => ({
-            id: item.id,
-            slotCost: item.slotCost,
-            slotId: item.type.slot?.id ?? null,
-            slotMaxCapacity: item.type.slot?.maxCapacity ?? null
-        }));
+        return equipment.map((item) => {
+            const { slot } = item.type;
+            if (!slot) {
+                return { id: item.id, slot: null };
+            }
+            if (item.slotCost === null) {
+                throw new Error(`Equipment ${item.id} belongs to a slotted type but has no slotCost`);
+            }
+            return { id: item.id, slot: { slotId: slot.id, maxCapacity: slot.maxCapacity, cost: item.slotCost } };
+        });
     };
 
     public create = async (equipment: EquipmentEntity): Promise<EquipmentEntity> => {
@@ -69,7 +73,7 @@ export default class EquipmentRepositoryImpl implements EquipmentRepository {
         });
     };
 
-    public update = async (id: number, equipment: Pick<EquipmentEntity, "name" | "description">): Promise<EquipmentEntity> => {
+    public update = async (id: number, equipment: EquipmentUpdate): Promise<EquipmentEntity> => {
         return this.db.equipment.update({
             select: FIELDS,
             where: { id },

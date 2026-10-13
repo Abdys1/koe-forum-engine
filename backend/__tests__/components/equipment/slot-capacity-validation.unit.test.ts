@@ -13,7 +13,7 @@ describe('SlotCapacityValidation', () => {
             findAllByIds: vi.fn(),
             findById: vi.fn(),
             findByNameAndTypeId: vi.fn(),
-            countAssignmentsByEquipmentId: vi.fn(),
+            countAssignmentsById: vi.fn(),
             findSlotUsageByIds: vi.fn().mockResolvedValue([]),
             create: vi.fn(),
             update: vi.fn(),
@@ -32,8 +32,8 @@ describe('SlotCapacityValidation', () => {
 
         it('should return true when the combined slot cost is within capacity', async () => {
             equipmentRepository.findSlotUsageByIds.mockResolvedValue([
-                { id: 1, slotCost: 1, slotId: 10, slotMaxCapacity: 2 },
-                { id: 2, slotCost: 1, slotId: 10, slotMaxCapacity: 2 },
+                { id: 1, slot: { slotId: 10, maxCapacity: 2, cost: 1 } },
+                { id: 2, slot: { slotId: 10, maxCapacity: 2, cost: 1 } },
             ]);
 
             const result = await slotCapacityValidation.execute([1, 2]);
@@ -43,9 +43,9 @@ describe('SlotCapacityValidation', () => {
 
         it('should return false when the combined slot cost exceeds the capacity', async () => {
             equipmentRepository.findSlotUsageByIds.mockResolvedValue([
-                { id: 1, slotCost: 1, slotId: 10, slotMaxCapacity: 2 },
-                { id: 2, slotCost: 1, slotId: 10, slotMaxCapacity: 2 },
-                { id: 3, slotCost: 1, slotId: 10, slotMaxCapacity: 2 },
+                { id: 1, slot: { slotId: 10, maxCapacity: 2, cost: 1 } },
+                { id: 2, slot: { slotId: 10, maxCapacity: 2, cost: 1 } },
+                { id: 3, slot: { slotId: 10, maxCapacity: 2, cost: 1 } },
             ]);
 
             const result = await slotCapacityValidation.execute([1, 2, 3]);
@@ -55,9 +55,9 @@ describe('SlotCapacityValidation', () => {
 
         it('should not count equipment whose type has no slot', async () => {
             equipmentRepository.findSlotUsageByIds.mockResolvedValue([
-                { id: 1, slotCost: 1, slotId: null, slotMaxCapacity: null },
-                { id: 2, slotCost: 1, slotId: null, slotMaxCapacity: null },
-                { id: 3, slotCost: 1, slotId: null, slotMaxCapacity: null },
+                { id: 1, slot: null },
+                { id: 2, slot: null },
+                { id: 3, slot: null },
             ]);
 
             const result = await slotCapacityValidation.execute([1, 2, 3]);
@@ -67,7 +67,7 @@ describe('SlotCapacityValidation', () => {
 
         it('should sum the slot cost of a repeated equipment id per occurrence', async () => {
             equipmentRepository.findSlotUsageByIds.mockResolvedValue([
-                { id: 1, slotCost: 1, slotId: 10, slotMaxCapacity: 2 },
+                { id: 1, slot: { slotId: 10, maxCapacity: 2, cost: 1 } },
             ]);
 
             const withinCapacity = await slotCapacityValidation.execute([1, 1]);
@@ -79,7 +79,7 @@ describe('SlotCapacityValidation', () => {
 
         it('should account for equipment with a slot cost greater than one', async () => {
             equipmentRepository.findSlotUsageByIds.mockResolvedValue([
-                { id: 1, slotCost: 2, slotId: 10, slotMaxCapacity: 2 },
+                { id: 1, slot: { slotId: 10, maxCapacity: 2, cost: 2 } },
             ]);
 
             const result = await slotCapacityValidation.execute([1]);
@@ -89,8 +89,8 @@ describe('SlotCapacityValidation', () => {
 
         it('should track capacity separately per slot', async () => {
             equipmentRepository.findSlotUsageByIds.mockResolvedValue([
-                { id: 1, slotCost: 1, slotId: 10, slotMaxCapacity: 1 },
-                { id: 2, slotCost: 1, slotId: 20, slotMaxCapacity: 1 },
+                { id: 1, slot: { slotId: 10, maxCapacity: 1, cost: 1 } },
+                { id: 2, slot: { slotId: 20, maxCapacity: 1, cost: 1 } },
             ]);
 
             const result = await slotCapacityValidation.execute([1, 2]);

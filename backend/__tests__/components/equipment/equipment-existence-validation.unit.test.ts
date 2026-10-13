@@ -13,7 +13,7 @@ describe('EquipmentExistenceValidation', () => {
             findAllByIds: vi.fn(),
             findById: vi.fn(),
             findByNameAndTypeId: vi.fn(),
-            countAssignmentsByEquipmentId: vi.fn(),
+            countAssignmentsById: vi.fn(),
             findSlotUsageByIds: vi.fn(),
             create: vi.fn(),
             update: vi.fn(),

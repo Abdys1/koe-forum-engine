@@ -1,6 +1,10 @@
+export interface SlotAllocation {
+    slotId: number;
+    maxCapacity: number;
+    cost: number;
+}
+
 export interface EquipmentSlotUsage {
     id: number;
-    slotCost: number | null;
-    slotId: number | null;
-    slotMaxCapacity: number | null;
+    slot: SlotAllocation | null;
 }

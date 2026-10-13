@@ -10,7 +10,7 @@ export default class EquipmentRemovalImpl implements EquipmentRemoval {
             return { status: EquipmentRemovalResult.NOT_FOUND };
         }
         
-        const assignmentCount = await this.equipmentRepository.countAssignmentsByEquipmentId(input.id);
+        const assignmentCount = await this.equipmentRepository.countAssignmentsById(input.id);
         if (assignmentCount > 0) {
             return { status: EquipmentRemovalResult.IN_USE };
         }

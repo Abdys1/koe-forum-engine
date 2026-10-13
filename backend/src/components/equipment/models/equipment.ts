@@ -8,3 +8,5 @@ export interface EquipmentEntity {
     slotCost: number | null;
     type?: EquipmentTypeEntity;
 }
+
+export type EquipmentUpdate = Pick<EquipmentEntity, "name" | "description">;

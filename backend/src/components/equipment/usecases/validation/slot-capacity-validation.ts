@@ -23,16 +23,18 @@ export default class SlotCapacityValidationImpl implements SlotCapacityValidatio
     // előfordulás a saját slotCost-jával foglal kapacitást.
     private isWithinCapacity = (equipmentIds: number[], usageByEquipmentId: Map<number, EquipmentSlotUsage>): boolean => {
         const usedCapacityBySlotId = new Map<number, number>();
+        let withinCapacity = true;
         for (const equipmentId of equipmentIds) {
-            const usage = usageByEquipmentId.get(equipmentId);
-            if (usage && usage.slotId !== null) {
-                const usedCapacity = (usedCapacityBySlotId.get(usage.slotId) ?? 0) + (usage.slotCost ?? 0);
-                if (usedCapacity > (usage.slotMaxCapacity ?? 0)) {
-                    return false;
+            const slot = usageByEquipmentId.get(equipmentId)?.slot;
+            if (slot) {
+                const usedCapacity = (usedCapacityBySlotId.get(slot.slotId) ?? 0) + slot.cost;
+                if (usedCapacity > slot.maxCapacity) {
+                    withinCapacity = false;
+                    break;
                 }
-                usedCapacityBySlotId.set(usage.slotId, usedCapacity);
+                usedCapacityBySlotId.set(slot.slotId, usedCapacity);
             }
         }
-        return true;
+        return withinCapacity;
     };
 }
