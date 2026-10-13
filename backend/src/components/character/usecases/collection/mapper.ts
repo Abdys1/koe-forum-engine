@@ -1,4 +1,4 @@
-import CharacterEntity, { CharacterEquipmentAssignmentEntity } from "@src/components/character/models/character";
+import CharacterEntity, { CharacterEquipmentAssignment } from "@src/components/character/models/character";
 import { CharacterCollectionDetails, CharacterCollectionOutput, CharacterEquipmentDetails } from "@src/components/character/usecases/collection/types";
 import { toEquipmentDetails } from "@src/components/equipment/usecases/collection/mapper";
 
@@ -17,7 +17,7 @@ function toDetails(character: CharacterEntity): CharacterCollectionDetails {
     }
 }
 
-function toAssignmentDetails(assignment: CharacterEquipmentAssignmentEntity): CharacterEquipmentDetails {
+function toAssignmentDetails(assignment: CharacterEquipmentAssignment): CharacterEquipmentDetails {
     return {
         assignmentId: assignment.assignmentId,
         ...toEquipmentDetails(assignment.equipment)

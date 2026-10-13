@@ -1,4 +1,4 @@
-import { EquipmentEntity } from "@src/components/equipment/models/equipment";
+import { Equipment } from "@src/components/equipment/models/equipment";
 
 export default interface CharacterEntity {
   id?: number;
@@ -7,20 +7,11 @@ export default interface CharacterEntity {
   race: string;
   sex: number;
   imageUrl: string;
-  /**
-   * Írási út: ahány elem, annyi `CharacterEquipment` sor jön létre. Ismétlődés
-   * engedett — ugyanaz a felszerelés több példányban is hozzárendelhető.
-   */
   equipmentIds: number[];
-  /**
-   * Olvasási út: a join-olt hozzárendelések. Csak azokon a lekérdezéseken van
-   * kitöltve, amelyek include-olják a felszerelést.
-   */
-  equipment?: CharacterEquipmentAssignmentEntity[];
+  equipment?: CharacterEquipmentAssignment[];
 }
 
-/** Egy konkrét hozzárendelés: a saját azonosítója és a hozzárendelt felszerelés. */
-export interface CharacterEquipmentAssignmentEntity {
+export interface CharacterEquipmentAssignment {
   assignmentId: number;
-  equipment: EquipmentEntity;
+  equipment: Equipment;
 }

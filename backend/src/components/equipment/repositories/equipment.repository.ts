@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { EquipmentEntity, EquipmentUpdate } from "@src/components/equipment/models/equipment";
+import { Equipment, EquipmentUpdate } from "@src/components/equipment/models/equipment";
 import { EquipmentSlotUsage } from "@src/components/equipment/models/equipment-slot-usage";
 import { EquipmentRepository } from "@src/components/equipment/repositories/types";
 
@@ -19,19 +19,19 @@ export default class EquipmentRepositoryImpl implements EquipmentRepository {
         this.db = db;
     }
 
-    public findAll = async (): Promise<EquipmentEntity[]> => {
+    public findAll = async (): Promise<Equipment[]> => {
         return this.db.equipment.findMany({ select: FIELDS, orderBy: { name: "asc" } });
     };
 
-    public findAllByIds = async (ids: number[]): Promise<EquipmentEntity[]> => {
+    public findAllByIds = async (ids: number[]): Promise<Equipment[]> => {
         return this.db.equipment.findMany({ select: FIELDS, where: { id: { in: ids } } });
     };
 
-    public findById = async (id: number): Promise<EquipmentEntity | null> => {
+    public findById = async (id: number): Promise<Equipment | null> => {
         return this.db.equipment.findUnique({ select: FIELDS, where: { id } });
     };
 
-    public findByNameAndTypeId = async (name: string, typeId: number): Promise<EquipmentEntity | null> => {
+    public findByNameAndTypeId = async (name: string, typeId: number): Promise<Equipment | null> => {
         return this.db.equipment.findUnique({ select: FIELDS, where: { name_typeId: { name, typeId } } });
     };
 
@@ -61,7 +61,7 @@ export default class EquipmentRepositoryImpl implements EquipmentRepository {
         });
     };
 
-    public create = async (equipment: EquipmentEntity): Promise<EquipmentEntity> => {
+    public create = async (equipment: Equipment): Promise<Equipment> => {
         return this.db.equipment.create({
             select: FIELDS,
             data: {
@@ -73,7 +73,7 @@ export default class EquipmentRepositoryImpl implements EquipmentRepository {
         });
     };
 
-    public update = async (id: number, equipment: EquipmentUpdate): Promise<EquipmentEntity> => {
+    public update = async (id: number, equipment: EquipmentUpdate): Promise<Equipment> => {
         return this.db.equipment.update({
             select: FIELDS,
             where: { id },

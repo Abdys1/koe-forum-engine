@@ -1,6 +1,6 @@
 import { EquipmentTypeEntity } from "@src/components/equipment-type/models/equipment-type";
 
-export interface EquipmentEntity {
+export interface Equipment {
     id?: number;
     name: string;
     typeId: number;
@@ -9,4 +9,4 @@ export interface EquipmentEntity {
     type?: EquipmentTypeEntity;
 }
 
-export type EquipmentUpdate = Pick<EquipmentEntity, "name" | "description">;
+export type EquipmentUpdate = Pick<Equipment, "name" | "description">;
