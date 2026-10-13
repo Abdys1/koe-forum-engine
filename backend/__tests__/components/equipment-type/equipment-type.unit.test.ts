@@ -135,7 +135,7 @@ describe('equipment-type use cases', () => {
             const result = await equipmentTypeModification.execute({ id: 3, label: 'Új név' });
 
             expect(result.status).toBe(EquipmentTypeModificationResult.UPDATED);
-            expect(equipmentTypeRepository.update).toHaveBeenCalledWith(3, 'Új név');
+            expect(equipmentTypeRepository.update).toHaveBeenCalledWith(3, { label: 'Új név' });
         });
 
         it('should return NOT_FOUND when the type does not exist', async () => {
@@ -171,7 +171,7 @@ describe('equipment-type use cases', () => {
 
             await equipmentTypeModification.execute({ id: 3, label: '  Új név  ' });
 
-            expect(equipmentTypeRepository.update).toHaveBeenCalledWith(3, 'Új név');
+            expect(equipmentTypeRepository.update).toHaveBeenCalledWith(3, { label: 'Új név' });
         });
     });
 

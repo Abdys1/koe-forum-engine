@@ -24,7 +24,7 @@ export default class EquipmentTypeModificationImpl implements EquipmentTypeModif
             return { status: EquipmentTypeModificationResult.ALREADY_EXISTS };
         }
 
-        const equipmentType = await this.equipmentTypeRepository.update(input.id, label);
+        const equipmentType = await this.equipmentTypeRepository.update(input.id, { label });
         return { status: EquipmentTypeModificationResult.UPDATED, equipmentType: toEquipmentTypeDetails(equipmentType) };
     };
 }

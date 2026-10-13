@@ -1,11 +1,11 @@
-import { EquipmentTypeEntity } from "@src/components/equipment-type/models/equipment-type";
+import { EquipmentType } from "@src/components/equipment-type/models/equipment-type";
 import { EquipmentTypeCollectionOutput, EquipmentTypeDetails } from "@src/components/equipment-type/usecases/collection/types";
 
-export function toEquipmentTypeCollectionOutput(equipmentTypes: EquipmentTypeEntity[]): EquipmentTypeCollectionOutput {
+export function toEquipmentTypeCollectionOutput(equipmentTypes: EquipmentType[]): EquipmentTypeCollectionOutput {
     return equipmentTypes.map(toEquipmentTypeDetails);
 }
 
-export function toEquipmentTypeDetails(equipmentType: EquipmentTypeEntity): EquipmentTypeDetails {
+export function toEquipmentTypeDetails(equipmentType: EquipmentType): EquipmentTypeDetails {
     return {
         id: equipmentType.id,
         label: equipmentType.label,

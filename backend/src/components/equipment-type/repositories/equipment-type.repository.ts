@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { EquipmentTypeEntity } from "@src/components/equipment-type/models/equipment-type";
+import { EquipmentType, EquipmentTypeUpdate } from "@src/components/equipment-type/models/equipment-type";
 import { EquipmentTypeRepository } from "@src/components/equipment-type/repositories/types";
 
 const FIELDS = { id: true, label: true, slotId: true } as const;
@@ -11,18 +11,18 @@ export default class EquipmentTypeRepositoryImpl implements EquipmentTypeReposit
         this.db = db;
     }
 
-    public findAll = async (): Promise<EquipmentTypeEntity[]> => {
+    public findAll = async (): Promise<EquipmentType[]> => {
         return this.db.equipmentType.findMany({
             select: FIELDS,
             orderBy: { label: "asc" }
         });
     };
 
-    public findById = async (id: number): Promise<EquipmentTypeEntity | null> => {
+    public findById = async (id: number): Promise<EquipmentType | null> => {
         return this.db.equipmentType.findUnique({ select: FIELDS, where: { id } });
     };
 
-    public findByLabelIgnoreCase = async (label: string): Promise<EquipmentTypeEntity | null> => {
+    public findByLabelIgnoreCase = async (label: string): Promise<EquipmentType | null> => {
         return this.db.equipmentType.findFirst({
             select: FIELDS,
             where: { label: { equals: label, mode: "insensitive" } }
@@ -33,15 +33,15 @@ export default class EquipmentTypeRepositoryImpl implements EquipmentTypeReposit
         return this.db.equipment.count({ where: { typeId: id } });
     };
 
-    public create = async (equipmentType: EquipmentTypeEntity): Promise<EquipmentTypeEntity> => {
+    public create = async (equipmentType: EquipmentType): Promise<EquipmentType> => {
         return this.db.equipmentType.create({
             select: FIELDS,
             data: { label: equipmentType.label, slotId: equipmentType.slotId ?? null }
         });
     };
 
-    public update = async (id: number, label: string): Promise<EquipmentTypeEntity> => {
-        return this.db.equipmentType.update({ select: FIELDS, where: { id }, data: { label } });
+    public update = async (id: number, equipmentType: EquipmentTypeUpdate): Promise<EquipmentType> => {
+        return this.db.equipmentType.update({ select: FIELDS, where: { id }, data: { label: equipmentType.label } });
     };
 
     public delete = async (id: number): Promise<void> => {

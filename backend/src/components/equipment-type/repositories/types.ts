@@ -1,11 +1,11 @@
-import { EquipmentTypeEntity } from "@src/components/equipment-type/models/equipment-type";
+import { EquipmentType, EquipmentTypeUpdate } from "@src/components/equipment-type/models/equipment-type";
 
 export interface EquipmentTypeRepository {
-    findAll: () => Promise<EquipmentTypeEntity[]>,
-    findById: (id: number) => Promise<EquipmentTypeEntity | null>,
-    findByLabelIgnoreCase: (label: string) => Promise<EquipmentTypeEntity | null>,
+    findAll: () => Promise<EquipmentType[]>,
+    findById: (id: number) => Promise<EquipmentType | null>,
+    findByLabelIgnoreCase: (label: string) => Promise<EquipmentType | null>,
     countEquipmentByTypeId: (id: number) => Promise<number>,
-    create: (equipmentType: EquipmentTypeEntity) => Promise<EquipmentTypeEntity>,
-    update: (id: number, label: string) => Promise<EquipmentTypeEntity>,
+    create: (equipmentType: EquipmentType) => Promise<EquipmentType>,
+    update: (id: number, equipmentType: EquipmentTypeUpdate) => Promise<EquipmentType>,
     delete: (id: number) => Promise<void>
 }
