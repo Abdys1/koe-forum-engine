@@ -1,9 +1,9 @@
 import { CharacterRepository } from "@src/components/character/repositories/types";
 import { EquipmentExistenceValidationUseCase, SlotCapacityValidationUseCase } from "@src/components/equipment/usecases/validation/types";
 
-import { CharacterUpdateValidator, ValidateCharacterUpdateInput, ValidateCharacterUpdateOutput, ValidateCharacterUpdateResult } from "./types";
+import { CharacterUpdateValidatorUseCase, ValidateCharacterUpdateInput, ValidateCharacterUpdateOutput, ValidateCharacterUpdateResult } from "./types";
 
-export default class CharacterUpdateValidatorImpl implements CharacterUpdateValidator {
+export default class CharacterUpdateValidatorUseCaseImpl implements CharacterUpdateValidatorUseCase {
     private characterRepository: CharacterRepository;
     private equipmentExistenceValidation: EquipmentExistenceValidationUseCase;
     private slotCapacityValidation: SlotCapacityValidationUseCase;

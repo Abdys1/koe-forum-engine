@@ -4,6 +4,7 @@ import { CrudRepository } from "@src/types";
 
 export interface EquipmentRepository extends CrudRepository<Equipment, EquipmentUpdate> {
     findAllByIds: (ids: number[]) => Promise<Equipment[]>,
+    findAllByCharacterId: (characterId: number) => Promise<Equipment[]>,
     findByNameAndTypeId: (name: string, typeId: number) => Promise<Equipment | null>,
     countAssignmentsById: (id: number) => Promise<number>,
     findSlotUsageByIds: (ids: number[]) => Promise<EquipmentSlotUsage[]>

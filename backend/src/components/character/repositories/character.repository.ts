@@ -1,39 +1,15 @@
-import { Prisma, PrismaClient } from "@prisma/client";
-import CharacterEntity from "@src/components/character/models/character";
+import { Character as CharacterRecord, PrismaClient } from "@prisma/client";
+import Character from "@src/components/character/models/character";
 import { CharacterRepository } from "@src/components/character/repositories/types";
 
-const ASSIGNMENTS = {
-  select: {
-    id: true,
-    equipment: {
-      select: {
-        id: true,
-        name: true,
-        typeId: true,
-        description: true,
-        slotCost: true,
-        type: { select: { id: true, label: true } }
-      }
-    }
-  },
-  orderBy: { id: "asc" }
-} as const;
-
-type CharacterWithAssignments = Prisma.CharacterGetPayload<{ include: { equipment: typeof ASSIGNMENTS } }>;
-
-function toCharacterEntity(character: CharacterWithAssignments): CharacterEntity {
+function toCharacter(record: CharacterRecord): Character {
   return {
-    id: character.id,
-    userId: character.userId,
-    name: character.name,
-    race: character.race,
-    sex: character.sex,
-    imageUrl: character.imageUrl,
-    equipmentIds: character.equipment.map((assignment) => assignment.equipment.id),
-    equipment: character.equipment.map((assignment) => ({
-      assignmentId: assignment.id,
-      equipment: assignment.equipment,
-    })),
+    id: record.id,
+    userId: record.userId,
+    name: record.name,
+    race: record.race,
+    sex: record.sex,
+    imageUrl: record.imageUrl,
   };
 }
 
@@ -44,15 +20,19 @@ export default class CharacterRepositoryImpl implements CharacterRepository {
     this.db = db;
   }
 
+  public async findById(id: number): Promise<Character | null> {
+    const character = await this.db.character.findUnique({ where: { id } });
+    return character ? toCharacter(character) : null;
+  }
+
   public async findAllCharacterByUserId(
     userId: number,
-  ): Promise<CharacterEntity[]> {
+  ): Promise<Character[]> {
     const characters = await this.db.character.findMany({
       where: { user: { id: userId } },
-      include: { equipment: ASSIGNMENTS },
     });
 
-    return characters.map(toCharacterEntity);
+    return characters.map(toCharacter);
   }
 
   public async existsByCharacterName(characterName: string): Promise<boolean> {
@@ -62,7 +42,7 @@ export default class CharacterRepositoryImpl implements CharacterRepository {
     return count > 0;
   }
 
-  public async create(character: CharacterEntity): Promise<CharacterEntity> {
+  public async create(character: Character): Promise<Character> {
     const created = await this.db.character.create({
       data: {
         name: character.name,
@@ -71,11 +51,10 @@ export default class CharacterRepositoryImpl implements CharacterRepository {
         imageUrl: character.imageUrl,
         user: { connect: { id: character.userId } },
         equipment: {
-          create: character.equipmentIds.map((equipmentId) => ({ equipmentId })),
+          create: (character.equipmentIds ?? []).map((equipmentId) => ({ equipmentId })),
         },
       },
-      include: { equipment: ASSIGNMENTS },
     });
-    return toCharacterEntity(created);
+    return toCharacter(created);
   }
 }

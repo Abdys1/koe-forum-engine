@@ -1,8 +1,8 @@
 import { CharacterRepository } from "@src/components/character/repositories/types";
 import { toOutput } from "@src/components/character/usecases/collection/mapper";
-import { CharacterCollection, CharacterCollectionOutput } from "@src/components/character/usecases/collection/types";
+import { CharacterCollectionOutput, CharacterCollectionUseCase } from "@src/components/character/usecases/collection/types";
 
-export default class CharacterCollectionImpl implements CharacterCollection {
+export default class CharacterCollectionUseCaseImpl implements CharacterCollectionUseCase {
     private characterRepository: CharacterRepository;
 
     constructor(characterRepository: CharacterRepository) {

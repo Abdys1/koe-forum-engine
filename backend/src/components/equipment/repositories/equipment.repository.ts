@@ -31,6 +31,15 @@ export default class EquipmentRepositoryImpl implements EquipmentRepository {
         return this.db.equipment.findUnique({ select: FIELDS, where: { id } });
     };
 
+    public findAllByCharacterId = async (characterId: number): Promise<Equipment[]> => {
+        const assignments = await this.db.characterEquipment.findMany({
+            where: { characterId },
+            select: { equipment: { select: FIELDS } },
+            orderBy: { id: "asc" }
+        });
+        return assignments.map((assignment) => assignment.equipment);
+    };
+
     public findByNameAndTypeId = async (name: string, typeId: number): Promise<Equipment | null> => {
         return this.db.equipment.findUnique({ select: FIELDS, where: { name_typeId: { name, typeId } } });
     };

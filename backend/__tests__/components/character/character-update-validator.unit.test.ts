@@ -1,25 +1,26 @@
 import { CharacterRepository } from '@src/components/character/repositories/types';
 import { Sex } from '@src/components/character/types';
-import CharacterUpdateValidatorImpl from '@src/components/character/usecases/update_validator/character-update-validator';
-import { CharacterUpdateValidator, ValidateCharacterUpdateInput, ValidateCharacterUpdateResult } from '@src/components/character/usecases/update_validator/types';
+import CharacterUpdateValidatorUseCaseImpl from '@src/components/character/usecases/update_validator/character-update-validator';
+import { CharacterUpdateValidatorUseCase, ValidateCharacterUpdateInput, ValidateCharacterUpdateResult } from '@src/components/character/usecases/update_validator/types';
 import { EquipmentExistenceValidationUseCase, SlotCapacityValidationUseCase } from '@src/components/equipment/usecases/validation/types';
 import { beforeEach, describe, expect, it, Mocked, vi } from 'vitest';
 
-describe('CharacterUpdateValidator', () => {
+describe('CharacterUpdateValidatorUseCase', () => {
     let characterRepository: Mocked<CharacterRepository>;
     let equipmentExistenceValidation: Mocked<EquipmentExistenceValidationUseCase>;
     let slotCapacityValidation: Mocked<SlotCapacityValidationUseCase>;
-    let characterUpdateValidator: CharacterUpdateValidator;
+    let characterUpdateValidator: CharacterUpdateValidatorUseCase;
 
     beforeEach(() => {
         characterRepository = {
             create: vi.fn(),
+            findById: vi.fn(),
             findAllCharacterByUserId: vi.fn(),
             existsByCharacterName: vi.fn().mockResolvedValue(false),
         };
         equipmentExistenceValidation = { execute: vi.fn().mockResolvedValue(true) };
         slotCapacityValidation = { execute: vi.fn().mockResolvedValue(true) };
-        characterUpdateValidator = new CharacterUpdateValidatorImpl(characterRepository, equipmentExistenceValidation, slotCapacityValidation);
+        characterUpdateValidator = new CharacterUpdateValidatorUseCaseImpl(characterRepository, equipmentExistenceValidation, slotCapacityValidation);
     });
 
     describe('execute()', () => {

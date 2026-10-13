@@ -336,8 +336,7 @@ describe('/api/equipment/type', () => {
             const createEquipmentResp = await equipmentClient.createEquipment({
                 name: equipmentName,
                 typeId,
-                description: 'Az új típusba tartozó felszerelés',
-                slotCost: 1
+                description: 'Az új típusba tartozó felszerelés'
             });
             expect(createEquipmentResp.status).toBe(201);
             const equipmentId = createEquipmentResp.body.id;
@@ -353,7 +352,8 @@ describe('/api/equipment/type', () => {
 
             expect(createCharacterResp.status).toBe(200);
             const charactersResp = await characterClient.getCharacters(user.username);
-            const equipment = charactersResp.body[0].equipment;
+            const equipmentResp = await characterClient.getCharacterEquipment(user.username, charactersResp.body[0].id);
+            const equipment = equipmentResp.body;
             expect(equipment.length).toBe(2);
             equipment.forEach((item: { type: EquipmentTypeResponseItem }) => {
                 expect(item.type).toStrictEqual({ id: typeId, label, slotId: null });

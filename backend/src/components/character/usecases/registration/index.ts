@@ -1,6 +1,6 @@
 import { characterRepository } from "@src/components/character/repositories";
-import CharacterRegistrationImpl from "@src/components/character/usecases/registration/character-registration";
+import CharacterRegistrationUseCaseImpl from "@src/components/character/usecases/registration/character-registration";
 
-const characterRegistration = new CharacterRegistrationImpl(characterRepository);
+const characterRegistration = new CharacterRegistrationUseCaseImpl(characterRepository);
 
 export { characterRegistration };

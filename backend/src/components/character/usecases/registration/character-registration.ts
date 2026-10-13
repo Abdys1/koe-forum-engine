@@ -1,12 +1,12 @@
-import CharacterEntity from "@src/components/character/models/character";
+import Character from "@src/components/character/models/character";
 import { CharacterRepository } from "@src/components/character/repositories/types";
 import { fromInput } from "@src/components/character/usecases/registration/mapper";
 import {
-  CharacterRegistration,
+  CharacterRegistrationUseCase,
   CreateCharacterInput,
 } from "@src/components/character/usecases/registration/types";
 
-export default class CharacterRegistrationImpl implements CharacterRegistration {
+export default class CharacterRegistrationUseCaseImpl implements CharacterRegistrationUseCase {
   private characterRepository: CharacterRepository;
 
   constructor(characterDao: CharacterRepository) {
@@ -14,7 +14,7 @@ export default class CharacterRegistrationImpl implements CharacterRegistration 
   }
 
   public execute = async (createCharacterDto: CreateCharacterInput): Promise<void> => {
-    const character: CharacterEntity = fromInput(createCharacterDto);
+    const character: Character = fromInput(createCharacterDto);
     await this.characterRepository.create(character);
   };
 }

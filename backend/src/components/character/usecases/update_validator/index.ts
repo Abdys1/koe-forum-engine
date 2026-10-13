@@ -1,8 +1,8 @@
 import { characterRepository } from "@src/components/character/repositories";
 import { equipmentExistenceValidation, slotCapacityValidation } from "@src/components/equipment/usecases/validation";
 
-import CharacterUpdateValidatorImpl from "./character-update-validator";
+import CharacterUpdateValidatorUseCaseImpl from "./character-update-validator";
 
-const characterUpdateValidator = new CharacterUpdateValidatorImpl(characterRepository, equipmentExistenceValidation, slotCapacityValidation);
+const characterUpdateValidator = new CharacterUpdateValidatorUseCaseImpl(characterRepository, equipmentExistenceValidation, slotCapacityValidation);
 
 export { characterUpdateValidator };

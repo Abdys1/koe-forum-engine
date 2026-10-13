@@ -1,20 +1,18 @@
 import CharacterRegistrationRequestMapper from "@src/components/character/character-dto.mapper";
-import { CharacterCollection } from "@src/components/character/usecases/collection/types";
-import { CharacterRegistration, CreateCharacterInput } from "@src/components/character/usecases/registration/types";
-import { CharacterUpdateValidator, ValidateCharacterUpdateResult } from "@src/components/character/usecases/update_validator/types";
+import { CharacterCollectionUseCase } from "@src/components/character/usecases/collection/types";
+import { CharacterEquipmentCollectionResult, CharacterEquipmentCollectionUseCase } from "@src/components/character/usecases/equipment_collection/types";
+import { CharacterRegistrationUseCase, CreateCharacterInput } from "@src/components/character/usecases/registration/types";
+import { CharacterUpdateValidatorUseCase, ValidateCharacterUpdateResult } from "@src/components/character/usecases/update_validator/types";
 import { ErrorMessages } from "@src/messages";
 import { Request, Response } from "express";
 
 export default class CharacterController {
-    private characterRegistration: CharacterRegistration;
-    private characterCollection: CharacterCollection;
-    private characterUpdateValidator: CharacterUpdateValidator;
-
-    constructor(characterRegistration: CharacterRegistration, characterCollection: CharacterCollection, characterUpdateValidator: CharacterUpdateValidator) {
-        this.characterRegistration = characterRegistration;
-        this.characterCollection = characterCollection;
-        this.characterUpdateValidator = characterUpdateValidator;
-    }
+    constructor(
+        private readonly characterRegistration: CharacterRegistrationUseCase,
+        private readonly characterCollection: CharacterCollectionUseCase,
+        private readonly characterUpdateValidator: CharacterUpdateValidatorUseCase,
+        private readonly characterEquipmentCollection: CharacterEquipmentCollectionUseCase
+    ) {}
 
     createCharacter = async (req: Request, res: Response): Promise<void> => {
         const characterUpdateValidatorInput = CharacterRegistrationRequestMapper.toValidateCharacterUpdateInput(req.user, req.body);
@@ -47,5 +45,17 @@ export default class CharacterController {
     listCharacters = async (req: Request, res: Response): Promise<void> => {
         const characters = await this.characterCollection.execute(req.user.id);
         res.status(200).send(characters);
+    }
+
+    listCharacterEquipment = async (req: Request, res: Response): Promise<void> => {
+        const { status, equipment } = await this.characterEquipmentCollection.execute({
+            characterId: Number(req.params.id)
+        });
+
+        if (status === CharacterEquipmentCollectionResult.NOT_FOUND) {
+            res.status(404).json({ errorCode: ErrorMessages.CHARACTER_NOT_EXISTS });
+            return;
+        }
+        res.status(200).send(equipment);
     }
 }

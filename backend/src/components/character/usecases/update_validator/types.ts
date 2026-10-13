@@ -1,6 +1,6 @@
 import { Sex } from "../../types"
 
-export interface CharacterUpdateValidator {
+export interface CharacterUpdateValidatorUseCase {
     execute: (input: ValidateCharacterUpdateInput) => Promise<ValidateCharacterUpdateOutput>
 }
 

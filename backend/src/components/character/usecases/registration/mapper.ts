@@ -1,7 +1,7 @@
-import CharacterEntity from "@src/components/character/models/character";
+import Character from "@src/components/character/models/character";
 import { CreateCharacterInput } from "@src/components/character/usecases/registration/types";
 
-export function fromInput(dto: CreateCharacterInput): CharacterEntity {
+export function fromInput(dto: CreateCharacterInput): Character {
     return {
         userId: dto.owner.id,
         name: dto.name,

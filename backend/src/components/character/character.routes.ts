@@ -1,26 +1,20 @@
 import CharacterController from "@src/components/character/character.controller";
 import { Sex } from "@src/components/character/types";
 import { characterCollection } from "@src/components/character/usecases/collection";
+import { characterEquipmentCollection } from "@src/components/character/usecases/equipment_collection";
 import { characterRegistration } from "@src/components/character/usecases/registration";
 import { characterUpdateValidator } from "@src/components/character/usecases/update_validator";
 import { defineRouter } from "@src/components/routerconf";
 import { HttpMethod } from "@src/components/routerconf/router-config";
 import { ErrorMessages } from "@src/messages";
-import { body } from "express-validator";
+import { body, param } from "express-validator";
 
-const characterController = new CharacterController(characterRegistration, characterCollection, characterUpdateValidator);
+const characterController = new CharacterController(characterRegistration, characterCollection, characterUpdateValidator, characterEquipmentCollection);
 
 /**
  * @openapi
  * components:
  *   schemas:
- *     CharacterEquipment:
- *       allOf:
- *         - $ref: '#/components/schemas/Equipment'
- *         - type: object
- *           properties:
- *             assignmentId:
- *               type: integer
  *     Character:
  *       type: object
  *       properties:
@@ -36,10 +30,6 @@ const characterController = new CharacterController(characterRegistration, chara
  *           type: string
  *         imageUrl:
  *           type: string
- *         equipment:
- *           type: array
- *           items:
- *             $ref: '#/components/schemas/CharacterEquipment'
  */
 
 /**
@@ -92,6 +82,29 @@ const characterController = new CharacterController(characterRegistration, chara
  *         description: A character with this name already exists
  *       422:
  *         description: One of the referenced equipment ids does not exist, or the equipment list exceeds a slot's capacity
+ * /characters/{id}/equipment:
+ *   get:
+ *     tags: [Character]
+ *     summary: List the equipment of any character
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Equipment of the character with its type; an equipment assigned multiple times is listed multiple times
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Equipment'
+ *       400:
+ *         description: The id is not an integer
+ *       404:
+ *         description: The character does not exist
  */
 export default defineRouter([
     {
@@ -112,5 +125,11 @@ export default defineRouter([
         path: '/',
         method: HttpMethod.GET,
         controller: characterController.listCharacters
+    },
+    {
+        path: '/:id/equipment',
+        method: HttpMethod.GET,
+        middlewares: [param('id').isInt().withMessage(ErrorMessages.CHARACTER_NOT_EXISTS)],
+        controller: characterController.listCharacterEquipment
     },
 ]);

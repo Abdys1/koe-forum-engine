@@ -17,7 +17,6 @@ import { Response } from "supertest";
 import { describe, it } from "vitest";
 
 interface EquipmentResponseItem {
-  assignmentId: number;
   id: number;
   name: string;
   description: string;
@@ -114,22 +113,6 @@ describe("/api/characters", () => {
       expect(equipment.map((item) => item.id).sort()).toStrictEqual(
         [potion.id, potion.id, ring.id].sort(),
       );
-    });
-
-    it("when create character with the same equipment twice then the assignment ids should be unique", async () => {
-      const user = await saveTestUserToDb();
-      const potion = await saveEquipmentToDb();
-      const newCharacter = characterReq({
-        equipmentIds: [potion.id, potion.id],
-      });
-
-      await characterClient.createCharacter(user.username, newCharacter);
-
-      const equipment = await getCharacterEquipment(user.username);
-      expect(equipment.length).toBe(2);
-      const assignmentIds = equipment.map((item) => item.assignmentId);
-      expect(assignmentIds.every((id) => id !== undefined && id !== null)).toBe(true);
-      expect(new Set(assignmentIds).size).toBe(2);
     });
 
     it("when create character with the same equipment twice then should write two join rows", async () => {
@@ -487,6 +470,54 @@ describe("/api/characters", () => {
     });
   });
 
+  describe("GET /:id/equipment", () => {
+    it("when the character belongs to another user then should still return its equipment", async () => {
+      const owner = await saveTestUserToDb();
+      const otherUser = await saveTestUserToDb();
+      const equipment = await saveEquipmentListToDb(2);
+      await characterClient.createCharacter(
+        owner.username,
+        characterReq({ equipmentIds: equipment.map((item) => item.id) }),
+      );
+      const character = await db.character.findFirstOrThrow({
+        where: { userId: owner.id },
+      });
+
+      const resp = await characterClient.getCharacterEquipment(
+        otherUser.username,
+        character.id,
+      );
+
+      expect(resp.status).toBe(200);
+      expect(
+        resp.body.map((item: EquipmentResponseItem) => item.id).sort(),
+      ).toStrictEqual(equipment.map((item) => item.id).sort());
+    });
+
+    it("when the character does not exist then should return character not exists error", async () => {
+      const user = await saveTestUserToDb();
+
+      const resp = await characterClient.getCharacterEquipment(
+        user.username,
+        999999,
+      );
+
+      expect(resp.status).toBe(404);
+      expect(resp.body.errorCode).toBe(ErrorMessages.CHARACTER_NOT_EXISTS);
+    });
+
+    it("when the id is not an integer then should return validation error", async () => {
+      const user = await saveTestUserToDb();
+
+      const resp = await characterClient.getCharacterEquipment(
+        user.username,
+        "nem-szam",
+      );
+
+      expect(resp.status).toBe(400);
+    });
+  });
+
   describe("DELETE /:id", () => {
     it("when a character is deleted then all of its equipment assignments are removed", async () => {
       const user = await saveTestUserToDb();
@@ -524,7 +555,12 @@ describe("/api/characters", () => {
     const resp = await characterClient.getCharacters(username);
     expect(resp.status).toBe(200);
     expect(resp.body.length).toBeGreaterThan(0);
-    return resp.body[0].equipment;
+    const equipmentResp = await characterClient.getCharacterEquipment(
+      username,
+      resp.body[0].id,
+    );
+    expect(equipmentResp.status).toBe(200);
+    return equipmentResp.body;
   }
 
   async function assertUserCharacterList(
@@ -543,12 +579,15 @@ describe("/api/characters", () => {
       expect(character.sex).toBe(expectedCharacter.sex);
       expect(character.race).toBe(expectedCharacter.race);
       expect(character.imageUrl).toBe(expectedCharacter.imageUrl);
-      expect(character.equipment).toBeInstanceOf(Array);
-      expect(character.equipment.length).toBe(
-        expectedCharacter.equipmentIds.length,
+      expect(character).not.toHaveProperty("equipment");
+
+      const equipmentResp = await characterClient.getCharacterEquipment(
+        username,
+        character.id,
       );
+      expect(equipmentResp.status).toBe(200);
       expect(
-        character.equipment.map((item: EquipmentResponseItem) => item.id).sort(),
+        equipmentResp.body.map((item: EquipmentResponseItem) => item.id).sort(),
       ).toStrictEqual([...expectedCharacter.equipmentIds].sort());
     }
   }

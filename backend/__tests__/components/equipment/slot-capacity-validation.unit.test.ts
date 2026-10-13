@@ -11,6 +11,7 @@ describe('SlotCapacityValidationUseCase', () => {
         equipmentRepository = {
             findAll: vi.fn(),
             findAllByIds: vi.fn(),
+            findAllByCharacterId: vi.fn(),
             findById: vi.fn(),
             findByNameAndTypeId: vi.fn(),
             countAssignmentsById: vi.fn(),

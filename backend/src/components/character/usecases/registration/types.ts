@@ -1,6 +1,6 @@
 import { Sex } from "@src/components/character/types"
 
-export interface CharacterRegistration {
+export interface CharacterRegistrationUseCase {
     execute: (newCharacterDto: CreateCharacterInput) => Promise<void>
 }
 
