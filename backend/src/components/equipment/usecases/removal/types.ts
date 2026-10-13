@@ -1,4 +1,4 @@
-export interface EquipmentRemoval {
+export interface EquipmentRemovalUseCase {
     execute: (input: RemoveEquipmentInput) => Promise<RemoveEquipmentOutput>
 }
 

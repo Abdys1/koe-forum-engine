@@ -1,6 +1,6 @@
 import { EquipmentCollectionDetails } from "@src/components/equipment/usecases/collection/types";
 
-export interface EquipmentModification {
+export interface EquipmentModificationUseCase {
     execute: (input: ModifyEquipmentInput) => Promise<ModifyEquipmentOutput>
 }
 

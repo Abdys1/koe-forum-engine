@@ -2,13 +2,13 @@ import { CharacterRepository } from '@src/components/character/repositories/type
 import { Sex } from '@src/components/character/types';
 import CharacterUpdateValidatorImpl from '@src/components/character/usecases/update_validator/character-update-validator';
 import { CharacterUpdateValidator, ValidateCharacterUpdateInput, ValidateCharacterUpdateResult } from '@src/components/character/usecases/update_validator/types';
-import { EquipmentExistenceValidation, SlotCapacityValidation } from '@src/components/equipment/usecases/validation/types';
+import { EquipmentExistenceValidationUseCase, SlotCapacityValidationUseCase } from '@src/components/equipment/usecases/validation/types';
 import { beforeEach, describe, expect, it, Mocked, vi } from 'vitest';
 
 describe('CharacterUpdateValidator', () => {
     let characterRepository: Mocked<CharacterRepository>;
-    let equipmentExistenceValidation: Mocked<EquipmentExistenceValidation>;
-    let slotCapacityValidation: Mocked<SlotCapacityValidation>;
+    let equipmentExistenceValidation: Mocked<EquipmentExistenceValidationUseCase>;
+    let slotCapacityValidation: Mocked<SlotCapacityValidationUseCase>;
     let characterUpdateValidator: CharacterUpdateValidator;
 
     beforeEach(() => {

@@ -1,7 +1,7 @@
 import { equipmentRepository } from "@src/components/equipment/repositories";
-import EquipmentCollectionImpl from "@src/components/equipment/usecases/collection/equipment-collection";
-import { EquipmentCollection } from "@src/components/equipment/usecases/collection/types";
+import EquipmentCollectionUseCaseImpl from "@src/components/equipment/usecases/collection/equipment-collection";
+import { EquipmentCollectionUseCase } from "@src/components/equipment/usecases/collection/types";
 
-const equipmentCollection: EquipmentCollection = new EquipmentCollectionImpl(equipmentRepository);
+const equipmentCollection: EquipmentCollectionUseCase = new EquipmentCollectionUseCaseImpl(equipmentRepository);
 
 export { equipmentCollection };

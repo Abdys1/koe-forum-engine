@@ -1,7 +1,7 @@
 import { EquipmentRepository } from "@src/components/equipment/repositories/types";
-import { EquipmentRemoval, EquipmentRemovalResult, RemoveEquipmentInput, RemoveEquipmentOutput } from "@src/components/equipment/usecases/removal/types";
+import { EquipmentRemovalResult, EquipmentRemovalUseCase, RemoveEquipmentInput, RemoveEquipmentOutput } from "@src/components/equipment/usecases/removal/types";
 
-export default class EquipmentRemovalImpl implements EquipmentRemoval {
+export default class EquipmentRemovalUseCaseImpl implements EquipmentRemovalUseCase {
     constructor(private readonly equipmentRepository: EquipmentRepository) {}
 
     public execute = async (input: RemoveEquipmentInput): Promise<RemoveEquipmentOutput> => {

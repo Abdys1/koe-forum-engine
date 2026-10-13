@@ -1,7 +1,7 @@
-export interface EquipmentExistenceValidation {
+export interface EquipmentExistenceValidationUseCase {
     execute: (ids: number[]) => Promise<boolean>;
 }
 
-export interface SlotCapacityValidation {
+export interface SlotCapacityValidationUseCase {
     execute: (equipmentIds: number[]) => Promise<boolean>;
 }

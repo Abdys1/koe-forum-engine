@@ -1,27 +1,17 @@
-import { EquipmentCollection } from "@src/components/equipment/usecases/collection/types";
-import { EquipmentCreation, EquipmentCreationResult } from "@src/components/equipment/usecases/creation/types";
-import { EquipmentModification, EquipmentModificationResult } from "@src/components/equipment/usecases/modification/types";
-import { EquipmentRemoval, EquipmentRemovalResult } from "@src/components/equipment/usecases/removal/types";
+import { EquipmentCollectionUseCase } from "@src/components/equipment/usecases/collection/types";
+import { EquipmentCreationResult, EquipmentCreationUseCase } from "@src/components/equipment/usecases/creation/types";
+import { EquipmentModificationResult, EquipmentModificationUseCase } from "@src/components/equipment/usecases/modification/types";
+import { EquipmentRemovalResult, EquipmentRemovalUseCase } from "@src/components/equipment/usecases/removal/types";
 import { ErrorMessages } from "@src/messages";
 import { Request, Response } from "express";
 
 export default class EquipmentController {
-    private equipmentCollection: EquipmentCollection;
-    private equipmentCreation: EquipmentCreation;
-    private equipmentModification: EquipmentModification;
-    private equipmentRemoval: EquipmentRemoval;
-
     constructor(
-        equipmentCollection: EquipmentCollection,
-        equipmentCreation: EquipmentCreation,
-        equipmentModification: EquipmentModification,
-        equipmentRemoval: EquipmentRemoval
-    ) {
-        this.equipmentCollection = equipmentCollection;
-        this.equipmentCreation = equipmentCreation;
-        this.equipmentModification = equipmentModification;
-        this.equipmentRemoval = equipmentRemoval;
-    }
+        private readonly equipmentCollection: EquipmentCollectionUseCase,
+        private readonly equipmentCreation: EquipmentCreationUseCase,
+        private readonly equipmentModification: EquipmentModificationUseCase,
+        private readonly equipmentRemoval: EquipmentRemovalUseCase
+    ) {}
 
     public getAll = async (req: Request, res: Response): Promise<void> => {
         const equipments = await this.equipmentCollection.execute();

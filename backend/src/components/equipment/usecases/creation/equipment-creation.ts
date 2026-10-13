@@ -1,10 +1,10 @@
 import { EquipmentRepository } from "@src/components/equipment/repositories/types";
 import { toEquipmentDetails } from "@src/components/equipment/usecases/collection/mapper";
-import { CreateEquipmentInput, CreateEquipmentOutput, EquipmentCreation, EquipmentCreationResult } from "@src/components/equipment/usecases/creation/types";
+import { CreateEquipmentInput, CreateEquipmentOutput, EquipmentCreationResult, EquipmentCreationUseCase } from "@src/components/equipment/usecases/creation/types";
 import { EquipmentTypeRepository } from "@src/components/equipment-type/repositories/types";
 import { SlotRepository } from "@src/components/slot/repositories/types";
 
-export default class EquipmentCreationImpl implements EquipmentCreation {
+export default class EquipmentCreationUseCaseImpl implements EquipmentCreationUseCase {
     constructor(
         private readonly equipmentRepository: EquipmentRepository,
         private readonly equipmentTypeRepository: EquipmentTypeRepository,

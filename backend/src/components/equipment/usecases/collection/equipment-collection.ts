@@ -1,8 +1,8 @@
 import { EquipmentRepository } from "@src/components/equipment/repositories/types";
 import { toEquipmentCollectionOutput } from "@src/components/equipment/usecases/collection/mapper";
-import { EquipmentCollection, EquipmentCollectionOutput } from "@src/components/equipment/usecases/collection/types";
+import { EquipmentCollectionOutput, EquipmentCollectionUseCase } from "@src/components/equipment/usecases/collection/types";
 
-export default class EquipmentCollectionImpl implements EquipmentCollection {
+export default class EquipmentCollectionUseCaseImpl implements EquipmentCollectionUseCase {
     private equipmentRepository: EquipmentRepository
 
     constructor(equipmentRepository: EquipmentRepository) {

@@ -1,11 +1,11 @@
 import { EquipmentRepository } from '@src/components/equipment/repositories/types';
-import SlotCapacityValidationImpl from '@src/components/equipment/usecases/validation/slot-capacity-validation';
-import { SlotCapacityValidation } from '@src/components/equipment/usecases/validation/types';
+import SlotCapacityValidationUseCaseImpl from '@src/components/equipment/usecases/validation/slot-capacity-validation';
+import { SlotCapacityValidationUseCase } from '@src/components/equipment/usecases/validation/types';
 import { beforeEach, describe, expect, it, Mocked, vi } from 'vitest';
 
-describe('SlotCapacityValidation', () => {
+describe('SlotCapacityValidationUseCase', () => {
     let equipmentRepository: Mocked<EquipmentRepository>;
-    let slotCapacityValidation: SlotCapacityValidation;
+    let slotCapacityValidation: SlotCapacityValidationUseCase;
 
     beforeEach(() => {
         equipmentRepository = {
@@ -19,7 +19,7 @@ describe('SlotCapacityValidation', () => {
             update: vi.fn(),
             delete: vi.fn(),
         };
-        slotCapacityValidation = new SlotCapacityValidationImpl(equipmentRepository);
+        slotCapacityValidation = new SlotCapacityValidationUseCaseImpl(equipmentRepository);
     });
 
     describe('execute()', () => {

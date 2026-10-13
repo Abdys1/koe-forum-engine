@@ -1,11 +1,11 @@
 import { EquipmentRepository } from '@src/components/equipment/repositories/types';
-import EquipmentExistenceValidationImpl from '@src/components/equipment/usecases/validation/equipment-existence-validation';
-import { EquipmentExistenceValidation } from '@src/components/equipment/usecases/validation/types';
+import EquipmentExistenceValidationUseCaseImpl from '@src/components/equipment/usecases/validation/equipment-existence-validation';
+import { EquipmentExistenceValidationUseCase } from '@src/components/equipment/usecases/validation/types';
 import { beforeEach, describe, expect, it, Mocked, vi } from 'vitest';
 
-describe('EquipmentExistenceValidation', () => {
+describe('EquipmentExistenceValidationUseCase', () => {
     let equipmentRepository: Mocked<EquipmentRepository>;
-    let equipmentExistenceValidation: EquipmentExistenceValidation;
+    let equipmentExistenceValidation: EquipmentExistenceValidationUseCase;
 
     beforeEach(() => {
         equipmentRepository = {
@@ -19,7 +19,7 @@ describe('EquipmentExistenceValidation', () => {
             update: vi.fn(),
             delete: vi.fn(),
         };
-        equipmentExistenceValidation = new EquipmentExistenceValidationImpl(equipmentRepository);
+        equipmentExistenceValidation = new EquipmentExistenceValidationUseCaseImpl(equipmentRepository);
     });
 
     describe('execute()', () => {

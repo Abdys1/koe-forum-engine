@@ -1,9 +1,9 @@
 import { EquipmentSlotUsage } from "@src/components/equipment/models/equipment-slot-usage";
 import { EquipmentRepository } from "@src/components/equipment/repositories/types";
 
-import { SlotCapacityValidation } from "./types";
+import { SlotCapacityValidationUseCase } from "./types";
 
-export default class SlotCapacityValidationImpl implements SlotCapacityValidation {
+export default class SlotCapacityValidationUseCaseImpl implements SlotCapacityValidationUseCase {
     constructor(private readonly equipmentRepository: EquipmentRepository) {}
 
     public execute = async (equipmentIds: number[]): Promise<boolean> => {

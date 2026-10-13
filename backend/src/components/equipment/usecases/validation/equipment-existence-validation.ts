@@ -1,8 +1,8 @@
 import { EquipmentRepository } from "@src/components/equipment/repositories/types";
 
-import { EquipmentExistenceValidation } from "./types";
+import { EquipmentExistenceValidationUseCase } from "./types";
 
-export default class EquipmentExistenceValidationImpl implements EquipmentExistenceValidation {
+export default class EquipmentExistenceValidationUseCaseImpl implements EquipmentExistenceValidationUseCase {
     constructor(private readonly equipmentRepository: EquipmentRepository) {}
 
     public execute = async (ids: number[]): Promise<boolean> => {

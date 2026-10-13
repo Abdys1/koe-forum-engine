@@ -1,17 +1,17 @@
 import { CharacterRepository } from "@src/components/character/repositories/types";
-import { EquipmentExistenceValidation, SlotCapacityValidation } from "@src/components/equipment/usecases/validation/types";
+import { EquipmentExistenceValidationUseCase, SlotCapacityValidationUseCase } from "@src/components/equipment/usecases/validation/types";
 
 import { CharacterUpdateValidator, ValidateCharacterUpdateInput, ValidateCharacterUpdateOutput, ValidateCharacterUpdateResult } from "./types";
 
 export default class CharacterUpdateValidatorImpl implements CharacterUpdateValidator {
     private characterRepository: CharacterRepository;
-    private equipmentExistenceValidation: EquipmentExistenceValidation;
-    private slotCapacityValidation: SlotCapacityValidation;
+    private equipmentExistenceValidation: EquipmentExistenceValidationUseCase;
+    private slotCapacityValidation: SlotCapacityValidationUseCase;
 
     constructor(
         characterRepository: CharacterRepository,
-        equipmentExistenceValidation: EquipmentExistenceValidation,
-        slotCapacityValidation: SlotCapacityValidation
+        equipmentExistenceValidation: EquipmentExistenceValidationUseCase,
+        slotCapacityValidation: SlotCapacityValidationUseCase
     ) {
         this.characterRepository = characterRepository;
         this.equipmentExistenceValidation = equipmentExistenceValidation;
