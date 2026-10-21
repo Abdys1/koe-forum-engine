@@ -10,7 +10,7 @@ export const wrapper = style({
 });
 
 export const wrapperDefault = style({ color: colors.secondary });
-export const wrapperError = style({ color: 'rgb(239, 68, 68)' });
+export const wrapperError = style({ color: colors.alert });
 
 export const label = style({
   position: 'relative',
@@ -45,8 +45,8 @@ export const inputDefault = style({
 });
 
 export const inputError = style({
-  borderColor: 'rgb(239, 68, 68)',
-  ':focus': { borderColor: 'rgb(239, 68, 68)' },
+  borderColor: colors.alert,
+  ':focus': { borderColor: colors.alert },
 });
 
 export const errorMsg = style({

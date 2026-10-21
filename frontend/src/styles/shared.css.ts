@@ -1,5 +1,10 @@
-import { globalStyle, style } from '@vanilla-extract/css';
+import { globalStyle, keyframes, style } from '@vanilla-extract/css';
 import { alphaColors, backdropBlur, colors, fonts, gradients, shadows, transition, withAlpha } from './tokens';
+
+export const riseIn = keyframes({
+  from: { opacity: 0, transform: 'translateY(0.25rem)' },
+  to: { opacity: 1, transform: 'translateY(0)' },
+});
 
 export const mainBg = style({
   backgroundColor: colors.pageDarkBg,
@@ -9,25 +14,6 @@ export const mainBg = style({
     `radial-gradient(ellipse 60% 40% at 30% 95%, ${withAlpha(colors.mainMedium, 0.12)} 0%, transparent 70%)`,
   ].join(', '),
   backgroundAttachment: 'fixed',
-});
-
-export const glassBox = style({
-  selectors: {
-    '&::before': {
-      content: '""',
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      width: '100%',
-      height: '100%',
-      background: colors.cardMediumBg,
-      opacity: 0.9,
-      borderRadius: '0.25rem',
-      borderTopLeftRadius: 0,
-      borderBottomLeftRadius: 0,
-      boxShadow: '-15px 15px 40px -5px rgba(0, 0, 0, 0.4)',
-    },
-  },
 });
 
 export const gearStepBg = style({
@@ -171,4 +157,29 @@ export const socialLink = style({
 globalStyle(`${socialLink} svg`, {
   width: '100%',
   height: '100%',
+});
+
+export const visuallyHidden = style({
+  position: 'absolute',
+  width: '1px',
+  height: '1px',
+  padding: 0,
+  margin: '-1px',
+  overflow: 'hidden',
+  clip: 'rect(0, 0, 0, 0)',
+  whiteSpace: 'nowrap',
+  border: 0,
+});
+
+export const thinScrollbar = style({
+  scrollbarWidth: 'thin',
+  scrollbarColor: `${colors.mainLight} transparent`,
+  selectors: {
+    '&::-webkit-scrollbar': { width: '6px' },
+    '&::-webkit-scrollbar-track': { background: 'transparent' },
+    '&::-webkit-scrollbar-thumb': {
+      background: colors.mainLight,
+      borderRadius: '9999px',
+    },
+  },
 });

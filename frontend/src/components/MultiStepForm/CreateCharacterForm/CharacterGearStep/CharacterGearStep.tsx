@@ -1,159 +1,101 @@
 'use client'
 
-import SelectableOptionBtn from "@/components/SelectableOptionBtn/SelectableOptionBtn";
-import TabbedListPanel, { ListOption } from "@/components/TabbedListPanel/TabbedListPanel";
-import SelectedGearElement from "@/components/SelectedGearElement/SelectedGearElement";
-import StepHeading from "@/components/StepHeading/StepHeading";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { useWatch } from "react-hook-form";
+import GearTypeIcon from "@/components/MultiStepForm/CreateCharacterForm/GearTypeIcon/GearTypeIcon";
+import GearItemCard from "@/components/MultiStepForm/CreateCharacterForm/GearItemCard/GearItemCard";
+import GearSlotTracker, { GEAR_CATALOG_ID, gearTabId } from "@/components/MultiStepForm/CreateCharacterForm/GearSlotTracker/GearSlotTracker";
+import SlotPips from "@/components/MultiStepForm/CreateCharacterForm/SlotPips/SlotPips";
 import { useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFormContext";
-import { glassBox } from "@/styles/shared.css";
-import clsx from "clsx";
+import SectionHeading from "@/components/SectionHeading/SectionHeading";
+import { applySelection, equipmentRoots, getPoolUsages, getRootSections, getRootUsage, resolveSelection } from "@/lib/equipment";
+import { stepContent, stepIntro } from "@/components/MultiStepForm/CreateCharacterForm/characterStep.css";
 import * as styles from "./CharacterGearStep.css";
 
-type GearOption = "fegyver" | "pancel";
-
-export const DEFAULT_GEAR_OPTION = "Nincs";
+const EMPTY_SELECTION: string[] = [];
 
 export default function CharacterGearStep() {
-    const formContext = useMultiStepFormContext();
-    const { register, getValues, setValue } = formContext.form;
+    const { control, setValue } = useMultiStepFormContext().form;
+    const selectedIds: string[] = useWatch({ control, name: "equipmentIds" }) ?? EMPTY_SELECTION;
 
-    const [activeGearOption, setActiveGearOption] = useState<GearOption>("fegyver");
-    const [primaryWeapon, setPrimaryWeapon] = useState(getValues("primaryWeaponTitle"));
-    const [secondaryWeapon, setSecondaryWeapon] = useState(getValues("secondaryWeaponTitle"));
-    const [shield, setShield] = useState(getValues("shieldTitle"));
-    const [bodyArmor, setBodyArmor] = useState(getValues("bodyArmorTitle"));
-    const [secondaryArmor, setSecondaryArmor] = useState(getValues("secondaryArmorTitle"));
-    const [helmet, setHelmet] = useState(getValues("helmetTitle"));
+    const [activeRootId, setActiveRootId] = useState(equipmentRoots[0].id);
+    const [previewId, setPreviewId] = useState<string | null>(null);
 
-    const weapons: ListOption[] = [
-        {
-            name: "Elsődleges",
-            onChooseElement: handlePrimaryWeapon,
-            elements: [
-                { title: "Hosszúkard", desc: "A hosszúkard lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora." },
-                { title: "Rövidkard", desc: "Rövidkard ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora." },
-                { title: "Fokos", desc: "A fokos lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora." },
-                { title: "Pöröly", desc: "A pöröly lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora." },
-                { title: "Csatabárd", desc: "Csatabárddal lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora." },
-                { title: "Lándzsa", desc: "A lándzsa lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora." },
-                { title: "Szegecses kesztyű", desc: "Vedd fel a kesztyűt vagy lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora." }
-            ]
-        },
-        {
-            name: "Másodlagos",
-            onChooseElement: handleSecondaryWeapon,
-            elements: [
-                { title: "Szablya", desc: "A szablya lorem ipsum dolor sit amet consectetur, adipisicing elit." },
-                { title: "Rövidkard", desc: "Rövidkard ipsum dolor sit amet consectetur, adipisicing elit." },
-                { title: "Fokos", desc: "A fokos lorem ipsum dolor sit amet consectetur, adipisicing elit." },
-                { title: "Pöröly", desc: "A pöröly lorem ipsum dolor sit amet consectetur, adipisicing elit." },
-                { title: "Csatabárd", desc: "Csatabárddal lorem ipsum dolor sit amet consectetur, adipisicing elit." },
-                { title: "Lándzsa", desc: "A lándzsa lorem ipsum dolor sit amet consectetur, adipisicing elit." },
-                { title: "Szegecses kesztyű", desc: "Vedd fel a kesztyűt vagy lorem ipsum dolor sit amet consectetur, adipisicing elit." }
-            ]
-        },
-        {
-            name: "Pajzs",
-            onChooseElement: handleShield,
-            elements: [
-                { title: "Kerek fapajzs", desc: "Kerek fapajzs lorem ipsum dolor sit amet consectetur, adipisicing elit." },
-                { title: "Ökölpajzs", desc: "Ökölpajzs lorem ipsum dolor sit amet consectetur, adipisicing elit." }
-            ]
-        }
-    ];
+    const usages = useMemo(() => getPoolUsages(selectedIds), [selectedIds]);
+    const counts = useMemo(() => selectedIds.reduce((map, itemId) => map.set(itemId, (map.get(itemId) ?? 0) + 1),
+        new Map<string, number>()), [selectedIds]);
 
-    const armors: ListOption[] = [
-        {
-            name: "Testpáncél",
-            onChooseElement: handleBodyArmor,
-            elements: [
-                { title: "Sodronying", desc: "A sordonying lorem ipsum dolor sit amet consectetur, adipisicing elit." },
-                { title: "Gambeson", desc: "A gambeson adipisicing elit." },
-                { title: "Rákozott bőrvért", desc: "A bőrvért lorem ipsum dolor sit amet consectetur, adipisicing elit." },
-                { title: "Rákozott bőrvért csataszoknyával", desc: "A bőrvért szoknyával is lorem ipsum dolor sit amet consectetur, adipisicing elit." },
-                { title: "Rákozott bőrvért vállvérttel", desc: "A bőrvért vállvérttel is lorem ipsum dolor sit amet consectetur, adipisicing elit." },
-                { title: "Pikkelyes bőrvért", desc: "A pikkelyes lorem ipsum dolor sit amet consectetur, adipisicing elit." },
-                { title: "Pikkelyes bőrvért vállvérttel", desc: "A pikkelyes váll orrupti esse repudiandae saepe." },
-                { title: "Lamellás vért", desc: "A lamellás lorem ipsum dolor sit amet consectetur, adipisicing elit." },
-                { title: "Lemezvért", desc: "Lemezes lorem ipsum dolor sit amet consectetur, adipisicing elit." },
-                { title: "Rákozott lemezvért", desc: "Rákozott lorem ipsum dolor sit amet consectetur, adipisicing elit." },
-                { title: "Rákozott lemezvért csataszoknyával", desc: "Rákozott lemez szoknyával adipisicing elit." },
-                { title: "Teljes gyalogos páncél", desc: "Valaki nagyon kemény talpas lorem ipsum dolor sit amet consectetur, adipisicing elit." },
-                { title: "Teljes lovagi páncél", desc: "A lova se bírja el lorem ipsum dolor sit amet consectetur, adipisicing elit." }
-            ]
-        },
-        {
-            name: "Kéz és lábvért",
-            onChooseElement: handleSecondaryArmor,
-            elements: [
-                { title: "Bőr alkarvért", desc: "Alkaron bőr lorem ipsum dolor sit amet consectetur, adipisicing elit." },
-                { title: "Bőr lábvért", desc: "Lábszáron bőr lorem ipsum dolor sit amet consectetur, adipisicing elit." },
-                { title: "Bőr alkar és lábvért", desc: "Mindenhol bőr lorem ipsum dolor sit amet consectetur, adipisicing elit." },
-                { title: "Fém alkarvért", desc: "Alkaron fém lorem ipsum dolor sit amet consectetur, adipisicing elit." },
-                { title: "Fém lábvért", desc: "A lábszáron fém lorem ipsum dolor sit amet consectetur, adipisicing elit." },
-                { title: "Fém alkar és lábvért", desc: "Mindenhol fém lorem ipsum dolor sit amet consectetur, adipisicing elit." }
-            ]
-        },
-        {
-            name: "Sisak",
-            onChooseElement: handleHelmet,
-            elements: [
-                { title: "Nyitott bőrsisak", desc: "A nyitott lorem ipsum dolor sit amet consectetur, adipisicing elit." },
-                { title: "Bőrsisak orrvédővel", desc: "Orrvédős lorem ipsum dolor sit amet consectetur, adipisicing elit." },
-                { title: "Nyitott fémsisak", desc: "A nyitott fém lorem ipsum dolor sit amet consectetur, adipisicing elit." },
-                { title: "Nyitott fémsisak orrvédővel", desc: "A fém orr lorem ipsum dolor sit amet consectetur, adipisicing elit." },
-                { title: "Fazéksisak", desc: "A fazék lorem ipsum dolor sit amet consectetur, adipisicing elit." },
-                { title: "Vaskalap", desc: "Vaskalapos lorem ipsum dolor sit amet consectetur, adipisicing elit." },
-                { title: "Rákfarkas sisak", desc: "Most akkor rák vagy farkas lorem ipsum dolor sit amet consectetur, adipisicing elit." }
-            ]
-        }
-    ];
+    const activeRoot = equipmentRoots.find(root => root.id === activeRootId) ?? equipmentRoots[0];
+    const activeUsage = getRootUsage(activeRoot.id, usages);
 
-    function handleGearOption(gear: GearOption): void { setActiveGearOption(gear); }
-    function handlePrimaryWeapon(title: string) { setPrimaryWeapon(title); setValue("primaryWeaponTitle", title); }
-    function handleSecondaryWeapon(title: string) { setSecondaryWeapon(title); setValue("secondaryWeaponTitle", title); }
-    function handleShield(title: string) { setShield(title); setValue("shieldTitle", title); }
-    function handleBodyArmor(title: string) { setBodyArmor(title); setValue("bodyArmorTitle", title); }
-    function handleSecondaryArmor(title: string) { setSecondaryArmor(title); setValue("secondaryArmorTitle", title); }
-    function handleHelmet(title: string) { setHelmet(title); setValue("helmetTitle", title); }
+    function updateSelection(nextIds: string[]) {
+        setValue("equipmentIds", nextIds, { shouldDirty: true });
+    }
+
+    function selectItem(itemId: string) {
+        updateSelection(applySelection(itemId, selectedIds, resolveSelection(itemId, usages)));
+    }
+
+    function removeAt(index: number) {
+        updateSelection(selectedIds.filter((_, selectedIndex) => selectedIndex !== index));
+    }
+
+    function selectRoot(rootId: string) {
+        setActiveRootId(rootId);
+        setPreviewId(null);
+    }
+
+    function handlePreview(itemId: string, isActive: boolean) {
+        setPreviewId(current => isActive ? itemId : current === itemId ? null : current);
+    }
 
     return (
-        <div className={styles.container}>
-            <div className={styles.content}>
-                <StepHeading title="3. Válassz fegyverzetet:" />
-                <div className={styles.gearRow}>
-                    <div className={styles.selectorPanel}>
-                        <div className={styles.optionBtns}>
-                            <SelectableOptionBtn title="Fegyver" onClick={() => handleGearOption("fegyver")} active={activeGearOption === "fegyver"}/>
-                            <SelectableOptionBtn title="Páncél" onClick={() => handleGearOption("pancel")} active={activeGearOption === "pancel"}/>
-                        </div>
-                        {activeGearOption === "fegyver" && <TabbedListPanel options={weapons}/>}
-                        {activeGearOption === "pancel" && <TabbedListPanel options={armors}/>}
-                    </div>
-                    <div className={styles.summaryPanel}>
-                        <div className={clsx(styles.glassPanel, glassBox)}>
-                            <h3 className={styles.gearSummaryTitle}>Karakter felszerelése:</h3>
-                            <div className={styles.gearColumns}>
-                                <div className={styles.gearColumn}>
-                                    <SelectedGearElement optionTitle="Elsődleges fegyver" gearTitle={primaryWeapon} onClear={() => handlePrimaryWeapon(DEFAULT_GEAR_OPTION)} isActiveClearBtn={primaryWeapon !== DEFAULT_GEAR_OPTION}/>
-                                    <input type="hidden" {...register("primaryWeaponTitle", {value: primaryWeapon})}/>
-                                    <SelectedGearElement optionTitle="Másodlagos fegyver" gearTitle={secondaryWeapon} onClear={() => handleSecondaryWeapon(DEFAULT_GEAR_OPTION)} isActiveClearBtn={secondaryWeapon !== DEFAULT_GEAR_OPTION}/>
-                                    <input type="hidden" {...register("secondaryWeaponTitle", {value: secondaryWeapon})}/>
-                                    <SelectedGearElement optionTitle="Pajzs" gearTitle={shield} onClear={() => handleShield(DEFAULT_GEAR_OPTION)} isActiveClearBtn={shield !== DEFAULT_GEAR_OPTION}/>
-                                    <input type="hidden" {...register("shieldTitle", {value: shield})}/>
-                                </div>
-                                <div className={styles.gearColumn}>
-                                    <SelectedGearElement optionTitle="Testpáncél" gearTitle={bodyArmor} onClear={() => handleBodyArmor(DEFAULT_GEAR_OPTION)} isActiveClearBtn={bodyArmor !== DEFAULT_GEAR_OPTION}/>
-                                    <input type="hidden" {...register("bodyArmorTitle", {value: bodyArmor})}/>
-                                    <SelectedGearElement optionTitle="Kéz és lábvért" gearTitle={secondaryArmor} onClear={() => handleSecondaryArmor(DEFAULT_GEAR_OPTION)} isActiveClearBtn={secondaryArmor !== DEFAULT_GEAR_OPTION}/>
-                                    <input type="hidden" {...register("secondaryArmorTitle", {value: secondaryArmor})}/>
-                                    <SelectedGearElement optionTitle="Sisak" gearTitle={helmet} onClear={() => handleHelmet(DEFAULT_GEAR_OPTION)} isActiveClearBtn={helmet !== DEFAULT_GEAR_OPTION}/>
-                                    <input type="hidden" {...register("helmetTitle", {value: helmet})}/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        <div className={stepContent}>
+            <SectionHeading eyebrow="3. lépés" title="Kezdő felszerelés"/>
+            <p className={stepIntro}>
+                Minden felszerelés slotot foglal. Válogass szabadon, amíg van szabad helyed a keretben.
+            </p>
+            <div className={styles.layout}>
+                <GearSlotTracker activeRootId={activeRootId} usages={usages} previewId={previewId}
+                                 onSelectRoot={selectRoot} onRemove={removeAt}/>
+                <div key={activeRoot.id} id={GEAR_CATALOG_ID} role="tabpanel" aria-labelledby={gearTabId(activeRoot.id)}
+                     className={styles.catalog}>
+                    <header className={styles.catalogHeader}>
+                        <GearTypeIcon icon={activeRoot.icon} className={styles.catalogIcon}/>
+                        <h3 className={styles.catalogTitle}>{activeRoot.label}</h3>
+                        <span className={styles.catalogMeta}>
+                            {activeUsage.capacity - activeUsage.used} / {activeUsage.capacity} slot szabad
+                        </span>
+                    </header>
+                    {getRootSections(activeRoot.id).map(section => {
+                        const usage = usages.get(section.pool.type.id);
+                        const hasOwnPool = section.pool.type.id === section.type.id;
+                        const headingId = `gear-section-${section.type.id}`;
+                        return (
+                            <section key={section.type.id} className={styles.section} aria-labelledby={headingId}>
+                                <header className={styles.sectionHeader}>
+                                    <h4 id={headingId} className={styles.sectionTitle}>{section.label}</h4>
+                                    <span className={styles.badge}>
+                                        <SlotPips total={section.cost} size="small"/>
+                                        {section.cost} slot / db
+                                    </span>
+                                    {hasOwnPool && usage &&
+                                        <span className={styles.poolMeta}>Keret: {usage.used} / {section.pool.capacity}</span>
+                                    }
+                                </header>
+                                <ul className={styles.grid}>
+                                    {section.items.map(item => (
+                                        <GearItemCard key={item.id} name={item.name}
+                                                      count={counts.get(item.id) ?? 0}
+                                                      status={resolveSelection(item.id, usages).kind}
+                                                      onSelect={() => selectItem(item.id)}
+                                                      onRemove={() => removeAt(selectedIds.lastIndexOf(item.id))}
+                                                      onPreview={isActive => handlePreview(item.id, isActive)}/>
+                                    ))}
+                                </ul>
+                            </section>
+                        );
+                    })}
                 </div>
             </div>
         </div>

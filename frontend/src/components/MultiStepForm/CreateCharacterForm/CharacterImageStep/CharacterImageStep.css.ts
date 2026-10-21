@@ -1,186 +1,129 @@
 import { style } from '@vanilla-extract/css';
-import { colors, fonts } from '@/styles/tokens';
-
-export const container = style({
-  position: 'relative',
-  width: '100%',
-  height: 'calc(100vh - 4rem)',
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  flexDirection: 'column',
-  margin: '2rem',
-  paddingTop: '1rem',
-  paddingBottom: '1rem',
-  paddingLeft: '2rem',
-  paddingRight: '2rem',
-  overflow: 'hidden',
-});
-
-export const content = style({
-  position: 'relative',
-  marginTop: '0.5rem',
-  width: '100%',
-  display: 'flex',
-  justifyContent: 'flex-start',
-  alignItems: 'flex-start',
-  flexDirection: 'column',
-  zIndex: 10,
-});
+import { fadeDividerTop, glassPanel } from '@/styles/shared.css';
+import { colors, fonts, media, shadows, withAlpha } from '@/styles/tokens';
 
 export const uploadRow = style({
   position: 'relative',
   width: '100%',
-  marginTop: '0.5rem',
+  marginTop: '0.75rem',
+  paddingInline: '3rem',
   display: 'flex',
-  justifyContent: 'space-evenly',
+  justifyContent: 'center',
   alignItems: 'flex-start',
+  gap: '4.5rem',
+  '@media': {
+    [media.tablet]: {
+      paddingInline: '1rem',
+      gap: '2.5rem',
+    },
+    [media.mobile]: {
+      paddingInline: 0,
+      gap: '2rem',
+      flexDirection: 'column',
+      alignItems: 'center',
+    },
+  },
 });
 
-export const imageLabel = style({
-  position: 'relative',
-  width: '185px',
-  height: '308px',
-  marginRight: '1rem',
+export const portraitColumn = style({
+  flexShrink: 0,
   display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  borderRadius: '0.125rem',
-  background: 'rgba(235,190,82,0.1)',
-  border: `2px solid ${colors.secondaryLight}`,
-  outline: `1px solid ${colors.secondaryLight}`,
-  outlineOffset: '2px',
-  cursor: 'pointer',
-});
-
-export const placeholder = style({
-  position: 'relative',
-  width: '100%',
-  height: '100%',
-  paddingBottom: '1rem',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
   flexDirection: 'column',
-});
-
-export const placeholderIcon = style({
-  position: 'relative',
-  width: '100%',
-  marginBottom: '0.5rem',
-  display: 'flex',
-  justifyContent: 'center',
   alignItems: 'center',
-  fontSize: '3.75rem',
-  fontFamily: fonts.poppins,
-  fontWeight: '500',
-  color: colors.secondaryLight,
-});
-
-export const placeholderText = style({
-  position: 'relative',
-  width: '100%',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  fontFamily: fonts.poppins,
-  fontWeight: '500',
-  color: colors.secondaryLight,
-  letterSpacing: '0.05em',
-  textTransform: 'uppercase',
-});
-
-export const previewImg = style({
-  position: 'relative',
-  width: '100%',
-  height: '100%',
-  objectFit: 'cover',
-});
-
-export const previewOverlay = style({
-  position: 'absolute',
-  top: 0,
-  left: 0,
-  width: '100%',
-  height: '100%',
-  paddingBottom: '0.5rem',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  background: 'rgba(0,0,0,0.5)',
-  color: colors.secondaryLight,
-  fontWeight: '500',
-  fontFamily: fonts.poppins,
-  textTransform: 'uppercase',
-  letterSpacing: '0.05em',
-  opacity: 0,
-  transition: 'all 0.3s ease-out',
-  ':hover': { opacity: 1 },
+  gap: '1.25rem',
 });
 
 export const hiddenInput = style({ display: 'none' });
 
-export const glassPanel = style({
+export const panel = style([glassPanel, {
   position: 'relative',
-  width: '100%',
-  maxWidth: '42rem',
-  padding: '1rem',
-  marginBottom: '0.5rem',
+  flex: '1 1 0',
+  maxWidth: '38rem',
+  padding: '1.5rem 1.75rem',
   display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'flex-start',
   flexDirection: 'column',
-  zIndex: 10,
-  borderLeft: `8px solid ${colors.mainLight}`,
-  borderRadius: '0.25rem',
-});
+  alignItems: 'flex-start',
+  gap: '1rem',
+  '@media': {
+    [media.mobile]: {
+      flex: 'none',
+      width: '100%',
+    },
+  },
+}]);
 
 export const helpTitle = style({
-  position: 'relative',
-  width: '100%',
-  paddingBottom: '0.5rem',
-  color: colors.mainLight,
-  textTransform: 'uppercase',
-  letterSpacing: '0.1em',
-  fontFamily: fonts.poppins,
-  fontWeight: '600',
+  fontFamily: fonts.cinzel,
+  fontSize: '1.15rem',
+  fontWeight: '700',
+  letterSpacing: '0.06em',
+  color: colors.secondary,
+  textShadow: shadows.text,
 });
 
-export const helpText = style({
+export const helpList = style({
+  margin: 0,
+  padding: 0,
+  listStyle: 'none',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '0.5rem',
+});
+
+const listItem = {
   position: 'relative',
-  marginBottom: '0.5rem',
-  fontSize: '0.875rem',
+  paddingLeft: '1.25rem',
   fontFamily: fonts.roboto,
-  color: colors.white,
-  letterSpacing: '0.025em',
-});
-
-export const highlight = style({ color: colors.mainHover });
-export const highlightBold = style({ color: colors.mainHover, fontWeight: '500' });
-
-export const moreLink = style({
-  position: 'relative',
-  padding: '0.25rem',
-  marginBottom: '0.25rem',
-  letterSpacing: '0.1em',
-  fontFamily: fonts.poppins,
-  fontWeight: '500',
   fontSize: '0.875rem',
-  color: colors.secondaryMedium,
-  textDecoration: 'none',
-  transition: 'all 0.3s ease-in-out',
-  ':hover': { color: colors.secondaryDark },
+  lineHeight: 1.5,
+  letterSpacing: '0.025em',
+} as const;
+
+const listMarker = {
+  content: '""',
+  position: 'absolute',
+  left: '0.15rem',
+  top: '0.5em',
+  width: '0.4rem',
+  height: '0.4rem',
+  transform: 'rotate(45deg)',
+} as const;
+
+export const ruleItem = style({
+  ...listItem,
+  fontWeight: '500',
+  color: colors.white,
   selectors: {
-    '&::before': {
-      content: '""',
-      position: 'absolute',
-      bottom: 0,
-      left: 0,
-      width: 0,
-      height: '0.125rem',
-      background: colors.secondaryDark,
-      transition: 'all 0.3s ease-in-out',
-    },
-    '&:hover::before': { width: '100%' },
+    '&::before': { ...listMarker, background: colors.mainLight },
   },
 });
+
+export const helpItem = style({
+  ...listItem,
+  color: colors.white,
+  selectors: {
+    '&::before': { ...listMarker, background: withAlpha(colors.white, 0.3) },
+  },
+});
+
+export const rulesBlock = style({
+  width: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '0.6rem',
+});
+
+export const helpBlock = style([fadeDividerTop, {
+  width: '100%',
+  paddingTop: '1rem',
+}]);
+
+export const rulesTitle = style({
+  fontFamily: fonts.poppins,
+  fontSize: '0.95rem',
+  fontWeight: '500',
+  letterSpacing: '0.05em',
+  color: colors.secondary,
+});
+
+export const highlight = style({ color: colors.secondary });

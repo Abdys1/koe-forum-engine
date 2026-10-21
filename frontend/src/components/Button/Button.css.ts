@@ -19,7 +19,19 @@ export const base = style({
   },
 });
 
+export const icon = style({
+  fontSize: '1.15em',
+});
+
 export const sizes = styleVariants({
+  small: {
+    height: '2.25rem',
+    paddingLeft: '1rem',
+    paddingRight: '1.15rem',
+    gap: '0.4rem',
+    fontSize: '0.875rem',
+    letterSpacing: '0.02em',
+  },
   medium: {
     height: '3rem',
     paddingLeft: '1.5rem',
@@ -77,6 +89,25 @@ export const variants = styleVariants({
       '&:hover:not(:disabled)': {
         borderColor: colors.secondary,
         color: colors.secondary,
+      },
+    },
+  },
+  soft: {
+    borderColor: alphaColors.primaryBorder,
+    borderRadius: '999px',
+    background: alphaColors.primaryTintSoft,
+    color: alphaColors.textSoft,
+    fontWeight: '500',
+    textTransform: 'none',
+    selectors: {
+      '&:hover:not(:disabled)': {
+        borderColor: alphaColors.primaryBorderStrong,
+        background: alphaColors.primaryTint,
+        color: colors.mainLight,
+      },
+      '&:focus-visible': {
+        outline: `2px solid ${colors.mainLight}`,
+        outlineOffset: '2px',
       },
     },
   },

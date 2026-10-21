@@ -64,7 +64,7 @@ export const counter = style({
 });
 
 export const counterInvalid = style({
-  color: 'rgb(239, 68, 68)',
+  color: colors.alert,
 });
 
 export const actions = style({

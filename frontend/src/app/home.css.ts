@@ -567,7 +567,7 @@ export const joinBand = style([contentContainer, {
   padding: '2rem 2.5rem',
   borderRadius: '0.75rem',
   border: `1px solid ${alphaColors.primaryBorderMedium}`,
-  background: `linear-gradient(120deg, ${withAlpha(colors.mainMedium, 0.35)} 0%, ${withAlpha(colors.cardBlackBg, 0.7)} 60%, ${withAlpha(colors.secondary, 0.1)} 100%)`,
+  background: gradients.primaryGoldSurface,
   boxShadow: shadows.glass,
 }]);
 

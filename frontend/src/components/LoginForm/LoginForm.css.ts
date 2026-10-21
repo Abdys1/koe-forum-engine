@@ -8,7 +8,7 @@ export const form = style({
 });
 
 export const errorMsg = style({
-  color: 'rgb(220, 38, 38)',
+  color: colors.alert,
 });
 
 export const submitBtn = style({

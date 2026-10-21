@@ -1,66 +1,78 @@
 'use client'
 
-import StepHeading from "@/components/StepHeading/StepHeading";
-import { useState } from "react";
-import Link from "next/link";
+import Button from "@/components/Button/Button";
+import SectionHeading from "@/components/SectionHeading/SectionHeading";
+import { useRef } from "react";
+import { useWatch } from "react-hook-form";
+import { useObjectUrl } from "@/hooks/useObjectUrl";
 import { useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFormContext";
-import { glassBox } from "@/styles/shared.css";
 import clsx from "clsx";
+import CharacterPortraitFrame from "@/components/MultiStepForm/CreateCharacterForm/CharacterPortraitFrame/CharacterPortraitFrame";
+import { stepContent, stepIntro } from "@/components/MultiStepForm/CreateCharacterForm/characterStep.css";
 import * as styles from "./CharacterImageStep.css";
-
-const IMAGE_PLACEHOLDER = "";
 
 export default function CharacterImageStep() {
     const formContext = useMultiStepFormContext();
-    const { register, getValues } = formContext.form;
-    const [characterImage, setCharacterImage] = useState(getCharacterImg());
-
-    function handleImageChange(event: React.ChangeEvent<HTMLInputElement>) {
-        const images = event.target.files;
-        if (!images) throw new Error('No image');
-        if (images.length === 0) return;
-        setCharacterImage(URL.createObjectURL(images[0]));
-    }
-
-    function getCharacterImg() {
-        const images = getValues("characterImg");
-        if (images?.length > 0) return URL.createObjectURL(images[0]);
-        return IMAGE_PLACEHOLDER;
-    }
+    const { register, control } = formContext.form;
+    const images: FileList | undefined = useWatch({ control, name: "characterImg" });
+    const characterImage = useObjectUrl(images?.[0]);
+    const imageInputRef = useRef<HTMLInputElement | null>(null);
+    const { ref: registerImageRef, ...imageField } = register("characterImg", {validate: (files: FileList | undefined) => !!files?.length});
 
     return (
-        <div className={styles.container}>
-            <div className={styles.content}>
-                <StepHeading title="4. Töltsd fel karakterképed:" />
-                <div className={styles.uploadRow}>
-                    <label htmlFor="characterImg" className={styles.imageLabel}>
-                        {characterImage === IMAGE_PLACEHOLDER &&
-                            <div className={styles.placeholder}>
-                                <span className={styles.placeholderIcon}>+</span>
-                                <span className={styles.placeholderText}>Kép feltöltése</span>
-                            </div>
-                        }
-                        {characterImage !== IMAGE_PLACEHOLDER &&
-                            <>
-                                <img src={characterImage} alt="karaktered képe" className={styles.previewImg}/>
-                                <span className={styles.previewOverlay}>Kép módosítása</span>
-                            </>
-                        }
-                    </label>
-                    <input type="file" id="characterImg" className={styles.hiddenInput}
-                        {...register("characterImg", {onChange: handleImageChange, required: true})}
-                    />
-                    <div className={clsx(styles.glassPanel, glassBox)}>
-                        <h3 className={styles.helpTitle}>Segédlet képfeltöltéséhez:</h3>
-                        <p className={styles.helpText}>
-                            A megjelenített kép mérete <span className={styles.highlight}>186px</span> x <span className={styles.highlight}>308px</span>, az optimális képarány <span className={styles.highlight}>3 : 5</span>. A sikeres feltöltéshez használj <span className={styles.highlight}>png</span>, <span className={styles.highlight}>jpg</span> vagy <span className={styles.highlight}>jpeg</span> formátumú képet.
-                        </p>
-                        <p className={styles.helpText}>
-                            <span className={clsx(styles.highlight, styles.highlightBold)}>Fontos! </span>
-                            A karakteredhez választott kép <span className={styles.highlight}>nem</span> lehet létező személyt ábrázoló kép (pl. híresség, vagy a szelfid sem). Továbbá <span className={styles.highlight}>ne válassz</span> közismert történetek szereplőiről készült illusztrációt saját karakterednek. Olyan képet válassz, ami illik az általad korábban megadott paraméterekhez (karakter faja, neme).
-                        </p>
-                        <Link href="#" className={styles.moreLink}>Karakterképről bővebben</Link>
+        <div className={stepContent}>
+            <SectionHeading eyebrow="4. lépés" title="Az arc, amiről a történetek szólnak"/>
+            <p className={stepIntro}>
+                Misztikumokkal övezett szóbeszédek alakja, regék hőse vagy dalnokok múzsája? Rajtad áll, ki rejlik mögötte.
+            </p>
+            <div className={styles.uploadRow}>
+                <div className={styles.portraitColumn}>
+                    <CharacterPortraitFrame htmlFor="characterImg" imageUrl={characterImage} imageAlt="karaktered képe"
+                        placeholder={{ icon: "add_photo_alternate", text: "Kép feltöltése" }}
+                        overlay={{ icon: "swap_horiz", text: "Kép cseréje" }}/>
+                    {characterImage &&
+                        <Button variant="soft" size="small" icon="swap_horiz" title="Kép cseréje"
+                            onClick={() => imageInputRef.current?.click()}/>
+                    }
+                </div>
+                <input type="file" id="characterImg" accept="image/png, image/jpeg" className={styles.hiddenInput}
+                    {...imageField}
+                    ref={element => {
+                        registerImageRef(element);
+                        imageInputRef.current = element;
+                    }}
+                />
+                <div className={styles.panel}>
+                    <h3 className={styles.helpTitle}>Segédlet képfeltöltéséhez</h3>
+                    <div className={styles.rulesBlock}>
+                        <h4 className={styles.rulesTitle}>Szabályok</h4>
+                        <ul className={styles.helpList}>
+                            <li className={styles.ruleItem}>
+                                <span className={styles.highlight}>Nem</span> ábrázolhat létező személyt (pl. hírességet vagy saját fotót)
+                            </li>
+                            <li className={styles.ruleItem}>
+                                <span className={styles.highlight}>Ne válassz</span> közismert történetek szereplőiről készült illusztrációt
+                            </li>
+                            <li className={styles.ruleItem}>
+                                Illeszkedjen a korábban megadott <span className={styles.highlight}>fajhoz</span>
+                            </li>
+                        </ul>
                     </div>
+                    <ul className={clsx(styles.helpList, styles.helpBlock)}>
+                        <li className={styles.helpItem}>
+                            Képarány: <span className={styles.highlight}>5 : 8</span> (álló kép)
+                        </li>
+                        <li className={styles.helpItem}>
+                            Megjelenített méret: <span className={styles.highlight}>224 × 358 px</span>
+                        </li>
+                        <li className={styles.helpItem}>
+                            Éles megjelenéshez ajánlott: legalább <span className={styles.highlight}>448 × 716 px</span>
+                        </li>
+                        <li className={styles.helpItem}>
+                            Formátum: <span className={styles.highlight}>png</span>, <span className={styles.highlight}>jpg</span> vagy <span className={styles.highlight}>jpeg</span>
+                        </li>
+                    </ul>
+                    <Button href="#" variant="outline" size="medium" title="Karakterképről bővebben"/>
                 </div>
             </div>
         </div>

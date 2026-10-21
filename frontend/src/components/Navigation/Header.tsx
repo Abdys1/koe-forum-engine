@@ -9,7 +9,7 @@ export default function Header() {
         <a href="/" className={styles.logo}>Gloamfall</a>
         <div className={styles.menu}>
           <a href="#" className={styles.menuItem}>Világ</a>
-          <a href="#" className={styles.menuItem}>Karakter alkotás</a>
+          <a href="#" className={styles.menuItem}>Karakteralkotás</a>
           <a href="/roleplay-area" className={styles.menuItem}>Játéktér</a>
           <a href="#" className={styles.mapBtn} aria-label="Térkép" title="Térkép">
             <Image

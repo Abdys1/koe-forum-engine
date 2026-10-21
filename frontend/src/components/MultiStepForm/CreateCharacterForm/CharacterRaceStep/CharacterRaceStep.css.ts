@@ -1,113 +1,142 @@
-import { style } from '@vanilla-extract/css';
-import { colors, fonts } from '@/styles/tokens';
+import { createVar, keyframes, style } from '@vanilla-extract/css';
+import { glassPanel } from '@/styles/shared.css';
+import { alphaColors, backdropBlur, colors, displayTitle, fonts, media, transition, withAlpha } from '@/styles/tokens';
 
-export const container = style({
-  position: 'relative',
-  width: '100%',
-  height: 'calc(100vh - 4rem)',
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  flexDirection: 'column',
-  margin: '2rem',
-  paddingTop: '1rem',
-  paddingBottom: '1rem',
-  paddingLeft: '2rem',
-  paddingRight: '2rem',
-  overflow: 'hidden',
+const appear = keyframes({
+  from: { opacity: 0, transform: 'translateY(0.5rem)' },
+  to: { opacity: 1, transform: 'translateY(0)' },
 });
 
 export const content = style({
-  position: 'relative',
-  marginTop: '0.5rem',
-  width: '100%',
+  height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '1.25rem',
+});
+
+export const stage = style({
+  flexGrow: 1,
+  minHeight: 0,
   display: 'flex',
   justifyContent: 'flex-end',
-  alignItems: 'flex-start',
-  zIndex: 10,
+  overflowY: 'auto',
 });
 
-export const infoPanel = style({
-  position: 'relative',
+export const detail = style({
   width: '100%',
-  maxWidth: '50%',
+  maxWidth: '46rem',
   display: 'flex',
-  justifyContent: 'flex-start',
-  alignItems: 'flex-start',
   flexDirection: 'column',
-  marginRight: '3.5rem',
+  gap: '0.5rem',
 });
 
-export const glassPanel = style({
-  position: 'relative',
-  width: '100%',
-  padding: '1rem',
-  margin: '1rem',
-  marginTop: '0.5rem',
+export const infoPanel = style([glassPanel, {
   display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'flex-start',
   flexDirection: 'column',
-  zIndex: 10,
-  borderLeft: `8px solid ${colors.mainLight}`,
-  borderRadius: '0.25rem',
-});
+  alignItems: 'flex-start',
+  gap: '0.75rem',
+  marginTop: '0.75rem',
+  padding: '1.5rem 1.75rem',
+  '@media': {
+    [media.motionOk]: {
+      animation: `${appear} 0.5s ease-out`,
+    },
+  },
+}]);
 
-export const raceTitle = style({
-  position: 'relative',
-  paddingBottom: '0.125rem',
-  marginBottom: '0.5rem',
-  color: colors.mainHover,
-  textTransform: 'uppercase',
-  letterSpacing: '0.1em',
+export const raceTitle = style(displayTitle);
+
+export const teaser = style({
+  paddingLeft: '1rem',
+  borderLeft: `2px solid ${colors.mainLight}`,
   fontFamily: fonts.poppins,
-  fontWeight: '600',
+  fontSize: '1rem',
+  fontStyle: 'italic',
+  lineHeight: 1.6,
+  color: colors.secondaryLight,
+  selectors: {
+    '&::before': { content: '"„"' },
+    '&::after': { content: '"”"' },
+  },
 });
 
 export const raceDesc = style({
-  position: 'relative',
-  marginBottom: '0.5rem',
   fontFamily: fonts.poppins,
-  color: colors.white,
+  fontSize: '0.9rem',
+  lineHeight: 1.7,
+  color: alphaColors.textBody,
 });
 
-export const moreLink = style({
-  position: 'relative',
-  padding: '0.25rem',
-  marginBottom: '0.25rem',
-  letterSpacing: '0.1em',
-  fontFamily: fonts.poppins,
-  fontWeight: '500',
-  fontSize: '0.875rem',
-  color: colors.secondaryMedium,
-  textDecoration: 'none',
-  transition: 'all 0.3s ease-in-out',
-  ':hover': {
-    color: colors.secondaryDark,
-  },
-  selectors: {
-    '&::before': {
-      content: '""',
-      position: 'absolute',
-      bottom: 0,
-      left: 0,
-      width: 0,
-      height: '0.125rem',
-      background: colors.secondaryDark,
-      transition: 'all 0.3s ease-in-out',
-    },
-    '&:hover::before': {
-      width: '100%',
-    },
-  },
-});
-
-export const raceList = style({
-  position: 'relative',
-  paddingLeft: '0.5rem',
-  paddingRight: '0.5rem',
+export const filmstrip = style({
+  flexShrink: 0,
   display: 'flex',
-  justifyContent: 'flex-start',
-  alignItems: 'flex-end',
-  flexDirection: 'column',
+  alignItems: 'center',
+  gap: '0.5rem',
+});
+
+const fadeStart = createVar();
+const fadeEnd = createVar();
+const FADE_SIZE = '1.5rem';
+
+export const track = style({
+  vars: {
+    [fadeStart]: '0px',
+    [fadeEnd]: '0px',
+  },
+  flexGrow: 1,
+  minWidth: 0,
+  listStyle: 'none',
+  display: 'flex',
+  gap: '0.75rem',
+  padding: `0.75rem ${FADE_SIZE}`,
+  scrollPaddingInline: FADE_SIZE,
+  overflowX: 'auto',
+  scrollSnapType: 'x proximity',
+  scrollbarWidth: 'none',
+  maskImage: `linear-gradient(to right, transparent 0, black ${fadeStart}, black calc(100% - ${fadeEnd}), transparent 100%)`,
+  cursor: 'grab',
+  userSelect: 'none',
+  selectors: {
+    '&::-webkit-scrollbar': { display: 'none' },
+  },
+});
+
+export const trackFadeStart = style({
+  vars: { [fadeStart]: FADE_SIZE },
+});
+
+export const trackFadeEnd = style({
+  vars: { [fadeEnd]: FADE_SIZE },
+});
+
+export const trackDragging = style({
+  cursor: 'grabbing',
+  scrollSnapType: 'none',
+});
+
+export const scrollBtn = style({
+  flexShrink: 0,
+  width: '2.5rem',
+  height: '2.5rem',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  border: `1px solid ${alphaColors.primaryBorderMedium}`,
+  borderRadius: '50%',
+  background: withAlpha(colors.cardBlackBg, 0.5),
+  ...backdropBlur('6px'),
+  color: colors.white,
+  fontSize: '1.75rem',
+  cursor: 'pointer',
+  transition: transition(['border-color', 'color', 'opacity']),
+  selectors: {
+    '&:hover:not(:disabled)': {
+      borderColor: colors.secondary,
+      color: colors.secondary,
+    },
+    '&:disabled': {
+      opacity: 0.3,
+      cursor: 'default',
+    },
+  },
 });

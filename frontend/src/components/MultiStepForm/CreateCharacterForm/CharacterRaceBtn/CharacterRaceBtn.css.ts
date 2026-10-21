@@ -1,90 +1,65 @@
 import { style } from '@vanilla-extract/css';
-import { colors, fonts } from '@/styles/tokens';
+import { glassPanel, glassPanelHover } from '@/styles/shared.css';
+import { alphaColors, colors, fonts, media, shadows, transition } from '@/styles/tokens';
 
-export const btn = style({
-  position: 'relative',
-  width: '12rem',
-  height: '2.75rem',
-  marginBottom: '1rem',
-  marginLeft: '1rem',
-  marginRight: '1rem',
+export const item = style({
+  flexShrink: 0,
+  scrollSnapAlign: 'start',
+});
+
+export const btn = style([glassPanel, glassPanelHover, {
+  width: '9rem',
   display: 'flex',
-  justifyContent: 'flex-start',
-  alignItems: 'center',
-  background: colors.cardMediumBg,
-  borderRadius: '0.125rem',
-  outlineStyle: 'solid',
-  outlineWidth: '1px',
-  outlineOffset: '2px',
-  overflow: 'hidden',
-  cursor: 'pointer',
-  transition: 'all 0.3s ease-in-out',
-  zIndex: 10,
-  listStyle: 'none',
-  selectors: {
-    '&::before': {
-      content: '""',
-      position: 'absolute',
-      bottom: 0,
-      left: 0,
-      width: '100%',
-      height: '60%',
-    },
-    '&::after': {
-      content: '""',
-      position: 'absolute',
-      bottom: '-1rem',
-      right: '-2rem',
-      height: '8rem',
-      width: '5rem',
-      background: '#94a3b8',
-      transform: 'rotate(20deg)',
-      opacity: 0.035,
+  flexDirection: 'column',
+  gap: '0.4rem',
+  padding: '0.3rem 0.3rem 0.5rem',
+  borderRadius: '0.5rem',
+  cursor: 'inherit',
+  transition: transition(['border-color', 'box-shadow', 'background', 'transform'], '0.4s'),
+  ':hover': {
+    transform: 'translateY(-0.2rem)',
+  },
+  '@media': {
+    [media.reducedMotion]: {
+      ':hover': { transform: 'none' },
     },
   },
-});
+}]);
 
 export const btnActive = style({
-  outlineColor: colors.mainLight,
-  selectors: {
-    '&::before': {
-      background: `linear-gradient(to top, ${colors.mainLight}, transparent)`,
-      opacity: 0.5,
-    },
+  borderColor: colors.mainLight,
+  background: `linear-gradient(to bottom, ${alphaColors.primaryGlow} 0%, ${alphaColors.cardBlackVeil} 100%)`,
+  boxShadow: shadows.glassHover,
+  ':hover': {
+    borderColor: colors.mainLight,
   },
 });
 
-export const btnInactive = style({
-  outlineColor: colors.cardMediumBg,
-  selectors: {
-    '&::before': {
-      background: 'linear-gradient(to top, #101112, transparent)',
-      opacity: 0.8,
-    },
-    '&:hover': {
-      outlineColor: colors.mainLight,
-    },
-    '&:hover::before': {
-      background: `linear-gradient(to top, ${colors.mainLight}, transparent)`,
-      opacity: 0.5,
-    },
-  },
+export const btnImgWrap = style({
+  position: 'relative',
+  width: '100%',
+  aspectRatio: '16 / 10',
+  overflow: 'hidden',
+  borderRadius: '0.35rem',
 });
 
 export const btnImg = style({
-  position: 'relative',
-  display: 'flex',
-  justifyContent: 'flex-start',
-  alignItems: 'center',
-  height: '100%',
-  width: 'auto',
+  objectFit: 'contain',
+  objectPosition: 'center bottom',
+  pointerEvents: 'none',
 });
 
 export const btnLabel = style({
-  position: 'relative',
-  paddingLeft: '1rem',
-  paddingRight: '1rem',
-  color: colors.white,
-  letterSpacing: '0.1em',
   fontFamily: fonts.poppins,
+  fontSize: '0.75rem',
+  fontWeight: '500',
+  letterSpacing: '0.05em',
+  textAlign: 'center',
+  color: alphaColors.textSoft,
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  selectors: {
+    [`${btnActive} &`]: { color: colors.secondary },
+  },
 });

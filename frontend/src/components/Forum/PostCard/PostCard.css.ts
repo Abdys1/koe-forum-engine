@@ -1,6 +1,6 @@
 import { style } from '@vanilla-extract/css';
 import { glassPanel } from '@/styles/shared.css';
-import { alphaColors, colors, fonts, gradients, shadows } from '@/styles/tokens';
+import { alphaColors, characterPortrait, colors, fonts, gradients, shadows } from '@/styles/tokens';
 
 export const card = style([glassPanel, {
   position: 'relative',
@@ -41,13 +41,10 @@ export const author = style({
 });
 
 export const avatar = style({
-  width: '14rem',
-  height: '22.4rem',
+  ...characterPortrait(14),
+  height: 'auto',
   objectFit: 'cover',
   objectPosition: 'top',
-  borderRadius: '0.5rem',
-  border: '1px solid rgba(159,150,254,0.4)',
-  boxShadow: '0 8px 24px -8px rgba(92,70,156,0.6)',
 });
 
 export const characterName = style({

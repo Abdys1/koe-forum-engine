@@ -1,112 +1,130 @@
-import { style } from '@vanilla-extract/css';
-import { colors, fonts } from '@/styles/tokens';
+import { keyframes, style } from '@vanilla-extract/css';
+import { fadeDividerBottom } from '@/styles/shared.css';
+import { alphaColors, colors, fonts, media, shadows } from '@/styles/tokens';
 
-export const container = style({
-  position: 'relative',
+const slideIn = keyframes({
+  from: { opacity: 0, transform: 'translateX(-0.75rem)' },
+  to: { opacity: 1, transform: 'translateX(0)' },
+});
+
+export const layout = style({
   width: '100%',
-  height: 'calc(100vh - 4rem)',
+  marginTop: '0.75rem',
   display: 'flex',
-  justifyContent: 'space-between',
+  alignItems: 'flex-start',
+  gap: '1.5rem',
+  '@media': {
+    [media.tablet]: {
+      flexDirection: 'column',
+    },
+  },
+});
+
+export const catalog = style({
+  flexGrow: 1,
+  minWidth: 0,
+  paddingRight: '1.25rem',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '1.5rem',
+  '@media': {
+    [media.tablet]: {
+      width: '100%',
+    },
+    [media.motionOk]: {
+      animation: `${slideIn} 0.4s ease-out`,
+    },
+  },
+});
+
+export const catalogHeader = style({
+  display: 'flex',
+  flexWrap: 'wrap',
   alignItems: 'center',
-  flexDirection: 'column',
-  margin: '2rem',
-  paddingTop: '1rem',
-  paddingBottom: '1rem',
-  paddingLeft: '2rem',
-  paddingRight: '2rem',
-  overflow: 'hidden',
+  gap: '0.5rem 0.75rem',
+  marginBottom: '-0.5rem',
 });
 
-export const content = style({
-  position: 'relative',
-  marginTop: '0.5rem',
-  width: '100%',
-  display: 'flex',
-  justifyContent: 'flex-start',
-  alignItems: 'flex-start',
-  flexDirection: 'column',
-  zIndex: 10,
+export const catalogIcon = style({
+  fontSize: '2rem',
+  color: colors.secondary,
+  filter: `drop-shadow(${shadows.text})`,
 });
 
-export const gearRow = style({
-  position: 'relative',
-  marginTop: '0.5rem',
-  width: '100%',
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'flex-start',
+export const catalogTitle = style({
+  fontFamily: fonts.cinzel,
+  fontSize: '1.75rem',
+  fontWeight: '700',
+  lineHeight: 1.1,
+  letterSpacing: '0.04em',
+  color: colors.secondary,
+  textShadow: shadows.text,
 });
 
-export const selectorPanel = style({
-  position: 'relative',
-  width: '100%',
-  maxWidth: '50%',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'flex-start',
-});
-
-export const optionBtns = style({
-  position: 'relative',
-  marginRight: '0.5rem',
-  display: 'flex',
-  justifyContent: 'flex-start',
-  alignItems: 'flex-start',
-  flexDirection: 'column',
-});
-
-export const summaryPanel = style({
-  position: 'relative',
-  width: '100%',
-  maxWidth: '50%',
-  marginLeft: '3rem',
-  marginRight: '0.5rem',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'flex-start',
-});
-
-export const glassPanel = style({
-  position: 'relative',
-  width: '100%',
-  maxWidth: '36rem',
-  padding: '1rem',
-  marginBottom: '0.5rem',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'flex-start',
-  flexDirection: 'column',
-  zIndex: 10,
-  borderLeft: `8px solid ${colors.mainLight}`,
-  borderRadius: '0.25rem',
-});
-
-export const gearSummaryTitle = style({
-  position: 'relative',
-  width: '100%',
-  paddingBottom: '0.5rem',
-  color: colors.mainLight,
-  textTransform: 'uppercase',
-  letterSpacing: '0.1em',
+export const catalogMeta = style({
+  marginLeft: 'auto',
   fontFamily: fonts.poppins,
-  fontWeight: '600',
+  fontSize: '0.75rem',
+  fontWeight: '500',
+  letterSpacing: '0.15em',
+  textTransform: 'uppercase',
+  color: alphaColors.textMuted,
 });
 
-export const gearColumns = style({
-  position: 'relative',
-  width: '100%',
+export const section = style({
   display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'flex-start',
-  marginRight: '0.5rem',
-});
-
-export const gearColumn = style({
-  position: 'relative',
-  width: '100%',
-  maxWidth: '50%',
-  display: 'flex',
-  justifyContent: 'flex-start',
-  alignItems: 'flex-start',
   flexDirection: 'column',
+  gap: '0.75rem',
+});
+
+export const sectionHeader = style([fadeDividerBottom, {
+  display: 'flex',
+  flexWrap: 'wrap',
+  alignItems: 'center',
+  gap: '0.5rem 0.75rem',
+  paddingBottom: '0.5rem',
+}]);
+
+export const sectionTitle = style({
+  marginRight: 'auto',
+  fontFamily: fonts.cinzel,
+  fontSize: '1.05rem',
+  fontWeight: '700',
+  letterSpacing: '0.06em',
+  color: colors.secondary,
+});
+
+const pill = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: '0.3rem',
+  padding: '0.2rem 0.6rem',
+  borderRadius: '999px',
+  fontFamily: fonts.poppins,
+  fontSize: '0.65rem',
+  fontWeight: '500',
+  letterSpacing: '0.15em',
+  textTransform: 'uppercase',
+} as const;
+
+export const badge = style({
+  ...pill,
+  border: `1px solid ${alphaColors.primaryBorderMedium}`,
+  background: alphaColors.primaryTintSoft,
+  color: colors.mainLight,
+});
+
+export const poolMeta = style({
+  ...pill,
+  border: `1px solid ${alphaColors.secondaryBorder}`,
+  color: colors.secondary,
+});
+
+export const grid = style({
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fill, minmax(9.5rem, 1fr))',
+  gap: '0.75rem',
+  margin: 0,
+  padding: 0,
+  listStyle: 'none',
 });

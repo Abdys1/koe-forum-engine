@@ -9,28 +9,41 @@ import * as styles from "./MultiStepForm.css";
 
 interface MultiStepFormProps {
     form: UseFormReturn<any, any, undefined>,
+    aside?: React.ReactNode,
     children: React.ReactElement<StepProps>[]
 }
 
-function MultiStepForm({ form, children }: MultiStepFormProps) {
+function MultiStepForm({ form, aside, children }: MultiStepFormProps) {
     const [actualStep, setActualStep] = useState(0);
+    const [summaryReached, setSummaryReached] = useState(false);
+    const lastStep = React.Children.count(children) - 1;
 
     function nextStep() {
-        setActualStep(actualStep + 1);
+        goToStep(actualStep + 1);
     }
 
     function prevStep() {
         setActualStep(actualStep - 1);
     }
 
+    function goToStep(step: number) {
+        setActualStep(step);
+        if (step === lastStep) setSummaryReached(true);
+    }
+
     const steps: string[] = React.Children.map(children, child => child.props.label);
+    const stepsComplete: boolean[] = React.Children.map(children, child => child.props.complete ?? child.props.canProceed ?? true);
+    const canReturnToSummary = summaryReached && actualStep < lastStep && stepsComplete.slice(actualStep, lastStep).every(Boolean);
 
     const formState: FormContextState = {
         form,
         steps,
         actualStep,
+        aside,
         onPrevStep: prevStep,
-        onNextStep: nextStep
+        onNextStep: nextStep,
+        goToStep,
+        canReturnToSummary
     };
 
     return (
@@ -45,13 +58,16 @@ function MultiStepForm({ form, children }: MultiStepFormProps) {
 interface StepProps {
     label: string,
     validate?: () => Promise<boolean>,
+    canProceed?: boolean,
+    complete?: boolean,
+    hideAside?: boolean,
     className?: string,
     style?: React.CSSProperties
     children: JSX.Element
 }
 
-function Step({ children, validate, style, className }: StepProps) {
-    const { onNextStep } = useMultiStepFormContext();
+function Step({ children, validate, canProceed = true, hideAside = false, style, className }: StepProps) {
+    const { aside, onNextStep } = useMultiStepFormContext();
 
     async function nextStep(e: React.MouseEvent<HTMLButtonElement>) {
         if (validate && !(await validate())) {
@@ -66,8 +82,11 @@ function Step({ children, validate, style, className }: StepProps) {
                 <ComponentHeading title="Karakter létrehozása" />
                 <MultiStepBar/>
             </div>
-            {children}
-            <MultiStepPagination onNextStep={nextStep}/>
+            <div className={styles.body}>
+                <div className={styles.main}>{children}</div>
+                {aside && !hideAside && <aside className={styles.aside}>{aside}</aside>}
+            </div>
+            <MultiStepPagination onNextStep={nextStep} nextDisabled={!canProceed}/>
         </form>
     );
 }

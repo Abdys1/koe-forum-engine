@@ -1,38 +1,17 @@
 import { style } from '@vanilla-extract/css';
-import { colors, shadows } from '@/styles/tokens';
+import { thinScrollbar } from '@/styles/shared.css';
 
 export const step = style({
   position: 'relative',
   width: '100%',
-  height: 'calc(100vh - 4rem)',
+  height: '100%',
   display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
   flexDirection: 'column',
-  margin: '2rem',
   paddingTop: '1rem',
   paddingBottom: '1rem',
   paddingLeft: '2rem',
   paddingRight: '2rem',
-  background: colors.cardBlackBg,
-  borderRadius: '0.25rem',
-  boxShadow: shadows.card,
   overflow: 'hidden',
-  selectors: {
-    '&::after': {
-      content: '""',
-      position: 'absolute',
-      bottom: 0,
-      left: 0,
-      width: '100%',
-      height: '100%',
-      backgroundImage: "url('/images/wave.svg')",
-      backgroundRepeat: 'no-repeat',
-      backgroundPosition: 'left bottom',
-      backgroundSize: 'contain',
-      zIndex: 0,
-    },
-  },
 });
 
 export const stepHeader = style({
@@ -44,4 +23,28 @@ export const stepHeader = style({
   alignItems: 'center',
   flexDirection: 'column',
   zIndex: 10,
+});
+
+export const body = style({
+  position: 'relative',
+  flexGrow: 1,
+  minHeight: 0,
+  display: 'flex',
+  gap: '3rem',
+  marginTop: '1.5rem',
+  zIndex: 10,
+});
+
+export const main = style([thinScrollbar, {
+  flexGrow: 1,
+  minWidth: 0,
+  overflowY: 'auto',
+}]);
+
+export const aside = style({
+  flexShrink: 0,
+  width: '24rem',
+  minHeight: 0,
+  marginRight: '1rem',
+  marginBottom: '1.5rem',
 });

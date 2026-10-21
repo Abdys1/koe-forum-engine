@@ -1,13 +1,10 @@
 import { style } from '@vanilla-extract/css';
-import { colors } from '@/styles/tokens';
+import { HEADER_TOTAL_HEIGHT } from '@/components/Navigation/Header.css';
+import { mainBg } from '@/styles/shared.css';
 
-export const page = style({
+export const page = style([mainBg, {
   position: 'relative',
-  margin: 0,
-  padding: 0,
-  boxSizing: 'border-box',
   width: '100%',
-  minHeight: '100vh',
+  height: `calc(100vh - ${HEADER_TOTAL_HEIGHT})`,
   display: 'flex',
-  background: colors.blackBg,
-});
+}]);
