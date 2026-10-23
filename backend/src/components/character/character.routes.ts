@@ -2,9 +2,23 @@ import { Sex } from "@src/components/character/types";
 import { HttpMethod, RouterConfig } from "@src/components/routerconf/router-config";
 import { Cradle } from "@src/container";
 import { ErrorMessages } from "@src/messages";
+import { createImageUploadMiddleware, ImageUploadError } from "@src/middlewares/image-upload.middleware";
 import { body, param } from "express-validator";
 
 const idValidation = param('id').isInt().withMessage(ErrorMessages.CHARACTER_NOT_EXISTS);
+
+const imageValidation = body('image').custom((_value, { req }) => {
+    if (req.imageUploadError === ImageUploadError.INVALID_TYPE) {
+        throw new Error(ErrorMessages.CHARACTER_IMAGE_INVALID_TYPE);
+    }
+    if (req.imageUploadError === ImageUploadError.TOO_LARGE) {
+        throw new Error(ErrorMessages.CHARACTER_IMAGE_TOO_LARGE);
+    }
+    if (!req.file) {
+        throw new Error(ErrorMessages.CHARACTER_IMAGE_REQUIRED);
+    }
+    return true;
+});
 
 /**
  * @openapi
@@ -48,10 +62,10 @@ const idValidation = param('id').isInt().withMessage(ErrorMessages.CHARACTER_NOT
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
- *             required: [name, sex, race, imageUrl]
+ *             required: [name, sex, race, image]
  *             properties:
  *               name:
  *                 type: string
@@ -63,9 +77,11 @@ const idValidation = param('id').isInt().withMessage(ErrorMessages.CHARACTER_NOT
  *                 enum: [1, 2]
  *               race:
  *                 type: string
- *               imageUrl:
+ *               image:
  *                 type: string
- *               equipmentIds:
+ *                 format: binary
+ *                 description: The character portrait (jpeg, png, webp or gif, at most 5 MB)
+ *               equipmentIds[]:
  *                 type: array
  *                 maxItems: 100
  *                 description: The initial equipment list; an id may be repeated to assign the same equipment multiple times
@@ -147,11 +163,12 @@ export const characterRoutes = ({ characterController }: Pick<Cradle, 'character
         path: '/',
         method: HttpMethod.POST,
         middlewares: [
+            createImageUploadMiddleware(),
             body('name').isLength({ min: 3, max: 64 }).withMessage(ErrorMessages.CHARACTER_NAME_INVALID_LENGTH)
                 .matches(/^[a-zA-ZaäáeëéiíoóöőuúüűAÄÁEÉËIÍOÓÖŐUÚÜŰ\s']*$/).withMessage(ErrorMessages.CHARACTER_NAME_INVALID_LETTERS),
-            body('sex').isIn(Object.values(Sex)).withMessage(ErrorMessages.CHARACTER_SEX_INVALID),
+            body('sex').isIn([Sex.MALE, Sex.FEMALE]).withMessage(ErrorMessages.CHARACTER_SEX_INVALID).toInt(),
             body('race').notEmpty().withMessage(ErrorMessages.CHARACTER_RACE_REQUIRED),
-            body('imageUrl').notEmpty().withMessage(ErrorMessages.CHARACTER_IMAGE_URL_REQUIRED),
+            imageValidation,
             body('equipmentIds').optional().isArray({ max: 100 }).withMessage(ErrorMessages.CHARACTER_EQUIPMENT_IDS_INVALID),
             body('equipmentIds.*').isInt().withMessage(ErrorMessages.CHARACTER_EQUIPMENT_ID_INVALID).toInt()
         ],

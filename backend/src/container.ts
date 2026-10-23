@@ -3,6 +3,7 @@ import { characterModule } from "@src/components/character/character.module";
 import { equipmentModule } from "@src/components/equipment/equipment.module";
 import { equipmentTypeModule } from "@src/components/equipment-type/equipment-type.module";
 import { slotModule } from "@src/components/slot/slot.module";
+import { storageModule } from "@src/components/storage/storage.module";
 import { transactionModule } from "@src/components/transaction/transaction.module";
 import { userModule } from "@src/components/user/user.module";
 import { createDbClient } from "@src/prisma-client";
@@ -11,6 +12,7 @@ import { asFunction, AwilixContainer, createContainer, InjectionMode, Resolver }
 const registrations = {
     db: asFunction(createDbClient).singleton().disposer((db) => db.$disconnect()),
     ...transactionModule,
+    ...storageModule,
     ...userModule,
     ...authModule,
     ...slotModule,

@@ -9,8 +9,7 @@ export interface ValidateCharacterUpdateInput {
     name: string,
     sex: Sex,
     race: string,
-    equipmentIds: number[],
-    imageUrl: string
+    equipmentIds: number[]
 };
 
 export interface ValidateCharacterUpdateOutput {

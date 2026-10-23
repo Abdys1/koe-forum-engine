@@ -74,8 +74,7 @@ describe('CharacterUpdateValidatorUseCase', () => {
             name: 'Aragorn a Kósza',
             sex: Sex.MALE,
             race: 'human',
-            equipmentIds,
-            imageUrl: '/aragorn.jpg'
+            equipmentIds
         };
     }
 });

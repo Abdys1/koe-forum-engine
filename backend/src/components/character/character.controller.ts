@@ -24,7 +24,7 @@ export default class CharacterController {
             return;
         }
 
-        const createCharInput: CreateCharacterInput = CharacterRegistrationRequestMapper.toCreateCharacterInput(req.user, req.body);
+        const createCharInput: CreateCharacterInput = CharacterRegistrationRequestMapper.toCreateCharacterInput(req.user, req.body, req.file!);
         await this.characterRegistration.execute(createCharInput);
         res.status(200).send();
     }

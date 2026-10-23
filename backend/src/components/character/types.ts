@@ -8,6 +8,5 @@ export interface CharacterRegistrationRequestDto {
   name: string;
   sex: Sex;
   race: string;
-  imageUrl: string;
   equipmentIds?: number[];
 }

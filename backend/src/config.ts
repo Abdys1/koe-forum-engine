@@ -17,6 +17,9 @@ const config: Config = {
   },
   storage: {
     type: storageType,
+    local: {
+      uploadsDir: process.env.LOCAL_UPLOADS_DIR || '.data/uploads',
+    },
   },
 };
 

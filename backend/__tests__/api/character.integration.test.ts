@@ -3,8 +3,9 @@ import {
   Sex,
 } from "@src/components/character/types";
 import { ErrorMessages } from "@src/messages";
-import CharacterClient from "@test/clients/character-client";
-import { db } from "@test/utils/test-container";
+import { DEFAULT_MAX_IMAGE_SIZE } from "@src/middlewares/image-upload.middleware";
+import CharacterClient, { testImage } from "@test/clients/character-client";
+import { db, uploadsDir } from "@test/utils/test-container";
 import {
   saveEquipmentListToDb,
   saveEquipmentToDb,
@@ -13,6 +14,8 @@ import {
   saveTestUserToDb,
 } from "@test/utils/test-data-generator";
 import { assertFieldError } from "@test/utils/validator-test-helper";
+import { existsSync, readdirSync, readFileSync } from "fs";
+import { join } from "path";
 import { Response } from "supertest";
 import { describe, it } from "vitest";
 
@@ -276,12 +279,61 @@ describe("/api/characters", () => {
       assertEquipmentIdsValidationError(resp);
     });
 
-    it("when try create character without image url then should return character image url required error", async () => {
-      const character = characterReq({ imageUrl: "" });
-      const resp = await createCharacterToRandomUser(character);
-      assertFieldError(resp, "imageUrl", [
-        ErrorMessages.CHARACTER_IMAGE_URL_REQUIRED,
-      ]);
+    it("when try create character without image then should return character image required error", async () => {
+      const user = await saveTestUserToDb();
+
+      const resp = await characterClient.createCharacter(user.username, characterReq(), null);
+
+      assertFieldError(resp, "image", [ErrorMessages.CHARACTER_IMAGE_REQUIRED]);
+    });
+
+    it("when try create character with a non-image file then should return character image invalid type error", async () => {
+      const user = await saveTestUserToDb();
+      const textFile = testImage({ buffer: Buffer.from("hello"), filename: "aragorn.txt", contentType: "text/plain" });
+
+      const resp = await characterClient.createCharacter(user.username, characterReq(), textFile);
+
+      assertFieldError(resp, "image", [ErrorMessages.CHARACTER_IMAGE_INVALID_TYPE]);
+    });
+
+    it("when try create character with too large image then should return character image too large error", async () => {
+      const user = await saveTestUserToDb();
+      const largeImage = testImage({ buffer: Buffer.alloc(DEFAULT_MAX_IMAGE_SIZE + 1) });
+
+      const resp = await characterClient.createCharacter(user.username, characterReq(), largeImage);
+
+      assertFieldError(resp, "image", [ErrorMessages.CHARACTER_IMAGE_TOO_LARGE]);
+    });
+
+    it("when create a new character then should store its image", async () => {
+      const user = await saveTestUserToDb();
+      const image = testImage();
+
+      await characterClient.createCharacter(user.username, characterReq(), image);
+
+      const resp = await characterClient.getCharacters(user.username);
+      const storedPath = join(uploadsDir, resp.body[0].imageUrl.replace("/.data/uploads/", ""));
+      expect(readFileSync(storedPath)).toStrictEqual(image.buffer);
+    });
+
+    it("when try create an already existing character then should not store its image", async () => {
+      const user = await saveTestUserToDb();
+      await characterClient.createCharacter(user.username, characterReq());
+      const storedImageCount = countStoredCharacterImages();
+
+      const resp = await characterClient.createCharacter(user.username, characterReq());
+
+      expect(resp.status).toBe(409);
+      expect(countStoredCharacterImages()).toBe(storedImageCount);
+    });
+
+    it("when try create character with non-existent equipment then should not store its image", async () => {
+      const storedImageCount = countStoredCharacterImages();
+
+      const resp = await createCharacterToRandomUser(characterReq({ equipmentIds: [-1] }));
+
+      expect(resp.status).toBe(422);
+      expect(countStoredCharacterImages()).toBe(storedImageCount);
     });
   });
 
@@ -752,9 +804,14 @@ describe("/api/characters", () => {
       expect(character.name).toBe(expectedCharacter.name);
       expect(character.sex).toBe(expectedCharacter.sex);
       expect(character.race).toBe(expectedCharacter.race);
-      expect(character.imageUrl).toBe(expectedCharacter.imageUrl);
+      expect(character.imageUrl).toMatch(/^\/\.data\/uploads\/characters\/[0-9a-f-]{36}\.png$/);
       expect(character).not.toHaveProperty("equipment");
     }
+  }
+
+  function countStoredCharacterImages(): number {
+    const directory = join(uploadsDir, "characters");
+    return existsSync(directory) ? readdirSync(directory).length : 0;
   }
 
   function assertEquipmentIdsValidationError(resp: Response): void {
@@ -774,7 +831,6 @@ function characterReq(
     name: "Aragorn a Kósza",
     sex: Sex.MALE,
     race: "human",
-    imageUrl: "/aragorn.jpg",
     ...overrides,
   };
 }

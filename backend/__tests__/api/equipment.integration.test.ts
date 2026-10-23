@@ -364,8 +364,7 @@ describe('/api/equipment', () => {
             await characterClient.createCharacter(user.username, {
                 name: 'Aragorn a Kósza',
                 sex: Sex.MALE,
-                race: 'human',
-                imageUrl: '/aragorn.jpg'
+                race: 'human'
             });
             const charactersResp = await characterClient.getCharacters(user.username);
             await characterClient.setCharacterEquipment(user.username, charactersResp.body[0].id, [equipment.id]);
@@ -385,8 +384,7 @@ describe('/api/equipment', () => {
             await characterClient.createCharacter(user.username, {
                 name: 'Aragorn a Kósza',
                 sex: Sex.MALE,
-                race: 'human',
-                imageUrl: '/aragorn.jpg'
+                race: 'human'
             });
             const charactersResp = await characterClient.getCharacters(user.username);
             await characterClient.setCharacterEquipment(user.username, charactersResp.body[0].id, [equipment.id, equipment.id, equipment.id]);

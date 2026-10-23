@@ -2,13 +2,20 @@ export interface Config {
   auth: { secrets: { accessToken: string; refreshToken: string } };
   storage: {
     type: 'local' | 'aws';
-    aws?: {
-      region: string;
-      bucketName: string;
-      accessKeyId: string;
-      secretAccessKey: string;
-    };
+    local: LocalStorageConfig;
+    aws?: AwsStorageConfig;
   };
+}
+
+export interface LocalStorageConfig {
+  uploadsDir: string;
+}
+
+export interface AwsStorageConfig {
+  region: string;
+  bucketName: string;
+  accessKeyId: string;
+  secretAccessKey: string;
 }
 
 export interface Readable<T> {
