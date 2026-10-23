@@ -1,4 +1,4 @@
-import { db } from "@src/prisma-client";
+import { db } from "@test/utils/test-container";
 
 beforeEach(async () => {
     await db.$transaction([

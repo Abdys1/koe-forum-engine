@@ -1,6 +1,7 @@
-import app from "@src/app";
+import { createApp } from "@src/app";
 import { signToken } from "@src/components/auth/jwt-token-generator";
 import config from "@src/config";
+import { testContainer } from "@test/utils/test-container";
 import { saveTestUserToDb } from "@test/utils/test-data-generator";
 import supertest from "supertest";
 import TestAgent from "supertest/lib/agent";
@@ -9,7 +10,7 @@ abstract class BaseClient {
     protected request: TestAgent;
 
     constructor() {
-        this.request = supertest(app);
+        this.request = supertest(createApp(testContainer));
     }
 
     protected async getAuthorizationHeader(user: { username: string }) {

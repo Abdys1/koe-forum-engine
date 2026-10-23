@@ -1,5 +1,4 @@
-import { equipmentRepositories } from '@src/components/equipment/repositories';
-import { db } from '@src/prisma-client';
+import { db, equipmentRepositories } from '@test/utils/test-container';
 import { saveEquipmentListToDb, saveTestUserToDb } from '@test/utils/test-data-generator';
 import { describe, expect, it } from 'vitest';
 

@@ -1,9 +1,6 @@
 import Character from '@src/components/character/models/character';
-import { characterRepositories } from '@src/components/character/repositories';
-import { equipmentRepositories } from '@src/components/equipment/repositories';
-import { transactionManager } from '@src/components/transaction';
 import { NestedTransactionError, rollback } from '@src/components/transaction/types';
-import { db } from '@src/prisma-client';
+import { characterRepositories, db, equipmentRepositories, transactionManager } from '@test/utils/test-container';
 import { saveEquipmentToDb, saveTestUserToDb } from '@test/utils/test-data-generator';
 import { describe, expect, it } from 'vitest';
 

@@ -1,22 +1,8 @@
-import CharacterController from "@src/components/character/character.controller";
 import { Sex } from "@src/components/character/types";
-import { characterCollection } from "@src/components/character/usecases/collection";
-import { characterEquipmentCollection } from "@src/components/character/usecases/equipment_collection";
-import { characterEquipmentModification } from "@src/components/character/usecases/equipment_modification";
-import { characterRegistration } from "@src/components/character/usecases/registration";
-import { characterUpdateValidator } from "@src/components/character/usecases/update_validator";
-import { defineRouter } from "@src/components/routerconf";
-import { HttpMethod } from "@src/components/routerconf/router-config";
+import { HttpMethod, RouterConfig } from "@src/components/routerconf/router-config";
+import { Cradle } from "@src/container";
 import { ErrorMessages } from "@src/messages";
 import { body, param } from "express-validator";
-
-const characterController = new CharacterController(
-    characterRegistration,
-    characterCollection,
-    characterUpdateValidator,
-    characterEquipmentCollection,
-    characterEquipmentModification
-);
 
 const idValidation = param('id').isInt().withMessage(ErrorMessages.CHARACTER_NOT_EXISTS);
 
@@ -156,7 +142,7 @@ const idValidation = param('id').isInt().withMessage(ErrorMessages.CHARACTER_NOT
  *       422:
  *         description: One of the referenced equipment ids does not exist, or the equipment list exceeds a slot's capacity
  */
-export default defineRouter([
+export const characterRoutes = ({ characterController }: Pick<Cradle, 'characterController'>): RouterConfig[] => [
     {
         path: '/',
         method: HttpMethod.POST,
@@ -192,4 +178,4 @@ export default defineRouter([
         ],
         controller: characterController.setCharacterEquipment
     },
-]);
+];

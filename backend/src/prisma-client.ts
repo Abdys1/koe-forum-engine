@@ -2,6 +2,6 @@ import { Prisma, PrismaClient } from "@prisma/client";
 
 export type DbClient = PrismaClient | Prisma.TransactionClient;
 
-export const db = new PrismaClient({
+export const createDbClient = () => new PrismaClient({
     //log: ["query", "error", "warn", "info"],
 });

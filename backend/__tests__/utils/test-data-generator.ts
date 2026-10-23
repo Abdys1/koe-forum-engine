@@ -1,4 +1,4 @@
-import { db } from "@src/prisma-client";
+import { db } from "@test/utils/test-container";
 
 export async function saveTestUserToDb(): Promise<{ id: number, username: string, password: string }> {
   return db.forumUser.create({ data: createRandomUser() });

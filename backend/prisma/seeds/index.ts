@@ -1,5 +1,6 @@
-import { db } from "@src/prisma-client";
 import { seedEquipment } from "prisma/seeds/equipment";
+
+import { db } from "./db";
 import { seedUsers } from "./user";
 
 async function main() {

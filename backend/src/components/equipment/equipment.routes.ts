@@ -1,19 +1,7 @@
-import EquipmentController from "@src/components/equipment/equipment.controller";
-import { equipmentCollection } from "@src/components/equipment/usecases/collection";
-import { equipmentCreation } from "@src/components/equipment/usecases/creation";
-import { equipmentModification } from "@src/components/equipment/usecases/modification";
-import { equipmentRemoval } from "@src/components/equipment/usecases/removal";
-import { defineRouter } from "@src/components/routerconf";
-import { HttpMethod } from "@src/components/routerconf/router-config";
+import { HttpMethod, RouterConfig } from "@src/components/routerconf/router-config";
+import { Cradle } from "@src/container";
 import { ErrorMessages } from "@src/messages";
 import { body, param } from "express-validator";
-
-const equipmentController = new EquipmentController(
-  equipmentCollection,
-  equipmentCreation,
-  equipmentModification,
-  equipmentRemoval
-);
 
 const updateValidations = [
   body("name").trim().isLength({ min: 1, max: 255 }).withMessage(ErrorMessages.EQUIPMENT_NAME_INVALID),
@@ -158,7 +146,7 @@ const idValidation = param("id").isInt().withMessage(ErrorMessages.EQUIPMENT_NOT
  *       409:
  *         description: Equipment is still assigned to a character and cannot be deleted
  */
-export default defineRouter([
+export const equipmentRoutes = ({ equipmentController }: Pick<Cradle, 'equipmentController'>): RouterConfig[] => [
   {
     path: "/",
     method: HttpMethod.GET,
@@ -183,4 +171,4 @@ export default defineRouter([
     middlewares: [idValidation],
     controller: equipmentController.remove,
   },
-]);
+];

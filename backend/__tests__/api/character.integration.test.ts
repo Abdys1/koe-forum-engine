@@ -3,8 +3,8 @@ import {
   Sex,
 } from "@src/components/character/types";
 import { ErrorMessages } from "@src/messages";
-import { db } from "@src/prisma-client";
 import CharacterClient from "@test/clients/character-client";
+import { db } from "@test/utils/test-container";
 import {
   saveEquipmentListToDb,
   saveEquipmentToDb,

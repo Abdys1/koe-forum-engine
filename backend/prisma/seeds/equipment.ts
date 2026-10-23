@@ -1,4 +1,4 @@
-import { db } from "@src/prisma-client";
+import { db } from "./db";
 
 const EquipmentTypeLabels = {
   WEAPON: "Fegyver",

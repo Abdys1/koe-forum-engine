@@ -7,7 +7,7 @@ export type AuthenticationMiddleware = (req: Request, res: Response, next: NextF
 
 export interface AuthenticationMiddlewareOptions {
     verifyToken: TokenVerifierFunc, secretKey: string
-    findUserByUsername: (username: string) => Promise<ForumUser>
+    findUserByUsername: (username: string) => Promise<ForumUser | undefined>
 };
 
 export interface RestApiValidationErrors {

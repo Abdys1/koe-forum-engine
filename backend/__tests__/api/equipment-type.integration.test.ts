@@ -1,7 +1,7 @@
 import { ErrorMessages } from "@src/messages";
-import { db } from "@src/prisma-client";
 import EquipmentClient from "@test/clients/equipment-client";
 import EquipmentTypeClient from "@test/clients/equipment-type-client";
+import { db } from "@test/utils/test-container";
 import {
     generateEquipmentTypeLabel,
     saveEquipmentToDb,

@@ -1,5 +1,4 @@
-import { userDao } from '@src/components/user/index';
-import { db } from '@src/prisma-client';
+import { db, userDao } from '@test/utils/test-container';
 import { generateUsername } from '@test/utils/test-data-generator';
 import {
   describe, expect, it

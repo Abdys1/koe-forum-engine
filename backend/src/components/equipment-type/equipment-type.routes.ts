@@ -1,19 +1,7 @@
-import EquipmentTypeController from "@src/components/equipment-type/equipment-type.controller";
-import { equipmentTypeCollection } from "@src/components/equipment-type/usecases/collection";
-import { equipmentTypeCreation } from "@src/components/equipment-type/usecases/creation";
-import { equipmentTypeModification } from "@src/components/equipment-type/usecases/modification";
-import { equipmentTypeRemoval } from "@src/components/equipment-type/usecases/removal";
-import { defineRouter } from "@src/components/routerconf";
-import { HttpMethod } from "@src/components/routerconf/router-config";
+import { HttpMethod, RouterConfig } from "@src/components/routerconf/router-config";
+import { Cradle } from "@src/container";
 import { ErrorMessages } from "@src/messages";
 import { body, param } from "express-validator";
-
-const equipmentTypeController = new EquipmentTypeController(
-    equipmentTypeCollection,
-    equipmentTypeCreation,
-    equipmentTypeModification,
-    equipmentTypeRemoval
-);
 
 const labelValidation = body('label').trim().isLength({ min: 1, max: 128 })
     .withMessage(ErrorMessages.EQUIPMENT_TYPE_LABEL_INVALID);
@@ -139,7 +127,7 @@ const idValidation = param('id').isInt().withMessage(ErrorMessages.EQUIPMENT_TYP
  *       409:
  *         description: Equipment type is still in use and cannot be deleted
  */
-export default defineRouter([
+export const equipmentTypeRoutes = ({ equipmentTypeController }: Pick<Cradle, 'equipmentTypeController'>): RouterConfig[] => [
     {
         path: '/',
         method: HttpMethod.GET,
@@ -163,4 +151,4 @@ export default defineRouter([
         middlewares: [idValidation],
         controller: equipmentTypeController.remove
     },
-]);
+];

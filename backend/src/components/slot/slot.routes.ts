@@ -1,13 +1,7 @@
-import { defineRouter } from "@src/components/routerconf";
-import { HttpMethod } from "@src/components/routerconf/router-config";
-import SlotController from "@src/components/slot/slot.controller";
-import { slotCollection } from "@src/components/slot/usecases/collection";
-import { slotCreation } from "@src/components/slot/usecases/creation";
-import { slotRemoval } from "@src/components/slot/usecases/removal";
+import { HttpMethod, RouterConfig } from "@src/components/routerconf/router-config";
+import { Cradle } from "@src/container";
 import { ErrorMessages } from "@src/messages";
 import { body, param } from "express-validator";
-
-const slotController = new SlotController(slotCollection, slotCreation, slotRemoval);
 
 const labelValidation = body("label").trim().isLength({ min: 1, max: 128 }).withMessage(ErrorMessages.SLOT_LABEL_INVALID);
 const maxCapacityValidation = body("maxCapacity").isInt({ min: 1 }).withMessage(ErrorMessages.SLOT_MAX_CAPACITY_INVALID);
@@ -93,7 +87,7 @@ const idValidation = param("id").isInt().withMessage(ErrorMessages.SLOT_NOT_EXIS
  *       404:
  *         description: Slot not found
  */
-export default defineRouter([
+export const slotRoutes = ({ slotController }: Pick<Cradle, 'slotController'>): RouterConfig[] => [
     {
         path: '/',
         method: HttpMethod.GET,
@@ -111,4 +105,4 @@ export default defineRouter([
         middlewares: [idValidation],
         controller: slotController.remove
     },
-]);
+];

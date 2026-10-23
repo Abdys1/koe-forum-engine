@@ -1,6 +1,5 @@
-import { authController } from '@src/components/auth';
-import { defineRouter } from '@src/components/routerconf';
-import { HttpMethod } from '@src/components/routerconf/router-config';
+import { HttpMethod, RouterConfig } from '@src/components/routerconf/router-config';
+import { Cradle } from '@src/container';
 import { body } from 'express-validator';
 
 /**
@@ -111,7 +110,7 @@ import { body } from 'express-validator';
  *             schema:
  *               type: string
  */
-export default defineRouter([
+export const authRoutes = ({ authController }: Pick<Cradle, 'authController'>): RouterConfig[] => [
     {
         path: '/login',
         method: HttpMethod.POST,
@@ -138,4 +137,4 @@ export default defineRouter([
         ],
         controller: authController.registrate
     }
-]);
+];

@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
-import app from '@src/app';
+import { createApp } from '@src/app';
 import logger from '@src/components/logger/logger';
+import { buildContainer } from '@src/container';
 import http from 'http';
 
 /**
@@ -23,6 +24,8 @@ function normalizePort(val: string) {
 
   return false;
 }
+
+const app = createApp(buildContainer());
 
 const port = normalizePort(process.env.PORT || '3000');
 
