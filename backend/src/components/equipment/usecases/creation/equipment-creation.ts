@@ -3,21 +3,22 @@ import { toEquipmentDetails } from "@src/components/equipment/usecases/collectio
 import { CreateEquipmentInput, CreateEquipmentOutput, EquipmentCreationResult, EquipmentCreationUseCase } from "@src/components/equipment/usecases/creation/types";
 import { EquipmentTypeRepository } from "@src/components/equipment-type/repositories/types";
 import { SlotRepository } from "@src/components/slot/repositories/types";
+import { RepositoryProvider } from "@src/components/transaction/types";
 
 export default class EquipmentCreationUseCaseImpl implements EquipmentCreationUseCase {
     constructor(
-        private readonly equipmentRepository: EquipmentRepository,
-        private readonly equipmentTypeRepository: EquipmentTypeRepository,
-        private readonly slotRepository: SlotRepository
+        private readonly equipmentRepositories: RepositoryProvider<EquipmentRepository>,
+        private readonly equipmentTypeRepositories: RepositoryProvider<EquipmentTypeRepository>,
+        private readonly slotRepositories: RepositoryProvider<SlotRepository>
     ) {}
 
     public execute = async (input: CreateEquipmentInput): Promise<CreateEquipmentOutput> => {
-        const equipmentType = await this.equipmentTypeRepository.findById(input.typeId);
+        const equipmentType = await this.equipmentTypeRepositories.get().findById(input.typeId);
         if (!equipmentType) {
             return { status: EquipmentCreationResult.TYPE_NOT_EXISTS };
         }
 
-        const slot = equipmentType.slotId !== null && equipmentType.slotId !== undefined ? await this.slotRepository.findById(equipmentType.slotId) : null;
+        const slot = equipmentType.slotId !== null && equipmentType.slotId !== undefined ? await this.slotRepositories.get().findById(equipmentType.slotId) : null;
         if (slot) {
             if (input.slotCost === undefined) {
                 return { status: EquipmentCreationResult.SLOT_COST_REQUIRED };
@@ -29,12 +30,12 @@ export default class EquipmentCreationUseCaseImpl implements EquipmentCreationUs
             return { status: EquipmentCreationResult.SLOT_COST_NOT_ALLOWED };
         }
 
-        const existingEquipment = await this.equipmentRepository.findByNameAndTypeId(input.name, input.typeId);
+        const existingEquipment = await this.equipmentRepositories.get().findByNameAndTypeId(input.name, input.typeId);
         if (existingEquipment) {
             return { status: EquipmentCreationResult.ALREADY_EXISTS };
         }
 
-        const equipment = await this.equipmentRepository.create({
+        const equipment = await this.equipmentRepositories.get().create({
             name: input.name,
             typeId: input.typeId,
             description: input.description,

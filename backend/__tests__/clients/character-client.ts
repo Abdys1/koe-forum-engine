@@ -18,6 +18,12 @@ class CharacterClient extends BaseClient {
     public async getCharacterEquipment(username: string, characterId: number | string): Promise<Response> {
         return this.request.get(`${CharacterClient.BASE_URL}/${characterId}/equipment`).set(await this.getAuthorizationHeader({ username }));
     }
+
+    public async setCharacterEquipment(username: string, characterId: number | string, equipmentIds: unknown): Promise<Response> {
+        return this.request.put(`${CharacterClient.BASE_URL}/${characterId}/equipment`)
+            .set(await this.getAuthorizationHeader({ username }))
+            .send({ equipmentIds });
+    }
 }
 
 export default CharacterClient;

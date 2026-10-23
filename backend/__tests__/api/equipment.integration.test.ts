@@ -365,9 +365,10 @@ describe('/api/equipment', () => {
                 name: 'Aragorn a Kósza',
                 sex: Sex.MALE,
                 race: 'human',
-                equipmentIds: [equipment.id],
                 imageUrl: '/aragorn.jpg'
             });
+            const charactersResp = await characterClient.getCharacters(user.username);
+            await characterClient.setCharacterEquipment(user.username, charactersResp.body[0].id, [equipment.id]);
 
             const deleteResp = await equipmentClient.deleteEquipment(equipment.id);
 
@@ -385,9 +386,10 @@ describe('/api/equipment', () => {
                 name: 'Aragorn a Kósza',
                 sex: Sex.MALE,
                 race: 'human',
-                equipmentIds: [equipment.id, equipment.id, equipment.id],
                 imageUrl: '/aragorn.jpg'
             });
+            const charactersResp = await characterClient.getCharacters(user.username);
+            await characterClient.setCharacterEquipment(user.username, charactersResp.body[0].id, [equipment.id, equipment.id, equipment.id]);
 
             const deleteResp = await equipmentClient.deleteEquipment(equipment.id);
 

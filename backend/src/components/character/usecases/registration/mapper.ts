@@ -7,7 +7,6 @@ export function fromInput(dto: CreateCharacterInput): Character {
         name: dto.name,
         race: dto.race,
         sex: dto.sex,
-        equipmentIds: dto.equipmentIds,
         imageUrl: dto.imageUrl
     };
 }

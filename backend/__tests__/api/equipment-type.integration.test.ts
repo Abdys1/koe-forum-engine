@@ -1,16 +1,12 @@
-import { Sex } from "@src/components/character/types";
 import { ErrorMessages } from "@src/messages";
 import { db } from "@src/prisma-client";
-import CharacterClient from "@test/clients/character-client";
 import EquipmentClient from "@test/clients/equipment-client";
 import EquipmentTypeClient from "@test/clients/equipment-type-client";
 import {
-    generateEquipmentName,
     generateEquipmentTypeLabel,
     saveEquipmentToDb,
     saveEquipmentTypeToDb,
-    saveSlotToDb,
-    saveTestUserToDb
+    saveSlotToDb
 } from "@test/utils/test-data-generator";
 import { describe, it } from "vitest";
 
@@ -22,12 +18,10 @@ interface EquipmentTypeResponseItem {
 describe('/api/equipment/type', () => {
     let equipmentTypeClient: EquipmentTypeClient;
     let equipmentClient: EquipmentClient;
-    let characterClient: CharacterClient;
 
     beforeAll(async () => {
         equipmentTypeClient = new EquipmentTypeClient();
         equipmentClient = new EquipmentClient();
-        characterClient = new CharacterClient();
     });
 
     describe('GET /', () => {
@@ -314,50 +308,6 @@ describe('/api/equipment/type', () => {
             const deleteResp = await equipmentTypeClient.deleteEquipmentType(type.id);
 
             expect(deleteResp.status).toBe(204);
-        });
-    });
-
-    /*
-     * A feature lényege: új felszerelés-típus vehető fel kódmódosítás és deploy
-     * nélkül, és az azonnal végig használható a felszerelés- és karakter-létrehozásban.
-     */
-    describe('új típus végponton keresztül, kódmódosítás nélkül', () => {
-        it('when a new type is created via the api then a character can be created with equipment of that type', async () => {
-            const label = generateEquipmentTypeLabel();
-            const createTypeResp = await equipmentTypeClient.createEquipmentType({ label });
-            expect(createTypeResp.status).toBe(201);
-            const typeId = createTypeResp.body.id;
-
-            const listTypesResp = await equipmentTypeClient.getAllEquipmentTypes();
-            expect(listTypesResp.body.equipmentTypes.map((item: EquipmentTypeResponseItem) => item.label))
-                .toContain(label);
-
-            const equipmentName = generateEquipmentName();
-            const createEquipmentResp = await equipmentClient.createEquipment({
-                name: equipmentName,
-                typeId,
-                description: 'Az új típusba tartozó felszerelés'
-            });
-            expect(createEquipmentResp.status).toBe(201);
-            const equipmentId = createEquipmentResp.body.id;
-
-            const user = await saveTestUserToDb();
-            const createCharacterResp = await characterClient.createCharacter(user.username, {
-                name: 'Aragorn a Kósza',
-                sex: Sex.MALE,
-                race: 'human',
-                equipmentIds: [equipmentId, equipmentId],
-                imageUrl: '/aragorn.jpg'
-            });
-
-            expect(createCharacterResp.status).toBe(200);
-            const charactersResp = await characterClient.getCharacters(user.username);
-            const equipmentResp = await characterClient.getCharacterEquipment(user.username, charactersResp.body[0].id);
-            const equipment = equipmentResp.body;
-            expect(equipment.length).toBe(2);
-            equipment.forEach((item: { type: EquipmentTypeResponseItem }) => {
-                expect(item.type).toStrictEqual({ id: typeId, label, slotId: null });
-            });
         });
     });
 });

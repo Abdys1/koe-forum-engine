@@ -8,6 +8,7 @@ import { EquipmentTypeModification, EquipmentTypeModificationResult } from '@src
 import EquipmentTypeRemovalImpl from '@src/components/equipment-type/usecases/removal/equipment-type-removal';
 import { EquipmentTypeRemoval, EquipmentTypeRemovalResult } from '@src/components/equipment-type/usecases/removal/types';
 import { SlotRepository } from '@src/components/slot/repositories/types';
+import { fakeRepositoryProvider } from '@test/utils/fake-repository-provider';
 import { beforeEach, describe, expect, it, Mocked, vi } from 'vitest';
 
 describe('equipment-type use cases', () => {
@@ -37,7 +38,7 @@ describe('equipment-type use cases', () => {
         let equipmentTypeCollection: EquipmentTypeCollection;
 
         beforeEach(() => {
-            equipmentTypeCollection = new EquipmentTypeCollectionImpl(equipmentTypeRepository);
+            equipmentTypeCollection = new EquipmentTypeCollectionImpl(fakeRepositoryProvider(equipmentTypeRepository));
         });
 
         it('should return the types provided by the database', async () => {
@@ -65,7 +66,7 @@ describe('equipment-type use cases', () => {
         let equipmentTypeCreation: EquipmentTypeCreation;
 
         beforeEach(() => {
-            equipmentTypeCreation = new EquipmentTypeCreationImpl(equipmentTypeRepository, slotRepository);
+            equipmentTypeCreation = new EquipmentTypeCreationImpl(fakeRepositoryProvider(equipmentTypeRepository), fakeRepositoryProvider(slotRepository));
         });
 
         it('should create the type and return CREATED', async () => {
@@ -126,7 +127,7 @@ describe('equipment-type use cases', () => {
         let equipmentTypeModification: EquipmentTypeModification;
 
         beforeEach(() => {
-            equipmentTypeModification = new EquipmentTypeModificationImpl(equipmentTypeRepository);
+            equipmentTypeModification = new EquipmentTypeModificationImpl(fakeRepositoryProvider(equipmentTypeRepository));
         });
 
         it('should update the label and return UPDATED', async () => {
@@ -179,7 +180,7 @@ describe('equipment-type use cases', () => {
         let equipmentTypeRemoval: EquipmentTypeRemoval;
 
         beforeEach(() => {
-            equipmentTypeRemoval = new EquipmentTypeRemovalImpl(equipmentTypeRepository);
+            equipmentTypeRemoval = new EquipmentTypeRemovalImpl(fakeRepositoryProvider(equipmentTypeRepository));
         });
 
         it('should delete the type and return DELETED', async () => {

@@ -1,7 +1,7 @@
-import { PrismaClient } from "@prisma/client";
 import { Equipment, EquipmentUpdate } from "@src/components/equipment/models/equipment";
 import { EquipmentSlotUsage } from "@src/components/equipment/models/equipment-slot-usage";
 import { EquipmentRepository } from "@src/components/equipment/repositories/types";
+import { DbClient } from "@src/prisma-client";
 
 const FIELDS = {
     id: true,
@@ -13,9 +13,9 @@ const FIELDS = {
 } as const;
 
 export default class EquipmentRepositoryImpl implements EquipmentRepository {
-    private db: PrismaClient;
+    private db: DbClient;
 
-    constructor(db: PrismaClient) {
+    constructor(db: DbClient) {
         this.db = db;
     }
 
@@ -38,6 +38,18 @@ export default class EquipmentRepositoryImpl implements EquipmentRepository {
             orderBy: { id: "asc" }
         });
         return assignments.map((assignment) => assignment.equipment);
+    };
+
+    public replaceAllByCharacterId = async (characterId: number, equipmentIds: number[]): Promise<void> => {
+        await this.db.character.update({
+            where: { id: characterId },
+            data: {
+                equipment: {
+                    deleteMany: {},
+                    createMany: { data: equipmentIds.map((equipmentId) => ({ equipmentId })) }
+                }
+            }
+        });
     };
 
     public findByNameAndTypeId = async (name: string, typeId: number): Promise<Equipment | null> => {

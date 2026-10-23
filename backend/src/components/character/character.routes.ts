@@ -2,6 +2,7 @@ import CharacterController from "@src/components/character/character.controller"
 import { Sex } from "@src/components/character/types";
 import { characterCollection } from "@src/components/character/usecases/collection";
 import { characterEquipmentCollection } from "@src/components/character/usecases/equipment_collection";
+import { characterEquipmentModification } from "@src/components/character/usecases/equipment_modification";
 import { characterRegistration } from "@src/components/character/usecases/registration";
 import { characterUpdateValidator } from "@src/components/character/usecases/update_validator";
 import { defineRouter } from "@src/components/routerconf";
@@ -9,7 +10,15 @@ import { HttpMethod } from "@src/components/routerconf/router-config";
 import { ErrorMessages } from "@src/messages";
 import { body, param } from "express-validator";
 
-const characterController = new CharacterController(characterRegistration, characterCollection, characterUpdateValidator, characterEquipmentCollection);
+const characterController = new CharacterController(
+    characterRegistration,
+    characterCollection,
+    characterUpdateValidator,
+    characterEquipmentCollection,
+    characterEquipmentModification
+);
+
+const idValidation = param('id').isInt().withMessage(ErrorMessages.CHARACTER_NOT_EXISTS);
 
 /**
  * @openapi
@@ -73,6 +82,7 @@ const characterController = new CharacterController(characterRegistration, chara
  *               equipmentIds:
  *                 type: array
  *                 maxItems: 100
+ *                 description: The initial equipment list; an id may be repeated to assign the same equipment multiple times
  *                 items:
  *                   type: integer
  *     responses:
@@ -105,6 +115,46 @@ const characterController = new CharacterController(characterRegistration, chara
  *         description: The id is not an integer
  *       404:
  *         description: The character does not exist
+ *   put:
+ *     tags: [Character]
+ *     summary: Replace the whole equipment list of one of the current user's characters
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [equipmentIds]
+ *             properties:
+ *               equipmentIds:
+ *                 type: array
+ *                 maxItems: 100
+ *                 description: The new equipment list; an id may be repeated to assign the same equipment multiple times, an empty list removes every equipment
+ *                 items:
+ *                   type: integer
+ *     responses:
+ *       200:
+ *         description: The new equipment list of the character
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Equipment'
+ *       400:
+ *         description: The id is not an integer, or the equipment id list is invalid
+ *       403:
+ *         description: The character belongs to another user
+ *       404:
+ *         description: The character does not exist
+ *       422:
+ *         description: One of the referenced equipment ids does not exist, or the equipment list exceeds a slot's capacity
  */
 export default defineRouter([
     {
@@ -117,7 +167,7 @@ export default defineRouter([
             body('race').notEmpty().withMessage(ErrorMessages.CHARACTER_RACE_REQUIRED),
             body('imageUrl').notEmpty().withMessage(ErrorMessages.CHARACTER_IMAGE_URL_REQUIRED),
             body('equipmentIds').optional().isArray({ max: 100 }).withMessage(ErrorMessages.CHARACTER_EQUIPMENT_IDS_INVALID),
-            body('equipmentIds.*').isInt().withMessage(ErrorMessages.CHARACTER_EQUIPMENT_ID_INVALID)
+            body('equipmentIds.*').isInt().withMessage(ErrorMessages.CHARACTER_EQUIPMENT_ID_INVALID).toInt()
         ],
         controller: characterController.createCharacter
     },
@@ -129,7 +179,17 @@ export default defineRouter([
     {
         path: '/:id/equipment',
         method: HttpMethod.GET,
-        middlewares: [param('id').isInt().withMessage(ErrorMessages.CHARACTER_NOT_EXISTS)],
+        middlewares: [idValidation],
         controller: characterController.listCharacterEquipment
+    },
+    {
+        path: '/:id/equipment',
+        method: HttpMethod.PUT,
+        middlewares: [
+            idValidation,
+            body('equipmentIds').isArray({ max: 100 }).withMessage(ErrorMessages.CHARACTER_EQUIPMENT_IDS_INVALID),
+            body('equipmentIds.*').isInt().withMessage(ErrorMessages.CHARACTER_EQUIPMENT_ID_INVALID).toInt()
+        ],
+        controller: characterController.setCharacterEquipment
     },
 ]);

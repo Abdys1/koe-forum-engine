@@ -5,6 +5,7 @@ import SlotCreationImpl from '@src/components/slot/usecases/creation/slot-creati
 import { SlotCreation, SlotCreationResult } from '@src/components/slot/usecases/creation/types';
 import SlotRemovalImpl from '@src/components/slot/usecases/removal/slot-removal';
 import { SlotRemoval, SlotRemovalResult } from '@src/components/slot/usecases/removal/types';
+import { fakeRepositoryProvider } from '@test/utils/fake-repository-provider';
 import { beforeEach, describe, expect, it, Mocked, vi } from 'vitest';
 
 describe('slot use cases', () => {
@@ -24,7 +25,7 @@ describe('slot use cases', () => {
         let slotCollection: SlotCollection;
 
         beforeEach(() => {
-            slotCollection = new SlotCollectionImpl(slotRepository);
+            slotCollection = new SlotCollectionImpl(fakeRepositoryProvider(slotRepository));
         });
 
         it('should return the slots provided by the database', async () => {
@@ -50,7 +51,7 @@ describe('slot use cases', () => {
         let slotCreation: SlotCreation;
 
         beforeEach(() => {
-            slotCreation = new SlotCreationImpl(slotRepository);
+            slotCreation = new SlotCreationImpl(fakeRepositoryProvider(slotRepository));
         });
 
         it('should create the slot and return CREATED', async () => {
@@ -88,7 +89,7 @@ describe('slot use cases', () => {
         let slotRemoval: SlotRemoval;
 
         beforeEach(() => {
-            slotRemoval = new SlotRemovalImpl(slotRepository);
+            slotRemoval = new SlotRemovalImpl(fakeRepositoryProvider(slotRepository));
         });
 
         it('should delete the slot and return DELETED', async () => {

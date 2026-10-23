@@ -7,20 +7,21 @@ import {
 } from "@src/components/character/usecases/equipment_collection/types";
 import { EquipmentRepository } from "@src/components/equipment/repositories/types";
 import { toEquipmentDetails } from "@src/components/equipment/usecases/collection/mapper";
+import { RepositoryProvider } from "@src/components/transaction/types";
 
 export default class CharacterEquipmentCollectionUseCaseImpl implements CharacterEquipmentCollectionUseCase {
     constructor(
-        private readonly characterRepository: CharacterRepository,
-        private readonly equipmentRepository: EquipmentRepository
+        private readonly characterRepositories: RepositoryProvider<CharacterRepository>,
+        private readonly equipmentRepositories: RepositoryProvider<EquipmentRepository>
     ) {}
 
     public execute = async (input: CharacterEquipmentCollectionInput): Promise<CharacterEquipmentCollectionOutput> => {
-        const character = await this.characterRepository.findById(input.characterId);
+        const character = await this.characterRepositories.get().findById(input.characterId);
         if (!character) {
             return { status: CharacterEquipmentCollectionResult.NOT_FOUND };
         }
 
-        const equipment = await this.equipmentRepository.findAllByCharacterId(input.characterId);
+        const equipment = await this.equipmentRepositories.get().findAllByCharacterId(input.characterId);
         return { status: CharacterEquipmentCollectionResult.FOUND, equipment: equipment.map(toEquipmentDetails) };
     };
 }

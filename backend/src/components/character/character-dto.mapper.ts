@@ -26,10 +26,6 @@ export default class CharacterRegistrationRequestMapper {
         };
     }
 
-    /**
-     * Az `equipmentIds` a bodyból kimaradhat, ezért itt, a HTTP-határon
-     * normalizáljuk üres listára — a use case-ek már mindig tömböt kapnak.
-     */
     private static toEquipmentIds(dto: CharacterRegistrationRequestDto): number[] {
         return dto.equipmentIds ?? [];
     }

@@ -1,25 +1,26 @@
 import { EquipmentTypeRepository } from "@src/components/equipment-type/repositories/types";
 import { EquipmentTypeRemoval, EquipmentTypeRemovalResult, RemoveEquipmentTypeInput, RemoveEquipmentTypeOutput } from "@src/components/equipment-type/usecases/removal/types";
+import { RepositoryProvider } from "@src/components/transaction/types";
 
 export default class EquipmentTypeRemovalImpl implements EquipmentTypeRemoval {
-    private equipmentTypeRepository: EquipmentTypeRepository;
+    private equipmentTypeRepositories: RepositoryProvider<EquipmentTypeRepository>;
 
-    constructor(equipmentTypeRepository: EquipmentTypeRepository) {
-        this.equipmentTypeRepository = equipmentTypeRepository;
+    constructor(equipmentTypeRepositories: RepositoryProvider<EquipmentTypeRepository>) {
+        this.equipmentTypeRepositories = equipmentTypeRepositories;
     }
 
     public execute = async (input: RemoveEquipmentTypeInput): Promise<RemoveEquipmentTypeOutput> => {
-        const currentType = await this.equipmentTypeRepository.findById(input.id);
+        const currentType = await this.equipmentTypeRepositories.get().findById(input.id);
         if (!currentType) {
             return { status: EquipmentTypeRemovalResult.NOT_FOUND };
         }
 
-        const referencingEquipmentCount = await this.equipmentTypeRepository.countEquipmentByTypeId(input.id);
+        const referencingEquipmentCount = await this.equipmentTypeRepositories.get().countEquipmentByTypeId(input.id);
         if (referencingEquipmentCount > 0) {
             return { status: EquipmentTypeRemovalResult.IN_USE };
         }
 
-        await this.equipmentTypeRepository.delete(input.id);
+        await this.equipmentTypeRepositories.get().delete(input.id);
         return { status: EquipmentTypeRemovalResult.DELETED };
     };
 }

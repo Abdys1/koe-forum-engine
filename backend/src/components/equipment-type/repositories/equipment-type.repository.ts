@@ -1,13 +1,13 @@
-import { PrismaClient } from "@prisma/client";
 import { EquipmentType, EquipmentTypeUpdate } from "@src/components/equipment-type/models/equipment-type";
 import { EquipmentTypeRepository } from "@src/components/equipment-type/repositories/types";
+import { DbClient } from "@src/prisma-client";
 
 const FIELDS = { id: true, label: true, slotId: true } as const;
 
 export default class EquipmentTypeRepositoryImpl implements EquipmentTypeRepository {
-    private db: PrismaClient;
+    private db: DbClient;
 
-    constructor(db: PrismaClient) {
+    constructor(db: DbClient) {
         this.db = db;
     }
 

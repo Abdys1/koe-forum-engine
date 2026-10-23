@@ -1,6 +1,6 @@
-import { PrismaClient } from "@prisma/client";
 import { SlotEntity } from "@src/components/slot/models/slot";
 import { SlotRepository } from "@src/components/slot/repositories/types";
+import { DbClient } from "@src/prisma-client";
 
 const FIELDS = {
     id: true,
@@ -9,9 +9,9 @@ const FIELDS = {
 } as const;
 
 export default class SlotRepositoryImpl implements SlotRepository {
-    private db: PrismaClient;
+    private db: DbClient;
 
-    constructor(db: PrismaClient) {
+    constructor(db: DbClient) {
         this.db = db;
     }
 

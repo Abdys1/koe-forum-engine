@@ -2,6 +2,7 @@ import { CharacterRepository } from '@src/components/character/repositories/type
 import CharacterEquipmentCollectionUseCaseImpl from '@src/components/character/usecases/equipment_collection/character-equipment-collection';
 import { CharacterEquipmentCollectionResult, CharacterEquipmentCollectionUseCase } from '@src/components/character/usecases/equipment_collection/types';
 import { EquipmentRepository } from '@src/components/equipment/repositories/types';
+import { fakeRepositoryProvider } from '@test/utils/fake-repository-provider';
 import { beforeEach, describe, expect, it, Mocked, vi } from 'vitest';
 
 describe('CharacterEquipmentCollectionUseCase', () => {
@@ -20,6 +21,7 @@ describe('CharacterEquipmentCollectionUseCase', () => {
             findAll: vi.fn(),
             findAllByIds: vi.fn(),
             findAllByCharacterId: vi.fn().mockResolvedValue([]),
+            replaceAllByCharacterId: vi.fn(),
             findById: vi.fn(),
             findByNameAndTypeId: vi.fn(),
             countAssignmentsById: vi.fn(),
@@ -28,7 +30,7 @@ describe('CharacterEquipmentCollectionUseCase', () => {
             update: vi.fn(),
             delete: vi.fn(),
         };
-        characterEquipmentCollection = new CharacterEquipmentCollectionUseCaseImpl(characterRepository, equipmentRepository);
+        characterEquipmentCollection = new CharacterEquipmentCollectionUseCaseImpl(fakeRepositoryProvider(characterRepository), fakeRepositoryProvider(equipmentRepository));
     });
 
     describe('execute()', () => {

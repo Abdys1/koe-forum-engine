@@ -1,10 +1,11 @@
 import { EquipmentSlotUsage } from "@src/components/equipment/models/equipment-slot-usage";
 import { EquipmentRepository } from "@src/components/equipment/repositories/types";
+import { RepositoryProvider } from "@src/components/transaction/types";
 
 import { SlotCapacityValidationUseCase } from "./types";
 
 export default class SlotCapacityValidationUseCaseImpl implements SlotCapacityValidationUseCase {
-    constructor(private readonly equipmentRepository: EquipmentRepository) {}
+    constructor(private readonly equipmentRepositories: RepositoryProvider<EquipmentRepository>) {}
 
     public execute = async (equipmentIds: number[]): Promise<boolean> => {
         if (equipmentIds.length === 0) {
@@ -12,7 +13,7 @@ export default class SlotCapacityValidationUseCaseImpl implements SlotCapacityVa
         }
 
         const uniqueEquipmentIds = [...new Set(equipmentIds)];
-        const usages = await this.equipmentRepository.findSlotUsageByIds(uniqueEquipmentIds);
+        const usages = await this.equipmentRepositories.get().findSlotUsageByIds(uniqueEquipmentIds);
         const usageByEquipmentId = new Map(usages.map((usage) => [usage.id, usage]));
 
         return this.isWithinCapacity(equipmentIds, usageByEquipmentId);

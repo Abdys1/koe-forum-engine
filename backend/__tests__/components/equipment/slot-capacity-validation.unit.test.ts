@@ -1,6 +1,7 @@
 import { EquipmentRepository } from '@src/components/equipment/repositories/types';
 import SlotCapacityValidationUseCaseImpl from '@src/components/equipment/usecases/validation/slot-capacity-validation';
 import { SlotCapacityValidationUseCase } from '@src/components/equipment/usecases/validation/types';
+import { fakeRepositoryProvider } from '@test/utils/fake-repository-provider';
 import { beforeEach, describe, expect, it, Mocked, vi } from 'vitest';
 
 describe('SlotCapacityValidationUseCase', () => {
@@ -12,6 +13,7 @@ describe('SlotCapacityValidationUseCase', () => {
             findAll: vi.fn(),
             findAllByIds: vi.fn(),
             findAllByCharacterId: vi.fn(),
+            replaceAllByCharacterId: vi.fn(),
             findById: vi.fn(),
             findByNameAndTypeId: vi.fn(),
             countAssignmentsById: vi.fn(),
@@ -20,7 +22,7 @@ describe('SlotCapacityValidationUseCase', () => {
             update: vi.fn(),
             delete: vi.fn(),
         };
-        slotCapacityValidation = new SlotCapacityValidationUseCaseImpl(equipmentRepository);
+        slotCapacityValidation = new SlotCapacityValidationUseCaseImpl(fakeRepositoryProvider(equipmentRepository));
     });
 
     describe('execute()', () => {

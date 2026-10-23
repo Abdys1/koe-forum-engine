@@ -9,5 +9,5 @@ export interface CharacterRegistrationRequestDto {
   sex: Sex;
   race: string;
   imageUrl: string;
-  equipmentIds: number[];
+  equipmentIds?: number[];
 }

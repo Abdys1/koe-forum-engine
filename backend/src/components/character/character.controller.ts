@@ -1,6 +1,7 @@
 import CharacterRegistrationRequestMapper from "@src/components/character/character-dto.mapper";
 import { CharacterCollectionUseCase } from "@src/components/character/usecases/collection/types";
 import { CharacterEquipmentCollectionResult, CharacterEquipmentCollectionUseCase } from "@src/components/character/usecases/equipment_collection/types";
+import { CharacterEquipmentModificationResult, CharacterEquipmentModificationUseCase } from "@src/components/character/usecases/equipment_modification/types";
 import { CharacterRegistrationUseCase, CreateCharacterInput } from "@src/components/character/usecases/registration/types";
 import { CharacterUpdateValidatorUseCase, ValidateCharacterUpdateResult } from "@src/components/character/usecases/update_validator/types";
 import { ErrorMessages } from "@src/messages";
@@ -11,7 +12,8 @@ export default class CharacterController {
         private readonly characterRegistration: CharacterRegistrationUseCase,
         private readonly characterCollection: CharacterCollectionUseCase,
         private readonly characterUpdateValidator: CharacterUpdateValidatorUseCase,
-        private readonly characterEquipmentCollection: CharacterEquipmentCollectionUseCase
+        private readonly characterEquipmentCollection: CharacterEquipmentCollectionUseCase,
+        private readonly characterEquipmentModification: CharacterEquipmentModificationUseCase
     ) {}
 
     createCharacter = async (req: Request, res: Response): Promise<void> => {
@@ -57,5 +59,30 @@ export default class CharacterController {
             return;
         }
         res.status(200).send(equipment);
+    }
+
+    setCharacterEquipment = async (req: Request, res: Response): Promise<void> => {
+        const { status, equipment } = await this.characterEquipmentModification.execute({
+            characterId: Number(req.params.id),
+            userId: req.user.id,
+            equipmentIds: req.body.equipmentIds
+        });
+
+        switch (status) {
+            case CharacterEquipmentModificationResult.NOT_FOUND:
+                res.status(404).json({ errorCode: ErrorMessages.CHARACTER_NOT_EXISTS });
+                return;
+            case CharacterEquipmentModificationResult.NOT_OWNED:
+                res.status(403).json({ errorCode: ErrorMessages.CHARACTER_NOT_OWNED });
+                return;
+            case CharacterEquipmentModificationResult.EQUIPMENT_NOT_EXISTS:
+                res.status(422).json({ errorCode: ErrorMessages.EQUIPMENT_NOT_EXISTS });
+                return;
+            case CharacterEquipmentModificationResult.SLOT_CAPACITY_EXCEEDED:
+                res.status(422).json({ errorCode: ErrorMessages.CHARACTER_SLOT_CAPACITY_EXCEEDED });
+                return;
+            default:
+                res.status(200).send(equipment);
+        }
     }
 }

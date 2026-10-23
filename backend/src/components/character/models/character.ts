@@ -5,5 +5,4 @@ export default interface Character {
   race: string;
   sex: number;
   imageUrl: string;
-  equipmentIds?: number[];
 }

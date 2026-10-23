@@ -68,6 +68,11 @@ Each feature in `src/components/` follows the same structure: controller → use
 
 **Authentication** uses JWT (access + refresh tokens). The auth middleware (`src/middlewares/auth.middleware.ts`) verifies Bearer tokens and attaches the user to the request.
 
+**Transactions** (`src/components/transaction/`): use cases receive repositories as `RepositoryProvider<R>`. `get()` returns the repository bound to the global client; inside `transactionManager.execute(async (tx) => ...)` use `inTransaction(tx)` to get the transaction-bound one. Returning `rollback(result)` from the callback rolls the transaction back and makes `execute` return `result`; a thrown error also rolls back and propagates. Rules:
+- A transaction callback may only contain repository calls (via `inTransaction(tx)`) and pure functions that do not touch the database — never another use case. A use case called inside the callback would silently run outside the transaction, because it reads its repositories with `get()`.
+- Business logic needed inside a transaction is split into data loading (repository method) and decision logic (pure function); the transaction-opening use case loads the data with the transaction-bound repository and calls the pure function.
+- Only the use case that opens the transaction calls `transactionManager.execute`; there are no nested transactions. Calling `execute` inside a running transaction throws `NestedTransactionError` (and rolls back the outer one), because Prisma would otherwise open an independent transaction on a separate connection.
+
 **Path aliases:** `@src/*` → `src/`, `@test/*` → `__tests__/`
 
 ### Backend Tests

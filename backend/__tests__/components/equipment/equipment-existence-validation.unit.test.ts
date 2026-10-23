@@ -1,6 +1,7 @@
 import { EquipmentRepository } from '@src/components/equipment/repositories/types';
 import EquipmentExistenceValidationUseCaseImpl from '@src/components/equipment/usecases/validation/equipment-existence-validation';
 import { EquipmentExistenceValidationUseCase } from '@src/components/equipment/usecases/validation/types';
+import { fakeRepositoryProvider } from '@test/utils/fake-repository-provider';
 import { beforeEach, describe, expect, it, Mocked, vi } from 'vitest';
 
 describe('EquipmentExistenceValidationUseCase', () => {
@@ -12,6 +13,7 @@ describe('EquipmentExistenceValidationUseCase', () => {
             findAll: vi.fn(),
             findAllByIds: vi.fn(),
             findAllByCharacterId: vi.fn(),
+            replaceAllByCharacterId: vi.fn(),
             findById: vi.fn(),
             findByNameAndTypeId: vi.fn(),
             countAssignmentsById: vi.fn(),
@@ -20,7 +22,7 @@ describe('EquipmentExistenceValidationUseCase', () => {
             update: vi.fn(),
             delete: vi.fn(),
         };
-        equipmentExistenceValidation = new EquipmentExistenceValidationUseCaseImpl(equipmentRepository);
+        equipmentExistenceValidation = new EquipmentExistenceValidationUseCaseImpl(fakeRepositoryProvider(equipmentRepository));
     });
 
     describe('execute()', () => {

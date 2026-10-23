@@ -1,6 +1,6 @@
-import { characterRepository } from "@src/components/character/repositories";
+import { characterRepositories } from "@src/components/character/repositories";
 import CharacterCollectionUseCaseImpl from "@src/components/character/usecases/collection/character-collection";
 
-const characterCollection = new CharacterCollectionUseCaseImpl(characterRepository);
+const characterCollection = new CharacterCollectionUseCaseImpl(characterRepositories);
 
 export { characterCollection };

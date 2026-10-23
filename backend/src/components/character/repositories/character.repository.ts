@@ -1,6 +1,7 @@
-import { Character as CharacterRecord, PrismaClient } from "@prisma/client";
+import { Character as CharacterRecord } from "@prisma/client";
 import Character from "@src/components/character/models/character";
 import { CharacterRepository } from "@src/components/character/repositories/types";
+import { DbClient } from "@src/prisma-client";
 
 function toCharacter(record: CharacterRecord): Character {
   return {
@@ -14,9 +15,9 @@ function toCharacter(record: CharacterRecord): Character {
 }
 
 export default class CharacterRepositoryImpl implements CharacterRepository {
-  private db: PrismaClient;
+  private db: DbClient;
 
-  constructor(db: PrismaClient) {
+  constructor(db: DbClient) {
     this.db = db;
   }
 
@@ -50,9 +51,6 @@ export default class CharacterRepositoryImpl implements CharacterRepository {
         race: character.race,
         imageUrl: character.imageUrl,
         user: { connect: { id: character.userId } },
-        equipment: {
-          create: (character.equipmentIds ?? []).map((equipmentId) => ({ equipmentId })),
-        },
       },
     });
     return toCharacter(created);
