@@ -63,10 +63,7 @@ export default function CharacterImageStep() {
                             Képarány: <span className={styles.highlight}>5 : 8</span> (álló kép)
                         </li>
                         <li className={styles.helpItem}>
-                            Megjelenített méret: <span className={styles.highlight}>224 × 358 px</span>
-                        </li>
-                        <li className={styles.helpItem}>
-                            Éles megjelenéshez ajánlott: legalább <span className={styles.highlight}>448 × 716 px</span>
+                            Ajánlott méret: <span className={styles.highlight}>270 × 433 px</span>
                         </li>
                         <li className={styles.helpItem}>
                             Formátum: <span className={styles.highlight}>png</span>, <span className={styles.highlight}>jpg</span> vagy <span className={styles.highlight}>jpeg</span>

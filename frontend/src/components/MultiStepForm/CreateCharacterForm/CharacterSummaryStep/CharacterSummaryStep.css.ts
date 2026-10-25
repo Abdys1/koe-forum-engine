@@ -1,24 +1,6 @@
 import { globalStyle, style } from '@vanilla-extract/css';
-import { fadeDividerBottom, fadeDividerTop, featuredPanel, glassPanel } from '@/styles/shared.css';
+import { fadeDividerBottom, fadeDividerTop, featuredPanel, glassPanel, roundIconButton } from '@/styles/shared.css';
 import { alphaColors, colors, fonts, goldFocusRing, gradients, media, shadows, transition, withAlpha } from '@/styles/tokens';
-
-const roundIconButton = style({
-  display: 'inline-flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  border: `1px solid ${alphaColors.primaryBorderStrong}`,
-  borderRadius: '50%',
-  background: alphaColors.primaryTintSoft,
-  color: alphaColors.textSoft,
-  cursor: 'pointer',
-  transition: transition(['border-color', 'background', 'color']),
-  ':hover': {
-    borderColor: colors.secondary,
-    background: withAlpha(colors.secondary, 0.1),
-    color: colors.secondary,
-  },
-  ':focus-visible': goldFocusRing,
-});
 
 export const sheetRow = style({
   width: '100%',
@@ -185,18 +167,6 @@ export const name = style({
   overflowWrap: 'anywhere',
 });
 
-export const editBtn = style([roundIconButton, {
-  flexShrink: 0,
-  width: '2rem',
-  height: '2rem',
-  borderColor: alphaColors.primaryBorder,
-  color: alphaColors.textMuted,
-}]);
-
-export const editIcon = style({
-  fontSize: '1rem',
-});
-
 export const seals = style({
   display: 'flex',
   flexWrap: 'wrap',
@@ -260,110 +230,6 @@ export const sectionTitle = style({
   letterSpacing: '0.08em',
   color: colors.secondary,
 });
-
-export const gearRoots = style({
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(16rem, 1fr))',
-  gap: '1rem',
-});
-
-export const rootCard = style({
-  minWidth: 0,
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '0.6rem',
-  padding: '0.9rem 1rem 1rem',
-  border: `1px solid ${withAlpha(colors.mainLight, 0.1)}`,
-  borderRadius: '0.5rem',
-  background: withAlpha(colors.blackBg, 0.12),
-});
-
-export const rootHeader = style({
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  gap: '0.75rem',
-});
-
-export const rootLabel = style({
-  display: 'flex',
-  alignItems: 'center',
-  gap: '0.4rem',
-  fontFamily: fonts.cinzel,
-  fontSize: '0.9rem',
-  fontWeight: '700',
-  letterSpacing: '0.06em',
-  color: colors.white,
-});
-
-export const rootIcon = style({
-  fontSize: '1.1rem',
-  color: colors.secondary,
-});
-
-export const rootCount = style({
-  flexShrink: 0,
-  fontFamily: fonts.poppins,
-  fontSize: '0.75rem',
-  color: alphaColors.textMuted,
-});
-
-export const gearList = style([fadeDividerTop, {
-  margin: 0,
-  paddingTop: '0.6rem',
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '0.6rem',
-}]);
-
-export const gearRow = style({
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'baseline',
-  gap: '0.75rem',
-});
-
-export const gearType = style({
-  flexShrink: 0,
-  fontFamily: fonts.poppins,
-  fontSize: '0.65rem',
-  fontWeight: '500',
-  letterSpacing: '0.18em',
-  textTransform: 'uppercase',
-  color: colors.mainLight,
-});
-
-export const gearItems = style({
-  minWidth: 0,
-  margin: 0,
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'flex-end',
-  gap: '0.2rem',
-});
-
-export const gearName = style({
-  minWidth: 0,
-  fontFamily: fonts.poppins,
-  fontSize: '0.875rem',
-  textAlign: 'right',
-  color: colors.white,
-  overflowWrap: 'anywhere',
-});
-
-export const gearEmpty = style({
-  fontFamily: fonts.poppins,
-  fontSize: '0.875rem',
-  color: alphaColors.textMuted,
-});
-
-export const emptyGear = style([fadeDividerTop, {
-  paddingTop: '0.6rem',
-  fontFamily: fonts.poppins,
-  fontSize: '0.8rem',
-  fontStyle: 'italic',
-  color: alphaColors.textMuted,
-}]);
 
 const closingLine = {
   content: '""',

@@ -3,30 +3,17 @@
 import clsx from "clsx";
 import { useMemo } from "react";
 import Button from "@/components/Button/Button";
+import EditButton from "@/components/EditButton/EditButton";
+import GearOverview from "@/components/GearOverview/GearOverview";
 import { sexLabels, SelectableSex } from "@/components/MultiStepForm/CreateCharacterForm/CharacterBasicsStep/CharacterBasicsStep";
 import CharacterPortraitFrame from "@/components/MultiStepForm/CreateCharacterForm/CharacterPortraitFrame/CharacterPortraitFrame";
-import GearTypeIcon from "@/components/MultiStepForm/CreateCharacterForm/GearTypeIcon/GearTypeIcon";
-import SlotPips from "@/components/MultiStepForm/CreateCharacterForm/SlotPips/SlotPips";
 import { useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFormContext";
 import SectionHeading from "@/components/SectionHeading/SectionHeading";
 import { useObjectUrl } from "@/hooks/useObjectUrl";
 import { discordLink } from "@/lib/socialLinks";
-import { compactSelection, equipmentRoots, getPoolUsages, getRootUsage, groupSelectionBySlot } from "@/lib/equipment";
+import { compactSelection } from "@/lib/equipment";
 import { stepContent, stepIntro } from "@/components/MultiStepForm/CreateCharacterForm/characterStep.css";
 import * as styles from "./CharacterSummaryStep.css";
-
-type EditButtonProps = {
-    label: string,
-    onClick: () => void
-}
-
-function EditButton({ label, onClick }: EditButtonProps) {
-    return (
-        <button type="button" className={styles.editBtn} onClick={onClick} aria-label={label} title={label}>
-            <span className={clsx("material-icons", styles.editIcon)} aria-hidden="true">edit</span>
-        </button>
-    );
-}
 
 export default function CharacterSummaryStep() {
     const { form, steps, goToStep } = useMultiStepFormContext();
@@ -38,7 +25,6 @@ export default function CharacterSummaryStep() {
     const characterImage = useObjectUrl(getValues("characterImg")?.[0]);
 
     const selectedIds = useMemo(() => compactSelection(getValues("equipmentIds")), [getValues]);
-    const usages = useMemo(() => getPoolUsages(selectedIds), [selectedIds]);
 
     const openStep = (label: string) => () => goToStep(steps.indexOf(label));
 
@@ -78,44 +64,7 @@ export default function CharacterSummaryStep() {
                             <h4 id="summary-gear-title" className={styles.sectionTitle}>Felszerelés</h4>
                             <EditButton label="Felszerelés módosítása" onClick={openStep("Felszerelés")}/>
                         </div>
-                        <div className={styles.gearRoots}>
-                            {equipmentRoots.map(root => {
-                                const gearRows = groupSelectionBySlot(selectedIds, root.id);
-                                const { used, capacity } = getRootUsage(root.id, usages);
-                                return (
-                                    <div key={root.id} className={styles.rootCard}>
-                                        <div className={styles.rootHeader}>
-                                            <span className={styles.rootLabel}>
-                                                <GearTypeIcon icon={root.icon} className={styles.rootIcon}/>
-                                                {root.label}
-                                            </span>
-                                            <span className={styles.rootCount}>{used} / {capacity} slot</span>
-                                        </div>
-                                        {capacity > 0 && <SlotPips total={capacity} filled={used} size="small"/>}
-                                        {gearRows.length > 0
-                                            ? <dl className={styles.gearList}>
-                                                {gearRows.map(row => (
-                                                    <div key={row.type.id} className={styles.gearRow}>
-                                                        <dt className={styles.gearType}>{row.type.label}</dt>
-                                                        <dd className={styles.gearItems}>
-                                                            {row.groups.length > 0
-                                                                ? row.groups.map(({ entry, count }) => (
-                                                                    <span key={entry.item.id} className={styles.gearName}>
-                                                                        {entry.item.name}{count > 1 && ` ×${count}`}
-                                                                    </span>
-                                                                ))
-                                                                : <span className={styles.gearEmpty}>-</span>
-                                                            }
-                                                        </dd>
-                                                    </div>
-                                                ))}
-                                              </dl>
-                                            : <p className={styles.emptyGear}>Nincs kiválasztva</p>
-                                        }
-                                    </div>
-                                );
-                            })}
-                        </div>
+                        <GearOverview selectedIds={selectedIds}/>
                     </section>
                 </article>
 

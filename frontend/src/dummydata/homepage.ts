@@ -42,7 +42,7 @@ export const latestActivity = [
 
 export const newestCharacter = {
   name: "Aerin Valcourt",
-  href: "/character/aerin-valcourt",
+  href: "/character/2",
 };
 
 export const news = [
@@ -76,21 +76,21 @@ export const cities = [
 
 export const featuredCharacters = [
   {
-    id: "rasdeher-clion",
+    id: "5",
     name: "Rasdeher Clion",
     imageUrl: "/images/rasdeher2.png",
     role: "Bűnöző",
     quote: "A végzet, ami eljön érted. És mosolyog.",
   },
   {
-    id: "rovena-omera-phorwentar",
+    id: "3",
     name: "Rovéna O'mera Phorwentar",
     imageUrl: "/images/rovena.jpg",
     role: "Dalnok",
     quote: "Néha a legillatosabb virág a legmérgezőbb.",
   },
   {
-    id: "aerin-valcourt",
+    id: "2",
     name: "Aerin Valcourt",
     imageUrl: "/images/knight-withoutbg.png",
     role: "Paladin",

@@ -1,5 +1,5 @@
 import { globalStyle, keyframes, style } from '@vanilla-extract/css';
-import { alphaColors, backdropBlur, colors, fonts, gradients, shadows, transition, withAlpha } from './tokens';
+import { alphaColors, backdropBlur, colors, fonts, goldFocusRing, gradients, shadows, transition, withAlpha } from './tokens';
 
 export const riseIn = keyframes({
   from: { opacity: 0, transform: 'translateY(0.25rem)' },
@@ -67,6 +67,24 @@ export const glassPanelHover = style({
     borderColor: alphaColors.primaryBorderStrong,
     boxShadow: shadows.glassHover,
   },
+});
+
+export const roundIconButton = style({
+  display: 'inline-flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  border: `1px solid ${alphaColors.primaryBorderStrong}`,
+  borderRadius: '50%',
+  background: alphaColors.primaryTintSoft,
+  color: alphaColors.textSoft,
+  cursor: 'pointer',
+  transition: transition(['border-color', 'background', 'color']),
+  ':hover': {
+    borderColor: colors.secondary,
+    background: withAlpha(colors.secondary, 0.1),
+    color: colors.secondary,
+  },
+  ':focus-visible': goldFocusRing,
 });
 
 export const glassFrame = style([glassPanel, {

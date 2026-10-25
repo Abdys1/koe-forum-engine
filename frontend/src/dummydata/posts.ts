@@ -14,7 +14,7 @@ export interface Post {
 }
 
 export const dummyCharacter: PostCharacter = {
-  id: "ryldan-dolzack",
+  id: "1",
   name: "Ryldan Dolzack",
   imageUrl: "/images/ryldan2.png",
 };

@@ -1,19 +1,12 @@
 import Image from "next/image";
 import { LocationPost } from "@/lib/api/posts/types";
+import { formatDateTime } from "@/lib/dateFormat";
 import * as styles from "./PostCard.css";
 
 type PostCardProps = {
     post: LocationPost,
     postNumber: number
 }
-
-const dateFormatter = new Intl.DateTimeFormat("hu-HU", {
-    month: "long",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    timeZone: "Europe/Budapest"
-});
 
 export default function PostCard({ post, postNumber }: PostCardProps) {
     return (
@@ -37,7 +30,7 @@ export default function PostCard({ post, postNumber }: PostCardProps) {
                     <div>
                         <h3 className={styles.postTitle}>{post.gameTitle}</h3>
                         <time dateTime={post.createdAt} className={styles.date}>
-                            {dateFormatter.format(new Date(post.createdAt))}
+                            {formatDateTime(post.createdAt)}
                         </time>
                     </div>
                     <div className={styles.actions}>

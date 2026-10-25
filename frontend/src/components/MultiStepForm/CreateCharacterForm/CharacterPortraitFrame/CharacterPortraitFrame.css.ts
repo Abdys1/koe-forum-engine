@@ -1,4 +1,4 @@
-import { style } from '@vanilla-extract/css';
+import { style, styleVariants } from '@vanilla-extract/css';
 import { alphaColors, colors, fonts, ornatePortrait, shadows, transition, withAlpha } from '@/styles/tokens';
 
 const frameHighlight = {
@@ -6,8 +6,12 @@ const frameHighlight = {
   boxShadow: `0 0 24px -2px ${alphaColors.secondaryGlow}`,
 } as const;
 
+export const frameSizes = styleVariants({
+  medium: ornatePortrait(14),
+  large: ornatePortrait(17),
+});
+
 export const frame = style({
-  ...ornatePortrait(14),
   padding: 0,
   display: 'flex',
   justifyContent: 'center',

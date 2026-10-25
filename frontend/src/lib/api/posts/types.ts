@@ -26,6 +26,20 @@ export interface LocationPost extends Omit<Post, "character"> {
     character: PostAuthor
 }
 
+export interface CharacterGame {
+    title: string,
+    locationId: string,
+    postCount: number,
+    lastPostAt: string
+}
+
+export interface CharacterActivity {
+    postCount: number,
+    lastPost?: Pick<Post, "locationId" | "createdAt">,
+    activeGames: CharacterGame[]
+}
+
 export interface PostsClient {
-    getLocationPosts: (locationId: string, pageRequest: PageRequest) => Promise<Page<LocationPost>>
+    getLocationPosts: (locationId: string, pageRequest: PageRequest) => Promise<Page<LocationPost>>,
+    getCharacterActivity: (characterId: string) => Promise<CharacterActivity>
 };
