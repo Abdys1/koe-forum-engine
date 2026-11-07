@@ -4,7 +4,7 @@ import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { MouseEvent as ReactMouseEvent, useEffect, useId, useRef, useState } from "react";
 import DropdownSelect from "@/components/Inputs/DropdownSelect/DropdownSelect";
 import { playerCharacters } from "@/dummydata/characters";
@@ -30,6 +30,17 @@ const MENU_ITEMS: MenuItem[] = [
 const CHARACTER_OPTIONS = playerCharacters.map(character => ({ value: character.id, label: character.name }));
 
 export default function Sidebar() {
+    const { data: session, status } = useSession();
+    const pathname = usePathname();
+
+    if (status !== "authenticated" || session.error || pathname.startsWith("/auth/")) {
+        return null;
+    }
+
+    return <SidebarPanel />;
+}
+
+function SidebarPanel() {
     const characterSelectLabelId = useId();
     const pathname = usePathname();
     const sidebarRef = useRef<HTMLElement>(null);

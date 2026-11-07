@@ -5,9 +5,7 @@ import { NextResponse } from "next/server";
 
 const PUBLIC_PATHS: string[] = [
     '/',
-    '/auth/login',
-    '/character/create',
-    '/roleplay-area/locations',
+    '/auth/login'
 ];
 
 export default withAuth({
@@ -19,9 +17,7 @@ export default withAuth({
             const isFaviconPath = pathname.startsWith('favicon.ico');
             const isSignIn = !!token && token.error !== 'RefreshAccessTokenError';
 
-            // return isPublicPath || isImagePath || isFaviconPath || isSignIn;
-
-            return true;
+            return isPublicPath || isImagePath || isFaviconPath || isSignIn;
         }
     }
 });

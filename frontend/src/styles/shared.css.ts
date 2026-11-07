@@ -69,6 +69,21 @@ export const glassPanelHover = style({
   },
 });
 
+export const authCard = style([glassPanel, {
+  position: 'relative',
+  width: '100%',
+  maxWidth: '26rem',
+  display: 'flex',
+  flexDirection: 'column',
+  borderColor: alphaColors.primaryBorderMedium,
+  boxShadow: `0 0 48px -10px ${alphaColors.primaryAura}, ${shadows.glass}`,
+  transition: transition(['border-color', 'box-shadow'], '0.4s'),
+  ':hover': {
+    borderColor: alphaColors.primaryBorderStrong,
+    boxShadow: `0 0 56px -8px ${withAlpha(colors.mainLight, 0.5)}, ${shadows.glass}`,
+  },
+}]);
+
 export const roundIconButton = style({
   display: 'inline-flex',
   justifyContent: 'center',
