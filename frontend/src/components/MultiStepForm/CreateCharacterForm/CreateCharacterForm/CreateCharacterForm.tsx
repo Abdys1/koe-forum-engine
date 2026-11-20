@@ -6,7 +6,7 @@ import CharacterGearStep from "@/components/MultiStepForm/CreateCharacterForm/Ch
 import CharacterImageStep from "@/components/MultiStepForm/CreateCharacterForm/CharacterImageStep/CharacterImageStep";
 import CreateCharacterHeader from "@/components/MultiStepForm/CreateCharacterForm/CreateCharacterHeader/CreateCharacterHeader";
 import CharacterSummaryStep from "@/components/MultiStepForm/CreateCharacterForm/CharacterSummaryStep/CharacterSummaryStep";
-import { useForm, useWatch } from "react-hook-form";
+import { SubmitHandler, useForm, useWatch } from "react-hook-form";
 import MultiStepForm from "@/components/MultiStepForm/MultiStepForm/MultiStepForm";
 import { findRace, races } from "@/dummydata/races";
 import { raceStepBg, gearStepBg } from "@/styles/shared.css";
@@ -35,8 +35,12 @@ export default function CreateCharacterForm() {
     const characterImg = useWatch({ control: form.control, name: "characterImg" });
     const raceStepStyle = { '--raceUrl': `url('${findRace(raceId).img}')` } as React.CSSProperties;
 
+    const submit: SubmitHandler<CharacterInputs> = async values => {
+        console.log(values);
+    };
+
     return (
-        <MultiStepForm form={form} header={<CreateCharacterHeader control={form.control}/>}>
+        <MultiStepForm form={form} header={<CreateCharacterHeader control={form.control}/>} onSubmit={submit}>
             <MultiStepForm.Step label="Faj" style={raceStepStyle} className={raceStepBg}>
                 <CharacterRaceStep/>
             </MultiStepForm.Step>

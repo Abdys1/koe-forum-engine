@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext } from "react";
+import { BaseSyntheticEvent, createContext, ReactNode, useContext } from "react";
 import { UseFormReturn } from "react-hook-form";
 
 // TODO legyen generikus
@@ -10,7 +10,8 @@ export interface FormContextState {
     onPrevStep: React.MouseEventHandler<HTMLElement>,
     onNextStep: React.MouseEventHandler<HTMLElement>,
     goToStep: (step: number) => void,
-    canReturnToSummary: boolean
+    canReturnToSummary: boolean,
+    onSubmit: (e?: BaseSyntheticEvent) => Promise<void>
 };
 
 export const MultiStepFormContext = createContext<FormContextState | undefined>(undefined);

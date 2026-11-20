@@ -2,17 +2,18 @@ import MultiStepBar from "@/components/MultiStepForm/MultiStepBar/MultiStepBar";
 import { FormContextState, MultiStepFormContext, useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFormContext";
 import MultiStepNavButton from "@/components/MultiStepForm/MultiStepNavButton/MultiStepNavButton";
 import React, { useState } from "react";
-import { UseFormReturn } from "react-hook-form";
+import { SubmitHandler, UseFormReturn } from "react-hook-form";
 import clsx from "clsx";
 import * as styles from "./MultiStepForm.css";
 
 interface MultiStepFormProps {
     form: UseFormReturn<any, any, undefined>,
     header?: React.ReactNode,
+    onSubmit: SubmitHandler<any>,
     children: React.ReactElement<StepProps>[]
 }
 
-function MultiStepForm({ form, header, children }: MultiStepFormProps) {
+function MultiStepForm({ form, header, onSubmit, children }: MultiStepFormProps) {
     const [actualStep, setActualStep] = useState(0);
     const [summaryReached, setSummaryReached] = useState(false);
     const lastStep = React.Children.count(children) - 1;
@@ -42,7 +43,8 @@ function MultiStepForm({ form, header, children }: MultiStepFormProps) {
         onPrevStep: prevStep,
         onNextStep: nextStep,
         goToStep,
-        canReturnToSummary
+        canReturnToSummary,
+        onSubmit: form.handleSubmit(onSubmit)
     };
 
     return (
@@ -65,7 +67,7 @@ interface StepProps {
 }
 
 function Step({ children, validate, canProceed = true, style, className }: StepProps) {
-    const { header, steps, actualStep, onPrevStep, onNextStep, goToStep, canReturnToSummary } = useMultiStepFormContext();
+    const { header, steps, actualStep, onPrevStep, onNextStep, goToStep, canReturnToSummary, onSubmit } = useMultiStepFormContext();
     const lastStep = steps.length - 1;
 
     async function nextStep(e: React.MouseEvent<HTMLButtonElement>) {
@@ -75,8 +77,16 @@ function Step({ children, validate, canProceed = true, style, className }: StepP
         onNextStep(e);
     }
 
+    async function submit(e: React.FormEvent<HTMLFormElement>) {
+        if (actualStep < lastStep) {
+            e.preventDefault();
+            return;
+        }
+        await onSubmit(e);
+    }
+
     return (
-        <form style={style} className={clsx(styles.step, className)}>
+        <form style={style} className={clsx(styles.step, className)} onSubmit={submit}>
             <div className={clsx(styles.rail, styles.railPrev)}>
                 {actualStep > 0 &&
                     <div className={styles.railInner}>
