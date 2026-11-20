@@ -5,16 +5,10 @@ import { config } from "@/app/api/auth/[...nextauth]/auth";
 import { characterClient } from "@/lib/api/character";
 import { CreateCharacterRequest, ErrorCode, Sex, ValidationErrors } from "@/lib/api/character/types";
 import { ApiResponseError } from "@/lib/api/client/api-response.error";
-import type { SelectableSex } from "@/components/MultiStepForm/CreateCharacterForm/CharacterBasicsStep/CharacterBasicsStep";
 
 export type CreateCharacterResult =
     | { success: true }
     | { success: false, errorCodes: string[] };
-
-const sexMapping: Record<SelectableSex, Sex> = {
-    ferfi: Sex.MALE,
-    no: Sex.FEMALE
-};
 
 export async function createCharacter(formData: FormData): Promise<CreateCharacterResult> {
     const session = await getServerSession(config);
@@ -29,7 +23,7 @@ export async function createCharacter(formData: FormData): Promise<CreateCharact
 
     const request: CreateCharacterRequest = {
         name: String(formData.get('name') ?? ''),
-        sex: sexMapping[formData.get('sex') as SelectableSex],
+        sex: Number(formData.get('sex')) as Sex,
         race: String(formData.get('race') ?? ''),
         image,
         equipmentIds: formData.getAll('equipmentIds').map(Number)

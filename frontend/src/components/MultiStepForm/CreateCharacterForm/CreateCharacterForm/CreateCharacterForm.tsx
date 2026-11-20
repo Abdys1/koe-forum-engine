@@ -10,6 +10,8 @@ import { SubmitHandler, useForm, useWatch } from "react-hook-form";
 import MultiStepForm from "@/components/MultiStepForm/MultiStepForm/MultiStepForm";
 import { findRace, races } from "@/dummydata/races";
 import { raceStepBg, gearStepBg } from "@/styles/shared.css";
+import { createCharacter } from "@/app/character/create/actions";
+import { Sex } from "@/lib/api/character/types";
 
 export interface CharacterInputs {
     raceId: string,
@@ -19,6 +21,11 @@ export interface CharacterInputs {
     equipmentIds: string[],
     characterImg: FileList
 }
+
+const sexMapping: Record<SelectableSex, Sex> = {
+    ferfi: Sex.MALE,
+    no: Sex.FEMALE
+};
 
 export default function CreateCharacterForm() {
     const form = useForm<CharacterInputs>({
@@ -36,7 +43,16 @@ export default function CreateCharacterForm() {
     const raceStepStyle = { '--raceUrl': `url('${findRace(raceId).img}')` } as React.CSSProperties;
 
     const submit: SubmitHandler<CharacterInputs> = async values => {
-        console.log(values);
+        const formData = new FormData();
+        formData.append("name", values.characterName);
+        formData.append("sex", String(sexMapping[values.characterSex]));
+        formData.append("race", values.raceId);
+        formData.append("image", values.characterImg[0]);
+
+        const result = await createCharacter(formData);
+        if (!result.success) {
+            console.error(result.errorCodes);
+        }
     };
 
     return (
