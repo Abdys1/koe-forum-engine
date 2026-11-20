@@ -81,6 +81,22 @@ export const infoText = style({
   color: alphaColors.textSoft,
 });
 
+export const createBtn = style({
+  width: '100%',
+  height: 'auto',
+  minHeight: '3.25rem',
+  paddingBlock: '0.5rem',
+  paddingInline: '0.75rem',
+  letterSpacing: '0.06em',
+  textAlign: 'center',
+  boxShadow: `0 0 18px -2px ${alphaColors.secondaryGlow}, 0 10px 30px -12px ${alphaColors.secondaryBorder}`,
+  selectors: {
+    '&:hover:not(:disabled)': {
+      boxShadow: `0 0 26px 0 ${withAlpha(colors.secondary, 0.4)}, 0 14px 40px -12px ${withAlpha(colors.secondary, 0.6)}`,
+    },
+  },
+});
+
 export const helpSection = style([fadeDividerTop, {
   paddingTop: '1.25rem',
   display: 'flex',
@@ -229,38 +245,4 @@ export const sectionTitle = style({
   fontWeight: '700',
   letterSpacing: '0.08em',
   color: colors.secondary,
-});
-
-const closingLine = {
-  content: '""',
-  flexShrink: 0,
-  width: '5rem',
-  height: '1px',
-} as const;
-
-export const closing = style({
-  alignSelf: 'center',
-  maxWidth: '100%',
-  marginTop: '1.5rem',
-  paddingInline: '1rem',
-  display: 'flex',
-  alignItems: 'center',
-  gap: '1rem',
-  textAlign: 'center',
-  fontFamily: fonts.cinzel,
-  fontSize: '1rem',
-  lineHeight: 1.7,
-  letterSpacing: '0.03em',
-  color: alphaColors.textSoft,
-  textShadow: shadows.text,
-  selectors: {
-    '&::before': {
-      ...closingLine,
-      background: gradients.primaryFadeLeft,
-    },
-    '&::after': {
-      ...closingLine,
-      background: gradients.primaryFadeRight,
-    },
-  },
 });

@@ -1,7 +1,6 @@
-import ComponentHeading from "@/components/ComponentHeading/ComponentHeading";
 import MultiStepBar from "@/components/MultiStepForm/MultiStepBar/MultiStepBar";
 import { FormContextState, MultiStepFormContext, useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFormContext";
-import MultiStepPagination from "@/components/MultiStepForm/MultiStepPagination/MultiStepPagination";
+import MultiStepNavButton from "@/components/MultiStepForm/MultiStepNavButton/MultiStepNavButton";
 import React, { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 import clsx from "clsx";
@@ -9,11 +8,11 @@ import * as styles from "./MultiStepForm.css";
 
 interface MultiStepFormProps {
     form: UseFormReturn<any, any, undefined>,
-    aside?: React.ReactNode,
+    header?: React.ReactNode,
     children: React.ReactElement<StepProps>[]
 }
 
-function MultiStepForm({ form, aside, children }: MultiStepFormProps) {
+function MultiStepForm({ form, header, children }: MultiStepFormProps) {
     const [actualStep, setActualStep] = useState(0);
     const [summaryReached, setSummaryReached] = useState(false);
     const lastStep = React.Children.count(children) - 1;
@@ -39,7 +38,7 @@ function MultiStepForm({ form, aside, children }: MultiStepFormProps) {
         form,
         steps,
         actualStep,
-        aside,
+        header,
         onPrevStep: prevStep,
         onNextStep: nextStep,
         goToStep,
@@ -60,14 +59,14 @@ interface StepProps {
     validate?: () => Promise<boolean>,
     canProceed?: boolean,
     complete?: boolean,
-    hideAside?: boolean,
     className?: string,
     style?: React.CSSProperties
     children: JSX.Element
 }
 
-function Step({ children, validate, canProceed = true, hideAside = false, style, className }: StepProps) {
-    const { aside, onNextStep } = useMultiStepFormContext();
+function Step({ children, validate, canProceed = true, style, className }: StepProps) {
+    const { header, steps, actualStep, onPrevStep, onNextStep, goToStep, canReturnToSummary } = useMultiStepFormContext();
+    const lastStep = steps.length - 1;
 
     async function nextStep(e: React.MouseEvent<HTMLButtonElement>) {
         if (validate && !(await validate())) {
@@ -78,15 +77,34 @@ function Step({ children, validate, canProceed = true, hideAside = false, style,
 
     return (
         <form style={style} className={clsx(styles.step, className)}>
-            <div className={styles.stepHeader}>
-                <ComponentHeading title="Karakter létrehozása" />
-                <MultiStepBar/>
+            <div className={clsx(styles.rail, styles.railPrev)}>
+                {actualStep > 0 &&
+                    <div className={styles.railInner}>
+                        <MultiStepNavButton direction="prev" label={steps[actualStep - 1]} onClick={onPrevStep}/>
+                    </div>
+                }
             </div>
-            <div className={styles.body}>
+            <div className={styles.content}>
+                {header ?? (
+                    <header className={styles.stepHeader}>
+                        <MultiStepBar/>
+                    </header>
+                )}
                 <div className={styles.main}>{children}</div>
-                {aside && !hideAside && <aside className={styles.aside}>{aside}</aside>}
             </div>
-            <MultiStepPagination onNextStep={nextStep} nextDisabled={!canProceed}/>
+            <div className={clsx(styles.rail, styles.railNext)}>
+                {actualStep < lastStep &&
+                    <div className={styles.railInner}>
+                        <MultiStepNavButton direction="next" label={steps[actualStep + 1]} onClick={nextStep}
+                                            disabled={!canProceed}/>
+                        {canReturnToSummary &&
+                            <div className={styles.railExtra}>
+                                <MultiStepNavButton direction="summary" label={steps[lastStep]} onClick={() => goToStep(lastStep)}/>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
         </form>
     );
 }

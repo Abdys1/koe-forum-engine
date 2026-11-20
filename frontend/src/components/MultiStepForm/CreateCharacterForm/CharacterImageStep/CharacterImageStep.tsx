@@ -21,7 +21,7 @@ export default function CharacterImageStep() {
 
     return (
         <div className={stepContent}>
-            <SectionHeading eyebrow="4. lépés" title="Az arc, amiről a történetek szólnak"/>
+            <SectionHeading title="Az arc, amiről a történetek szólnak"/>
             <p className={stepIntro}>
                 Misztikumokkal övezett szóbeszédek alakja, regék hőse vagy dalnokok múzsája? Rajtad áll, ki rejlik mögötte.
             </p>

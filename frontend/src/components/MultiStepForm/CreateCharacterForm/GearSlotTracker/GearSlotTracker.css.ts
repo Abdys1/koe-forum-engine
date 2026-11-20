@@ -1,4 +1,5 @@
 import { keyframes, style } from '@vanilla-extract/css';
+import { HEADER_TOTAL_HEIGHT } from '@/components/Navigation/Header.css';
 import { fadeDividerBottom, glassPanel, riseIn } from '@/styles/shared.css';
 import { alphaColors, colors, fonts, goldFocusRing, media, shadows, transition, withAlpha } from '@/styles/tokens';
 
@@ -24,7 +25,7 @@ const slotCell = {
 
 export const tracker = style([glassPanel, {
   position: 'sticky',
-  top: 0,
+  top: `calc(${HEADER_TOTAL_HEIGHT} + 1rem)`,
   flex: `0 1 ${TRACKER_MAX_WIDTH}`,
   minWidth: 0,
   maxWidth: TRACKER_MAX_WIDTH,

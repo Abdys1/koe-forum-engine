@@ -5,6 +5,6 @@ import { mainBg } from '@/styles/shared.css';
 export const page = style([mainBg, {
   position: 'relative',
   width: '100%',
-  height: `calc(100vh - ${HEADER_TOTAL_HEIGHT})`,
+  minHeight: `calc(100vh - ${HEADER_TOTAL_HEIGHT})`,
   display: 'flex',
 }]);

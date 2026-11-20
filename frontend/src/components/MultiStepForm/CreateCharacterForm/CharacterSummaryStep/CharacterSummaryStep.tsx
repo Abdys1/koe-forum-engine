@@ -30,7 +30,7 @@ export default function CharacterSummaryStep() {
 
     return (
         <div className={stepContent}>
-            <SectionHeading eyebrow="5. lépés" title="Vár az út"/>
+            <SectionHeading title="Vár az út"/>
             <p className={stepIntro}>
                 Ellenőrizd az adatokat, mielőtt életre kelted a karaktered.
             </p>
@@ -78,6 +78,7 @@ export default function CharacterSummaryStep() {
                             Külső leírás és háttértörténet megadására a létrehozás után lesz lehetőséged.
                         </p>
                     </div>
+                    <Button variant="gold" size="large" type="submit" title="Karakter létrehozása" className={styles.createBtn}/>
                     <div className={styles.helpSection}>
                         <h4 className={styles.helpTitle}>Jól jönne némi segítség?</h4>
                         <p className={styles.infoText}>Nézd meg a karakteralkotási segédletet.</p>
@@ -94,10 +95,6 @@ export default function CharacterSummaryStep() {
                     </div>
                 </aside>
             </div>
-
-            <p className={styles.closing}>
-                A világ nyitva áll előtted. Ha készen állsz, lépd át a küszöbét.
-            </p>
         </div>
     );
 }

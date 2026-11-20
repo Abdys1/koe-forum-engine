@@ -51,7 +51,7 @@ export default function CharacterGearStep() {
 
     return (
         <div className={stepContent}>
-            <SectionHeading eyebrow="3. lépés" title="Kezdő felszerelés"/>
+            <SectionHeading title="Kezdő felszerelés"/>
             <p className={stepIntro}>
                 Minden felszerelés slotot foglal. Válogass szabadon, amíg van szabad helyed a keretben.
             </p>

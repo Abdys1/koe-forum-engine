@@ -1,4 +1,5 @@
 import { globalStyle, keyframes, style } from '@vanilla-extract/css';
+import { HEADER_TOTAL_HEIGHT } from '@/components/Navigation/Header.css';
 import { alphaColors, backdropBlur, colors, fonts, goldFocusRing, gradients, shadows, transition, withAlpha } from './tokens';
 
 export const riseIn = keyframes({
@@ -16,6 +17,8 @@ export const mainBg = style({
   backgroundAttachment: 'fixed',
 });
 
+const STEP_BG_HEIGHT = `calc(100vh - ${HEADER_TOTAL_HEIGHT})`;
+
 export const gearStepBg = style({
   selectors: {
     '&::before': {
@@ -24,7 +27,7 @@ export const gearStepBg = style({
       bottom: 0,
       right: '5%',
       width: '50%',
-      height: '100%',
+      height: STEP_BG_HEIGHT,
       backgroundImage: "url('/images/knight-withoutbg.png')",
       backgroundRepeat: 'no-repeat',
       backgroundPosition: 'left bottom',
@@ -43,7 +46,7 @@ export const raceStepBg = style({
       left: 0,
       right: '5%',
       width: '100%',
-      height: '100%',
+      height: STEP_BG_HEIGHT,
       backgroundImage: 'var(--raceUrl)',
       backgroundRepeat: 'no-repeat',
       backgroundPosition: 'left bottom',

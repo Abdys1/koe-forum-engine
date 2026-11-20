@@ -6,7 +6,7 @@ export interface FormContextState {
     form: UseFormReturn<any, any, undefined>,
     actualStep: number,
     steps: string[],
-    aside?: ReactNode,
+    header?: ReactNode,
     onPrevStep: React.MouseEventHandler<HTMLElement>,
     onNextStep: React.MouseEventHandler<HTMLElement>,
     goToStep: (step: number) => void,

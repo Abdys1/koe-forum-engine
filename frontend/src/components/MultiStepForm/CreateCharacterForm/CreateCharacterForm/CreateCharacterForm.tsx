@@ -4,7 +4,7 @@ import CharacterRaceStep from "@/components/MultiStepForm/CreateCharacterForm/Ch
 import CharacterBasicsStep, { SelectableSex } from "@/components/MultiStepForm/CreateCharacterForm/CharacterBasicsStep/CharacterBasicsStep";
 import CharacterGearStep from "@/components/MultiStepForm/CreateCharacterForm/CharacterGearStep/CharacterGearStep";
 import CharacterImageStep from "@/components/MultiStepForm/CreateCharacterForm/CharacterImageStep/CharacterImageStep";
-import CharacterPreview from "@/components/MultiStepForm/CreateCharacterForm/CharacterPreview/CharacterPreview";
+import CreateCharacterHeader from "@/components/MultiStepForm/CreateCharacterForm/CreateCharacterHeader/CreateCharacterHeader";
 import CharacterSummaryStep from "@/components/MultiStepForm/CreateCharacterForm/CharacterSummaryStep/CharacterSummaryStep";
 import { useForm, useWatch } from "react-hook-form";
 import MultiStepForm from "@/components/MultiStepForm/MultiStepForm/MultiStepForm";
@@ -36,13 +36,13 @@ export default function CreateCharacterForm() {
     const raceStepStyle = { '--raceUrl': `url('${findRace(raceId).img}')` } as React.CSSProperties;
 
     return (
-        <MultiStepForm form={form} aside={<CharacterPreview control={form.control}/>}>
+        <MultiStepForm form={form} header={<CreateCharacterHeader control={form.control}/>}>
             <MultiStepForm.Step label="Faj" style={raceStepStyle} className={raceStepBg}>
                 <CharacterRaceStep/>
             </MultiStepForm.Step>
             <MultiStepForm.Step label="Identitás"
                                 validate={() => form.trigger('characterName', { shouldFocus: true })}
-                                canProceed={!!characterName?.trim()}
+                                complete={!!characterName?.trim()}
                                 style={raceStepStyle}
                                 className={raceStepBg}>
                 <CharacterBasicsStep/>
@@ -53,7 +53,7 @@ export default function CreateCharacterForm() {
             <MultiStepForm.Step label="Karakterkép" validate={() => form.trigger('characterImg')} complete={!!characterImg?.length}>
                 <CharacterImageStep/>
             </MultiStepForm.Step>
-            <MultiStepForm.Step label="Áttekintés" hideAside>
+            <MultiStepForm.Step label="Áttekintés">
                 <CharacterSummaryStep/>
             </MultiStepForm.Step>
         </MultiStepForm>

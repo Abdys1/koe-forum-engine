@@ -18,7 +18,7 @@ export const sexLabels = Object.fromEntries(sexOptions.map(option => [option.val
 
 export default function CharacterBasicsStep() {
     const formContext = useMultiStepFormContext();
-    const { register, getValues, setValue, formState: { errors } } = formContext.form;
+    const { register, getValues, setValue, trigger, formState: { errors } } = formContext.form;
     const nameInputId = useId();
     const nameErrorId = useId();
     const nameError = errors.characterName?.message as string | undefined;
@@ -32,7 +32,7 @@ export default function CharacterBasicsStep() {
     return (
         <div className={styles.content}>
             <div className={styles.infoPanel}>
-                <SectionHeading eyebrow="2. lépés" title="Identitás"/>
+                <SectionHeading title="Identitás"/>
                 <div className={styles.panel}>
                     <div className={styles.nameField}>
                         <label htmlFor={nameInputId} className={styles.nameLabel}>Hogyan szólíthatlak, utazó?</label>
@@ -40,7 +40,10 @@ export default function CharacterBasicsStep() {
                             <input id={nameInputId} type="text" placeholder="Névtelen vándor" autoComplete="off"
                                 aria-invalid={!!nameError} aria-describedby={nameError ? nameErrorId : undefined}
                                 className={clsx(styles.nameInput, nameError && styles.nameInputError)}
-                                {...register("characterName", {required: "A mező kitöltése kötelező!"})}/>
+                                {...register("characterName", {
+                                    required: "A mező kitöltése kötelező!",
+                                    onChange: () => nameError && trigger("characterName")
+                                })}/>
                         </div>
                         {nameError && <span id={nameErrorId} role="alert" className={styles.nameError}>{nameError}</span>}
                     </div>
