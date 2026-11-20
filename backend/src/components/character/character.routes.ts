@@ -90,10 +90,24 @@ const imageValidation = body('image').custom((_value, { req }) => {
  *     responses:
  *       200:
  *         description: Character created
+ *       400:
+ *         description: A field or the image is invalid
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ValidationErrors'
  *       409:
  *         description: A character with this name already exists
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorCode'
  *       422:
  *         description: One of the referenced equipment ids does not exist, or the equipment list exceeds a slot's capacity
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorCode'
  * /characters/{id}/equipment:
  *   get:
  *     tags: [Character]

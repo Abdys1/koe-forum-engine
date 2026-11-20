@@ -8,6 +8,7 @@ import { body } from 'express-validator';
  *   schemas:
  *     AuthTokens:
  *       type: object
+ *       required: [accessToken, refreshToken]
  *       properties:
  *         accessToken:
  *           type: string

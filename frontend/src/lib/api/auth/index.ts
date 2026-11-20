@@ -1,7 +1,7 @@
-import { http } from "@/lib/api/http/index";
 import AuthClientImpl from "@/lib/api/auth/auth.client";
 import { AuthClient } from "@/lib/api/auth/types";
+import { createApiClient } from "@/lib/api/client/api-client";
 
-const authClient: AuthClient = new AuthClientImpl(http);
+const authClient: AuthClient = new AuthClientImpl(createApiClient());
 
 export { authClient };

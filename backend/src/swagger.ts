@@ -11,6 +11,34 @@ const swaggerSpec = swaggerJSDoc({
             { url: '/api' },
         ],
         components: {
+            schemas: {
+                ErrorCode: {
+                    type: 'object',
+                    required: ['errorCode'],
+                    properties: {
+                        errorCode: { type: 'string' },
+                    },
+                },
+                ValidationErrors: {
+                    type: 'object',
+                    required: ['errors'],
+                    properties: {
+                        errors: {
+                            type: 'array',
+                            items: {
+                                type: 'object',
+                                required: ['type', 'msg'],
+                                properties: {
+                                    type: { type: 'string' },
+                                    msg: { type: 'string' },
+                                    path: { type: 'string' },
+                                    location: { type: 'string' },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
             securitySchemes: {
                 bearerAuth: {
                     type: 'http',

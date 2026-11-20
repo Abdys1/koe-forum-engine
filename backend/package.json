@@ -11,6 +11,7 @@
     "dev": "tsx src/bin/www.ts",
     "watch:dev": "tsx watch src/bin/www.ts",
     "lint": "eslint ./src",
+    "openapi:export": "tsx src/bin/export-openapi.ts",
     "migrate:test": "dotenv -e .env.test -- npx prisma migrate deploy",
     "migrate:dev": "dotenv -e .env -- npx prisma migrate deploy",
     "seed:dev": "dotenv -e .env -- tsx prisma/seeds/index.ts",

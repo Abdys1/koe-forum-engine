@@ -1,20 +1,12 @@
-import { HttpResponse } from "@/lib/api/http/http";
+import type { components, paths } from "@/lib/api/schema";
 
-export type LoginRequestBody = {
-    username: string,
-    password: string
-};
+export type LoginRequestBody = paths["/auth/login"]["post"]["requestBody"]["content"]["application/json"];
 
-export type RefreshTokenBody = {
-    refreshToken: string
-};
+export type RefreshTokenBody = paths["/auth/refresh"]["post"]["requestBody"]["content"]["application/json"];
 
-export type TokenResponseBody = {
-    accessToken: string,
-    refreshToken: string
-};
+export type AuthTokens = components["schemas"]["AuthTokens"];
 
 export interface AuthClient {
-    login: (reqData: LoginRequestBody) => Promise<HttpResponse<TokenResponseBody>>,
-    refreshToken: (reqData: RefreshTokenBody) => Promise<HttpResponse<TokenResponseBody>>
+    login: (reqData: LoginRequestBody) => Promise<AuthTokens>,
+    refreshToken: (reqData: RefreshTokenBody) => Promise<AuthTokens>
 };

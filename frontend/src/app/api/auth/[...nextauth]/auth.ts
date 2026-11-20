@@ -8,8 +8,8 @@ import { getServerSession } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import { authClient } from "@/lib/api/auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { HttpResponse, HttpResponseError } from "@/lib/api/http/http";
-import { TokenResponseBody } from "@/lib/api/auth/types";
+import { ApiResponseError } from "@/lib/api/client/api-response.error";
+import { AuthTokens } from "@/lib/api/auth/types";
 
 const ACCESS_TOKEN_MAX_AGE = 60 * 10 * 1000;
 
@@ -34,8 +34,8 @@ export const config = {
 
           return {
             username: credentials.username,
-            accessToken: resp.data.accessToken,
-            refreshToken: resp.data.refreshToken
+            accessToken: resp.accessToken,
+            refreshToken: resp.refreshToken
           };
         } catch (error: unknown) {
           return null;
@@ -74,15 +74,15 @@ async function refreshAccessToken(token: JWT): Promise<JWT> {
       throw new Error("Missing refresh token!");
     }
 
-    const res: HttpResponse<TokenResponseBody> = await authClient.refreshToken({ refreshToken: token.refreshToken });
+    const res: AuthTokens = await authClient.refreshToken({ refreshToken: token.refreshToken });
     return {
       ...token,
-      accessToken: res.data.accessToken,
-      refreshToken: res.data.refreshToken,
+      accessToken: res.accessToken,
+      refreshToken: res.refreshToken,
       expiresAt: Date.now() + ACCESS_TOKEN_MAX_AGE
     };
   } catch (error: unknown) {
-    console.error(error instanceof HttpResponseError ? error.stack : error);
+    console.error(error instanceof ApiResponseError ? error.stack : error);
     return {
       ...token,
       error: "RefreshAccessTokenError",

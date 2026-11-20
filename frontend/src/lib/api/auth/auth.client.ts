@@ -1,18 +1,27 @@
-import { AuthClient, LoginRequestBody, RefreshTokenBody, TokenResponseBody } from "@/lib/api/auth/types";
-import { HttpClient, HttpResponse } from "@/lib/api/http/http";
+import { AuthClient, AuthTokens, LoginRequestBody, RefreshTokenBody } from "@/lib/api/auth/types";
+import { ApiClient } from "@/lib/api/client/api-client";
+import { ApiResponseError } from "@/lib/api/client/api-response.error";
 
 export default class AuthClientImpl implements AuthClient {
-    private http: HttpClient;
+    private api: ApiClient;
 
-    constructor(http: HttpClient) {
-        this.http = http;
+    constructor(api: ApiClient) {
+        this.api = api;
     }
 
-    public async login(reqData: LoginRequestBody): Promise<HttpResponse<TokenResponseBody>> {
-        return this.http.post('/auth/login', reqData);
+    public async login(reqData: LoginRequestBody): Promise<AuthTokens> {
+        const { data, error, response } = await this.api.POST('/auth/login', { body: reqData });
+        if (!data) {
+            throw new ApiResponseError(response, error);
+        }
+        return data;
     }
 
-    public async refreshToken(reqData: RefreshTokenBody): Promise<HttpResponse<TokenResponseBody>> {
-        return this.http.post('/auth/refresh', reqData);
+    public async refreshToken(reqData: RefreshTokenBody): Promise<AuthTokens> {
+        const { data, error, response } = await this.api.POST('/auth/refresh', { body: reqData });
+        if (!data) {
+            throw new ApiResponseError(response, error);
+        }
+        return data;
     }
 }
