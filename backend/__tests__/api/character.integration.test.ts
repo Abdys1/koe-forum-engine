@@ -44,6 +44,13 @@ describe("/api/characters", () => {
       );
 
       expect(createResp.status).toBe(200);
+      expect(createResp.body).toEqual(expect.objectContaining({
+        id: expect.any(Number),
+        name: newCharacter.name,
+        sex: newCharacter.sex,
+        race: newCharacter.race,
+        imageUrl: expect.any(String),
+      }));
       await assertUserCharacterList(user.username, [newCharacter]);
     });
 

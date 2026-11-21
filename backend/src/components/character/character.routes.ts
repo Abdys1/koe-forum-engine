@@ -90,7 +90,11 @@ const imageValidation = body('image').custom((_value, { req }) => {
  *                   type: integer
  *     responses:
  *       200:
- *         description: Character created
+ *         description: The created character
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Character'
  *       400:
  *         description: A field or the image is invalid
  *         content:

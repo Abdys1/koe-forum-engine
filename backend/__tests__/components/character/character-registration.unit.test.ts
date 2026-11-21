@@ -73,6 +73,18 @@ describe('CharacterRegistrationUseCase', () => {
             });
         });
 
+        it('should return the created character', async () => {
+            const result = await characterRegistration.execute(inputWithEquipmentIds([]));
+
+            expect(result).toEqual({
+                id: CREATED_ID,
+                name: 'Aragorn a Kósza',
+                sex: Sex.MALE,
+                race: 'human',
+                imageUrl: '/.data/uploads/characters/abc.png'
+            });
+        });
+
         it('should assign the equipment to the created character', async () => {
             await characterRegistration.execute(inputWithEquipmentIds([4, 4, 7]));
 

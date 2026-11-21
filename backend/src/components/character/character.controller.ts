@@ -27,8 +27,8 @@ export default class CharacterController {
         }
 
         const createCharInput: CreateCharacterInput = CharacterRegistrationRequestMapper.toCreateCharacterInput(req.user, req.body, req.file!);
-        await this.characterRegistration.execute(createCharInput);
-        res.status(200).send();
+        const character = await this.characterRegistration.execute(createCharInput);
+        res.status(200).send(character);
     }
 
     private sendCreateCharErrorByStatus = (res: Response, status: ValidateCharacterUpdateResult): void => {

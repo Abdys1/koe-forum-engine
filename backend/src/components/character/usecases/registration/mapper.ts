@@ -1,5 +1,5 @@
 import Character from "@src/components/character/models/character";
-import { CreateCharacterInput } from "@src/components/character/usecases/registration/types";
+import { CreateCharacterInput, CreateCharacterOutput } from "@src/components/character/usecases/registration/types";
 
 export function fromInput(dto: CreateCharacterInput, imageUrl: string): Character {
     return {
@@ -8,5 +8,15 @@ export function fromInput(dto: CreateCharacterInput, imageUrl: string): Characte
         race: dto.race,
         sex: dto.sex,
         imageUrl
+    };
+}
+
+export function toOutput(character: Character): CreateCharacterOutput {
+    return {
+        id: character.id!,
+        name: character.name,
+        sex: character.sex,
+        race: character.race,
+        imageUrl: character.imageUrl
     };
 }
