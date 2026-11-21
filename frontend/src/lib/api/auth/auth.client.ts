@@ -1,4 +1,4 @@
-import { AuthClient, AuthTokens, LoginRequestBody, RefreshTokenBody } from "@/lib/api/auth/types";
+import { AuthClient, AuthTokens, CurrentUser, LoginRequestBody, RefreshTokenBody } from "@/lib/api/auth/types";
 import { ApiClient } from "@/lib/api/client/api-client";
 import { ApiResponseError } from "@/lib/api/client/api-response.error";
 
@@ -20,6 +20,16 @@ export default class AuthClientImpl implements AuthClient {
     public async refreshToken(reqData: RefreshTokenBody): Promise<AuthTokens> {
         const { data, error, response } = await this.api.POST('/auth/refresh', { body: reqData });
         if (!data) {
+            throw new ApiResponseError(response, error);
+        }
+        return data;
+    }
+
+    public async getCurrentUser(accessToken: string): Promise<CurrentUser> {
+        const { data, error, response } = await this.api.GET('/users/me', {
+            headers: { Authorization: `Bearer ${accessToken}` }
+        });
+        if (!response.ok || !data) {
             throw new ApiResponseError(response, error);
         }
         return data;

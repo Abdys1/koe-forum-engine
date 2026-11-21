@@ -22,5 +22,6 @@ export type ValidationErrors = components["schemas"]["ValidationErrors"];
 export interface CharacterClient {
     create: (reqData: CreateCharacterRequest) => Promise<CharacterDetails>,
     getById: (id: number) => Promise<CharacterDetails | null>,
+    getOwnCharacters: () => Promise<CharacterDetails[]>,
     getEquipmentIds: (id: number) => Promise<number[]>
 };

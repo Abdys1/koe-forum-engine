@@ -131,6 +131,14 @@ export const avatar = style({
   boxShadow: '0 6px 16px -6px rgba(0,0,0,0.8)',
 });
 
+export const avatarPlaceholder = style({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontSize: '2.5rem',
+  color: alphaColors.textSoft,
+});
+
 export const characterInfo = style({
   display: 'flex',
   flexDirection: 'column',
@@ -200,6 +208,13 @@ export const characterSwitchLabel = style({
   fontSize: '0.8rem',
   letterSpacing: '0.05em',
   color: alphaColors.textSoft,
+});
+
+export const characterSwitchError = style({
+  margin: 0,
+  fontFamily: fonts.poppins,
+  fontSize: '0.8rem',
+  color: colors.alert,
 });
 
 export const menu = style({

@@ -34,6 +34,14 @@ export default class CharacterClientImpl implements CharacterClient {
         return { ...data, imageUrl: new URL(data.imageUrl, response.url).href };
     }
 
+    public async getOwnCharacters(): Promise<CharacterDetails[]> {
+        const { data, error, response } = await this.api.GET('/characters');
+        if (!response.ok || !data) {
+            throw new ApiResponseError(response, error);
+        }
+        return data.map(character => ({ ...character, imageUrl: new URL(character.imageUrl, response.url).href }));
+    }
+
     public async getEquipmentIds(id: number): Promise<number[]> {
         const { data, error, response } = await this.api.GET('/characters/{id}/equipment', {
             params: { path: { id } }

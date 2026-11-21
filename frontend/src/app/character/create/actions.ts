@@ -1,5 +1,6 @@
 "use server"
 
+import { revalidatePath } from "next/cache";
 import { getServerSession } from "next-auth";
 import { config } from "@/app/api/auth/[...nextauth]/auth";
 import { characterClient } from "@/lib/api/character";
@@ -31,6 +32,7 @@ export async function createCharacter(formData: FormData): Promise<CreateCharact
 
     try {
         const character = await characterClient.create(request);
+        revalidatePath("/", "layout");
         return { success: true, characterId: character.id };
     } catch (error: unknown) {
         if (error instanceof ApiResponseError) {
