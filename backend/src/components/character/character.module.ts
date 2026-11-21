@@ -1,6 +1,7 @@
 import CharacterController from "@src/components/character/character.controller";
 import CharacterRepositoryImpl from "@src/components/character/repositories/character.repository";
 import CharacterCollectionUseCaseImpl from "@src/components/character/usecases/collection/character-collection";
+import CharacterDetailsUseCaseImpl from "@src/components/character/usecases/details/character-details";
 import CharacterEquipmentCollectionUseCaseImpl from "@src/components/character/usecases/equipment_collection/character-equipment-collection";
 import CharacterEquipmentModificationUseCaseImpl from "@src/components/character/usecases/equipment_modification/character-equipment-modification";
 import CharacterEquipmentValidationUseCaseImpl from "@src/components/character/usecases/equipment_validation/character-equipment-validation";
@@ -12,6 +13,7 @@ import { asClass } from "awilix";
 export const characterModule = {
     characterRepositories: repositoryProvider((client) => new CharacterRepositoryImpl(client)),
     characterCollection: asClass(CharacterCollectionUseCaseImpl).singleton(),
+    characterDetails: asClass(CharacterDetailsUseCaseImpl).singleton(),
     characterEquipmentCollection: asClass(CharacterEquipmentCollectionUseCaseImpl).singleton(),
     characterEquipmentValidation: asClass(CharacterEquipmentValidationUseCaseImpl).singleton(),
     characterEquipmentModification: asClass(CharacterEquipmentModificationUseCaseImpl).singleton(),

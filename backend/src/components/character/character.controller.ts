@@ -1,5 +1,6 @@
 import CharacterRegistrationRequestMapper from "@src/components/character/character-dto.mapper";
 import { CharacterCollectionUseCase } from "@src/components/character/usecases/collection/types";
+import { CharacterDetailsResult, CharacterDetailsUseCase } from "@src/components/character/usecases/details/types";
 import { CharacterEquipmentCollectionResult, CharacterEquipmentCollectionUseCase } from "@src/components/character/usecases/equipment_collection/types";
 import { CharacterEquipmentModificationResult, CharacterEquipmentModificationUseCase } from "@src/components/character/usecases/equipment_modification/types";
 import { CharacterRegistrationUseCase, CreateCharacterInput } from "@src/components/character/usecases/registration/types";
@@ -11,6 +12,7 @@ export default class CharacterController {
     constructor(
         private readonly characterRegistration: CharacterRegistrationUseCase,
         private readonly characterCollection: CharacterCollectionUseCase,
+        private readonly characterDetails: CharacterDetailsUseCase,
         private readonly characterUpdateValidator: CharacterUpdateValidatorUseCase,
         private readonly characterEquipmentCollection: CharacterEquipmentCollectionUseCase,
         private readonly characterEquipmentModification: CharacterEquipmentModificationUseCase
@@ -47,6 +49,18 @@ export default class CharacterController {
     listCharacters = async (req: Request, res: Response): Promise<void> => {
         const characters = await this.characterCollection.execute(req.user.id);
         res.status(200).send(characters);
+    }
+
+    getCharacter = async (req: Request, res: Response): Promise<void> => {
+        const { status, character } = await this.characterDetails.execute({
+            characterId: Number(req.params.id)
+        });
+
+        if (status === CharacterDetailsResult.NOT_FOUND) {
+            res.status(404).json({ errorCode: ErrorMessages.CHARACTER_NOT_EXISTS });
+            return;
+        }
+        res.status(200).send(character);
     }
 
     listCharacterEquipment = async (req: Request, res: Response): Promise<void> => {

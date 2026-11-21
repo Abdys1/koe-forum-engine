@@ -108,6 +108,31 @@ const imageValidation = body('image').custom((_value, { req }) => {
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorCode'
+ * /characters/{id}:
+ *   get:
+ *     tags: [Character]
+ *     summary: Get the details of any character
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: The character
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Character'
+ *       400:
+ *         description: The id is not an integer
+ *       404:
+ *         description: The character does not exist
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorCode'
  * /characters/{id}/equipment:
  *   get:
  *     tags: [Character]
@@ -192,6 +217,12 @@ export const characterRoutes = ({ characterController }: Pick<Cradle, 'character
         path: '/',
         method: HttpMethod.GET,
         controller: characterController.listCharacters
+    },
+    {
+        path: '/:id',
+        method: HttpMethod.GET,
+        middlewares: [idValidation],
+        controller: characterController.getCharacter
     },
     {
         path: '/:id/equipment',
