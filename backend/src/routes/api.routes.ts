@@ -4,6 +4,7 @@ import { equipmentRoutes } from '@src/components/equipment/equipment.routes';
 import { equipmentTypeRoutes } from '@src/components/equipment-type/equipment-type.routes';
 import { useDefineRouter } from '@src/components/routerconf/router-config';
 import { slotRoutes } from '@src/components/slot/slot.routes';
+import { userRoutes } from '@src/components/user/user.routes';
 import config from '@src/config';
 import { Cradle } from '@src/container';
 import useAuthMiddleware from '@src/middlewares/auth.middleware';
@@ -20,6 +21,7 @@ export const createApiRouter = (cradle: Cradle) => {
     const router = express.Router();
 
     router.use('/auth', defineRouter(authRoutes(cradle)));
+    router.use('/users', defineRouter(userRoutes(cradle)));
     router.use('/characters', defineRouter(characterRoutes(cradle)));
     router.use('/equipment/type', defineRouter(equipmentTypeRoutes(cradle)));
     router.use('/equipment/slot', defineRouter(slotRoutes(cradle)));

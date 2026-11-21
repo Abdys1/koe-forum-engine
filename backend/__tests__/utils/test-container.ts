@@ -17,5 +17,6 @@ export const {
     transactionManager,
     userDao,
     characterRepositories,
-    equipmentRepositories
+    equipmentRepositories,
+    userRepositories
 } = testContainer.cradle;
