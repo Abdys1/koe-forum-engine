@@ -7,7 +7,7 @@ import { CreateCharacterRequest, ErrorCode, Sex, ValidationErrors } from "@/lib/
 import { ApiResponseError } from "@/lib/api/client/api-response.error";
 
 export type CreateCharacterResult =
-    | { success: true }
+    | { success: true, characterId: number }
     | { success: false, errorCodes: string[] };
 
 export async function createCharacter(formData: FormData): Promise<CreateCharacterResult> {
@@ -30,8 +30,8 @@ export async function createCharacter(formData: FormData): Promise<CreateCharact
     };
 
     try {
-        await characterClient.create(request);
-        return { success: true };
+        const character = await characterClient.create(request);
+        return { success: true, characterId: character.id };
     } catch (error: unknown) {
         if (error instanceof ApiResponseError) {
             return { success: false, errorCodes: toErrorCodes(error) };

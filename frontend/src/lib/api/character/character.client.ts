@@ -10,14 +10,15 @@ export default class CharacterClientImpl implements CharacterClient {
         this.api = api;
     }
 
-    public async create({ equipmentIds, ...reqData }: CreateCharacterRequest): Promise<void> {
-        const { error, response } = await this.api.POST('/characters', {
+    public async create({ equipmentIds, ...reqData }: CreateCharacterRequest): Promise<CharacterDetails> {
+        const { data, error, response } = await this.api.POST('/characters', {
             body: { ...reqData, 'equipmentIds[]': equipmentIds },
             bodySerializer: toFormData
         });
-        if (!response.ok) {
+        if (!response.ok || !data) {
             throw new ApiResponseError(response, error);
         }
+        return { ...data, imageUrl: new URL(data.imageUrl, response.url).href };
     }
 
     public async getById(id: number): Promise<CharacterDetails | null> {

@@ -522,12 +522,14 @@ export interface paths {
                 };
             };
             responses: {
-                /** @description Character created */
+                /** @description The created character */
                 200: {
                     headers: {
                         [name: string]: unknown;
                     };
-                    content?: never;
+                    content: {
+                        "application/json": components["schemas"]["Character"];
+                    };
                 };
                 /** @description A field or the image is invalid */
                 400: {

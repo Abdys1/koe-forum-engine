@@ -20,7 +20,7 @@ export type ErrorCode = components["schemas"]["ErrorCode"];
 export type ValidationErrors = components["schemas"]["ValidationErrors"];
 
 export interface CharacterClient {
-    create: (reqData: CreateCharacterRequest) => Promise<void>,
+    create: (reqData: CreateCharacterRequest) => Promise<CharacterDetails>,
     getById: (id: number) => Promise<CharacterDetails | null>,
     getEquipmentIds: (id: number) => Promise<number[]>
 };

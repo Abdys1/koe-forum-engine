@@ -6,6 +6,7 @@ import CharacterGearStep from "@/components/MultiStepForm/CreateCharacterForm/Ch
 import CharacterImageStep from "@/components/MultiStepForm/CreateCharacterForm/CharacterImageStep/CharacterImageStep";
 import CreateCharacterHeader from "@/components/MultiStepForm/CreateCharacterForm/CreateCharacterHeader/CreateCharacterHeader";
 import CharacterSummaryStep from "@/components/MultiStepForm/CreateCharacterForm/CharacterSummaryStep/CharacterSummaryStep";
+import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 import { SubmitHandler, useForm, useWatch } from "react-hook-form";
 import MultiStepForm from "@/components/MultiStepForm/MultiStepForm/MultiStepForm";
@@ -32,6 +33,7 @@ type CreateCharacterFormProps = {
 }
 
 export default function CreateCharacterForm({ equipmentCatalogData }: CreateCharacterFormProps) {
+    const router = useRouter();
     const form = useForm<CharacterInputs>({
         defaultValues: {
             raceId: races[0].id,
@@ -67,7 +69,9 @@ export default function CreateCharacterForm({ equipmentCatalogData }: CreateChar
         const result = await createCharacter(formData);
         if (!result.success) {
             console.error(result.errorCodes);
+            return;
         }
+        router.push(`/character/${result.characterId}`);
     };
 
     return (
