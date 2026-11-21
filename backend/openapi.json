@@ -139,6 +139,13 @@
       },
       "Character": {
         "type": "object",
+        "required": [
+          "id",
+          "name",
+          "sex",
+          "race",
+          "imageUrl"
+        ],
         "properties": {
           "id": {
             "type": "integer"

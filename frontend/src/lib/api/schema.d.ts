@@ -564,6 +564,60 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/characters/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get the details of any character */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description The character */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Character"];
+                    };
+                };
+                /** @description The id is not an integer */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description The character does not exist */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorCode"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/characters/{id}/equipment": {
         parameters: {
             query?: never;
@@ -861,15 +915,15 @@ export interface components {
             type: components["schemas"]["EquipmentType"];
         };
         Character: {
-            id?: number;
-            name?: string;
+            id: number;
+            name: string;
             /**
              * @description 1 = male, 2 = female (ISO/IEC 5218)
              * @enum {integer}
              */
-            sex?: 1 | 2;
-            race?: string;
-            imageUrl?: string;
+            sex: 1 | 2;
+            race: string;
+            imageUrl: string;
         };
         AuthTokens: {
             accessToken: string;

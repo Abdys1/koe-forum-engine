@@ -13,10 +13,14 @@ export type CreateCharacterRequest = Omit<CreateCharacterRequestBody, "equipment
     equipmentIds: number[]
 };
 
+export type CharacterDetails = components["schemas"]["Character"];
+
 export type ErrorCode = components["schemas"]["ErrorCode"];
 
 export type ValidationErrors = components["schemas"]["ValidationErrors"];
 
 export interface CharacterClient {
-    create: (reqData: CreateCharacterRequest) => Promise<void>
+    create: (reqData: CreateCharacterRequest) => Promise<void>,
+    getById: (id: number) => Promise<CharacterDetails | null>,
+    getEquipmentIds: (id: number) => Promise<number[]>
 };

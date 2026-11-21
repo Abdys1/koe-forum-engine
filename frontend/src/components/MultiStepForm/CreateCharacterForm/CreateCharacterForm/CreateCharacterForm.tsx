@@ -12,8 +12,8 @@ import MultiStepForm from "@/components/MultiStepForm/MultiStepForm/MultiStepFor
 import { findRace, races } from "@/dummydata/races";
 import { raceStepBg, gearStepBg } from "@/styles/shared.css";
 import { createCharacter } from "@/app/character/create/actions";
-import { Sex } from "@/lib/api/character/types";
 import { EquipmentCatalogData } from "@/lib/api/equipment/types";
+import { sexMapping } from "@/lib/character";
 import { compactSelection } from "@/lib/equipment";
 import { buildEquipmentCatalog } from "@/lib/equipmentCatalog";
 import { toGearOverview } from "@/lib/gearOverview";
@@ -26,11 +26,6 @@ export interface CharacterInputs {
     equipmentIds: number[],
     characterImg: FileList
 }
-
-const sexMapping: Record<SelectableSex, Sex> = {
-    ferfi: Sex.MALE,
-    no: Sex.FEMALE
-};
 
 type CreateCharacterFormProps = {
     equipmentCatalogData: EquipmentCatalogData

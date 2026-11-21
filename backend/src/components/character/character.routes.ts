@@ -26,6 +26,7 @@ const imageValidation = body('image').custom((_value, { req }) => {
  *   schemas:
  *     Character:
  *       type: object
+ *       required: [id, name, sex, race, imageUrl]
  *       properties:
  *         id:
  *           type: integer
