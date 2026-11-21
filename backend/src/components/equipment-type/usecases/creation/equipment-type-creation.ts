@@ -28,7 +28,20 @@ export default class EquipmentTypeCreationImpl implements EquipmentTypeCreation 
             }
         }
 
-        const equipmentType = await this.equipmentTypeRepositories.get().create({ label, slotId: input.slotId ?? null });
+        if (input.parentId !== undefined) {
+            const parent = await this.equipmentTypeRepositories.get().findById(input.parentId);
+            if (!parent) {
+                return { status: EquipmentTypeCreationResult.PARENT_NOT_EXISTS };
+            }
+        }
+
+        const equipmentType = await this.equipmentTypeRepositories.get().create({
+            label,
+            slotId: input.slotId ?? null,
+            parentId: input.parentId ?? null,
+            icon: input.icon?.trim() || null,
+            sortOrder: input.sortOrder ?? 0
+        });
         return { status: EquipmentTypeCreationResult.CREATED, equipmentType: toEquipmentTypeDetails(equipmentType) };
     };
 }

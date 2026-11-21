@@ -121,7 +121,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** List all equipment types */
+        /** List all equipment types (flat list ordered by sortOrder, then label; the tree is built from parentId) */
         get: {
             parameters: {
                 query?: never;
@@ -159,6 +159,11 @@ export interface paths {
                         label: string;
                         /** @description Optional — assigns this type to an existing Slot (several types may share the same Slot) */
                         slotId?: number;
+                        /** @description Optional — places this type under an existing type; omitted for a root type (category) */
+                        parentId?: number;
+                        icon?: string;
+                        /** @default 0 */
+                        sortOrder?: number;
                     };
                 };
             };
@@ -179,7 +184,7 @@ export interface paths {
                     };
                     content?: never;
                 };
-                /** @description The referenced slotId does not exist */
+                /** @description The referenced slotId or parentId does not exist */
                 422: {
                     headers: {
                         [name: string]: unknown;
@@ -272,7 +277,7 @@ export interface paths {
                     };
                     content?: never;
                 };
-                /** @description Equipment type is still in use and cannot be deleted */
+                /** @description Equipment type is still in use or has child types and cannot be deleted */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -834,22 +839,26 @@ export interface components {
             }[];
         };
         Slot: {
-            id?: number;
-            label?: string;
-            maxCapacity?: number;
+            id: number;
+            label: string;
+            maxCapacity: number;
         };
         EquipmentType: {
-            id?: number;
-            label?: string;
-            slotId?: number | null;
+            id: number;
+            label: string;
+            slotId: number | null;
+            /** @description The parent type; null for a root type (category) */
+            parentId: number | null;
+            icon: string | null;
+            sortOrder: number;
         };
         Equipment: {
-            id?: number;
-            name?: string;
-            description?: string;
+            id: number;
+            name: string;
+            description: string;
             /** @description Only meaningful (and required on creation) when the equipment's type has a slot; null otherwise */
-            slotCost?: number | null;
-            type?: components["schemas"]["EquipmentType"];
+            slotCost: number | null;
+            type: components["schemas"]["EquipmentType"];
         };
         Character: {
             id?: number;

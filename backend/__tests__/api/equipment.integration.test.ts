@@ -56,7 +56,7 @@ describe('/api/equipment', () => {
 
             expect(resp.status).toBe(200);
             expect(resp.body.equipments.length).toBe(1);
-            expect(resp.body.equipments[0].type).toStrictEqual({ id: type.id, label: 'Pajzs', slotId: null });
+            expect(resp.body.equipments[0].type).toStrictEqual({ id: type.id, label: 'Pajzs', slotId: null, parentId: null, icon: null, sortOrder: 0 });
         });
 
         it('when there is no equipment then should return an empty list', async () => {
@@ -83,7 +83,7 @@ describe('/api/equipment', () => {
             const created = listResp.body.equipments.find((item: EquipmentResponseItem) => item.name === name);
             expect(created).toBeDefined();
             expect(created.description).toBe('Egy vadonatúj felszerelés');
-            expect(created.type).toStrictEqual({ id: type.id, label: type.label, slotId: null });
+            expect(created.type).toStrictEqual({ id: type.id, label: type.label, slotId: null, parentId: null, icon: null, sortOrder: 0 });
         });
 
         it('when create equipment then should return the created equipment with its id', async () => {
@@ -305,9 +305,9 @@ describe('/api/equipment', () => {
             });
 
             expect(updateResp.status).toBe(200);
-            expect(updateResp.body.type).toStrictEqual({ id: firstType.id, label: firstType.label, slotId: null });
+            expect(updateResp.body.type).toStrictEqual({ id: firstType.id, label: firstType.label, slotId: null, parentId: null, icon: null, sortOrder: 0 });
             const listResp = await equipmentClient.getAllEquipment();
-            expect(listResp.body.equipments[0].type).toStrictEqual({ id: firstType.id, label: firstType.label, slotId: null });
+            expect(listResp.body.equipments[0].type).toStrictEqual({ id: firstType.id, label: firstType.label, slotId: null, parentId: null, icon: null, sortOrder: 0 });
         });
 
         it('when update a non-existent equipment then should return not exists error', async () => {

@@ -38,13 +38,10 @@ describe('/api/equipment/type', () => {
             const resp = await equipmentTypeClient.getAllEquipmentTypes();
 
             expect(resp.status).toBe(200);
-            expect(resp.body.equipmentTypes).toStrictEqual([{ id: type.id, label: 'Pajzs', slotId: null }]);
+            expect(resp.body.equipmentTypes).toStrictEqual([{ id: type.id, label: 'Pajzs', slotId: null, parentId: null, icon: null, sortOrder: 0 }]);
         });
 
-        /*
-         * sortOrder mező nincs, a sorrend a label szerinti ábécésorrend.
-         */
-        it('when there are multiple types then should return them ordered by label', async () => {
+        it('when there are multiple types with the same sortOrder then should return them ordered by label', async () => {
             await saveEquipmentTypeToDb('Pajzs');
             await saveEquipmentTypeToDb('Fejvédő');
             await saveEquipmentTypeToDb('Testpáncél');
@@ -54,6 +51,18 @@ describe('/api/equipment/type', () => {
             expect(resp.status).toBe(200);
             expect(resp.body.equipmentTypes.map((item: EquipmentTypeResponseItem) => item.label))
                 .toStrictEqual(['Fejvédő', 'Pajzs', 'Testpáncél']);
+        });
+
+        it('when the types have different sortOrder then should return them ordered by sortOrder before label', async () => {
+            await saveEquipmentTypeToDb('Alma', undefined, { sortOrder: 2 });
+            await saveEquipmentTypeToDb('Körte', undefined, { sortOrder: 1 });
+            await saveEquipmentTypeToDb('Barack', undefined, { sortOrder: 2 });
+
+            const resp = await equipmentTypeClient.getAllEquipmentTypes();
+
+            expect(resp.status).toBe(200);
+            expect(resp.body.equipmentTypes.map((item: EquipmentTypeResponseItem) => item.label))
+                .toStrictEqual(['Körte', 'Alma', 'Barack']);
         });
     });
 
@@ -168,6 +177,17 @@ describe('/api/equipment/type', () => {
             });
         });
 
+        it('when create a type under a parent with icon and sortOrder then the list should return it with these fields', async () => {
+            const parent = await saveEquipmentTypeToDb('Fegyverzet');
+
+            const createResp = await equipmentTypeClient.createEquipmentType({ label: 'Kardok', parentId: parent.id, icon: 'swords', sortOrder: 3 });
+
+            expect(createResp.status).toBe(201);
+            const listResp = await equipmentTypeClient.getAllEquipmentTypes();
+            const created = listResp.body.equipmentTypes.find((item: EquipmentTypeResponseItem) => item.id === createResp.body.id);
+            expect(created).toStrictEqual({ id: createResp.body.id, label: 'Kardok', slotId: null, parentId: parent.id, icon: 'swords', sortOrder: 3 });
+        });
+
         it('when two types are created with the same slotId then both should be assigned to it', async () => {
             const slot = await saveSlotToDb();
 
@@ -189,7 +209,7 @@ describe('/api/equipment/type', () => {
 
             expect(updateResp.status).toBe(200);
             const listResp = await equipmentTypeClient.getAllEquipmentTypes();
-            expect(listResp.body.equipmentTypes).toStrictEqual([{ id: type.id, label: 'Új név', slotId: null }]);
+            expect(listResp.body.equipmentTypes).toStrictEqual([{ id: type.id, label: 'Új név', slotId: null, parentId: null, icon: null, sortOrder: 0 }]);
         });
 
         /*
@@ -205,7 +225,7 @@ describe('/api/equipment/type', () => {
             expect(updateResp.status).toBe(200);
             const listResp = await equipmentClient.getAllEquipment();
             const found = listResp.body.equipments.find((item: { id: number }) => item.id === equipment.id);
-            expect(found.type).toStrictEqual({ id: type.id, label: 'Új név', slotId: null });
+            expect(found.type).toStrictEqual({ id: type.id, label: 'Új név', slotId: null, parentId: null, icon: null, sortOrder: 0 });
         });
 
         it('when save a type with its own unchanged label then should not be a conflict', async () => {
@@ -298,6 +318,19 @@ describe('/api/equipment/type', () => {
             await equipmentTypeClient.deleteEquipmentType(type.id);
 
             expect(await db.equipmentType.count({ where: { id: type.id } })).toBe(1);
+        });
+
+        it('when delete a type that has a child type then should return has children error and keep the type', async () => {
+            const parent = await saveEquipmentTypeToDb();
+            await saveEquipmentTypeToDb(undefined, undefined, { parentId: parent.id });
+
+            const deleteResp = await equipmentTypeClient.deleteEquipmentType(parent.id);
+
+            expect(deleteResp.status).toBe(409);
+            expect(deleteResp.body).toStrictEqual({
+                errorCode: ErrorMessages.EQUIPMENT_TYPE_HAS_CHILDREN
+            });
+            expect(await db.equipmentType.count({ where: { id: parent.id } })).toBe(1);
         });
 
         it('when the referencing equipment is deleted then the type becomes deletable', async () => {

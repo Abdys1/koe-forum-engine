@@ -6,7 +6,10 @@ export interface EquipmentTypeCreation {
 
 export interface CreateEquipmentTypeInput {
     label: string,
-    slotId?: number
+    slotId?: number,
+    parentId?: number,
+    icon?: string,
+    sortOrder?: number
 }
 
 export interface CreateEquipmentTypeOutput {
@@ -17,5 +20,6 @@ export interface CreateEquipmentTypeOutput {
 export enum EquipmentTypeCreationResult {
     CREATED,
     ALREADY_EXISTS,
-    SLOT_NOT_EXISTS
+    SLOT_NOT_EXISTS,
+    PARENT_NOT_EXISTS
 }

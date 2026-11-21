@@ -9,7 +9,7 @@ const FIELDS = {
     typeId: true,
     description: true,
     slotCost: true,
-    type: { select: { id: true, label: true } }
+    type: { select: { id: true, label: true, slotId: true, parentId: true, icon: true, sortOrder: true } }
 } as const;
 
 export default class EquipmentRepositoryImpl implements EquipmentRepository {

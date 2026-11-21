@@ -8,44 +8,60 @@ import GearSlotTracker, { GEAR_CATALOG_ID, gearTabId } from "@/components/MultiS
 import SlotPips from "@/components/MultiStepForm/CreateCharacterForm/SlotPips/SlotPips";
 import { useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFormContext";
 import SectionHeading from "@/components/SectionHeading/SectionHeading";
-import { applySelection, equipmentRoots, getPoolUsages, getRootSections, getRootUsage, resolveSelection } from "@/lib/equipment";
+import { applySelection } from "@/lib/equipment";
+import { EquipmentCatalog } from "@/lib/equipmentCatalog";
 import { stepContent, stepIntro } from "@/components/MultiStepForm/CreateCharacterForm/characterStep.css";
 import * as styles from "./CharacterGearStep.css";
 
-const EMPTY_SELECTION: string[] = [];
+const EMPTY_SELECTION: number[] = [];
 
-export default function CharacterGearStep() {
+type CharacterGearStepProps = {
+    equipmentCatalog: EquipmentCatalog
+}
+
+export default function CharacterGearStep({ equipmentCatalog }: CharacterGearStepProps) {
     const { control, setValue } = useMultiStepFormContext().form;
-    const selectedIds: string[] = useWatch({ control, name: "equipmentIds" }) ?? EMPTY_SELECTION;
+    const selectedIds: number[] = useWatch({ control, name: "equipmentIds" }) ?? EMPTY_SELECTION;
+    const equipmentTypeRoots = equipmentCatalog.getEquipmentTypeRoots();
 
-    const [activeRootId, setActiveRootId] = useState(equipmentRoots[0].id);
-    const [previewId, setPreviewId] = useState<string | null>(null);
+    const [activeRootId, setActiveRootId] = useState(equipmentTypeRoots[0]?.id);
+    const [previewId, setPreviewId] = useState<number | null>(null);
 
-    const usages = useMemo(() => getPoolUsages(selectedIds), [selectedIds]);
+    const usages = useMemo(() => equipmentCatalog.getSlotPoolUsages(selectedIds), [equipmentCatalog, selectedIds]);
     const counts = useMemo(() => selectedIds.reduce((map, itemId) => map.set(itemId, (map.get(itemId) ?? 0) + 1),
-        new Map<string, number>()), [selectedIds]);
+        new Map<number, number>()), [selectedIds]);
 
-    const activeRoot = equipmentRoots.find(root => root.id === activeRootId) ?? equipmentRoots[0];
-    const activeUsage = getRootUsage(activeRoot.id, usages);
+    const activeRoot = equipmentTypeRoots.find(root => root.id === activeRootId) ?? equipmentTypeRoots[0];
 
-    function updateSelection(nextIds: string[]) {
+    if (!activeRoot) {
+        return (
+            <div className={stepContent}>
+                <SectionHeading title="Kezdő felszerelés"/>
+                <p className={stepIntro}>Jelenleg nincs választható felszerelés.</p>
+            </div>
+        );
+    }
+
+    const activeUsage = equipmentCatalog.getRootUsage(activeRoot.id, usages);
+
+    function updateSelection(nextIds: number[]) {
         setValue("equipmentIds", nextIds, { shouldDirty: true });
     }
 
-    function selectItem(itemId: string) {
-        updateSelection(applySelection(itemId, selectedIds, resolveSelection(itemId, usages)));
+    function selectItem(itemId: number) {
+        updateSelection(applySelection(itemId, selectedIds, equipmentCatalog.resolveSelection(itemId, usages)));
     }
 
     function removeAt(index: number) {
         updateSelection(selectedIds.filter((_, selectedIndex) => selectedIndex !== index));
     }
 
-    function selectRoot(rootId: string) {
+    function selectRoot(rootId: number) {
         setActiveRootId(rootId);
         setPreviewId(null);
     }
 
-    function handlePreview(itemId: string, isActive: boolean) {
+    function handlePreview(itemId: number, isActive: boolean) {
         setPreviewId(current => isActive ? itemId : current === itemId ? null : current);
     }
 
@@ -56,7 +72,7 @@ export default function CharacterGearStep() {
                 Minden felszerelés slotot foglal. Válogass szabadon, amíg van szabad helyed a keretben.
             </p>
             <div className={styles.layout}>
-                <GearSlotTracker activeRootId={activeRootId} usages={usages} previewId={previewId}
+                <GearSlotTracker equipmentCatalog={equipmentCatalog} activeRootId={activeRootId} usages={usages} previewId={previewId}
                                  onSelectRoot={selectRoot} onRemove={removeAt}/>
                 <div key={activeRoot.id} id={GEAR_CATALOG_ID} role="tabpanel" aria-labelledby={gearTabId(activeRoot.id)}
                      className={styles.catalog}>
@@ -67,27 +83,31 @@ export default function CharacterGearStep() {
                             {activeUsage.capacity - activeUsage.used} / {activeUsage.capacity} slot szabad
                         </span>
                     </header>
-                    {getRootSections(activeRoot.id).map(section => {
-                        const usage = usages.get(section.pool.type.id);
-                        const hasOwnPool = section.pool.type.id === section.type.id;
+                    {equipmentCatalog.getRootSections(activeRoot.id).map(section => {
+                        const usage = usages.get(section.slotPool.id);
+                        const costs = new Set(section.entries.map(entry => entry.cost));
+                        const uniformCost = costs.size === 1 ? section.entries[0].cost : undefined;
                         const headingId = `gear-section-${section.type.id}`;
                         return (
                             <section key={section.type.id} className={styles.section} aria-labelledby={headingId}>
                                 <header className={styles.sectionHeader}>
                                     <h4 id={headingId} className={styles.sectionTitle}>{section.label}</h4>
-                                    <span className={styles.badge}>
-                                        <SlotPips total={section.cost} size="small"/>
-                                        {section.cost} slot / db
-                                    </span>
-                                    {hasOwnPool && usage &&
-                                        <span className={styles.poolMeta}>Keret: {usage.used} / {section.pool.capacity}</span>
+                                    {uniformCost !== undefined &&
+                                        <span className={styles.badge}>
+                                            <SlotPips total={uniformCost} size="small"/>
+                                            {uniformCost} slot / db
+                                        </span>
+                                    }
+                                    {!section.slotPool.isRootSlotPool && usage &&
+                                        <span className={styles.poolMeta}>Keret: {usage.used} / {section.slotPool.capacity}</span>
                                     }
                                 </header>
                                 <ul className={styles.grid}>
-                                    {section.items.map(item => (
+                                    {section.entries.map(({ item, cost }) => (
                                         <GearItemCard key={item.id} name={item.name}
+                                                      cost={uniformCost === undefined ? cost : undefined}
                                                       count={counts.get(item.id) ?? 0}
-                                                      status={resolveSelection(item.id, usages).kind}
+                                                      status={equipmentCatalog.resolveSelection(item.id, usages).kind}
                                                       onSelect={() => selectItem(item.id)}
                                                       onRemove={() => removeAt(selectedIds.lastIndexOf(item.id))}
                                                       onPreview={isActive => handlePreview(item.id, isActive)}/>

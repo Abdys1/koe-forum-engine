@@ -56,6 +56,11 @@
       },
       "Slot": {
         "type": "object",
+        "required": [
+          "id",
+          "label",
+          "maxCapacity"
+        ],
         "properties": {
           "id": {
             "type": "integer"
@@ -70,6 +75,14 @@
       },
       "EquipmentType": {
         "type": "object",
+        "required": [
+          "id",
+          "label",
+          "slotId",
+          "parentId",
+          "icon",
+          "sortOrder"
+        ],
         "properties": {
           "id": {
             "type": "integer"
@@ -80,11 +93,30 @@
           "slotId": {
             "type": "integer",
             "nullable": true
+          },
+          "parentId": {
+            "type": "integer",
+            "nullable": true,
+            "description": "The parent type; null for a root type (category)"
+          },
+          "icon": {
+            "type": "string",
+            "nullable": true
+          },
+          "sortOrder": {
+            "type": "integer"
           }
         }
       },
       "Equipment": {
         "type": "object",
+        "required": [
+          "id",
+          "name",
+          "description",
+          "slotCost",
+          "type"
+        ],
         "properties": {
           "id": {
             "type": "integer"
@@ -265,7 +297,7 @@
         "tags": [
           "EquipmentType"
         ],
-        "summary": "List all equipment types",
+        "summary": "List all equipment types (flat list ordered by sortOrder, then label; the tree is built from parentId)",
         "responses": {
           "200": {
             "description": "List of equipment types",
@@ -310,6 +342,18 @@
                   "slotId": {
                     "type": "integer",
                     "description": "Optional — assigns this type to an existing Slot (several types may share the same Slot)"
+                  },
+                  "parentId": {
+                    "type": "integer",
+                    "description": "Optional — places this type under an existing type; omitted for a root type (category)"
+                  },
+                  "icon": {
+                    "type": "string",
+                    "maxLength": 32
+                  },
+                  "sortOrder": {
+                    "type": "integer",
+                    "default": 0
                   }
                 }
               }
@@ -331,7 +375,7 @@
             "description": "An equipment type with this label already exists"
           },
           "422": {
-            "description": "The referenced slotId does not exist"
+            "description": "The referenced slotId or parentId does not exist"
           }
         }
       }
@@ -414,7 +458,7 @@
             "description": "Equipment type not found"
           },
           "409": {
-            "description": "Equipment type is still in use and cannot be deleted"
+            "description": "Equipment type is still in use or has child types and cannot be deleted"
           }
         }
       }

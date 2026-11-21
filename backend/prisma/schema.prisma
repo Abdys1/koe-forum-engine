@@ -49,6 +49,11 @@ model EquipmentType {
   createdAt DateTime @default(now())
   slotId Int?
   slot Slot? @relation(fields: [slotId], references: [id], onDelete: SetNull)
+  parentId Int?
+  parent EquipmentType? @relation("EquipmentTypeTree", fields: [parentId], references: [id], onDelete: NoAction)
+  children EquipmentType[] @relation("EquipmentTypeTree")
+  icon String? @db.VarChar(32)
+  sortOrder Int @default(0)
   equipment Equipment[]
 }
 

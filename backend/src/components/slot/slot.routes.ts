@@ -13,6 +13,7 @@ const idValidation = param("id").isInt().withMessage(ErrorMessages.SLOT_NOT_EXIS
  *   schemas:
  *     Slot:
  *       type: object
+ *       required: [id, label, maxCapacity]
  *       properties:
  *         id:
  *           type: integer

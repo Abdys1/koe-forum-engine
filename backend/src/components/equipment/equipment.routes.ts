@@ -22,6 +22,7 @@ const idValidation = param("id").isInt().withMessage(ErrorMessages.EQUIPMENT_NOT
  *   schemas:
  *     Equipment:
  *       type: object
+ *       required: [id, name, description, slotCost, type]
  *       properties:
  *         id:
  *           type: integer

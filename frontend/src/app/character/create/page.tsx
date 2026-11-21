@@ -1,10 +1,13 @@
 import CreateCharacterForm from "@/components/MultiStepForm/CreateCharacterForm/CreateCharacterForm/CreateCharacterForm";
+import { equipmentClient } from "@/lib/api/equipment";
 import * as styles from "./create.css";
 
-export default function CharacterCreatePage() {
+export default async function CharacterCreatePage() {
+    const equipmentCatalogData = await equipmentClient.getCatalogData();
+
     return (
         <section className={styles.page}>
-            <CreateCharacterForm />
+            <CreateCharacterForm equipmentCatalogData={equipmentCatalogData}/>
         </section>
     );
 };

@@ -10,7 +10,7 @@ export interface CharacterQuote {
 export interface Character extends PostCharacter {
   raceId: string;
   sex: SelectableSex;
-  equipmentIds: string[];
+  equipmentIds: number[];
   appearance?: string;
   backstory?: string;
   secrets?: string;
@@ -23,7 +23,7 @@ export const playerCharacters: Character[] = [
     ...dummyCharacter,
     raceId: "sotetelf",
     sex: "ferfi",
-    equipmentIds: ["hosszukard", "rovidkard", "okolpajzs", "borsisak", "borvert", "borkesztyu", "borkesztyu", "borlabvert"],
+    equipmentIds: [],
     appearance:
       "Magas, szikár alak, akinek hamuszürke bőre szinte elnyeli a fáklyák fényét. Hosszú, ezüstfehér haját többnyire egyszerű bőrszíjjal fogja hátra, vörösen izzó szemeit ritkán emeli huzamosabb ideig másokra.\n\nMozgása csendes és kimért, mintha minden lépését előre kiszámolta volna. Bal arcán halvány, régi vágás húzódik a halántékától az álláig.",
     backstory:
@@ -43,7 +43,7 @@ export const playerCharacters: Character[] = [
     imageUrl: "/images/knight-withoutbg.png",
     raceId: "ember",
     sex: "ferfi",
-    equipmentIds: ["csatabard", "kerekfapajzs", "fazeksisak", "lamellasvert", "pancelkesztyu", "femalkarvedo", "femlabvert"],
+    equipmentIds: [],
     appearance:
       "Széles vállú, napbarnított lovag, rövidre nyírt gesztenyebarna hajjal és gondosan ápolt szakállal. Páncélját mindig fényesre csiszolja, még akkor is, ha senki sem látja.",
   },
@@ -53,7 +53,7 @@ export const playerCharacters: Character[] = [
     imageUrl: "/images/rovena.jpg",
     raceId: "ember",
     sex: "no",
-    equipmentIds: ["langoloszablya", "kalandozoszablya", "borvert"],
+    equipmentIds: [],
     backstory:
       "Évszázadokon át őrizte népe ősi könyvtárát, mígnem egy éjjel a lángok mindent elemésztettek. Azóta a tűz titkait kutatja, és azt, aki a lángokat gyújtotta.",
   },
@@ -63,7 +63,7 @@ export const playerCharacters: Character[] = [
     imageUrl: "/images/valeria.jpeg",
     raceId: "ember",
     sex: "no",
-    equipmentIds: ["kalozszablya", "tisztiszablya", "borsisak"],
+    equipmentIds: [],
   },
   {
     id: "5",

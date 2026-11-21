@@ -4,6 +4,9 @@ import { Response } from "supertest";
 export interface EquipmentTypeWriteRequestBody {
     label?: string | null;
     slotId?: number | string | null;
+    parentId?: number | string | null;
+    icon?: string | null;
+    sortOrder?: number | string | null;
 }
 
 export default class EquipmentTypeClient extends BaseClient {

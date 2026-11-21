@@ -6,19 +6,24 @@ import CharacterGearStep from "@/components/MultiStepForm/CreateCharacterForm/Ch
 import CharacterImageStep from "@/components/MultiStepForm/CreateCharacterForm/CharacterImageStep/CharacterImageStep";
 import CreateCharacterHeader from "@/components/MultiStepForm/CreateCharacterForm/CreateCharacterHeader/CreateCharacterHeader";
 import CharacterSummaryStep from "@/components/MultiStepForm/CreateCharacterForm/CharacterSummaryStep/CharacterSummaryStep";
+import { useMemo } from "react";
 import { SubmitHandler, useForm, useWatch } from "react-hook-form";
 import MultiStepForm from "@/components/MultiStepForm/MultiStepForm/MultiStepForm";
 import { findRace, races } from "@/dummydata/races";
 import { raceStepBg, gearStepBg } from "@/styles/shared.css";
 import { createCharacter } from "@/app/character/create/actions";
 import { Sex } from "@/lib/api/character/types";
+import { EquipmentCatalogData } from "@/lib/api/equipment/types";
+import { compactSelection } from "@/lib/equipment";
+import { buildEquipmentCatalog } from "@/lib/equipmentCatalog";
+import { toGearOverview } from "@/lib/gearOverview";
 
 export interface CharacterInputs {
     raceId: string,
     raceTitle: string,
     characterName: string,
     characterSex: SelectableSex,
-    equipmentIds: string[],
+    equipmentIds: number[],
     characterImg: FileList
 }
 
@@ -27,7 +32,11 @@ const sexMapping: Record<SelectableSex, Sex> = {
     no: Sex.FEMALE
 };
 
-export default function CreateCharacterForm() {
+type CreateCharacterFormProps = {
+    equipmentCatalogData: EquipmentCatalogData
+}
+
+export default function CreateCharacterForm({ equipmentCatalogData }: CreateCharacterFormProps) {
     const form = useForm<CharacterInputs>({
         defaultValues: {
             raceId: races[0].id,
@@ -37,9 +46,19 @@ export default function CreateCharacterForm() {
         }
     });
 
+    const equipmentCatalog = useMemo(() => buildEquipmentCatalog(equipmentCatalogData), [equipmentCatalogData]);
+
     const raceId = useWatch({ control: form.control, name: "raceId" });
     const characterName = useWatch({ control: form.control, name: "characterName" });
     const characterImg = useWatch({ control: form.control, name: "characterImg" });
+    const equipmentIds = useWatch({ control: form.control, name: "equipmentIds" });
+    const gearOverview = useMemo(
+        () => toGearOverview(
+            equipmentCatalog.getEquipmentTypeRoots(),
+            equipmentCatalog.getSlotPoolUsages(compactSelection(equipmentIds))
+        ),
+        [equipmentCatalog, equipmentIds]
+    );
     const raceStepStyle = { '--raceUrl': `url('${findRace(raceId).img}')` } as React.CSSProperties;
 
     const submit: SubmitHandler<CharacterInputs> = async values => {
@@ -48,6 +67,7 @@ export default function CreateCharacterForm() {
         formData.append("sex", String(sexMapping[values.characterSex]));
         formData.append("race", values.raceId);
         formData.append("image", values.characterImg[0]);
+        values.equipmentIds.forEach(equipmentId => formData.append("equipmentIds", String(equipmentId)));
 
         const result = await createCharacter(formData);
         if (!result.success) {
@@ -68,13 +88,13 @@ export default function CreateCharacterForm() {
                 <CharacterBasicsStep/>
             </MultiStepForm.Step>
             <MultiStepForm.Step label="Felszerelés" className={gearStepBg}>
-               <CharacterGearStep/>
+               <CharacterGearStep equipmentCatalog={equipmentCatalog}/>
             </MultiStepForm.Step>
             <MultiStepForm.Step label="Karakterkép" validate={() => form.trigger('characterImg')} complete={!!characterImg?.length}>
                 <CharacterImageStep/>
             </MultiStepForm.Step>
             <MultiStepForm.Step label="Áttekintés">
-                <CharacterSummaryStep/>
+                <CharacterSummaryStep gearOverview={gearOverview}/>
             </MultiStepForm.Step>
         </MultiStepForm>
     );

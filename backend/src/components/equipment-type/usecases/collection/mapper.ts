@@ -9,6 +9,9 @@ export function toEquipmentTypeDetails(equipmentType: EquipmentType): EquipmentT
     return {
         id: equipmentType.id,
         label: equipmentType.label,
-        slotId: equipmentType.slotId ?? null
+        slotId: equipmentType.slotId ?? null,
+        parentId: equipmentType.parentId ?? null,
+        icon: equipmentType.icon ?? null,
+        sortOrder: equipmentType.sortOrder ?? 0
     };
 }

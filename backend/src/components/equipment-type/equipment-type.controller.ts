@@ -31,7 +31,10 @@ export default class EquipmentTypeController {
     public create = async (req: Request, res: Response): Promise<void> => {
         const { status, equipmentType } = await this.equipmentTypeCreation.execute({
             label: req.body.label,
-            slotId: req.body.slotId === undefined ? undefined : Number(req.body.slotId)
+            slotId: req.body.slotId === undefined ? undefined : Number(req.body.slotId),
+            parentId: req.body.parentId === undefined ? undefined : Number(req.body.parentId),
+            icon: req.body.icon,
+            sortOrder: req.body.sortOrder === undefined ? undefined : Number(req.body.sortOrder)
         });
 
         switch (status) {
@@ -40,6 +43,9 @@ export default class EquipmentTypeController {
                 return;
             case EquipmentTypeCreationResult.SLOT_NOT_EXISTS:
                 res.status(422).json({ errorCode: ErrorMessages.SLOT_NOT_EXISTS });
+                return;
+            case EquipmentTypeCreationResult.PARENT_NOT_EXISTS:
+                res.status(422).json({ errorCode: ErrorMessages.EQUIPMENT_TYPE_PARENT_NOT_EXISTS });
                 return;
             default:
                 res.status(201).send(equipmentType);
@@ -73,6 +79,9 @@ export default class EquipmentTypeController {
                 return;
             case EquipmentTypeRemovalResult.IN_USE:
                 res.status(409).json({ errorCode: ErrorMessages.EQUIPMENT_TYPE_IN_USE });
+                return;
+            case EquipmentTypeRemovalResult.HAS_CHILDREN:
+                res.status(409).json({ errorCode: ErrorMessages.EQUIPMENT_TYPE_HAS_CHILDREN });
                 return;
             default:
                 res.status(204).send();

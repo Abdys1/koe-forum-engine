@@ -2,7 +2,7 @@ import { EquipmentType, EquipmentTypeUpdate } from "@src/components/equipment-ty
 import { EquipmentTypeRepository } from "@src/components/equipment-type/repositories/types";
 import { DbClient } from "@src/prisma-client";
 
-const FIELDS = { id: true, label: true, slotId: true } as const;
+const FIELDS = { id: true, label: true, slotId: true, parentId: true, icon: true, sortOrder: true } as const;
 
 export default class EquipmentTypeRepositoryImpl implements EquipmentTypeRepository {
     private db: DbClient;
@@ -14,7 +14,7 @@ export default class EquipmentTypeRepositoryImpl implements EquipmentTypeReposit
     public findAll = async (): Promise<EquipmentType[]> => {
         return this.db.equipmentType.findMany({
             select: FIELDS,
-            orderBy: { label: "asc" }
+            orderBy: [{ sortOrder: "asc" }, { label: "asc" }]
         });
     };
 
@@ -33,10 +33,20 @@ export default class EquipmentTypeRepositoryImpl implements EquipmentTypeReposit
         return this.db.equipment.count({ where: { typeId: id } });
     };
 
+    public countChildrenByParentId = async (id: number): Promise<number> => {
+        return this.db.equipmentType.count({ where: { parentId: id } });
+    };
+
     public create = async (equipmentType: EquipmentType): Promise<EquipmentType> => {
         return this.db.equipmentType.create({
             select: FIELDS,
-            data: { label: equipmentType.label, slotId: equipmentType.slotId ?? null }
+            data: {
+                label: equipmentType.label,
+                slotId: equipmentType.slotId ?? null,
+                parentId: equipmentType.parentId ?? null,
+                icon: equipmentType.icon ?? null,
+                sortOrder: equipmentType.sortOrder ?? 0
+            }
         });
     };
 

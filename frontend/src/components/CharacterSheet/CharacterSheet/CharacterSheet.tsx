@@ -16,17 +16,19 @@ import { Character } from "@/dummydata/characters";
 import { findRace } from "@/dummydata/races";
 import { useObjectUrl } from "@/hooks/useObjectUrl";
 import { CharacterActivity } from "@/lib/api/posts/types";
+import { GearOverviewRoot } from "@/lib/gearOverview";
 import { eyebrow, visuallyHidden } from "@/styles/shared.css";
 import * as styles from "./CharacterSheet.css";
 
 type CharacterSheetProps = {
     character: Character,
     activity: CharacterActivity,
+    gearOverview: GearOverviewRoot[],
     canEdit: boolean,
     canViewPrivate: boolean
 }
 
-export default function CharacterSheet({ character, activity, canEdit, canViewPrivate }: CharacterSheetProps) {
+export default function CharacterSheet({ character, activity, gearOverview, canEdit, canViewPrivate }: CharacterSheetProps) {
     const imageInputId = useId();
     const imageInputRef = useRef<HTMLInputElement>(null);
     const [imageFile, setImageFile] = useState<File>();
@@ -85,7 +87,7 @@ export default function CharacterSheet({ character, activity, canEdit, canViewPr
                             <div className={heading}>
                                 <h2 id="character-gear-title" className={headingTitle}>Felszerelés</h2>
                             </div>
-                            <GearOverview selectedIds={character.equipmentIds} emptyText="Nincs felszerelés" variant="tinted"/>
+                            <GearOverview roots={gearOverview} emptyText="Nincs felszerelés" variant="tinted"/>
                         </section>
                     </div>
                 </div>

@@ -437,7 +437,7 @@ describe("/api/characters", () => {
       expect(resp.body[0].id).toBe(potion.id);
       expect(resp.body[0].name).toBe("Gyógyító ital");
       expect(resp.body[0].description).toBe("Gyógyít");
-      expect(resp.body[0].type).toStrictEqual({ id: type.id, label: "Bájital", slotId: null });
+      expect(resp.body[0].type).toStrictEqual({ id: type.id, label: "Bájital", slotId: null, parentId: null, icon: null, sortOrder: 0 });
     });
 
     it("when the character belongs to another user then should return character not owned error", async () => {

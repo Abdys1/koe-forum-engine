@@ -13,5 +13,6 @@ export interface RemoveEquipmentTypeOutput {
 export enum EquipmentTypeRemovalResult {
     DELETED,
     NOT_FOUND,
-    IN_USE
+    IN_USE,
+    HAS_CHILDREN
 }

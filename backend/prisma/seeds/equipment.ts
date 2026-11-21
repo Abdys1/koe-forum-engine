@@ -1,285 +1,102 @@
 import { db } from "./db";
 
-const EquipmentTypeLabels = {
-  WEAPON: "Fegyver",
-  HELMET: "Fejvédő",
-  BODY_ARMOR: "Testpáncél",
-  SECONDARY_ARMOR: "Másodlagos páncél",
-  SHIELD: "Pajzs",
-} as const;
+interface SeedEquipmentType {
+  label: string;
+  icon?: string;
+  slots?: number;
+  slotCost?: number;
+  children?: SeedEquipmentType[];
+  items?: string[];
+}
 
-const maxCapacityByLabel: Record<string, number> = {
-  [EquipmentTypeLabels.WEAPON]: 2,
-  [EquipmentTypeLabels.BODY_ARMOR]: 1,
-  [EquipmentTypeLabels.SECONDARY_ARMOR]: 1,
-  [EquipmentTypeLabels.HELMET]: 1,
-  [EquipmentTypeLabels.SHIELD]: 1,
-};
-
-const equipment = [
+const equipmentTypes: SeedEquipmentType[] = [
   {
-    name: "Hosszúkard",
-    type: EquipmentTypeLabels.WEAPON,
-    description:
-      "A hosszúkard lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
+    label: "Fegyverzet",
+    icon: "swords",
+    slots: 5,
+    children: [
+      { label: "Kardok", slotCost: 1, items: ["Rövidkard", "Hosszúkard"] },
+      {
+        label: "Szablyák",
+        slotCost: 1,
+        items: [
+          "Kalóz szablya",
+          "Huszár szablya",
+          "Mágikus lángoló szablya",
+          "Lovassági szablya",
+          "Tiszti díszszablya",
+          "Sivatagi görbe szablya",
+          "Kalandozó szablya",
+        ],
+      },
+      { label: "Balták és bárdok", slotCost: 2, items: ["Fokos", "Csatabárd"] },
+      { label: "Lándzsák", slotCost: 2, items: ["Lándzsa", "Hajítólándzsa"] },
+      { label: "Pajzsok", slotCost: 1, items: ["Kerek fapajzs", "Ökölpajzs"] },
+    ],
   },
   {
-    name: "Rövidkard",
-    type: EquipmentTypeLabels.WEAPON,
-    description:
-      "Rövidkard ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Fokos",
-    type: EquipmentTypeLabels.WEAPON,
-    description:
-      "A fokos lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Pöröly",
-    type: EquipmentTypeLabels.WEAPON,
-    description:
-      "A pöröly lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Csatabárd",
-    type: EquipmentTypeLabels.WEAPON,
-    description:
-      "Csatabárddal lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Lándzsa",
-    type: EquipmentTypeLabels.WEAPON,
-    description:
-      "A lándzsa lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Szegecses kesztyű",
-    type: EquipmentTypeLabels.WEAPON,
-    description:
-      "Vedd fel a kesztyűt vagy lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Szablya",
-    type: EquipmentTypeLabels.WEAPON,
-    description:
-      "A szablya lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Kerek fapajzs",
-    type: EquipmentTypeLabels.SHIELD,
-    description:
-      "Kerek fapajzs lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Ökölpajzs",
-    type: EquipmentTypeLabels.SHIELD,
-    description:
-      "Ökölpajzs lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Sodronying",
-    type: EquipmentTypeLabels.BODY_ARMOR,
-    description:
-      "A sordonying lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Gambeson",
-    type: EquipmentTypeLabels.BODY_ARMOR,
-    description:
-      "A gambeson adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Rákozott bőrvért",
-    type: EquipmentTypeLabels.BODY_ARMOR,
-    description:
-      "A bőrvért lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Rákozott bőrvért csataszoknyával",
-    type: EquipmentTypeLabels.BODY_ARMOR,
-    description:
-      "A bőrvért szoknyával is lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Rákozott bőrvért vállvérttel",
-    type: EquipmentTypeLabels.BODY_ARMOR,
-    description:
-      "A bőrvért vállvérttel is lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Pikkelyes bőrvért",
-    type: EquipmentTypeLabels.BODY_ARMOR,
-    description:
-      "A pikkelyes lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Pikkelyes bőrvért vállvérttel",
-    type: EquipmentTypeLabels.BODY_ARMOR,
-    description:
-      "A pikkelyes vállvérttel is lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Lamellás vért",
-    type: EquipmentTypeLabels.BODY_ARMOR,
-    description:
-      "A lamellás lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Lemezvért",
-    type: EquipmentTypeLabels.BODY_ARMOR,
-    description:
-      "Lemezes lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Rákozott lemezvért",
-    type: EquipmentTypeLabels.BODY_ARMOR,
-    description:
-      "Rákozott lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Rákozott lemezvért csataszoknyával",
-    type: EquipmentTypeLabels.BODY_ARMOR,
-    description:
-      "Rákozott lemez szoknyával adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Teljes gyalogos páncél",
-    type: EquipmentTypeLabels.BODY_ARMOR,
-    description:
-      "Valaki nagyon kemény talpas lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Teljes lovagi páncél",
-    type: EquipmentTypeLabels.BODY_ARMOR,
-    description:
-      "A lova se bírja el lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Bőr alkarvért",
-    type: EquipmentTypeLabels.SECONDARY_ARMOR,
-    description:
-      "Alkaron bőr lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Bőr lábvért",
-    type: EquipmentTypeLabels.SECONDARY_ARMOR,
-    description:
-      "Lábszáron bőr lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Bőr alkar és lábvért",
-    type: EquipmentTypeLabels.SECONDARY_ARMOR,
-    description:
-      "Mindenhol bőr lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Fém alkarvért",
-    type: EquipmentTypeLabels.SECONDARY_ARMOR,
-    description:
-      "Alkaron fém lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Fém lábvért",
-    type: EquipmentTypeLabels.SECONDARY_ARMOR,
-    description:
-      "A lábszáron fém lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Fém alkar és lábvért",
-    type: EquipmentTypeLabels.SECONDARY_ARMOR,
-    description:
-      "Mindenhol fém lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Nyitott bőrsisak",
-    type: EquipmentTypeLabels.HELMET,
-    description:
-      "A nyitott lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Bőrsisak orrvédővel",
-    type: EquipmentTypeLabels.HELMET,
-    description:
-      "Orrvédős lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Nyitott fémsisak",
-    type: EquipmentTypeLabels.HELMET,
-    description:
-      "A nyitott fém lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Nyitott fémsisak orrvédővel",
-    type: EquipmentTypeLabels.HELMET,
-    description:
-      "A fém orr lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Fazéksisak",
-    type: EquipmentTypeLabels.HELMET,
-    description:
-      "A fazék lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Vaskalap",
-    type: EquipmentTypeLabels.HELMET,
-    description:
-      "Vaskalapos lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
-  },
-  {
-    name: "Rákfarkas sisak",
-    type: EquipmentTypeLabels.HELMET,
-    description:
-      "Most akkor rák vagy farkas lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.",
+    label: "Páncélzat",
+    icon: "shield",
+    children: [
+      { label: "Sisakok", slots: 1, slotCost: 1, items: ["Nyitott bőrsisak", "Fazéksisak", "Vaskalap"] },
+      { label: "Vértek", slots: 1, slotCost: 1, items: ["Gambeson", "Bőrvért", "Lamellás vért"] },
+      {
+        label: "Karvédők",
+        slots: 2,
+        slotCost: 1,
+        items: ["Páncélkesztyű", "Bőrkesztyű", "Fém alkarvédő", "Bőr alkarvédő"],
+      },
+      { label: "Lábvértek", slots: 1, slotCost: 1, items: ["Bőr lábvért", "Fém lábvért"] },
+    ],
   },
 ];
 
-async function seedSlots(): Promise<Map<string, number>> {
-  const slotIdsByLabel = new Map<string, number>();
-  for (const [label, maxCapacity] of Object.entries(maxCapacityByLabel)) {
-    const slot = await db.slot.upsert({
-      where: { label },
-      update: { maxCapacity },
-      create: { label, maxCapacity },
-    });
-    slotIdsByLabel.set(label, slot.id);
-  }
-  return slotIdsByLabel;
+function describe(name: string): string {
+  return `${name} lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti esse repudiandae saepe, recusandae a quo atque deserunt vitae reprehenderit assumenda mollitia tempora.`;
 }
 
-async function seedEquipmentTypes(slotIdsByLabel: Map<string, number>): Promise<Map<string, number>> {
-  const typeIdsByLabel = new Map<string, number>();
-  for (const label of Object.values(EquipmentTypeLabels)) {
-    const slotId = slotIdsByLabel.get(label) ?? null;
-    const equipmentType = await db.equipmentType.upsert({
-      where: { label },
-      update: { slotId },
-      create: { label, slotId },
+async function seedSlot(label: string, maxCapacity: number): Promise<number> {
+  const slot = await db.slot.upsert({
+    where: { label },
+    update: { maxCapacity },
+    create: { label, maxCapacity },
+  });
+  return slot.id;
+}
+
+async function seedEquipmentType(
+  type: SeedEquipmentType,
+  sortOrder: number,
+  parentId: number | null,
+  inheritedSlotId: number | null,
+  inheritedSlotCost: number | undefined
+): Promise<void> {
+  const slotId = type.slots === undefined ? inheritedSlotId : await seedSlot(type.label, type.slots);
+  const slotCost = type.slotCost ?? inheritedSlotCost;
+  const data = { parentId, slotId, icon: type.icon ?? null, sortOrder };
+
+  const equipmentType = await db.equipmentType.upsert({
+    where: { label: type.label },
+    update: data,
+    create: { label: type.label, ...data },
+  });
+
+  for (const name of type.items ?? []) {
+    const equipmentSlotCost = slotId === null ? null : (slotCost ?? 1);
+    await db.equipment.upsert({
+      where: { name_typeId: { name, typeId: equipmentType.id } },
+      update: { slotCost: equipmentSlotCost },
+      create: { name, typeId: equipmentType.id, description: describe(name), slotCost: equipmentSlotCost },
     });
-    typeIdsByLabel.set(label, equipmentType.id);
   }
-  return typeIdsByLabel;
+
+  for (const [index, child] of (type.children ?? []).entries()) {
+    await seedEquipmentType(child, index, equipmentType.id, slotId, slotCost);
+  }
 }
 
 export async function seedEquipment(): Promise<void> {
-  const slotIdsByLabel = await seedSlots();
-  const typeIdsByLabel = await seedEquipmentTypes(slotIdsByLabel);
-
-  for (const item of equipment) {
-    const typeId = typeIdsByLabel.get(item.type);
-    if (typeId === undefined) {
-      throw new Error(`Nincs seedelt felszerelés-típus ehhez a label-hez: ${item.type}`);
-    }
-    await db.equipment.upsert({
-      where: { name_typeId: { name: item.name, typeId } },
-      update: {},
-      create: {
-        name: item.name,
-        typeId,
-        description: item.description,
-        slotCost: 1,
-      },
-    });
+  for (const [index, root] of equipmentTypes.entries()) {
+    await seedEquipmentType(root, index, null, null, undefined);
   }
 }

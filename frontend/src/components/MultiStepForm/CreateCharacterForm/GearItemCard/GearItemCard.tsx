@@ -1,10 +1,12 @@
 import clsx from "clsx";
-import { SelectionResult } from "@/lib/equipment";
+import SlotPips from "@/components/MultiStepForm/CreateCharacterForm/SlotPips/SlotPips";
+import { SelectionResult } from "@/lib/equipmentCatalog";
 import { visuallyHidden } from "@/styles/shared.css";
 import * as styles from "./GearItemCard.css";
 
 type GearItemCardProps = {
     name: string,
+    cost?: number,
     count: number,
     status: SelectionResult["kind"],
     onSelect: () => void,
@@ -18,7 +20,7 @@ const hints: Record<SelectionResult["kind"], string> = {
     blocked: "Nincs elég slot"
 };
 
-export default function GearItemCard({ name, count, status, onSelect, onRemove, onPreview }: GearItemCardProps) {
+export default function GearItemCard({ name, cost, count, status, onSelect, onRemove, onPreview }: GearItemCardProps) {
     const isBlocked = status === "blocked";
     const hint = status === "add" && count > 0 ? "Még egy" : hints[status];
 
@@ -29,6 +31,7 @@ export default function GearItemCard({ name, count, status, onSelect, onRemove, 
                     onMouseEnter={() => onPreview(true)} onMouseLeave={() => onPreview(false)}
                     onFocus={() => onPreview(true)} onBlur={() => onPreview(false)}>
                 <span className={styles.name}>{name}</span>
+                {cost !== undefined && <SlotPips total={cost} size="small"/>}
                 <span className={clsx(styles.hint, isBlocked && styles.hintBlocked)}>{hint}</span>
                 {count > 0 &&
                     <span key={count} className={styles.countBadge}>

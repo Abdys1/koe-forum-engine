@@ -4,34 +4,36 @@ import clsx from "clsx";
 import { KeyboardEvent, useRef } from "react";
 import GearTypeIcon from "@/components/MultiStepForm/CreateCharacterForm/GearTypeIcon/GearTypeIcon";
 import SlotPips from "@/components/MultiStepForm/CreateCharacterForm/SlotPips/SlotPips";
-import { equipmentRoots, findEquipment, getRootPools, getRootUsage, PoolUsage, resolveSelection } from "@/lib/equipment";
+import { EquipmentCatalog, SlotPoolUsage } from "@/lib/equipmentCatalog";
 import { visuallyHidden } from "@/styles/shared.css";
 import * as styles from "./GearSlotTracker.css";
 
 export const GEAR_CATALOG_ID = "gear-catalog";
-export const gearTabId = (rootId: string) => `gear-tab-${rootId}`;
+export const gearTabId = (rootId: number) => `gear-tab-${rootId}`;
 
 type GearSlotTrackerProps = {
-    activeRootId: string,
-    usages: Map<string, PoolUsage>,
-    previewId: string | null,
-    onSelectRoot: (rootId: string) => void,
+    equipmentCatalog: EquipmentCatalog,
+    activeRootId: number,
+    usages: Map<number, SlotPoolUsage>,
+    previewId: number | null,
+    onSelectRoot: (rootId: number) => void,
     onRemove: (index: number) => void
 }
 
-export default function GearSlotTracker({ activeRootId, usages, previewId, onSelectRoot, onRemove }: GearSlotTrackerProps) {
-    const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+export default function GearSlotTracker({ equipmentCatalog, activeRootId, usages, previewId, onSelectRoot, onRemove }: GearSlotTrackerProps) {
+    const tabRefs = useRef<Record<number, HTMLButtonElement | null>>({});
+    const equipmentTypeRoots = equipmentCatalog.getEquipmentTypeRoots();
 
-    const previewEntry = previewId ? findEquipment(previewId) : undefined;
-    const previewResult = previewId ? resolveSelection(previewId, usages) : undefined;
-    const activeRoot = equipmentRoots.find(root => root.id === activeRootId) ?? equipmentRoots[0];
-    const activeUsage = getRootUsage(activeRoot.id, usages);
+    const previewEntry = previewId !== null ? equipmentCatalog.findEquipment(previewId) : undefined;
+    const previewResult = previewId !== null ? equipmentCatalog.resolveSelection(previewId, usages) : undefined;
+    const activeRoot = equipmentTypeRoots.find(root => root.id === activeRootId) ?? equipmentTypeRoots[0];
+    const activeUsage = equipmentCatalog.getRootUsage(activeRoot.id, usages);
 
     function handleTabKeyDown(event: KeyboardEvent<HTMLButtonElement>, index: number) {
         if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
         event.preventDefault();
         const step = event.key === "ArrowRight" ? 1 : -1;
-        const nextRoot = equipmentRoots[(index + step + equipmentRoots.length) % equipmentRoots.length];
+        const nextRoot = equipmentTypeRoots[(index + step + equipmentTypeRoots.length) % equipmentTypeRoots.length];
         onSelectRoot(nextRoot.id);
         tabRefs.current[nextRoot.id]?.focus();
     }
@@ -39,9 +41,9 @@ export default function GearSlotTracker({ activeRootId, usages, previewId, onSel
     return (
         <aside className={styles.tracker} aria-label="Felszerelés slotok">
             <div role="tablist" aria-label="Felszerelés típusok" className={styles.tabs}>
-                {equipmentRoots.map((root, index) => {
+                {equipmentTypeRoots.map((root, index) => {
                     const isActive = root.id === activeRoot.id;
-                    const { used, capacity } = getRootUsage(root.id, usages);
+                    const { used, capacity } = equipmentCatalog.getRootUsage(root.id, usages);
                     const previewCost = isActive && previewEntry && previewResult?.kind === "add" ? previewEntry.cost : 0;
                     return (
                         <button key={root.id} type="button" role="tab" id={gearTabId(root.id)}
@@ -67,22 +69,22 @@ export default function GearSlotTracker({ activeRootId, usages, previewId, onSel
             </div>
 
             <div className={styles.racks}>
-                {getRootPools(activeRoot.id).map(pool => {
-                    const usage = usages.get(pool.type.id);
+                {equipmentCatalog.getRootSlotPools(activeRoot.id).map(pool => {
+                    const usage = usages.get(pool.id);
                     if (!usage) return null;
-                    const isPreviewPool = previewEntry?.pool === pool;
+                    const isPreviewPool = previewEntry?.slotPool === pool;
                     const ghostCost = isPreviewPool && previewResult?.kind === "add" ? previewEntry.cost : 0;
                     const replacedIndices = isPreviewPool && previewResult?.kind === "replace" ? previewResult.indices : [];
                     const emptyCount = Math.max(pool.capacity - usage.used - ghostCost, 0);
                     return (
-                        <div key={pool.type.id} className={styles.rackGroup}>
-                            {pool.type.id !== activeRoot.id &&
+                        <div key={pool.id} className={styles.rackGroup}>
+                            {!pool.isRootSlotPool &&
                                 <div className={styles.rackHeader}>
-                                    <span className={styles.rackLabel}>{pool.type.label}</span>
+                                    <span className={styles.rackLabel}>{pool.label}</span>
                                     <span className={styles.rackCount}>{usage.used} / {pool.capacity}</span>
                                 </div>
                             }
-                            <ul className={styles.rack} aria-label={`${pool.type.label} slotjai`}>
+                            <ul className={styles.rack} aria-label={`${pool.label} slotjai`}>
                                 {usage.occupants.map(({ entry, index }) => {
                                     const isReplaced = replacedIndices.includes(index);
                                     return (

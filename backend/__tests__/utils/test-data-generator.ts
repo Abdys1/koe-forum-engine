@@ -28,8 +28,12 @@ export function generateEquipmentName(): string {
   return `Teszt felszerelés ${randomSuffix()}`;
 }
 
-export async function saveEquipmentTypeToDb(label: string = generateEquipmentTypeLabel(), slotId?: number) {
-  return db.equipmentType.create({ data: { label, slotId } });
+export async function saveEquipmentTypeToDb(
+  label: string = generateEquipmentTypeLabel(),
+  slotId?: number,
+  overrides: { parentId?: number, sortOrder?: number } = {}
+) {
+  return db.equipmentType.create({ data: { label, slotId, ...overrides } });
 }
 
 export async function saveEquipmentToDb(overrides: { name?: string, typeId?: number, description?: string, slotCost?: number } = {}) {

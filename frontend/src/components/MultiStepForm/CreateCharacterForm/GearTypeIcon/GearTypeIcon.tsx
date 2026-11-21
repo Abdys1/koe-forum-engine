@@ -1,9 +1,8 @@
 import clsx from "clsx";
-import { EquipmentType } from "@/dummydata/equipment";
 import * as styles from "./GearTypeIcon.css";
 
 type GearTypeIconProps = {
-    icon: EquipmentType["icon"],
+    icon: string | null,
     className?: string
 }
 

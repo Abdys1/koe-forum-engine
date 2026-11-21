@@ -1,7 +1,6 @@
 'use client'
 
 import clsx from "clsx";
-import { useMemo } from "react";
 import Button from "@/components/Button/Button";
 import EditButton from "@/components/EditButton/EditButton";
 import GearOverview from "@/components/GearOverview/GearOverview";
@@ -11,11 +10,15 @@ import { useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFor
 import SectionHeading from "@/components/SectionHeading/SectionHeading";
 import { useObjectUrl } from "@/hooks/useObjectUrl";
 import { discordLink } from "@/lib/socialLinks";
-import { compactSelection } from "@/lib/equipment";
+import { GearOverviewRoot } from "@/lib/gearOverview";
 import { stepContent, stepIntro } from "@/components/MultiStepForm/CreateCharacterForm/characterStep.css";
 import * as styles from "./CharacterSummaryStep.css";
 
-export default function CharacterSummaryStep() {
+type CharacterSummaryStepProps = {
+    gearOverview: GearOverviewRoot[]
+}
+
+export default function CharacterSummaryStep({ gearOverview }: CharacterSummaryStepProps) {
     const { form, steps, goToStep } = useMultiStepFormContext();
     const { getValues } = form;
 
@@ -23,8 +26,6 @@ export default function CharacterSummaryStep() {
     const raceTitle: string = getValues("raceTitle");
     const characterSex: SelectableSex = getValues("characterSex");
     const characterImage = useObjectUrl(getValues("characterImg")?.[0]);
-
-    const selectedIds = useMemo(() => compactSelection(getValues("equipmentIds")), [getValues]);
 
     const openStep = (label: string) => () => goToStep(steps.indexOf(label));
 
@@ -64,7 +65,7 @@ export default function CharacterSummaryStep() {
                             <h4 id="summary-gear-title" className={styles.sectionTitle}>Felszerelés</h4>
                             <EditButton label="Felszerelés módosítása" onClick={openStep("Felszerelés")}/>
                         </div>
-                        <GearOverview selectedIds={selectedIds}/>
+                        <GearOverview roots={gearOverview}/>
                     </section>
                 </article>
 

@@ -15,6 +15,11 @@ export default class EquipmentTypeRemovalImpl implements EquipmentTypeRemoval {
             return { status: EquipmentTypeRemovalResult.NOT_FOUND };
         }
 
+        const childCount = await this.equipmentTypeRepositories.get().countChildrenByParentId(input.id);
+        if (childCount > 0) {
+            return { status: EquipmentTypeRemovalResult.HAS_CHILDREN };
+        }
+
         const referencingEquipmentCount = await this.equipmentTypeRepositories.get().countEquipmentByTypeId(input.id);
         if (referencingEquipmentCount > 0) {
             return { status: EquipmentTypeRemovalResult.IN_USE };
