@@ -1,17 +1,4 @@
-export interface PostCharacter {
-  id: string;
-  name: string;
-  imageUrl: string;
-}
-
-export interface Post {
-  id: string;
-  locationId: string;
-  gameTitle: string;
-  content: string;
-  createdAt: string;
-  character: PostCharacter;
-}
+import { Post, PostCharacter } from "@/lib/api/posts/types";
 
 export const dummyCharacter: PostCharacter = {
   id: "1",

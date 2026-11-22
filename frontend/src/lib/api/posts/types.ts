@@ -1,4 +1,17 @@
-import { Post, PostCharacter } from "@/dummydata/posts";
+export interface PostCharacter {
+    id: string,
+    name: string,
+    imageUrl: string
+}
+
+export interface Post {
+    id: string,
+    locationId: string,
+    gameTitle: string,
+    content: string,
+    createdAt: string,
+    character: PostCharacter
+}
 
 export const POST_PAGE_SIZES = [20, 50, 100] as const;
 export const DEFAULT_POST_PAGE_SIZE: PostPageSize = 20;

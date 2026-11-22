@@ -1,6 +1,23 @@
 import type { SelectableSex } from "@/components/MultiStepForm/CreateCharacterForm/CharacterBasicsStep/CharacterBasicsStep";
-import type { Character } from "@/dummydata/characters";
 import { CharacterDetails, Sex } from "@/lib/api/character/types";
+import { PostCharacter } from "@/lib/api/posts/types";
+
+export interface CharacterQuote {
+    text: string,
+    locationId: string,
+    postNumber: number
+}
+
+export interface Character extends PostCharacter {
+    raceId: string,
+    sex: SelectableSex,
+    equipmentIds: number[],
+    appearance?: string,
+    backstory?: string,
+    secrets?: string,
+    notes?: string,
+    quote?: CharacterQuote
+}
 
 export const sexMapping: Record<SelectableSex, Sex> = {
     ferfi: Sex.MALE,

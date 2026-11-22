@@ -12,7 +12,7 @@ import { heading, headingTitle } from "@/components/CharacterSheet/sheetHeading.
 import GearOverview from "@/components/GearOverview/GearOverview";
 import { sexLabels } from "@/components/MultiStepForm/CreateCharacterForm/CharacterBasicsStep/CharacterBasicsStep";
 import CharacterPortraitFrame from "@/components/MultiStepForm/CreateCharacterForm/CharacterPortraitFrame/CharacterPortraitFrame";
-import { Character } from "@/dummydata/characters";
+import { Character } from "@/lib/character";
 import { findRace } from "@/dummydata/races";
 import { useObjectUrl } from "@/hooks/useObjectUrl";
 import { CharacterActivity } from "@/lib/api/posts/types";

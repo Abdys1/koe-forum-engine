@@ -6,7 +6,7 @@ import { useId, useLayoutEffect, useRef, useState } from "react";
 import Button from "@/components/Button/Button";
 import EditButton from "@/components/EditButton/EditButton";
 import DropdownSelect from "@/components/Inputs/DropdownSelect/DropdownSelect";
-import { CharacterQuote } from "@/dummydata/characters";
+import { CharacterQuote } from "@/lib/character";
 import { locations } from "@/dummydata/locations";
 import { goldLink } from "@/styles/shared.css";
 import * as styles from "./QuoteSection.css";
