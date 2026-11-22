@@ -9,7 +9,7 @@ import SectionHeading from "@/components/atoms/SectionHeading/SectionHeading";
 import TextLink from "@/components/atoms/TextLink/TextLink";
 import BackgroundSlideshow from "@/components/Home/BackgroundSlideshow/BackgroundSlideshow";
 import CharacterTeasers from "@/components/Home/CharacterTeasers/CharacterTeasers";
-import QuickLogin from "@/components/Home/QuickLogin/QuickLogin";
+import QuickLogin from "@/components/organisms/auth/QuickLogin/QuickLogin";
 import Showcase from "@/components/Showcase/Showcase";
 import { activityStats, characterSteps, cities, featuredCharacters, heroSlides, latestActivity, newestCharacter, news } from "@/dummydata/homepage";
 import { metaText } from "@/styles/shared.css";

@@ -1,5 +1,5 @@
 import BackgroundSlideshow from "@/components/Home/BackgroundSlideshow/BackgroundSlideshow";
-import LoginForm from "@/components/LoginForm/LoginForm";
+import LoginForm from "@/components/organisms/auth/LoginForm/LoginForm";
 import { heroSlides } from "@/dummydata/homepage";
 
 import * as styles from "./login.css";
