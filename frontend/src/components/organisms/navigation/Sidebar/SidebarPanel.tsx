@@ -1,7 +1,7 @@
 "use client"
 
 import clsx from "clsx";
-import { MouseEvent, useCallback, useRef, useState } from "react";
+import { MouseEvent, useCallback, useEffect, useRef, useState } from "react";
 
 import Icon from "@/components/atoms/Icon/Icon";
 import { useDismissable } from "@/hooks/useDismissable";
@@ -31,8 +31,15 @@ export default function SidebarPanel(
 
     useDismissable(sidebarRef, isOpen, close);
 
-    const openOnBackgroundClick = (event: MouseEvent<HTMLElement>) => {
-        if (!isOpen && !(event.target as HTMLElement).closest("a, button")) {
+    useEffect(() => {
+        close();
+    }, [pathname, close]);
+
+    const handleClick = (event: MouseEvent<HTMLElement>) => {
+        const target = event.target as HTMLElement;
+        if (isOpen && target.closest("a")) {
+            close();
+        } else if (!isOpen && !target.closest("a, button")) {
             open();
         }
     };
@@ -40,7 +47,7 @@ export default function SidebarPanel(
     return (
         <div className={styles.slot}>
             <aside ref={sidebarRef} className={clsx(styles.sidebar, isOpen && styles.sidebarOpen)}
-                onClick={openOnBackgroundClick}>
+                onClick={handleClick}>
                 {isOpen && (
                     <button type="button" className={styles.collapseBtn} aria-label="Menüsáv összecsukása" onClick={close}>
                         <Icon name="chevron_left" className={styles.collapseIcon}/>
