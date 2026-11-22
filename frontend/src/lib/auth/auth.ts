@@ -6,10 +6,11 @@ import type {
 import type { NextAuthOptions, Session } from "next-auth";
 import { getServerSession } from "next-auth";
 import { JWT } from "next-auth/jwt";
-import { authClient } from "@/lib/api/auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { ApiResponseError } from "@/lib/api/client/api-response.error";
+
+import { authClient } from "@/lib/api/auth";
 import { AuthTokens } from "@/lib/api/auth/types";
+import { ApiResponseError } from "@/lib/api/client/api-response.error";
 
 const ACCESS_TOKEN_MAX_AGE = 60 * 10 * 1000;
 

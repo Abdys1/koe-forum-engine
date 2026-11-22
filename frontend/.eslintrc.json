@@ -1,3 +1,265 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:storybook/recommended"
+  ],
+  "plugins": [
+    "simple-import-sort",
+    "boundaries"
+  ],
+  "settings": {
+    "boundaries/include": [
+      "src/**/*"
+    ],
+    "boundaries/elements": [
+      {
+        "type": "atom",
+        "pattern": "src/components/atoms/*"
+      },
+      {
+        "type": "molecule",
+        "pattern": "src/components/molecules/*"
+      },
+      {
+        "type": "organism",
+        "pattern": "src/components/organisms/*/*"
+      },
+      {
+        "type": "template",
+        "pattern": "src/components/templates/*"
+      },
+      {
+        "type": "feature",
+        "pattern": "src/features/*"
+      },
+      {
+        "type": "hook",
+        "pattern": "src/hooks"
+      },
+      {
+        "type": "style",
+        "pattern": "src/styles"
+      },
+      {
+        "type": "lib",
+        "pattern": "src/lib"
+      },
+      {
+        "type": "app",
+        "pattern": "src/app"
+      }
+    ]
+  },
+  "rules": {
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
+    "boundaries/dependencies": [
+      "error",
+      {
+        "default": "disallow",
+        "message": "A(z) {{ from.element.types.[0] }} szint nem importálhat {{ to.element.types.[0] }} szintről",
+        "policies": [
+          {
+            "from": {
+              "element": {
+                "type": "atom"
+              }
+            },
+            "allow": {
+              "to": {
+                "element": {
+                  "types": [
+                    "atom",
+                    "hook",
+                    "style"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "from": {
+              "element": {
+                "type": "molecule"
+              }
+            },
+            "allow": {
+              "to": {
+                "element": {
+                  "types": [
+                    "atom",
+                    "molecule",
+                    "hook",
+                    "style"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "from": {
+              "element": {
+                "type": "organism"
+              }
+            },
+            "allow": {
+              "to": {
+                "element": {
+                  "types": [
+                    "atom",
+                    "molecule",
+                    "organism",
+                    "feature",
+                    "hook",
+                    "style"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "from": {
+              "element": {
+                "type": "organism"
+              }
+            },
+            "allow": {
+              "to": {
+                "element": {
+                  "type": "lib"
+                }
+              },
+              "dependency": {
+                "kind": "type"
+              }
+            }
+          },
+          {
+            "from": {
+              "element": {
+                "type": "template"
+              }
+            },
+            "allow": {
+              "to": {
+                "element": {
+                  "types": [
+                    "atom",
+                    "molecule",
+                    "organism",
+                    "hook",
+                    "style"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "from": {
+              "element": {
+                "type": "template"
+              }
+            },
+            "allow": {
+              "to": {
+                "element": {
+                  "types": [
+                    "feature",
+                    "lib"
+                  ]
+                }
+              },
+              "dependency": {
+                "kind": "type"
+              }
+            }
+          },
+          {
+            "from": {
+              "element": {
+                "type": "feature"
+              }
+            },
+            "allow": {
+              "to": {
+                "element": {
+                  "types": [
+                    "feature",
+                    "lib",
+                    "hook"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "from": {
+              "element": {
+                "type": "hook"
+              }
+            },
+            "allow": {
+              "to": {
+                "element": {
+                  "type": "hook"
+                }
+              }
+            }
+          },
+          {
+            "from": {
+              "element": {
+                "type": "style"
+              }
+            },
+            "allow": {
+              "to": {
+                "element": {
+                  "type": "style"
+                }
+              }
+            }
+          },
+          {
+            "from": {
+              "element": {
+                "type": "lib"
+              }
+            },
+            "allow": {
+              "to": {
+                "element": {
+                  "type": "lib"
+                }
+              }
+            }
+          },
+          {
+            "from": {
+              "element": {
+                "type": "app"
+              }
+            },
+            "allow": {
+              "to": {
+                "element": {
+                  "types": [
+                    "atom",
+                    "molecule",
+                    "organism",
+                    "template",
+                    "feature",
+                    "hook",
+                    "style",
+                    "lib",
+                    "app"
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
 }

@@ -8,7 +8,7 @@ import Footer from "@/components/Main/Footer";
 import Header from "@/components/Navigation/Header";
 import Sidebar from "@/components/Navigation/Sidebar";
 import { Provider } from "@/components/Provider/Provider";
-import { auth } from "@/app/api/auth/[...nextauth]/auth";
+import { auth } from "@/lib/auth/auth";
 import { socialLinks } from "@/lib/socialLinks";
 
 import * as styles from "./layout.css";

@@ -39,9 +39,12 @@ npx dotenv -e .env.test -- vitest --project integration --no-file-parallelism --
 ### Frontend (`/frontend`)
 
 ```bash
-npm run dev    # Start Next.js dev server (port 3000)
-npm run build  # Production build
-npm run lint   # ESLint
+npm run dev              # Start Next.js dev server (port 3000)
+npm run build            # Production build
+npm run lint             # ESLint (incl. sorted imports and atomic design boundaries)
+npm run test:unit        # Run unit tests once (Vitest, `*.unit.test.ts(x)`)
+npm run storybook        # Start Storybook (port 6006)
+npm run build-storybook  # Static Storybook build
 ```
 
 ## Architecture
@@ -91,9 +94,21 @@ Test helpers are in `__tests__/utils/` and API test clients in `__tests__/client
 Next.js 14 App Router. Authentication via NextAuth.js with a Credentials provider that talks to the backend `/api/auth` endpoints. Tokens from the backend are stored in the NextAuth session and injected as Bearer tokens on outbound API requests.
 
 **Key files:**
-- `src/app/api/auth/[...nextauth]/` — NextAuth configuration
+- `src/lib/auth/auth.ts` — NextAuth configuration (`config`, `auth()`); the route handler stays in `src/app/api/auth/[...nextauth]/route.ts`
 - `src/lib/api/` — HTTP client and auth API client
 - `src/middleware.ts` — route protection via NextAuth
+
+**Atomic design** (refactor in progress; the legacy `src/components/<Name>/` folders are being migrated level by level). Target layout:
+- `src/components/atoms/<Name>/`, `molecules/<Name>/`, `organisms/<domain>/<Name>/`, `templates/<Name>/` — presentation only; each folder holds `<Name>.tsx`, `<Name>.css.ts` and `<Name>.stories.tsx`.
+- `src/features/<domain>/` — business logic without markup: `model/` (types, pure functions), `hooks/`, `actions/` (server actions), `queries/` (server-side data loading).
+- `src/lib/` — infrastructure: API clients, auth config, generic utils. `src/hooks/` — generic UI hooks. `src/styles/` — tokens and global styles.
+- `src/app/` — routing only: pages load data via `features/*/queries` and render a template.
+
+The levels are enforced by `boundaries/dependencies` in `frontend/.eslintrc.json`: a level only imports lower levels; atoms and molecules are domain-agnostic (no `features`, `lib`, dummy data or server actions); organisms may use `features` and only *type* imports from `lib`; features never import components; lib only imports lib. Files outside the classified folders are not checked yet.
+
+### Frontend Tests
+
+Vitest (`frontend/vitest.config.mts`), unit tests only, co-located as `*.unit.test.ts(x)`. Business logic is tested through pure functions in `features/*/model` (shared fixtures in `__fixtures__/`). Every new atom, molecule and organism gets a Storybook story.
 
 ## Environment
 
@@ -103,7 +118,8 @@ Backend dev uses `.env`, tests use `.env.test`. Frontend uses `.env.local`. The 
 
 After every code change, run the unit tests to verify nothing is broken:
 ```bash
-npx dotenv -e .env.test -- vitest --project unit --run
+npx dotenv -e .env.test -- vitest --project unit --run   # backend
+npm run test:unit && npm run lint                          # frontend
 ```
 
 ## Code Style

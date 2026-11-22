@@ -1,7 +1,7 @@
 import SidebarPanel from "@/components/Navigation/SidebarPanel";
 import { characterClient } from "@/lib/api/character";
 import { CharacterDetails } from "@/lib/api/character/types";
-import { auth } from "@/app/api/auth/[...nextauth]/auth";
+import { auth } from "@/lib/auth/auth";
 
 export default async function Sidebar() {
     const session = await auth();

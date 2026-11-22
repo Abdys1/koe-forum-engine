@@ -3,7 +3,7 @@
 import { getServerSession } from "next-auth";
 
 import { userClient } from "@/lib/api/user";
-import { config } from "@/app/api/auth/[...nextauth]/auth";
+import { config } from "@/lib/auth/auth";
 
 export type SelectActiveCharacterResult = { success: boolean };
 

@@ -6,7 +6,7 @@ import { getServerSession } from "next-auth";
 import { characterClient } from "@/lib/api/character";
 import { CreateCharacterRequest, ErrorCode, Sex, ValidationErrors } from "@/lib/api/character/types";
 import { ApiResponseError } from "@/lib/api/client/api-response.error";
-import { config } from "@/app/api/auth/[...nextauth]/auth";
+import { config } from "@/lib/auth/auth";
 
 export type CreateCharacterResult =
     | { success: true, characterId: number }
