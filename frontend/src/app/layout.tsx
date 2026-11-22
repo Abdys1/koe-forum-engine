@@ -4,10 +4,10 @@ import 'material-icons/iconfont/material-icons.css';
 import type { Metadata } from "next";
 
 import { caveat, cinzel, cinzelDecorative,mrsSaintDelafield, pirataOne, poppins, roboto, splash, sumana } from "@/app/fonts";
-import Footer from "@/components/Main/Footer";
-import Header from "@/components/Navigation/Header";
-import SidebarPanel from "@/components/Navigation/SidebarPanel";
-import { Provider } from "@/components/Provider/Provider";
+import { Provider } from "@/app/Provider";
+import Footer from "@/components/organisms/navigation/Footer/Footer";
+import Header from "@/components/organisms/navigation/Header/Header";
+import Sidebar from "@/components/organisms/navigation/Sidebar/Sidebar";
 import { getOwnCharacters } from "@/features/character/queries/getOwnCharacters";
 import { socialLinks } from "@/features/community/model/socialLinks";
 import { auth } from "@/lib/auth/auth";
@@ -31,7 +31,7 @@ export default async function RootLayout({
         <Provider session={session}>
           <Header />
           <div className={styles.body}>
-            <SidebarPanel characters={characters} />
+            <Sidebar characters={characters} />
             <div className={styles.content}>{ children }</div>
           </div>
           <Footer socialLinks={socialLinks} />

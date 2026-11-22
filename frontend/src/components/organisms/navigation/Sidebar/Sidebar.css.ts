@@ -6,10 +6,19 @@ const COLLAPSED_WIDTH = '4.5rem';
 const OPEN_WIDTH = '36rem';
 const AVATAR_SIZE = '5.75rem';
 const AVATAR_BORDER_WIDTH = '3px';
+const WIDTH_TRANSITION_DURATION = '0.3s';
 
 const surfaceTint = (alpha: number) => withAlpha(colors.cardMediumBg, alpha);
 const goldTint = (alpha: number) => withAlpha(colors.secondary, alpha);
 const neutralHighlight = colors.neutralHighlight;
+
+const tileAppear = keyframes({
+  from: { opacity: 0, transform: 'scale(0.96)' },
+  to: { opacity: 1, transform: 'scale(1)' },
+});
+
+const appearAfterOpening = `${tileAppear} 0.25s ease-out ${WIDTH_TRANSITION_DURATION} backwards`;
+
 const neutralFadeRight = `linear-gradient(to right, ${neutralHighlight} 0%, ${colors.cardMediumBg} 70%, ${colors.cardMediumBg} 100%)`;
 
 export const slot = style({
@@ -31,7 +40,7 @@ export const sidebar = style({
   WebkitBackdropFilter: 'blur(14px)',
   boxShadow: '4px 0 24px -12px rgba(0,0,0,0.8)',
   cursor: 'pointer',
-  transition: 'width 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
+  transition: `width ${WIDTH_TRANSITION_DURATION} ease-in-out, box-shadow ${WIDTH_TRANSITION_DURATION} ease-in-out`,
   selectors: {
     '&::after': {
       content: '""',
@@ -143,9 +152,11 @@ export const characterInfo = style({
   display: 'flex',
   flexDirection: 'column',
   gap: '0.6rem',
+  flexShrink: 0,
   width: '16rem',
   minWidth: 0,
   marginLeft: `calc(${COLLAPSED_WIDTH} + ${AVATAR_SIZE} / 2 + 2.25rem)`,
+  animation: appearAfterOpening,
 });
 
 export const characterName = style({
@@ -201,6 +212,7 @@ export const characterSwitch = style({
   flexDirection: 'column',
   gap: '0.35rem',
   padding: '0 1rem',
+  animation: appearAfterOpening,
 });
 
 export const characterSwitchLabel = style({
@@ -305,11 +317,6 @@ export const tileGrid = style({
   gridTemplateColumns: 'repeat(4, 1fr)',
   gap: '0.75rem',
   width: `calc(${OPEN_WIDTH} - 2.5rem)`,
-});
-
-const tileAppear = keyframes({
-  from: { opacity: 0, transform: 'scale(0.96)' },
-  to: { opacity: 1, transform: 'scale(1)' },
 });
 
 const tileGlow = (alpha: number) => `radial-gradient(circle at 50% 38%, rgba(255,255,255,${alpha}) 0%, transparent 45%)`;
