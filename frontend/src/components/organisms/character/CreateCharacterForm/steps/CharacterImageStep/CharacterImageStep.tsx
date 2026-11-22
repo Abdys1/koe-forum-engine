@@ -7,14 +7,15 @@ import { useWatch } from "react-hook-form";
 import Button from "@/components/atoms/Button/Button";
 import PortraitFrame from "@/components/atoms/PortraitFrame/PortraitFrame";
 import SectionHeading from "@/components/atoms/SectionHeading/SectionHeading";
-import { stepContent, stepIntro } from "@/components/MultiStepForm/CreateCharacterForm/characterStep.css";
-import { useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFormContext";
+import { stepContent, stepIntro } from "@/components/organisms/character/CreateCharacterForm/steps/characterStep.css";
+import { useMultiStepFormContext } from "@/components/organisms/form/MultiStepForm/MultiStepFormContext";
+import type { CharacterInputs } from "@/features/character/model/createCharacter";
 import { useObjectUrl } from "@/hooks/useObjectUrl";
 
 import * as styles from "./CharacterImageStep.css";
 
 export default function CharacterImageStep() {
-    const formContext = useMultiStepFormContext();
+    const formContext = useMultiStepFormContext<CharacterInputs>();
     const { register, control } = formContext.form;
     const images: FileList | undefined = useWatch({ control, name: "characterImg" });
     const characterImage = useObjectUrl(images?.[0]);

@@ -1,4 +1,4 @@
-import CreateCharacterForm from "@/components/MultiStepForm/CreateCharacterForm/CreateCharacterForm/CreateCharacterForm";
+import CreateCharacterForm from "@/components/organisms/character/CreateCharacterForm/CreateCharacterForm";
 import { getEquipmentCatalogData } from "@/features/equipment/queries/getEquipmentCatalogData";
 
 import * as styles from "./create.css";

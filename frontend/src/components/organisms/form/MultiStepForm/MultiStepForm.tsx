@@ -1,21 +1,22 @@
 import clsx from "clsx";
 import React, { useState } from "react";
-import { SubmitHandler, UseFormReturn } from "react-hook-form";
+import { FieldValues, SubmitHandler, UseFormReturn } from "react-hook-form";
 
 import MultiStepNavButton from "@/components/molecules/MultiStepNavButton/MultiStepNavButton";
-import MultiStepBar from "@/components/MultiStepForm/MultiStepBar/MultiStepBar";
-import { FormContextState, MultiStepFormContext, useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFormContext";
+import MultiStepBar from "@/components/organisms/form/MultiStepForm/MultiStepBar";
+import { FormContextState, MultiStepFormContext, useMultiStepFormContext } from "@/components/organisms/form/MultiStepForm/MultiStepFormContext";
 
 import * as styles from "./MultiStepForm.css";
+import { canReturnToSummary } from "./stepNavigation";
 
-interface MultiStepFormProps {
-    form: UseFormReturn<any, any, undefined>,
+interface MultiStepFormProps<Values extends FieldValues> {
+    form: UseFormReturn<Values>,
     header?: React.ReactNode,
-    onSubmit: SubmitHandler<any>,
+    onSubmit: SubmitHandler<Values>,
     children: React.ReactElement<StepProps>[]
 }
 
-function MultiStepForm({ form, header, onSubmit, children }: MultiStepFormProps) {
+function MultiStepForm<Values extends FieldValues>({ form, header, onSubmit, children }: MultiStepFormProps<Values>) {
     const [actualStep, setActualStep] = useState(0);
     const [summaryReached, setSummaryReached] = useState(false);
     const lastStep = React.Children.count(children) - 1;
@@ -35,9 +36,8 @@ function MultiStepForm({ form, header, onSubmit, children }: MultiStepFormProps)
 
     const steps: string[] = React.Children.map(children, child => child.props.label);
     const stepsComplete: boolean[] = React.Children.map(children, child => child.props.complete ?? child.props.canProceed ?? true);
-    const canReturnToSummary = summaryReached && actualStep < lastStep && stepsComplete.slice(actualStep, lastStep).every(Boolean);
 
-    const formState: FormContextState = {
+    const formState: FormContextState<Values> = {
         form,
         steps,
         actualStep,
@@ -45,12 +45,12 @@ function MultiStepForm({ form, header, onSubmit, children }: MultiStepFormProps)
         onPrevStep: prevStep,
         onNextStep: nextStep,
         goToStep,
-        canReturnToSummary,
+        canReturnToSummary: canReturnToSummary(summaryReached, actualStep, stepsComplete),
         onSubmit: form.handleSubmit(onSubmit)
     };
 
     return (
-        <MultiStepFormContext.Provider value={formState}>
+        <MultiStepFormContext.Provider value={formState as unknown as FormContextState}>
             {React.Children.map(children, (child, i) => {
                 if (i === actualStep) return child;
             })}

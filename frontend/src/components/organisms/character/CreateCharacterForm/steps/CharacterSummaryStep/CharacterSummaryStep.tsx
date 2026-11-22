@@ -8,8 +8,9 @@ import PortraitFrame from "@/components/atoms/PortraitFrame/PortraitFrame";
 import SectionHeading from "@/components/atoms/SectionHeading/SectionHeading";
 import SocialIcon from "@/components/atoms/SocialIcon/SocialIcon";
 import GearOverview from "@/components/GearOverview/GearOverview";
-import { stepContent, stepIntro } from "@/components/MultiStepForm/CreateCharacterForm/characterStep.css";
-import { useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFormContext";
+import { stepContent, stepIntro } from "@/components/organisms/character/CreateCharacterForm/steps/characterStep.css";
+import { useMultiStepFormContext } from "@/components/organisms/form/MultiStepForm/MultiStepFormContext";
+import type { CharacterInputs } from "@/features/character/model/createCharacter";
 import { SelectableSex, sexLabels } from "@/features/character/model/sex";
 import { findSocialLink } from "@/features/community/model/socialLinks";
 import { GearOverviewRoot } from "@/features/equipment/model/gearOverview";
@@ -24,7 +25,7 @@ type CharacterSummaryStepProps = {
 const discord = findSocialLink("discord");
 
 export default function CharacterSummaryStep({ gearOverview }: CharacterSummaryStepProps) {
-    const { form, steps, goToStep } = useMultiStepFormContext();
+    const { form, steps, goToStep } = useMultiStepFormContext<CharacterInputs>();
     const { getValues } = form;
 
     const characterName: string = getValues("characterName");

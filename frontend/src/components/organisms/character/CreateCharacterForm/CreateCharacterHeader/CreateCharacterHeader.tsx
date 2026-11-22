@@ -1,9 +1,9 @@
 import { Control } from "react-hook-form";
 
 import PageHeading from "@/components/atoms/PageHeading/PageHeading";
-import CharacterPreview from "@/components/MultiStepForm/CreateCharacterForm/CharacterPreview/CharacterPreview";
-import MultiStepBar from "@/components/MultiStepForm/MultiStepBar/MultiStepBar";
-import { useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFormContext";
+import CharacterPreview from "@/components/organisms/character/CreateCharacterForm/CharacterPreview/CharacterPreview";
+import MultiStepBar from "@/components/organisms/form/MultiStepForm/MultiStepBar";
+import { useMultiStepFormContext } from "@/components/organisms/form/MultiStepForm/MultiStepFormContext";
 import type { CharacterInputs } from "@/features/character/model/createCharacter";
 
 import * as styles from "./CreateCharacterHeader.css";
@@ -13,7 +13,7 @@ type CreateCharacterHeaderProps = {
 }
 
 export default function CreateCharacterHeader({ control }: CreateCharacterHeaderProps) {
-    const { steps, actualStep } = useMultiStepFormContext();
+    const { steps, actualStep } = useMultiStepFormContext<CharacterInputs>();
     const isSummaryStep = actualStep === steps.length - 1;
 
     return (

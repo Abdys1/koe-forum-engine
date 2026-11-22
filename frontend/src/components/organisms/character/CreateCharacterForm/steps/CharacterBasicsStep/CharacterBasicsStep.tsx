@@ -6,13 +6,14 @@ import { useId, useState } from "react";
 import Button from "@/components/atoms/Button/Button";
 import Icon from "@/components/atoms/Icon/Icon";
 import SectionHeading from "@/components/atoms/SectionHeading/SectionHeading";
-import { useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFormContext";
+import { useMultiStepFormContext } from "@/components/organisms/form/MultiStepForm/MultiStepFormContext";
+import type { CharacterInputs } from "@/features/character/model/createCharacter";
 import { SelectableSex, sexOptions } from "@/features/character/model/sex";
 
 import * as styles from "./CharacterBasicsStep.css";
 
 export default function CharacterBasicsStep() {
-    const formContext = useMultiStepFormContext();
+    const formContext = useMultiStepFormContext<CharacterInputs>();
     const { register, getValues, setValue, trigger, formState: { errors } } = formContext.form;
     const nameInputId = useId();
     const nameErrorId = useId();

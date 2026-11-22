@@ -4,8 +4,10 @@ import clsx from "clsx";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useWatch } from "react-hook-form";
 
-import CharacterRaceBtn from "@/components/MultiStepForm/CreateCharacterForm/CharacterRaceBtn/CharacterRaceBtn";
-import { useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFormContext";
+import Icon from "@/components/atoms/Icon/Icon";
+import CharacterRaceBtn from "@/components/organisms/character/CreateCharacterForm/steps/CharacterRaceBtn/CharacterRaceBtn";
+import { useMultiStepFormContext } from "@/components/organisms/form/MultiStepForm/MultiStepFormContext";
+import type { CharacterInputs } from "@/features/character/model/createCharacter";
 import { races, SelectableRace } from "@/features/character/model/race";
 
 import * as styles from "./CharacterRaceFilmstrip.css";
@@ -14,7 +16,7 @@ const DRAG_THRESHOLD = 5;
 const SCROLL_EDGE_TOLERANCE = 1;
 
 export default function CharacterRaceFilmstrip() {
-    const { control, register, setValue } = useMultiStepFormContext().form;
+    const { control, register, setValue } = useMultiStepFormContext<CharacterInputs>().form;
     const selectedRaceId: string = useWatch({ control, name: "raceId" });
 
     const [canScrollPrev, setCanScrollPrev] = useState(false);
@@ -103,8 +105,8 @@ export default function CharacterRaceFilmstrip() {
     return (
         <div className={styles.filmstrip}>
             <button type="button" aria-label="Előző fajok" disabled={!canScrollPrev}
-                className={clsx("material-icons", styles.scrollBtn)} onClick={() => scrollTrack(-1)}>
-                chevron_left
+                className={styles.scrollBtn} onClick={() => scrollTrack(-1)}>
+                <Icon name="chevron_left" className={styles.scrollIcon}/>
             </button>
             <ul ref={trackRef} aria-label="Választható fajok"
                 className={clsx(styles.track, {
@@ -128,8 +130,8 @@ export default function CharacterRaceFilmstrip() {
                 ))}
             </ul>
             <button type="button" aria-label="Következő fajok" disabled={!canScrollNext}
-                className={clsx("material-icons", styles.scrollBtn)} onClick={() => scrollTrack(1)}>
-                chevron_right
+                className={styles.scrollBtn} onClick={() => scrollTrack(1)}>
+                <Icon name="chevron_right" className={styles.scrollIcon}/>
             </button>
             <input type="hidden" {...register("raceId")}/>
             <input type="hidden" {...register("raceTitle")}/>

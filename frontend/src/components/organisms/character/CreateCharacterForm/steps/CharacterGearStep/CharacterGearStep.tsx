@@ -7,9 +7,10 @@ import GearTypeIcon from "@/components/atoms/GearTypeIcon/GearTypeIcon";
 import SectionHeading from "@/components/atoms/SectionHeading/SectionHeading";
 import SlotPips from "@/components/atoms/SlotPips/SlotPips";
 import GearItemCard from "@/components/molecules/GearItemCard/GearItemCard";
-import { stepContent, stepIntro } from "@/components/MultiStepForm/CreateCharacterForm/characterStep.css";
-import GearSlotTracker, { GEAR_CATALOG_ID, gearTabId } from "@/components/MultiStepForm/CreateCharacterForm/GearSlotTracker/GearSlotTracker";
-import { useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFormContext";
+import { stepContent, stepIntro } from "@/components/organisms/character/CreateCharacterForm/steps/characterStep.css";
+import GearSlotTracker, { GEAR_CATALOG_ID, gearTabId } from "@/components/organisms/character/CreateCharacterForm/steps/GearSlotTracker/GearSlotTracker";
+import { useMultiStepFormContext } from "@/components/organisms/form/MultiStepForm/MultiStepFormContext";
+import type { CharacterInputs } from "@/features/character/model/createCharacter";
 import { EquipmentCatalog } from "@/features/equipment/model/equipmentCatalog";
 import { applySelection } from "@/features/equipment/model/selection";
 
@@ -22,7 +23,7 @@ type CharacterGearStepProps = {
 }
 
 export default function CharacterGearStep({ equipmentCatalog }: CharacterGearStepProps) {
-    const { control, setValue } = useMultiStepFormContext().form;
+    const { control, setValue } = useMultiStepFormContext<CharacterInputs>().form;
     const selectedIds: number[] = useWatch({ control, name: "equipmentIds" }) ?? EMPTY_SELECTION;
     const equipmentTypeRoots = equipmentCatalog.getEquipmentTypeRoots();
 

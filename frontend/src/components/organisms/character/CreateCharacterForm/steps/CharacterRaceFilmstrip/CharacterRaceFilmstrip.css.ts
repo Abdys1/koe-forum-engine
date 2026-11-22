@@ -75,3 +75,7 @@ export const scrollBtn = style({
     },
   },
 });
+
+export const scrollIcon = style({
+  fontSize: 'inherit',
+});
