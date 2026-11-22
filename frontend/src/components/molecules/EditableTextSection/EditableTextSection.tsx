@@ -6,7 +6,8 @@ import { useId, useState } from "react";
 import Button from "@/components/atoms/Button/Button";
 import Icon from "@/components/atoms/Icon/Icon";
 import IconButton from "@/components/atoms/IconButton/IconButton";
-import { heading, headingAction, headingTitle } from "@/components/CharacterSheet/sheetHeading.css";
+import PanelHeading from "@/components/molecules/PanelHeading/PanelHeading";
+import { splitParagraphs } from "@/utils/text";
 
 import * as styles from "./EditableTextSection.css";
 
@@ -31,7 +32,7 @@ export default function EditableTextSection({ title, value, emptyText, info, edi
     const [draft, setDraft] = useState("");
     const draftLength = draft.trim().length;
     const isTooShort = draftLength < minLength;
-    const paragraphs = value?.trim() ? value.trim().split(/\n\s*\n/) : [];
+    const paragraphs = splitParagraphs(value);
 
     function startEditing(): void {
         setDraft(value ?? "");
@@ -46,14 +47,9 @@ export default function EditableTextSection({ title, value, emptyText, info, edi
 
     return (
         <section className={className} aria-labelledby={titleId}>
-            <div className={heading}>
-                <h2 id={titleId} className={headingTitle}>{title}</h2>
-                {canEdit && !isEditing &&
-                    <span className={headingAction}>
-                        <IconButton icon="edit" label={`${title} szerkesztése`} onClick={startEditing}/>
-                    </span>
-                }
-            </div>
+            <PanelHeading id={titleId} title={title} action={canEdit && !isEditing &&
+                <IconButton icon="edit" label={`${title} szerkesztése`} onClick={startEditing}/>
+            }/>
             {info &&
                 <p className={styles.info}>
                     <Icon name="lock" className={styles.infoIcon}/>

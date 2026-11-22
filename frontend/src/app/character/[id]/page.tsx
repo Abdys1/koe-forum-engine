@@ -1,4 +1,4 @@
-import CharacterSheet from "@/components/CharacterSheet/CharacterSheet/CharacterSheet";
+import CharacterSheet from "@/components/organisms/character/CharacterSheet/CharacterSheet";
 import { getCharacterSheet } from "@/features/character/queries/getCharacterSheet";
 
 import * as styles from "./character.css";

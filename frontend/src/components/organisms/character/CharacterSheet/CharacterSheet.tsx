@@ -1,24 +1,22 @@
 'use client'
 
 import Image from "next/image";
-import { useId, useRef, useState } from "react";
 
-import Button from "@/components/atoms/Button/Button";
 import Eyebrow from "@/components/atoms/Eyebrow/Eyebrow";
-import PortraitFrame from "@/components/atoms/PortraitFrame/PortraitFrame";
-import ActiveGames from "@/components/CharacterSheet/ActiveGames/ActiveGames";
-import CharacterActivityPanel from "@/components/CharacterSheet/CharacterActivityPanel/CharacterActivityPanel";
-import EditableTextSection from "@/components/CharacterSheet/EditableTextSection/EditableTextSection";
-import FollowToggle from "@/components/CharacterSheet/FollowToggle/FollowToggle";
-import QuoteSection from "@/components/CharacterSheet/QuoteSection/QuoteSection";
-import { heading, headingTitle } from "@/components/CharacterSheet/sheetHeading.css";
-import GearOverview from "@/components/GearOverview/GearOverview";
+import EditableTextSection from "@/components/molecules/EditableTextSection/EditableTextSection";
+import PanelHeading from "@/components/molecules/PanelHeading/PanelHeading";
+import ActiveGames from "@/components/organisms/character/CharacterSheet/ActiveGames/ActiveGames";
+import CharacterActivityPanel from "@/components/organisms/character/CharacterSheet/CharacterActivityPanel/CharacterActivityPanel";
+import CharacterSheetPortrait from "@/components/organisms/character/CharacterSheet/CharacterSheetPortrait";
+import FollowToggle from "@/components/organisms/character/CharacterSheet/FollowToggle/FollowToggle";
+import QuoteSection from "@/components/organisms/character/CharacterSheet/QuoteSection/QuoteSection";
+import GearOverview from "@/components/organisms/equipment/GearOverview/GearOverview";
+import { useCharacterSheetDraft } from "@/features/character/hooks/useCharacterSheetDraft";
 import { Character } from "@/features/character/model/character";
 import { findRace } from "@/features/character/model/race";
 import { sexLabels } from "@/features/character/model/sex";
 import { GearOverviewRoot } from "@/features/equipment/model/gearOverview";
-import { useObjectUrl } from "@/hooks/useObjectUrl";
-import { CharacterActivity } from "@/lib/api/posts/types";
+import type { CharacterActivity } from "@/lib/api/posts/types";
 import { visuallyHidden } from "@/styles/shared.css";
 
 import * as styles from "./CharacterSheet.css";
@@ -32,15 +30,8 @@ type CharacterSheetProps = {
 }
 
 export default function CharacterSheet({ character, activity, gearOverview, canEdit, canViewPrivate }: CharacterSheetProps) {
-    const imageInputId = useId();
-    const imageInputRef = useRef<HTMLInputElement>(null);
-    const [imageFile, setImageFile] = useState<File>();
-    const [appearance, setAppearance] = useState(character.appearance);
-    const [backstory, setBackstory] = useState(character.backstory);
-    const [secrets, setSecrets] = useState(character.secrets);
-    const [notes, setNotes] = useState(character.notes);
-    const [quote, setQuote] = useState(character.quote);
-    const imageUrl = useObjectUrl(imageFile) ?? character.imageUrl;
+    const { imageUrl, changeImage, appearance, setAppearance, backstory, setBackstory, secrets, setSecrets, notes, setNotes, quote, setQuote }
+        = useCharacterSheetDraft(character);
 
     return (
         <article className={styles.sheet} aria-labelledby="character-name">
@@ -49,20 +40,7 @@ export default function CharacterSheet({ character, activity, gearOverview, canE
             </div>
 
             <header className={styles.hero}>
-                {canEdit
-                    ? <div className={styles.portraitColumn}>
-                        <PortraitFrame htmlFor={imageInputId} imageUrl={imageUrl} imageAlt={character.name} size="large"
-                            overlay={{ icon: "swap_horiz", text: "Kép cseréje" }}/>
-                        <Button variant="soft" size="small" icon="swap_horiz" title="Kép cseréje"
-                            onClick={() => imageInputRef.current?.click()}/>
-                        <input ref={imageInputRef} id={imageInputId} type="file" accept="image/png, image/jpeg"
-                            className={visuallyHidden} tabIndex={-1}
-                            onChange={event => event.target.files?.[0] && setImageFile(event.target.files[0])}/>
-                      </div>
-                    : <div className={styles.portrait}>
-                        <Image src={imageUrl} alt={character.name} fill sizes="272px" className={styles.portraitImg} priority/>
-                      </div>
-                }
+                <CharacterSheetPortrait name={character.name} imageUrl={imageUrl} canEdit={canEdit} onChangeImage={changeImage}/>
 
                 <div className={styles.heroMain}>
                     <div className={styles.identity}>
@@ -87,9 +65,7 @@ export default function CharacterSheet({ character, activity, gearOverview, canE
                         <CharacterActivityPanel activity={activity}/>
 
                         <section className={styles.gear} aria-labelledby="character-gear-title">
-                            <div className={heading}>
-                                <h2 id="character-gear-title" className={headingTitle}>Felszerelés</h2>
-                            </div>
+                            <PanelHeading id="character-gear-title" title="Felszerelés"/>
                             <GearOverview roots={gearOverview} emptyText="Nincs felszerelés" variant="tinted"/>
                         </section>
                     </div>

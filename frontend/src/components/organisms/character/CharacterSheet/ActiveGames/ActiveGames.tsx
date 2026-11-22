@@ -1,9 +1,9 @@
 import Link from "next/link";
 
 import TextLink from "@/components/atoms/TextLink/TextLink";
-import { heading, headingTitle } from "@/components/CharacterSheet/sheetHeading.css";
+import PanelHeading from "@/components/molecules/PanelHeading/PanelHeading";
 import { findLocation, locationHref } from "@/features/forum/model/location";
-import { CharacterGame } from "@/lib/api/posts/types";
+import type { CharacterGame } from "@/lib/api/posts/types";
 import { formatShortDate } from "@/utils/dateFormat";
 
 import * as styles from "./ActiveGames.css";
@@ -16,9 +16,7 @@ type ActiveGamesProps = {
 export default function ActiveGames({ games, className }: ActiveGamesProps) {
     return (
         <section className={className} aria-labelledby="character-games-title">
-            <div className={heading}>
-                <h2 id="character-games-title" className={headingTitle}>Futó játékai</h2>
-            </div>
+            <PanelHeading id="character-games-title" title="Futó játékai"/>
             {games.length > 0
                 ? <ul className={styles.list}>
                     {games.map(game => {

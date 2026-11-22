@@ -5,7 +5,7 @@ import Link from "next/link";
 import Button from "@/components/atoms/Button/Button";
 import TextLink from "@/components/atoms/TextLink/TextLink";
 import { findLocation, locationHref } from "@/features/forum/model/location";
-import { CharacterActivity } from "@/lib/api/posts/types";
+import type { CharacterActivity } from "@/lib/api/posts/types";
 import { formatLongDate } from "@/utils/dateFormat";
 
 import * as styles from "./CharacterActivityPanel.css";
