@@ -1,17 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
-import { equipmentCatalogData } from "@/features/equipment/model/__fixtures__/equipmentCatalogData";
-import { buildEquipmentCatalog } from "@/features/equipment/model/equipmentCatalog";
-import { toGearOverview } from "@/features/equipment/model/gearOverview";
+import { gearOverviewFor } from "@/features/equipment/model/__fixtures__/gearOverview";
 
 import GearOverview from "./GearOverview";
 
-const catalog = buildEquipmentCatalog(equipmentCatalogData);
-const overview = (selectedIds: number[]) => toGearOverview(catalog.getEquipmentTypeRoots(), catalog.getSlotPoolUsages(selectedIds));
-
 const meta = {
     component: GearOverview,
-    args: { roots: overview([100, 100, 102, 103]) },
+    args: { roots: gearOverviewFor([100, 100, 102, 103]) },
     decorators: [Story => <div style={{ width: "36rem" }}><Story /></div>],
 } satisfies Meta<typeof GearOverview>;
 
@@ -23,4 +18,4 @@ export const Card: Story = {};
 
 export const Tinted: Story = { args: { variant: "tinted" } };
 
-export const Empty: Story = { args: { roots: overview([]), emptyText: "Nincs felszerelés" } };
+export const Empty: Story = { args: { roots: gearOverviewFor([]), emptyText: "Nincs felszerelés" } };

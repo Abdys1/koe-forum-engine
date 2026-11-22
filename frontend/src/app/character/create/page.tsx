@@ -1,14 +1,13 @@
 import CreateCharacterForm from "@/components/organisms/character/CreateCharacterForm/CreateCharacterForm";
+import CreateCharacterTemplate from "@/components/templates/CreateCharacterTemplate/CreateCharacterTemplate";
 import { getEquipmentCatalogData } from "@/features/equipment/queries/getEquipmentCatalogData";
-
-import * as styles from "./create.css";
 
 export default async function CharacterCreatePage() {
     const equipmentCatalogData = await getEquipmentCatalogData();
 
     return (
-        <section className={styles.page}>
+        <CreateCharacterTemplate>
             <CreateCharacterForm equipmentCatalogData={equipmentCatalogData}/>
-        </section>
+        </CreateCharacterTemplate>
     );
-};
+}

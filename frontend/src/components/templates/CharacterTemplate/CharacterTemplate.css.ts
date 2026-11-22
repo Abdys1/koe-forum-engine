@@ -1,7 +1,7 @@
 import { style } from '@vanilla-extract/css';
 
 import { mainBg } from '@/styles/shared.css';
-import { colors, fonts, media } from '@/styles/tokens';
+import { media } from '@/styles/tokens';
 
 export const page = style([mainBg, {
   width: '100%',
@@ -13,10 +13,3 @@ export const page = style([mainBg, {
     },
   },
 }]);
-
-export const notFound = style({
-  padding: '4rem 2rem',
-  fontFamily: fonts.cinzel,
-  textAlign: 'center',
-  color: colors.white,
-});

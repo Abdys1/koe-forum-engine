@@ -1,12 +1,6 @@
 import { style } from '@vanilla-extract/css';
 
-import { mainBg } from '@/styles/shared.css';
-import { alphaColors, colors, fonts, shadows } from '@/styles/tokens';
-
-export const page = style([mainBg, {
-  width: '100%',
-  minHeight: '100vh',
-}]);
+import { alphaColors, colors, fonts, shadows, withAlpha } from '@/styles/tokens';
 
 export const hero = style({
   position: 'relative',
@@ -23,7 +17,7 @@ export const hero = style({
       content: '""',
       position: 'absolute',
       inset: 0,
-      background: `linear-gradient(to bottom, rgba(18,19,21,0.4) 0%, ${alphaColors.pageDarkVeil} 60%, ${colors.pageDarkBg} 100%)`,
+      background: `linear-gradient(to bottom, ${withAlpha(colors.pageDarkBg, 0.4)} 0%, ${alphaColors.pageDarkVeil} 60%, ${colors.pageDarkBg} 100%)`,
     },
   },
 });
@@ -53,19 +47,6 @@ export const locationName = style({
 export const description = style({
   maxWidth: '40rem',
   fontFamily: fonts.poppins,
-  color: 'rgba(255,255,255,0.85)',
+  color: withAlpha(colors.white, 0.85),
   textShadow: shadows.text,
-});
-
-export const stream = style({
-  position: 'relative',
-  paddingBottom: '4rem',
-  background: `linear-gradient(to bottom, ${colors.pageDarkBg} 0, ${alphaColors.pageDarkVeil} 8rem, transparent 18rem, transparent calc(100% - 18rem), ${alphaColors.pageDarkVeil} calc(100% - 8rem), ${colors.pageDarkBg} 100%)`,
-});
-
-export const notFound = style({
-  padding: '4rem 2rem',
-  fontFamily: fonts.cinzel,
-  textAlign: 'center',
-  color: colors.white,
 });

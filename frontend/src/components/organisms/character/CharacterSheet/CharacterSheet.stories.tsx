@@ -1,12 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
-import { equipmentCatalogData } from "@/features/equipment/model/__fixtures__/equipmentCatalogData";
-import { buildEquipmentCatalog } from "@/features/equipment/model/equipmentCatalog";
-import { toGearOverview } from "@/features/equipment/model/gearOverview";
+import { gearOverviewFor } from "@/features/equipment/model/__fixtures__/gearOverview";
 
 import CharacterSheet from "./CharacterSheet";
-
-const catalog = buildEquipmentCatalog(equipmentCatalogData);
 
 const meta = {
     component: CharacterSheet,
@@ -28,7 +24,7 @@ const meta = {
                 { title: "Egy pohár rum", locationId: "fogado-a-feher-siralyhoz", postCount: 14, lastPostAt: "2026-11-01T18:30:00.000Z" },
             ],
         },
-        gearOverview: toGearOverview(catalog.getEquipmentTypeRoots(), catalog.getSlotPoolUsages([100, 103])),
+        gearOverview: gearOverviewFor([100, 103]),
         canEdit: false,
         canViewPrivate: false,
     },

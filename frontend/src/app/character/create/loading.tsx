@@ -1,9 +1,10 @@
-import * as styles from "./create.css";
+import StatusMessage from "@/components/molecules/StatusMessage/StatusMessage";
+import CreateCharacterTemplate from "@/components/templates/CreateCharacterTemplate/CreateCharacterTemplate";
 
 export default function CharacterCreateLoading() {
     return (
-        <section className={styles.page}>
-            <p className={styles.status} role="status">Betöltés…</p>
-        </section>
+        <CreateCharacterTemplate>
+            <StatusMessage role="status">Betöltés…</StatusMessage>
+        </CreateCharacterTemplate>
     );
 }

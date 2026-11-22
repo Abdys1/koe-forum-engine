@@ -7,7 +7,7 @@ import { equipmentCatalogData } from "@/features/equipment/model/__fixtures__/eq
 
 import CreateCharacterWizard from "./CreateCharacterWizard";
 
-function CreateCharacterWizardDemo({ onSubmit }: { onSubmit: (values: CharacterInputs) => void }) {
+export function CreateCharacterWizardDemo({ onSubmit }: { onSubmit: (values: CharacterInputs) => void }) {
     const creation = useCharacterCreation(equipmentCatalogData);
     return <CreateCharacterWizard creation={creation} onSubmit={onSubmit}/>;
 }
@@ -15,6 +15,7 @@ function CreateCharacterWizardDemo({ onSubmit }: { onSubmit: (values: CharacterI
 const meta = {
     title: "organisms/character/CreateCharacterWizard",
     component: CreateCharacterWizardDemo,
+    excludeStories: ["CreateCharacterWizardDemo"],
     args: { onSubmit: fn() },
     parameters: { layout: "fullscreen" },
 } satisfies Meta<typeof CreateCharacterWizardDemo>;
