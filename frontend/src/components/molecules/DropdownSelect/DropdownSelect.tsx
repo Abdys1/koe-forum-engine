@@ -1,9 +1,10 @@
 "use client"
 
 import clsx from "clsx";
-import { KeyboardEvent, ReactNode, useEffect, useId, useRef, useState } from "react";
+import { KeyboardEvent, ReactNode, useCallback, useEffect, useId, useRef, useState } from "react";
 
 import Icon from "@/components/atoms/Icon/Icon";
+import { useDismissable } from "@/hooks/useDismissable";
 
 import * as styles from "./DropdownSelect.css";
 
@@ -32,18 +33,14 @@ export default function DropdownSelect<ValueType extends string | number>(
     const selectedIndex = Math.max(options.findIndex(option => option.value === value), 0);
     const [activeIndex, setActiveIndex] = useState(selectedIndex);
 
+    const dismiss = useCallback(() => setIsOpen(false), []);
+
+    useDismissable(containerRef, isOpen, dismiss);
+
     useEffect(() => {
-        if (!isOpen) {
-            return;
+        if (isOpen) {
+            listboxRef.current?.focus();
         }
-        listboxRef.current?.focus();
-        const closeOnOutsideClick = (event: MouseEvent) => {
-            if (!containerRef.current?.contains(event.target as Node)) {
-                setIsOpen(false);
-            }
-        };
-        document.addEventListener("mousedown", closeOnOutsideClick);
-        return () => document.removeEventListener("mousedown", closeOnOutsideClick);
     }, [isOpen]);
 
     const open = () => {
