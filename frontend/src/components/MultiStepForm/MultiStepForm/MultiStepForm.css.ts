@@ -1,7 +1,6 @@
 import { style } from '@vanilla-extract/css';
 
-import { HEADER_TOTAL_HEIGHT } from '@/components/Navigation/Header.css';
-import { media } from '@/styles/tokens';
+import { layout, media } from '@/styles/tokens';
 
 const RAIL_WIDTH = '6rem';
 
@@ -52,7 +51,7 @@ export const railNext = style({
 
 export const railInner = style({
   position: 'sticky',
-  top: `calc(50vh + ${HEADER_TOTAL_HEIGHT} / 2)`,
+  top: `calc(50vh + ${layout.headerTotalHeight} / 2)`,
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',

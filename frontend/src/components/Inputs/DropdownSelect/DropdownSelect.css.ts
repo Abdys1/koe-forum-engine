@@ -1,6 +1,6 @@
 import { style } from '@vanilla-extract/css';
 
-import { alphaColors, colors, fonts } from '@/styles/tokens';
+import { alphaColors, colors, fonts, withAlpha } from '@/styles/tokens';
 
 const radius = '0.75rem';
 
@@ -31,7 +31,7 @@ export const button = style({
   },
   ':focus-visible': {
     borderColor: colors.mainLight,
-    boxShadow: '0 0 0 3px rgba(159,150,254,0.15)',
+    boxShadow: `0 0 0 3px ${withAlpha(colors.mainLight, 0.15)}`,
   },
 });
 
@@ -43,7 +43,7 @@ export const buttonLabel = style({
 
 export const buttonOpen = style({
   borderColor: colors.mainLight,
-  boxShadow: '0 0 0 3px rgba(159,150,254,0.15)',
+  boxShadow: `0 0 0 3px ${withAlpha(colors.mainLight, 0.15)}`,
 });
 
 export const arrow = style({

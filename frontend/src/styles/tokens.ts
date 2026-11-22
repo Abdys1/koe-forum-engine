@@ -8,6 +8,7 @@ export const colors = {
   pageDarkBg: '#121315',
   cardBlackBg: '#191a1c',
   cardMediumBg: '#323438',
+  neutralHighlight: '#5c5e64',
   darkBtn: '#434343',
   blackBorder: '#161616',
   lightBorder: '#7364f5',
@@ -90,6 +91,15 @@ export const gradients = {
     `linear-gradient(to bottom, ${alphaColors.primaryTintSoft} 0%, ${withAlpha(colors.mainMedium, 0.1)} 100%)`,
     glassSurface,
   ].join(', '),
+} as const;
+
+const HEADER_HEIGHT = '3.75rem';
+const HEADER_BORDER_WIDTH = '1px';
+
+export const layout = {
+  headerHeight: HEADER_HEIGHT,
+  headerBorderWidth: HEADER_BORDER_WIDTH,
+  headerTotalHeight: `calc(${HEADER_HEIGHT} + ${HEADER_BORDER_WIDTH})`,
 } as const;
 
 export const media = {

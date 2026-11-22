@@ -6,7 +6,7 @@ import { mergeConfig } from "vite";
 
 const config: StorybookConfig = {
     framework: "@storybook/nextjs-vite",
-    stories: ["../src/**/*.stories.@(ts|tsx)"],
+    stories: [{ directory: "../src/components", files: "**/*.stories.@(ts|tsx)" }],
     staticDirs: ["../public"],
     core: { disableTelemetry: true },
     viteFinal: async viteConfig => mergeConfig(viteConfig, {

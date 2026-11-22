@@ -4,13 +4,13 @@ import clsx from "clsx";
 import Link from "next/link";
 import { useId, useLayoutEffect, useRef, useState } from "react";
 
-import Button from "@/components/Button/Button";
-import EditButton from "@/components/EditButton/EditButton";
+import Button from "@/components/atoms/Button/Button";
+import IconButton from "@/components/atoms/IconButton/IconButton";
+import TextLink from "@/components/atoms/TextLink/TextLink";
 import DropdownSelect from "@/components/Inputs/DropdownSelect/DropdownSelect";
 import { CharacterQuote } from "@/features/character/model/character";
 import { MAX_QUOTE_LENGTH, toCharacterQuote } from "@/features/character/model/quote";
 import { findLocation, locationHref, locations } from "@/features/forum/model/location";
-import { goldLink } from "@/styles/shared.css";
 
 import * as styles from "./QuoteSection.css";
 
@@ -63,7 +63,7 @@ export default function QuoteSection({ quote, canEdit, onSave }: QuoteSectionPro
         <section className={styles.section} aria-labelledby={titleId}>
             <div className={styles.heading}>
                 <h2 id={titleId} className={styles.title}>{TITLE}</h2>
-                {canEdit && !isEditing && <EditButton label={`${TITLE} szerkesztése`} onClick={startEditing}/>}
+                {canEdit && !isEditing && <IconButton icon="edit" label={`${TITLE} szerkesztése`} onClick={startEditing}/>}
             </div>
 
             {isEditing
@@ -104,7 +104,7 @@ export default function QuoteSection({ quote, canEdit, onSave }: QuoteSectionPro
                         <figcaption className={styles.source}>
                             {savedLocation
                                 ? <>
-                                    <Link href={locationHref(quote.locationId)} className={goldLink}>{savedLocation.name}</Link>
+                                    <TextLink href={locationHref(quote.locationId)}>{savedLocation.name}</TextLink>
                                     #{quote.postNumber}
                                   </>
                                 : <>#{quote.postNumber}</>

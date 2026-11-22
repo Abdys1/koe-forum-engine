@@ -1,6 +1,5 @@
-import SocialLink from "@/components/SocialLink/SocialLink";
-import { SocialLink as SocialLinkData } from "@/lib/socialLinks";
-import { socialLinkList } from "@/styles/shared.css";
+import SocialLink from "@/components/atoms/SocialLink/SocialLink";
+import { SocialLinkData } from "@/features/community/model/socialLinks";
 
 import * as styles from "./Footer.css";
 
@@ -13,9 +12,9 @@ export default function Footer({ socialLinks }: FooterProps) {
     <footer className={styles.footer}>
       <a href="/" className={styles.logo}>Gloamfall</a>
       <p className={styles.copyright}>&copy; 2026 Gloamfall. All rights reserved.</p>
-      <div className={socialLinkList}>
+      <div className={styles.socialLinks}>
         {socialLinks.map(link => (
-          <SocialLink key={link.label} link={link} />
+          <SocialLink key={link.network} {...link} />
         ))}
       </div>
     </footer>

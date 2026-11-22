@@ -1,7 +1,7 @@
 import { style } from '@vanilla-extract/css';
 
 import { glassPanel } from '@/styles/shared.css';
-import { alphaColors, characterPortrait, colors, fonts, gradients, shadows } from '@/styles/tokens';
+import { alphaColors, characterPortrait, colors, fonts, gradients, shadows, withAlpha } from '@/styles/tokens';
 
 export const card = style([glassPanel, {
   position: 'relative',
@@ -26,7 +26,7 @@ export const author = style({
   alignItems: 'center',
   gap: '0.5rem',
   padding: '1.25rem 1rem',
-  background: 'linear-gradient(to bottom, rgba(92,70,156,0.22) 0%, rgba(92,70,156,0.06) 60%, transparent 100%)',
+  background: `linear-gradient(to bottom, ${withAlpha(colors.mainMedium, 0.22)} 0%, ${withAlpha(colors.mainMedium, 0.06)} 60%, transparent 100%)`,
   textAlign: 'center',
   selectors: {
     '&::after': {

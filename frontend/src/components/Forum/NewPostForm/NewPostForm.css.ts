@@ -1,7 +1,7 @@
 import { style } from '@vanilla-extract/css';
 
 import { glassPanel } from '@/styles/shared.css';
-import { alphaColors, colors, fonts } from '@/styles/tokens';
+import { alphaColors, colors, fonts, withAlpha } from '@/styles/tokens';
 
 export const form = style([glassPanel, {
   display: 'flex',
@@ -43,7 +43,7 @@ const inputBase = {
   transition: 'border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
   ':focus': {
     borderColor: colors.mainLight,
-    boxShadow: '0 0 0 3px rgba(159,150,254,0.15)',
+    boxShadow: `0 0 0 3px ${withAlpha(colors.mainLight, 0.15)}`,
   },
 } as const;
 

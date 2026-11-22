@@ -2,14 +2,17 @@ import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
 
-import Button from "@/components/Button/Button";
+import Button from "@/components/atoms/Button/Button";
+import Eyebrow from "@/components/atoms/Eyebrow/Eyebrow";
+import Icon from "@/components/atoms/Icon/Icon";
+import SectionHeading from "@/components/atoms/SectionHeading/SectionHeading";
+import TextLink from "@/components/atoms/TextLink/TextLink";
 import BackgroundSlideshow from "@/components/Home/BackgroundSlideshow/BackgroundSlideshow";
 import CharacterTeasers from "@/components/Home/CharacterTeasers/CharacterTeasers";
 import QuickLogin from "@/components/Home/QuickLogin/QuickLogin";
-import SectionHeading from "@/components/SectionHeading/SectionHeading";
 import Showcase from "@/components/Showcase/Showcase";
 import { activityStats, characterSteps, cities, featuredCharacters, heroSlides, latestActivity, newestCharacter, news } from "@/dummydata/homepage";
-import { accentLink, eyebrow, metaText } from "@/styles/shared.css";
+import { metaText } from "@/styles/shared.css";
 
 import * as styles from "./home.css";
 
@@ -22,7 +25,7 @@ export default function Home() {
         <BackgroundSlideshow slides={heroSlides} />
         <div className={styles.heroInner}>
           <div className={styles.heroText}>
-            <span className={eyebrow}>Fórumos szerepjáték</span>
+            <Eyebrow>Fórumos szerepjáték</Eyebrow>
             <h1 className={styles.heroTitle}>Gloamfall</h1>
             <p className={styles.heroLead}>
               Amikor a nap lebukik a romok mögött, a világ megmutatja valódi arcát. Lépj be a 
@@ -58,9 +61,9 @@ export default function Home() {
                 <div className={styles.recentBody}>
                   <p className={styles.recentMeta}>
                     <span className={styles.recentName}>{activity.characterName}</span> írt ide:{" "}
-                    <Link href={activity.locationHref} className={accentLink}>
+                    <TextLink href={activity.locationHref} variant="accent">
                       {activity.locationName}
-                    </Link>
+                    </TextLink>
                   </p>
                 </div>
                 <span className={metaText}>{activity.timeAgo}</span>
@@ -95,7 +98,7 @@ export default function Home() {
           </div>
           <div className={styles.liveSide}>
             <div className={styles.newestCharacter}>
-              <span className={clsx("material-icons", styles.newestCharacterIcon)}>person_add</span>
+              <Icon name="person_add" className={styles.newestCharacterIcon}/>
               <div>
                 <span className={styles.newestCharacterLabel}>Legújabb karakter</span>
                 <Link href={newestCharacter.href} className={styles.newestCharacterName}>
@@ -105,7 +108,7 @@ export default function Home() {
             </div>
             <aside className={styles.newsPanel}>
               <h3 className={styles.newsTitle}>
-                <span className={clsx("material-icons", styles.newsIcon)}>campaign</span>
+                <Icon name="campaign" className={styles.newsIcon}/>
                 Hírek
               </h3>
               <ul className={styles.newsList}>

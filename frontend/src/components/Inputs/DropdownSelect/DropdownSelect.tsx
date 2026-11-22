@@ -3,6 +3,8 @@
 import clsx from "clsx";
 import { KeyboardEvent, ReactNode, useEffect, useId, useRef, useState } from "react";
 
+import Icon from "@/components/atoms/Icon/Icon";
+
 import * as styles from "./DropdownSelect.css";
 
 export type DropdownOption<ValueType> = {
@@ -112,8 +114,7 @@ export default function DropdownSelect<ValueType extends string | number>(
                 onClick={() => isOpen ? close() : open()} onKeyDown={handleButtonKeyDown}
             >
                 <span className={styles.buttonLabel}>{options[selectedIndex]?.label}</span>
-                <span className={clsx("material-icons", styles.arrow, size === "large" && styles.arrowLarge,
-                    isOpen && styles.arrowOpen)}>expand_more</span>
+                <Icon name="expand_more" className={clsx(styles.arrow, size === "large" && styles.arrowLarge, isOpen && styles.arrowOpen)}/>
             </button>
             {isOpen && (
                 <ul

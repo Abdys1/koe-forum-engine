@@ -4,7 +4,7 @@ import clsx from "clsx";
 import { useId } from "react";
 import { useForm } from "react-hook-form";
 
-import Button from "@/components/Button/Button";
+import Button from "@/components/atoms/Button/Button";
 import { NewPostInput } from "@/features/forum/model/post";
 
 import * as styles from "./NewPostForm.css";

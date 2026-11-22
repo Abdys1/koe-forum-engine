@@ -9,8 +9,8 @@ import Header from "@/components/Navigation/Header";
 import SidebarPanel from "@/components/Navigation/SidebarPanel";
 import { Provider } from "@/components/Provider/Provider";
 import { getOwnCharacters } from "@/features/character/queries/getOwnCharacters";
+import { socialLinks } from "@/features/community/model/socialLinks";
 import { auth } from "@/lib/auth/auth";
-import { socialLinks } from "@/lib/socialLinks";
 
 import * as styles from "./layout.css";
 

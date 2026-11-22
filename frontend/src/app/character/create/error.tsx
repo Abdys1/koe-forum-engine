@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { startTransition } from "react";
 
-import Button from "@/components/Button/Button";
+import Button from "@/components/atoms/Button/Button";
 
 import * as styles from "./create.css";
 

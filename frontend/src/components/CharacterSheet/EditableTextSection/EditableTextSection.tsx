@@ -3,9 +3,10 @@
 import clsx from "clsx";
 import { useId, useState } from "react";
 
-import Button from "@/components/Button/Button";
+import Button from "@/components/atoms/Button/Button";
+import Icon from "@/components/atoms/Icon/Icon";
+import IconButton from "@/components/atoms/IconButton/IconButton";
 import { heading, headingAction, headingTitle } from "@/components/CharacterSheet/sheetHeading.css";
-import EditButton from "@/components/EditButton/EditButton";
 
 import * as styles from "./EditableTextSection.css";
 
@@ -49,13 +50,13 @@ export default function EditableTextSection({ title, value, emptyText, info, edi
                 <h2 id={titleId} className={headingTitle}>{title}</h2>
                 {canEdit && !isEditing &&
                     <span className={headingAction}>
-                        <EditButton label={`${title} szerkesztése`} onClick={startEditing}/>
+                        <IconButton icon="edit" label={`${title} szerkesztése`} onClick={startEditing}/>
                     </span>
                 }
             </div>
             {info &&
                 <p className={styles.info}>
-                    <span className={clsx("material-icons", styles.infoIcon)} aria-hidden="true">lock</span>
+                    <Icon name="lock" className={styles.infoIcon}/>
                     {info}
                 </p>
             }

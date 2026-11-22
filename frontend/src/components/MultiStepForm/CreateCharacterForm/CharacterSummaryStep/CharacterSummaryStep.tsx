@@ -1,24 +1,27 @@
 'use client'
 
-import clsx from "clsx";
 
-import Button from "@/components/Button/Button";
-import EditButton from "@/components/EditButton/EditButton";
+import Button from "@/components/atoms/Button/Button";
+import Icon from "@/components/atoms/Icon/Icon";
+import IconButton from "@/components/atoms/IconButton/IconButton";
+import PortraitFrame from "@/components/atoms/PortraitFrame/PortraitFrame";
+import SectionHeading from "@/components/atoms/SectionHeading/SectionHeading";
+import SocialIcon from "@/components/atoms/SocialIcon/SocialIcon";
 import GearOverview from "@/components/GearOverview/GearOverview";
-import CharacterPortraitFrame from "@/components/MultiStepForm/CreateCharacterForm/CharacterPortraitFrame/CharacterPortraitFrame";
 import { stepContent, stepIntro } from "@/components/MultiStepForm/CreateCharacterForm/characterStep.css";
 import { useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFormContext";
-import SectionHeading from "@/components/SectionHeading/SectionHeading";
 import { SelectableSex, sexLabels } from "@/features/character/model/sex";
+import { findSocialLink } from "@/features/community/model/socialLinks";
 import { GearOverviewRoot } from "@/features/equipment/model/gearOverview";
 import { useObjectUrl } from "@/hooks/useObjectUrl";
-import { discordLink } from "@/lib/socialLinks";
 
 import * as styles from "./CharacterSummaryStep.css";
 
 type CharacterSummaryStepProps = {
     gearOverview: GearOverviewRoot[]
 }
+
+const discord = findSocialLink("discord");
 
 export default function CharacterSummaryStep({ gearOverview }: CharacterSummaryStepProps) {
     const { form, steps, goToStep } = useMultiStepFormContext();
@@ -39,25 +42,25 @@ export default function CharacterSummaryStep({ gearOverview }: CharacterSummaryS
             </p>
 
             <div className={styles.sheetRow}>
-                <CharacterPortraitFrame imageUrl={characterImage} onClick={openStep("Karakterkép")} label="Karakterkép cseréje"
+                <PortraitFrame imageUrl={characterImage} onClick={openStep("Karakterkép")} label="Karakterkép cseréje"
                     overlay={{ icon: "swap_horiz", text: "Kép cseréje" }}/>
 
                 <article className={styles.sheet} aria-label="Karakterlap">
                     <header className={styles.identity}>
                         <div className={styles.nameRow}>
                             <h3 className={styles.name}>{characterName}</h3>
-                            <EditButton label="Név módosítása" onClick={openStep("Identitás")}/>
+                            <IconButton icon="edit" label="Név módosítása" onClick={openStep("Identitás")}/>
                         </div>
                         <div className={styles.seals}>
                             <button type="button" className={styles.seal} onClick={openStep("Faj")} aria-label={`Faj: ${raceTitle}. Módosítás`}>
                                 <span className={styles.sealLabel}>Faj</span>
                                 {raceTitle}
-                                <span className={clsx("material-icons", styles.sealIcon)} aria-hidden="true">edit</span>
+                                <Icon name="edit" className={styles.sealIcon}/>
                             </button>
                             <button type="button" className={styles.seal} onClick={openStep("Identitás")} aria-label={`Nem: ${sexLabels[characterSex]}. Módosítás`}>
                                 <span className={styles.sealLabel}>Nem</span>
                                 {sexLabels[characterSex]}
-                                <span className={clsx("material-icons", styles.sealIcon)} aria-hidden="true">edit</span>
+                                <Icon name="edit" className={styles.sealIcon}/>
                             </button>
                         </div>
                     </header>
@@ -65,7 +68,7 @@ export default function CharacterSummaryStep({ gearOverview }: CharacterSummaryS
                     <section className={styles.gear} aria-labelledby="summary-gear-title">
                         <div className={styles.sectionHeader}>
                             <h4 id="summary-gear-title" className={styles.sectionTitle}>Felszerelés</h4>
-                            <EditButton label="Felszerelés módosítása" onClick={openStep("Felszerelés")}/>
+                            <IconButton icon="edit" label="Felszerelés módosítása" onClick={openStep("Felszerelés")}/>
                         </div>
                         <GearOverview roots={gearOverview}/>
                     </section>
@@ -74,7 +77,7 @@ export default function CharacterSummaryStep({ gearOverview }: CharacterSummaryS
                 <aside className={styles.infoPanel} aria-label="Információk">
                     <div className={styles.infoStatus} role="note">
                         <div className={styles.infoHeader}>
-                            <span className={clsx("material-icons", styles.infoIcon)} aria-hidden="true">check</span>
+                            <Icon name="check" className={styles.infoIcon}/>
                             <p className={styles.infoTitle}>Elkészültél a karaktered elsődleges adataival</p>
                         </div>
                         <p className={styles.infoText}>
@@ -90,10 +93,10 @@ export default function CharacterSummaryStep({ gearOverview }: CharacterSummaryS
                     </div>
                     <div className={styles.contactLinks}>
                         <a href="#" className={styles.contactLink} aria-label="Chat" title="Chat">
-                            <span className={clsx("material-icons", styles.contactIcon)} aria-hidden="true">chat</span>
+                            <Icon name="chat" className={styles.contactIcon}/>
                         </a>
-                        <a href="#" className={styles.contactLink} aria-label={discordLink.label} title={discordLink.label}>
-                            {discordLink.icon}
+                        <a href={discord.href ?? "#"} className={styles.contactLink} aria-label={discord.label} title={discord.label}>
+                            <SocialIcon network="discord" className={styles.contactSocialIcon}/>
                         </a>
                     </div>
                 </aside>

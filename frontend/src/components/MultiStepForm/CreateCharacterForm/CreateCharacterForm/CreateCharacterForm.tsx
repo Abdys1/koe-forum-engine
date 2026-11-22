@@ -18,7 +18,8 @@ import { buildEquipmentCatalog } from "@/features/equipment/model/equipmentCatal
 import { toGearOverview } from "@/features/equipment/model/gearOverview";
 import { compactSelection } from "@/features/equipment/model/selection";
 import { EquipmentCatalogData } from "@/lib/api/equipment/types";
-import { gearStepBg,raceStepBg } from "@/styles/shared.css";
+
+import * as styles from "./CreateCharacterForm.css";
 
 type CreateCharacterFormProps = {
     equipmentCatalogData: EquipmentCatalogData
@@ -56,17 +57,17 @@ export default function CreateCharacterForm({ equipmentCatalogData }: CreateChar
 
     return (
         <MultiStepForm form={form} header={<CreateCharacterHeader control={form.control}/>} onSubmit={submit}>
-            <MultiStepForm.Step label="Faj" style={raceStepStyle} className={raceStepBg}>
+            <MultiStepForm.Step label="Faj" style={raceStepStyle} className={styles.raceStepBg}>
                 <CharacterRaceStep/>
             </MultiStepForm.Step>
             <MultiStepForm.Step label="Identitás"
                                 validate={() => form.trigger('characterName', { shouldFocus: true })}
                                 complete={!!characterName?.trim()}
                                 style={raceStepStyle}
-                                className={raceStepBg}>
+                                className={styles.raceStepBg}>
                 <CharacterBasicsStep/>
             </MultiStepForm.Step>
-            <MultiStepForm.Step label="Felszerelés" className={gearStepBg}>
+            <MultiStepForm.Step label="Felszerelés" className={styles.gearStepBg}>
                <CharacterGearStep equipmentCatalog={equipmentCatalog}/>
             </MultiStepForm.Step>
             <MultiStepForm.Step label="Karakterkép" validate={() => form.trigger('characterImg')} complete={!!characterImg?.length}>

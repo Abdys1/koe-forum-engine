@@ -3,7 +3,7 @@ import { style } from '@vanilla-extract/css';
 import { roundIconButton } from '@/styles/shared.css';
 import { alphaColors } from '@/styles/tokens';
 
-export const editBtn = style([roundIconButton, {
+export const button = style([roundIconButton, {
   flexShrink: 0,
   width: '2rem',
   height: '2rem',
@@ -11,6 +11,6 @@ export const editBtn = style([roundIconButton, {
   color: alphaColors.textMuted,
 }]);
 
-export const editIcon = style({
+export const icon = style({
   fontSize: '1rem',
 });

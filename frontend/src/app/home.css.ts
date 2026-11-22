@@ -1,8 +1,7 @@
 import { keyframes, style } from '@vanilla-extract/css';
 
-import { HEADER_TOTAL_HEIGHT } from '@/components/Navigation/Header.css';
 import { accentLink, contentContainer, fadeDividerBottom, fadeDividerTop, featuredPanel, glassPanel, glassPanelHover, goldLink, mainBg, metaText } from '@/styles/shared.css';
-import { alphaColors, backdropBlur, colors, fonts, gradients, media, shadows, transition, withAlpha } from '@/styles/tokens';
+import { alphaColors, backdropBlur, colors, fonts, gradients, layout, media, shadows, transition, withAlpha } from '@/styles/tokens';
 
 const pulse = keyframes({
   '0%': { boxShadow: `0 0 0 0 ${withAlpha(colors.online, 0.6)}` },
@@ -16,7 +15,7 @@ export const page = style([mainBg, {
 
 export const section = style({
   position: 'relative',
-  minHeight: `calc(100vh - ${HEADER_TOTAL_HEIGHT})`,
+  minHeight: `calc(100vh - ${layout.headerTotalHeight})`,
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
@@ -66,7 +65,7 @@ export const sectionLead = style({
 
 export const hero = style({
   position: 'relative',
-  minHeight: `calc(100vh - ${HEADER_TOTAL_HEIGHT})`,
+  minHeight: `calc(100vh - ${layout.headerTotalHeight})`,
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',

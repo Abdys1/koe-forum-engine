@@ -1,6 +1,7 @@
 import clsx from "clsx";
 
-import SlotPips from "@/components/MultiStepForm/CreateCharacterForm/SlotPips/SlotPips";
+import Icon from "@/components/atoms/Icon/Icon";
+import SlotPips from "@/components/atoms/SlotPips/SlotPips";
 import { SelectionResult } from "@/features/equipment/model/equipmentCatalog";
 import { visuallyHidden } from "@/styles/shared.css";
 
@@ -43,7 +44,7 @@ export default function GearItemCard({ name, cost, count, status, onSelect, onRe
             </button>
             {count > 0 &&
                 <button type="button" className={styles.removeBtn} onClick={onRemove} aria-label={`Egy ${name} eltávolítása`}>
-                    <span className={clsx("material-icons", styles.removeIcon)} aria-hidden="true">remove</span>
+                    <Icon name="remove" className={styles.removeIcon}/>
                 </button>
             }
         </li>

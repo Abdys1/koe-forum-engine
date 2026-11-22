@@ -1,4 +1,4 @@
-import { globalStyle, style } from '@vanilla-extract/css';
+import { style } from '@vanilla-extract/css';
 
 import { fadeDividerBottom, fadeDividerTop, featuredPanel, glassPanel, roundIconButton } from '@/styles/shared.css';
 import { alphaColors, colors, fonts, goldFocusRing, gradients, media, shadows, transition, withAlpha } from '@/styles/tokens';
@@ -131,7 +131,7 @@ export const contactLink = style([roundIconButton, {
   textDecoration: 'none',
 }]);
 
-globalStyle(`${contactLink} svg`, {
+export const contactSocialIcon = style({
   width: '1.15rem',
   height: '1.15rem',
 });

@@ -2,10 +2,10 @@
 
 import { useWatch } from "react-hook-form";
 
-import Button from "@/components/Button/Button";
+import Button from "@/components/atoms/Button/Button";
+import SectionHeading from "@/components/atoms/SectionHeading/SectionHeading";
 import CharacterRaceFilmstrip from "@/components/MultiStepForm/CreateCharacterForm/CharacterRaceFilmstrip/CharacterRaceFilmstrip";
 import { useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFormContext";
-import SectionHeading from "@/components/SectionHeading/SectionHeading";
 import { findRace } from "@/features/character/model/race";
 
 import * as styles from "./CharacterRaceStep.css";

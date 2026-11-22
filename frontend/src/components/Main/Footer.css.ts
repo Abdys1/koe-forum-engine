@@ -30,3 +30,9 @@ export const copyright = style({
   color: colors.white,
   opacity: 0.7,
 });
+
+export const socialLinks = style({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '1rem',
+});

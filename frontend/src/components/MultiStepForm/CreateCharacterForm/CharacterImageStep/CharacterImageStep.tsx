@@ -4,11 +4,11 @@ import clsx from "clsx";
 import { useRef } from "react";
 import { useWatch } from "react-hook-form";
 
-import Button from "@/components/Button/Button";
-import CharacterPortraitFrame from "@/components/MultiStepForm/CreateCharacterForm/CharacterPortraitFrame/CharacterPortraitFrame";
+import Button from "@/components/atoms/Button/Button";
+import PortraitFrame from "@/components/atoms/PortraitFrame/PortraitFrame";
+import SectionHeading from "@/components/atoms/SectionHeading/SectionHeading";
 import { stepContent, stepIntro } from "@/components/MultiStepForm/CreateCharacterForm/characterStep.css";
 import { useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFormContext";
-import SectionHeading from "@/components/SectionHeading/SectionHeading";
 import { useObjectUrl } from "@/hooks/useObjectUrl";
 
 import * as styles from "./CharacterImageStep.css";
@@ -29,7 +29,7 @@ export default function CharacterImageStep() {
             </p>
             <div className={styles.uploadRow}>
                 <div className={styles.portraitColumn}>
-                    <CharacterPortraitFrame htmlFor="characterImg" imageUrl={characterImage} imageAlt="karaktered képe"
+                    <PortraitFrame htmlFor="characterImg" imageUrl={characterImage} imageAlt="karaktered képe"
                         placeholder={{ icon: "add_photo_alternate", text: "Kép feltöltése" }}
                         overlay={{ icon: "swap_horiz", text: "Kép cseréje" }}/>
                     {characterImage &&

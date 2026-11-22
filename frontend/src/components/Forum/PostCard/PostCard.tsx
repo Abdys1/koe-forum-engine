@@ -1,5 +1,6 @@
 import Image from "next/image";
 
+import Icon from "@/components/atoms/Icon/Icon";
 import { LocationPost } from "@/lib/api/posts/types";
 import { formatDateTime } from "@/utils/dateFormat";
 
@@ -20,10 +21,10 @@ export default function PostCard({ post, postNumber }: PostCardProps) {
                 <span className={styles.postCount}>{post.character.postCount} hozzászólás</span>
                 <div className={styles.actions}>
                     <button type="button" className={styles.iconBtn} title="Privát üzenet küldése">
-                        <span className="material-icons">mail</span>
+                        <Icon name="mail"/>
                     </button>
                     <button type="button" className={styles.iconBtn} title="Értesítés beállítása">
-                        <span className="material-icons">notifications</span>
+                        <Icon name="notifications"/>
                     </button>
                 </div>
             </aside>
@@ -38,10 +39,10 @@ export default function PostCard({ post, postNumber }: PostCardProps) {
                     <div className={styles.actions}>
                         <span className={styles.postNumber}>#{postNumber}</span>
                         <button type="button" className={styles.iconBtn} title="Szerkesztés">
-                            <span className="material-icons">edit</span>
+                            <Icon name="edit"/>
                         </button>
                         <button type="button" className={styles.iconBtn} title="Törlés">
-                            <span className="material-icons">delete</span>
+                            <Icon name="delete"/>
                         </button>
                     </div>
                 </header>

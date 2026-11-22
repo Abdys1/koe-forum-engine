@@ -1,13 +1,12 @@
 import { style } from '@vanilla-extract/css';
 
-import { HEADER_TOTAL_HEIGHT } from '@/components/Navigation/Header.css';
 import { authCard, mainBg } from '@/styles/shared.css';
-import { alphaColors, colors, fonts, media, shadows, withAlpha } from '@/styles/tokens';
+import { alphaColors, colors, fonts, layout, media, shadows, withAlpha } from '@/styles/tokens';
 
 export const page = style([mainBg, {
   position: 'relative',
   width: '100%',
-  minHeight: `calc(100vh - ${HEADER_TOTAL_HEIGHT})`,
+  minHeight: `calc(100vh - ${layout.headerTotalHeight})`,
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',

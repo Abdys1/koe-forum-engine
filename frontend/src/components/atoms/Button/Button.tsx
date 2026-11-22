@@ -1,6 +1,8 @@
 import clsx from "clsx";
 import Link from "next/link";
 
+import Icon from "@/components/atoms/Icon/Icon";
+
 import * as styles from "./Button.css";
 
 type ButtonProps = {
@@ -22,7 +24,7 @@ type ButtonProps = {
 export default function Button({ title, icon, variant = "primary", size = "large", className, ...props }: ButtonProps) {
     const classNames = clsx(styles.base, styles.sizes[size], styles.variants[variant], className);
     const content = <>
-        {icon && <span className={clsx("material-icons", styles.icon)} aria-hidden="true">{icon}</span>}
+        {icon && <Icon name={icon} className={styles.icon}/>}
         {title}
     </>;
 

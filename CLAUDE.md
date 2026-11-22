@@ -104,6 +104,8 @@ Next.js 14 App Router. Authentication via NextAuth.js with a Credentials provide
 - `src/lib/` — infrastructure: API clients, auth config. `src/utils/` — dependency-free generic helpers (e.g. `dateFormat`), usable from every level. `src/hooks/` — generic UI hooks. `src/styles/` — tokens and global styles.
 - `src/app/` — routing only: pages load data via `features/*/queries` and render a template.
 
+Material icons are always rendered with the `Icon` atom, never with a hand-written `material-icons` span. Styles use tokens from `src/styles/tokens.ts` (colors, `withAlpha`, `layout` sizes such as `layout.headerTotalHeight`) instead of raw color values; `src/styles/shared.css.ts` holds only generic surfaces and typography, never feature-specific styles, and style files never import from components.
+
 The levels are enforced by `boundaries/dependencies` in `frontend/.eslintrc.json`: a level only imports lower levels; atoms and molecules are domain-agnostic (no `features`, `lib`, dummy data or server actions); organisms may use `features` and only *type* imports from `lib`; features never import components; lib only imports lib. Files outside the classified folders are not checked yet.
 
 ### Frontend Tests

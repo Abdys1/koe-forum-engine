@@ -3,8 +3,9 @@
 import clsx from "clsx";
 import { KeyboardEvent, useRef } from "react";
 
-import GearTypeIcon from "@/components/MultiStepForm/CreateCharacterForm/GearTypeIcon/GearTypeIcon";
-import SlotPips from "@/components/MultiStepForm/CreateCharacterForm/SlotPips/SlotPips";
+import GearTypeIcon from "@/components/atoms/GearTypeIcon/GearTypeIcon";
+import Icon from "@/components/atoms/Icon/Icon";
+import SlotPips from "@/components/atoms/SlotPips/SlotPips";
 import { EquipmentCatalog, SlotPoolUsage } from "@/features/equipment/model/equipmentCatalog";
 import { visuallyHidden } from "@/styles/shared.css";
 
@@ -97,12 +98,12 @@ export default function GearSlotTracker({ equipmentCatalog, activeRootId, usages
                                                 <span className={styles.occupantName}>{entry.item.name}</span>
                                                 {isReplaced && previewEntry
                                                     ? <span className={styles.replaceHint}>
-                                                        <span className={clsx("material-icons", styles.replaceIcon)} aria-hidden="true">swap_horiz</span>
+                                                        <Icon name="swap_horiz" className={styles.replaceIcon}/>
                                                         <span className={styles.replaceName}>{previewEntry.item.name}</span>
                                                       </span>
                                                     : <SlotPips total={entry.cost} size="small"/>
                                                 }
-                                                <span className={clsx("material-icons", styles.occupantIcon)} aria-hidden="true">close</span>
+                                                <Icon name="close" className={styles.occupantIcon}/>
                                             </button>
                                         </li>
                                     );

@@ -1,6 +1,6 @@
 import { Control } from "react-hook-form";
 
-import ComponentHeading from "@/components/ComponentHeading/ComponentHeading";
+import PageHeading from "@/components/atoms/PageHeading/PageHeading";
 import CharacterPreview from "@/components/MultiStepForm/CreateCharacterForm/CharacterPreview/CharacterPreview";
 import MultiStepBar from "@/components/MultiStepForm/MultiStepBar/MultiStepBar";
 import { useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFormContext";
@@ -18,7 +18,7 @@ export default function CreateCharacterHeader({ control }: CreateCharacterHeader
 
     return (
         <header className={styles.header}>
-            <div className={styles.title}><ComponentHeading title="Karakter létrehozása"/></div>
+            <div className={styles.title}><PageHeading title="Karakter létrehozása"/></div>
             <div className={styles.bar}><MultiStepBar/></div>
             {!isSummaryStep && <div className={styles.preview}><CharacterPreview control={control}/></div>}
         </header>

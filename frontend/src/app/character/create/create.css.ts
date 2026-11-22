@@ -1,13 +1,12 @@
 import { style } from '@vanilla-extract/css';
 
-import { HEADER_TOTAL_HEIGHT } from '@/components/Navigation/Header.css';
 import { mainBg } from '@/styles/shared.css';
-import { alphaColors, fonts } from '@/styles/tokens';
+import { alphaColors, fonts, layout } from '@/styles/tokens';
 
 export const page = style([mainBg, {
   position: 'relative',
   width: '100%',
-  minHeight: `calc(100vh - ${HEADER_TOTAL_HEIGHT})`,
+  minHeight: `calc(100vh - ${layout.headerTotalHeight})`,
   display: 'flex',
 }]);
 

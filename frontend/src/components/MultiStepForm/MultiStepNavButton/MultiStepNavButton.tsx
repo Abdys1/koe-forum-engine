@@ -1,5 +1,7 @@
 import clsx from "clsx";
 
+import Icon from "@/components/atoms/Icon/Icon";
+
 import * as styles from "./MultiStepNavButton.css";
 
 type NavDirection = keyof typeof styles.circleVariants;
@@ -27,9 +29,7 @@ export default function MultiStepNavButton({ direction, label, onClick, disabled
     return (
         <button type="button" className={styles.navButton} onClick={onClick} disabled={disabled}
                 aria-label={`${actionLabels[direction]}: ${label}`}>
-            <span className={clsx("material-icons", styles.circle, styles.circleVariants[direction])} aria-hidden="true">
-                {icons[direction]}
-            </span>
+            <Icon name={icons[direction]} className={clsx(styles.circle, styles.circleVariants[direction])}/>
             <span className={clsx(styles.label, direction === "next" && styles.labelNext)} aria-hidden="true">
                 {label}
             </span>

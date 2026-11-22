@@ -1,6 +1,8 @@
 import clsx from "clsx";
 import { useState } from "react";
 
+import Icon from "@/components/atoms/Icon/Icon";
+
 import * as styles from "./FollowToggle.css";
 
 export default function FollowToggle() {
@@ -10,9 +12,7 @@ export default function FollowToggle() {
         <button type="button" aria-pressed={isFollowing}
             className={clsx(styles.followBtn, isFollowing && styles.followBtnActive)}
             onClick={() => setIsFollowing(following => !following)}>
-            <span className={clsx("material-icons", styles.followIcon)} aria-hidden="true">
-                {isFollowing ? "notifications_active" : "notifications"}
-            </span>
+            <Icon name={isFollowing ? "notifications_active" : "notifications"} className={styles.followIcon}/>
             {isFollowing ? "Követem a játékait" : "Karakter játékának követése"}
         </button>
     );

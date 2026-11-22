@@ -3,9 +3,10 @@
 import clsx from "clsx";
 import { useId, useState } from "react";
 
-import Button from "@/components/Button/Button";
+import Button from "@/components/atoms/Button/Button";
+import Icon from "@/components/atoms/Icon/Icon";
+import SectionHeading from "@/components/atoms/SectionHeading/SectionHeading";
 import { useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFormContext";
-import SectionHeading from "@/components/SectionHeading/SectionHeading";
 import { SelectableSex, sexOptions } from "@/features/character/model/sex";
 
 import * as styles from "./CharacterBasicsStep.css";
@@ -56,7 +57,7 @@ export default function CharacterBasicsStep() {
                                     aria-checked={selectedSex === option.value}
                                     className={clsx(styles.sexBtn, selectedSex === option.value && styles.sexBtnActive)}
                                     onClick={() => selectSex(option.value)}>
-                                    <span className={clsx("material-icons", styles.sexIcon)} aria-hidden="true">{option.icon}</span>
+                                    <Icon name={option.icon} className={styles.sexIcon}/>
                                     {option.label}
                                 </button>
                             ))}

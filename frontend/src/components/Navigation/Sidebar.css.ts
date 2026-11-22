@@ -1,16 +1,15 @@
 import { keyframes, style } from '@vanilla-extract/css';
 
-import { HEADER_TOTAL_HEIGHT } from '@/components/Navigation/Header.css';
-import { alphaColors, colors, fonts, gradients } from '@/styles/tokens';
+import { alphaColors, colors, fonts, gradients, layout, withAlpha } from '@/styles/tokens';
 
 const COLLAPSED_WIDTH = '4.5rem';
 const OPEN_WIDTH = '36rem';
 const AVATAR_SIZE = '5.75rem';
 const AVATAR_BORDER_WIDTH = '3px';
 
-const surfaceTint = (alpha: number) => `rgba(50,52,56,${alpha})`;
-const goldTint = (alpha: number) => `rgba(231,207,147,${alpha})`;
-const neutralHighlight = '#5c5e64';
+const surfaceTint = (alpha: number) => withAlpha(colors.cardMediumBg, alpha);
+const goldTint = (alpha: number) => withAlpha(colors.secondary, alpha);
+const neutralHighlight = colors.neutralHighlight;
 const neutralFadeRight = `linear-gradient(to right, ${neutralHighlight} 0%, ${colors.cardMediumBg} 70%, ${colors.cardMediumBg} 100%)`;
 
 export const slot = style({
@@ -22,11 +21,11 @@ export const slot = style({
 
 export const sidebar = style({
   position: 'sticky',
-  top: HEADER_TOTAL_HEIGHT,
+  top: layout.headerTotalHeight,
   display: 'flex',
   flexDirection: 'column',
   width: COLLAPSED_WIDTH,
-  height: `calc(100vh - ${HEADER_TOTAL_HEIGHT})`,
+  height: `calc(100vh - ${layout.headerTotalHeight})`,
   background: colors.cardBlackBg,
   backdropFilter: 'blur(14px)',
   WebkitBackdropFilter: 'blur(14px)',
@@ -160,7 +159,7 @@ export const characterName = style({
   letterSpacing: '0.04em',
   color: colors.secondary,
   textDecoration: 'none',
-  textShadow: '0 2px 8px rgba(0,0,0,0.7), 0 0 14px rgba(231,207,147,0.35)',
+  textShadow: `0 2px 8px rgba(0,0,0,0.7), 0 0 14px ${goldTint(0.35)}`,
   transition: 'color 0.3s ease-in-out',
   ':hover': {
     color: colors.secondaryLight,
@@ -258,7 +257,7 @@ export const menuItem = style({
       width: '3px',
       height: '70%',
       background: `linear-gradient(to bottom, ${colors.secondaryLight}, ${colors.secondaryDark})`,
-      boxShadow: '0 0 8px rgba(231,207,147,0.7)',
+      boxShadow: `0 0 8px ${goldTint(0.7)}`,
       transform: 'scaleY(0)',
       transition: 'transform 0.3s ease-in-out',
     },
@@ -359,7 +358,7 @@ export const tile = style({
       width: '70%',
       height: '3px',
       background: `linear-gradient(to right, ${colors.secondaryDark}, ${colors.secondaryLight}, ${colors.secondaryDark})`,
-      boxShadow: '0 0 8px rgba(231,207,147,0.7)',
+      boxShadow: `0 0 8px ${goldTint(0.7)}`,
       transform: 'scaleX(0)',
       transition: 'transform 0.3s ease-in-out',
     },

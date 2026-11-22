@@ -3,13 +3,13 @@
 import { useMemo, useState } from "react";
 import { useWatch } from "react-hook-form";
 
+import GearTypeIcon from "@/components/atoms/GearTypeIcon/GearTypeIcon";
+import SectionHeading from "@/components/atoms/SectionHeading/SectionHeading";
+import SlotPips from "@/components/atoms/SlotPips/SlotPips";
 import { stepContent, stepIntro } from "@/components/MultiStepForm/CreateCharacterForm/characterStep.css";
 import GearItemCard from "@/components/MultiStepForm/CreateCharacterForm/GearItemCard/GearItemCard";
 import GearSlotTracker, { GEAR_CATALOG_ID, gearTabId } from "@/components/MultiStepForm/CreateCharacterForm/GearSlotTracker/GearSlotTracker";
-import GearTypeIcon from "@/components/MultiStepForm/CreateCharacterForm/GearTypeIcon/GearTypeIcon";
-import SlotPips from "@/components/MultiStepForm/CreateCharacterForm/SlotPips/SlotPips";
 import { useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFormContext";
-import SectionHeading from "@/components/SectionHeading/SectionHeading";
 import { EquipmentCatalog } from "@/features/equipment/model/equipmentCatalog";
 import { applySelection } from "@/features/equipment/model/selection";
 

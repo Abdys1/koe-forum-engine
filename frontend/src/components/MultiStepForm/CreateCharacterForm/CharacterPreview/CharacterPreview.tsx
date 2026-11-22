@@ -4,6 +4,7 @@ import clsx from "clsx";
 import Image from "next/image";
 import { Control, useWatch } from "react-hook-form";
 
+import Icon from "@/components/atoms/Icon/Icon";
 import type { CharacterInputs } from "@/features/character/model/createCharacter";
 import { sexLabels } from "@/features/character/model/sex";
 import { useObjectUrl } from "@/hooks/useObjectUrl";
@@ -28,7 +29,7 @@ export default function CharacterPreview({ control }: CharacterPreviewProps) {
                     ? <span key={imageUrl} className={clsx(styles.portraitInner, styles.portraitReveal)}>
                         <Image src={imageUrl} alt="Karakterkép" fill sizes="2.25rem" className={styles.portraitImg}/>
                       </span>
-                    : <span className={clsx("material-icons", styles.portraitIcon)} aria-hidden="true">person</span>
+                    : <Icon name="person" className={styles.portraitIcon}/>
                 }
             </div>
             <div className={styles.identity}>

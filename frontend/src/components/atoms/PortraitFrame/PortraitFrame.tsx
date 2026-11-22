@@ -1,14 +1,16 @@
 import clsx from "clsx";
 import Image from "next/image";
 
-import * as styles from "./CharacterPortraitFrame.css";
+import Icon from "@/components/atoms/Icon/Icon";
+
+import * as styles from "./PortraitFrame.css";
 
 type PortraitAction = {
     icon: string,
     text: string
 }
 
-type CharacterPortraitFrameProps = {
+type PortraitFrameProps = {
     imageUrl?: string,
     imageAlt?: string,
     placeholder?: PortraitAction,
@@ -21,7 +23,7 @@ type CharacterPortraitFrameProps = {
 
 function ActionContent({ icon, text }: PortraitAction) {
     return <>
-        <span className={clsx("material-icons", styles.actionIcon)} aria-hidden="true">{icon}</span>
+        <Icon name={icon} className={styles.actionIcon}/>
         <span className={styles.actionText}>{text}</span>
     </>;
 }
@@ -31,7 +33,7 @@ const imageSizes: Record<keyof typeof styles.frameSizes, string> = {
     large: "272px"
 };
 
-export default function CharacterPortraitFrame({ imageUrl, imageAlt = "", placeholder, overlay, size = "medium", ...props }: CharacterPortraitFrameProps) {
+export default function PortraitFrame({ imageUrl, imageAlt = "", placeholder, overlay, size = "medium", ...props }: PortraitFrameProps) {
     const frameClassName = clsx(styles.frame, styles.frameSizes[size]);
     const content = imageUrl
         ? <>

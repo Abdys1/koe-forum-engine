@@ -1,9 +1,9 @@
 import Link from "next/link";
 
+import TextLink from "@/components/atoms/TextLink/TextLink";
 import { heading, headingTitle } from "@/components/CharacterSheet/sheetHeading.css";
 import { findLocation, locationHref } from "@/features/forum/model/location";
 import { CharacterGame } from "@/lib/api/posts/types";
-import { goldLink } from "@/styles/shared.css";
 import { formatShortDate } from "@/utils/dateFormat";
 
 import * as styles from "./ActiveGames.css";
@@ -28,9 +28,9 @@ export default function ActiveGames({ games, className }: ActiveGamesProps) {
                                 <span className={styles.title}>{game.title}</span>
                                 <span className={styles.meta}>
                                     {location
-                                        ? <Link href={locationHref(game.locationId)} className={goldLink}>
+                                        ? <TextLink href={locationHref(game.locationId)}>
                                             {location.name}
-                                          </Link>
+                                          </TextLink>
                                         : game.locationId
                                     }
                                 </span>

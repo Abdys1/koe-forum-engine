@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useId } from "react";
 
+import Icon from "@/components/atoms/Icon/Icon";
 import DropdownSelect from "@/components/Inputs/DropdownSelect/DropdownSelect";
 import { DEFAULT_POST_PAGE_SIZE, POST_PAGE_SIZES, PostPageSize } from "@/lib/api/posts/types";
 
@@ -59,11 +60,11 @@ export default function Pagination({ page, pageSize, totalPages, anchorId }: Pag
         const isDisabled = targetPage < 1 || targetPage > totalPages;
         return isDisabled ? (
             <span className={clsx(styles.pageBtn, styles.pageBtnDisabled)} aria-hidden="true">
-                <span className="material-icons">{icon}</span>
+                <Icon name={icon}/>
             </span>
         ) : (
             <Link href={createHref(targetPage)} className={styles.pageBtn} aria-label={label} title={label}>
-                <span className="material-icons">{icon}</span>
+                <Icon name={icon}/>
             </Link>
         );
     };

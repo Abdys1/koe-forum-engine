@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 
-import Button from "@/components/Button/Button";
+import Button from "@/components/atoms/Button/Button";
+import TextLink from "@/components/atoms/TextLink/TextLink";
 import { findLocation, locationHref } from "@/features/forum/model/location";
 import { CharacterActivity } from "@/lib/api/posts/types";
-import { goldLink } from "@/styles/shared.css";
 import { formatLongDate } from "@/utils/dateFormat";
 
 import * as styles from "./CharacterActivityPanel.css";
@@ -33,9 +33,9 @@ export default function CharacterActivityPanel({ activity }: CharacterActivityPa
                     {lastPost && lastLocation
                         ? <>
                             <dd className={styles.statValue}>
-                                <Link href={locationHref(lastPost.locationId)} className={goldLink}>
+                                <TextLink href={locationHref(lastPost.locationId)}>
                                     {lastLocation.name}
-                                </Link>
+                                </TextLink>
                             </dd>
                             <dd>
                                 <time dateTime={lastPost.createdAt} className={styles.statMeta}>

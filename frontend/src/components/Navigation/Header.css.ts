@@ -1,10 +1,7 @@
 import { style } from '@vanilla-extract/css';
 
-import { colors, fonts, shadows } from '@/styles/tokens';
+import { colors, fonts, layout, shadows } from '@/styles/tokens';
 
-export const HEADER_HEIGHT = '3.75rem';
-const HEADER_BORDER_WIDTH = '1px';
-export const HEADER_TOTAL_HEIGHT = `calc(${HEADER_HEIGHT} + ${HEADER_BORDER_WIDTH})`;
 
 export const header = style({
   position: 'sticky',
@@ -12,7 +9,7 @@ export const header = style({
   zIndex: 40,
   width: '100%',
   background: colors.cardBlackBg,
-  borderBottom: `${HEADER_BORDER_WIDTH} solid`,
+  borderBottom: `${layout.headerBorderWidth} solid`,
   borderImage: `linear-gradient(to right, ${colors.cardMediumBg} 0%, ${colors.cardMediumBg} 30%, ${colors.secondary} 100%) 1`,
   boxShadow: shadows.card,
 });
@@ -21,7 +18,7 @@ export const nav = style({
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
-  height: HEADER_HEIGHT,
+  height: layout.headerHeight,
   paddingLeft: '2rem',
   paddingRight: '2rem',
 });

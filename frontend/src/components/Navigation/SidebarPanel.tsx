@@ -7,6 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import { MouseEvent as ReactMouseEvent, useEffect, useId, useRef, useState } from "react";
 
+import Icon from "@/components/atoms/Icon/Icon";
 import DropdownSelect from "@/components/Inputs/DropdownSelect/DropdownSelect";
 import { selectActiveCharacter } from "@/features/character/actions/selectActiveCharacter";
 import { CharacterDetails } from "@/lib/api/character/types";
@@ -119,7 +120,7 @@ function SidebarContent({ characters }: SidebarPanelProps) {
                         aria-label="Menüsáv összecsukása"
                         onClick={() => setIsOpen(false)}
                         >
-                        <span className={clsx("material-icons", styles.collapseIcon)}>chevron_left</span>
+                        <Icon name="chevron_left" className={styles.collapseIcon}/>
                     </button>
                 )}
                 <div className={styles.characterBlock}>
@@ -131,9 +132,7 @@ function SidebarContent({ characters }: SidebarPanelProps) {
                                 <Image src={activeCharacter.imageUrl} alt={activeCharacter.name} width={128} height={128}
                                     className={styles.avatar} />
                             ) : (
-                                <span className={clsx("material-icons", styles.avatar, styles.avatarPlaceholder)}>
-                                    person_add
-                                </span>
+                                <Icon name="person_add" className={clsx(styles.avatar, styles.avatarPlaceholder)}/>
                             )}
                         </button>
                         {isOpen && (
@@ -178,7 +177,7 @@ function SidebarContent({ characters }: SidebarPanelProps) {
                                 <Link key={item.label} href={item.href} className={styles.tile}
                                     style={{ animationDelay: `${120 + index * 35}ms` }}
                                     aria-current={isCurrentPage(item) ? "page" : undefined}>
-                                    <span className={clsx("material-icons", styles.tileIcon)}>{item.icon}</span>
+                                    <Icon name={item.icon} className={styles.tileIcon}/>
                                     <span className={styles.tileLabel}>{item.label}</span>
                                 </Link>
                             ))}
@@ -188,7 +187,7 @@ function SidebarContent({ characters }: SidebarPanelProps) {
                             <Link key={item.label} href={item.href} className={styles.menuItem}
                                 aria-current={isCurrentPage(item) ? "page" : undefined}
                                 aria-label={item.label} title={item.label}>
-                                <span className={clsx("material-icons", styles.menuIcon)}>{item.icon}</span>
+                                <Icon name={item.icon} className={styles.menuIcon}/>
                             </Link>
                         ))
                     )}
@@ -196,9 +195,7 @@ function SidebarContent({ characters }: SidebarPanelProps) {
                         aria-label={isOpen ? undefined : "Kijelentkezés"}
                         title={isOpen ? undefined : "Kijelentkezés"}
                         onClick={() => signOut()}>
-                        <span className={clsx("material-icons", isOpen ? styles.logoutIcon : styles.menuIcon)}>
-                            logout
-                        </span>
+                        <Icon name="logout" className={isOpen ? styles.logoutIcon : styles.menuIcon}/>
                         {isOpen && "Kijelentkezés"}
                     </button>
                 </nav>

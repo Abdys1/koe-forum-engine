@@ -1,5 +1,7 @@
 import clsx from "clsx";
 
+import Icon from "@/components/atoms/Icon/Icon";
+
 import * as styles from "./GearTypeIcon.css";
 
 type GearTypeIconProps = {
@@ -23,5 +25,5 @@ export default function GearTypeIcon({ icon, className }: GearTypeIconProps) {
             </svg>
         );
     }
-    return <span className={clsx("material-icons", styles.icon, className)} aria-hidden="true">{icon ?? "category"}</span>;
+    return <Icon name={icon ?? "category"} className={clsx(styles.icon, className)}/>;
 }

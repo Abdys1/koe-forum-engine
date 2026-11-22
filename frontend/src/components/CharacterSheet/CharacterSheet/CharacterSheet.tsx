@@ -3,7 +3,9 @@
 import Image from "next/image";
 import { useId, useRef, useState } from "react";
 
-import Button from "@/components/Button/Button";
+import Button from "@/components/atoms/Button/Button";
+import Eyebrow from "@/components/atoms/Eyebrow/Eyebrow";
+import PortraitFrame from "@/components/atoms/PortraitFrame/PortraitFrame";
 import ActiveGames from "@/components/CharacterSheet/ActiveGames/ActiveGames";
 import CharacterActivityPanel from "@/components/CharacterSheet/CharacterActivityPanel/CharacterActivityPanel";
 import EditableTextSection from "@/components/CharacterSheet/EditableTextSection/EditableTextSection";
@@ -11,14 +13,13 @@ import FollowToggle from "@/components/CharacterSheet/FollowToggle/FollowToggle"
 import QuoteSection from "@/components/CharacterSheet/QuoteSection/QuoteSection";
 import { heading, headingTitle } from "@/components/CharacterSheet/sheetHeading.css";
 import GearOverview from "@/components/GearOverview/GearOverview";
-import CharacterPortraitFrame from "@/components/MultiStepForm/CreateCharacterForm/CharacterPortraitFrame/CharacterPortraitFrame";
 import { Character } from "@/features/character/model/character";
 import { findRace } from "@/features/character/model/race";
 import { sexLabels } from "@/features/character/model/sex";
 import { GearOverviewRoot } from "@/features/equipment/model/gearOverview";
 import { useObjectUrl } from "@/hooks/useObjectUrl";
 import { CharacterActivity } from "@/lib/api/posts/types";
-import { eyebrow, visuallyHidden } from "@/styles/shared.css";
+import { visuallyHidden } from "@/styles/shared.css";
 
 import * as styles from "./CharacterSheet.css";
 
@@ -50,7 +51,7 @@ export default function CharacterSheet({ character, activity, gearOverview, canE
             <header className={styles.hero}>
                 {canEdit
                     ? <div className={styles.portraitColumn}>
-                        <CharacterPortraitFrame htmlFor={imageInputId} imageUrl={imageUrl} imageAlt={character.name} size="large"
+                        <PortraitFrame htmlFor={imageInputId} imageUrl={imageUrl} imageAlt={character.name} size="large"
                             overlay={{ icon: "swap_horiz", text: "Kép cseréje" }}/>
                         <Button variant="soft" size="small" icon="swap_horiz" title="Kép cseréje"
                             onClick={() => imageInputRef.current?.click()}/>
@@ -66,7 +67,7 @@ export default function CharacterSheet({ character, activity, gearOverview, canE
                 <div className={styles.heroMain}>
                     <div className={styles.identity}>
                         <div className={styles.eyebrowRow}>
-                            <span className={eyebrow}>Karakterlap</span>
+                            <Eyebrow>Karakterlap</Eyebrow>
                             <FollowToggle/>
                         </div>
                         <h1 id="character-name" className={styles.name}>{character.name}</h1>

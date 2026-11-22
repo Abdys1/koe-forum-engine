@@ -1,6 +1,4 @@
-import { globalStyle, keyframes, style } from '@vanilla-extract/css';
-
-import { HEADER_TOTAL_HEIGHT } from '@/components/Navigation/Header.css';
+import { keyframes, style } from '@vanilla-extract/css';
 
 import { alphaColors, backdropBlur, colors, fonts, goldFocusRing, gradients, shadows, transition, withAlpha } from './tokens';
 
@@ -17,45 +15,6 @@ export const mainBg = style({
     `radial-gradient(ellipse 60% 40% at 30% 95%, ${withAlpha(colors.mainMedium, 0.12)} 0%, transparent 70%)`,
   ].join(', '),
   backgroundAttachment: 'fixed',
-});
-
-const STEP_BG_HEIGHT = `calc(100vh - ${HEADER_TOTAL_HEIGHT})`;
-
-export const gearStepBg = style({
-  selectors: {
-    '&::before': {
-      content: '""',
-      position: 'absolute',
-      bottom: 0,
-      right: '5%',
-      width: '50%',
-      height: STEP_BG_HEIGHT,
-      backgroundImage: "url('/images/knight-withoutbg.png')",
-      backgroundRepeat: 'no-repeat',
-      backgroundPosition: 'left bottom',
-      backgroundSize: 'contain',
-      opacity: 0.4,
-    },
-  },
-});
-
-export const raceStepBg = style({
-  selectors: {
-    '&::before': {
-      content: '""',
-      position: 'absolute',
-      bottom: 0,
-      left: 0,
-      right: '5%',
-      width: '100%',
-      height: STEP_BG_HEIGHT,
-      backgroundImage: 'var(--raceUrl)',
-      backgroundRepeat: 'no-repeat',
-      backgroundPosition: 'left bottom',
-      backgroundSize: 'contain',
-      opacity: 0.4,
-    },
-  },
 });
 
 export const glassPanel = style({
@@ -172,31 +131,6 @@ export const contentContainer = style({
   margin: '0 auto',
 });
 
-export const socialLinkList = style({
-  display: 'flex',
-  alignItems: 'center',
-  gap: '1rem',
-});
-
-export const socialLink = style({
-  display: 'flex',
-  width: '1.5rem',
-  height: '1.5rem',
-  color: colors.white,
-  opacity: 0.7,
-  cursor: 'pointer',
-  transition: 'color 0.2s ease, opacity 0.2s ease',
-  ':hover': {
-    color: colors.secondary,
-    opacity: 1,
-  },
-});
-
-globalStyle(`${socialLink} svg`, {
-  width: '100%',
-  height: '100%',
-});
-
 export const visuallyHidden = style({
   position: 'absolute',
   width: '1px',
@@ -207,17 +141,4 @@ export const visuallyHidden = style({
   clip: 'rect(0, 0, 0, 0)',
   whiteSpace: 'nowrap',
   border: 0,
-});
-
-export const thinScrollbar = style({
-  scrollbarWidth: 'thin',
-  scrollbarColor: `${colors.mainLight} transparent`,
-  selectors: {
-    '&::-webkit-scrollbar': { width: '6px' },
-    '&::-webkit-scrollbar-track': { background: 'transparent' },
-    '&::-webkit-scrollbar-thumb': {
-      background: colors.mainLight,
-      borderRadius: '9999px',
-    },
-  },
 });
