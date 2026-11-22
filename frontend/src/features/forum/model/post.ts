@@ -5,6 +5,17 @@ export interface NewPostInput {
     content: string
 }
 
+export const POST_CONTENT_MIN_LENGTH = 500;
+export const POST_CONTENT_MAX_LENGTH = 30000;
+
+export function isPostContentLengthValid(content: string): boolean {
+    return content.length >= POST_CONTENT_MIN_LENGTH && content.length <= POST_CONTENT_MAX_LENGTH;
+}
+
+export function canSubmitNewPost({ gameTitle, content }: NewPostInput): boolean {
+    return gameTitle.trim() !== "" && isPostContentLengthValid(content);
+}
+
 export interface LocalPostMeta {
     id: string,
     locationId: string,

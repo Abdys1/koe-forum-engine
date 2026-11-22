@@ -1,4 +1,4 @@
-import LocationPosts from "@/components/Forum/LocationPosts/LocationPosts";
+import LocationPosts from "@/components/organisms/forum/LocationPosts/LocationPosts";
 import { getLocationPage } from "@/features/forum/queries/getLocationPage";
 
 import * as styles from "./location.css";

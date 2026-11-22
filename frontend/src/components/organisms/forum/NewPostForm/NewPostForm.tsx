@@ -5,12 +5,9 @@ import { useId } from "react";
 import { useForm } from "react-hook-form";
 
 import Button from "@/components/atoms/Button/Button";
-import { NewPostInput } from "@/features/forum/model/post";
+import { canSubmitNewPost, NewPostInput, POST_CONTENT_MAX_LENGTH, POST_CONTENT_MIN_LENGTH } from "@/features/forum/model/post";
 
 import * as styles from "./NewPostForm.css";
-
-export const MIN_CONTENT_LENGTH = 500;
-export const MAX_CONTENT_LENGTH = 30000;
 
 const numberFormatter = new Intl.NumberFormat("hu-HU");
 
@@ -27,8 +24,7 @@ export default function NewPostForm({ onSubmit }: NewPostFormProps) {
 
     const content = watch("content");
     const gameTitle = watch("gameTitle");
-    const isContentLengthValid = content.length >= MIN_CONTENT_LENGTH && content.length <= MAX_CONTENT_LENGTH;
-    const canSubmit = gameTitle.trim() !== "" && isContentLengthValid;
+    const canSubmit = canSubmitNewPost({ gameTitle, content });
 
     const submit = (inputs: NewPostInput) => {
         onSubmit(inputs);
@@ -48,12 +44,12 @@ export default function NewPostForm({ onSubmit }: NewPostFormProps) {
                 <textarea id={contentId} className={styles.textarea}
                     {...register("content", {
                         required: true,
-                        minLength: MIN_CONTENT_LENGTH,
-                        maxLength: MAX_CONTENT_LENGTH
+                        minLength: POST_CONTENT_MIN_LENGTH,
+                        maxLength: POST_CONTENT_MAX_LENGTH
                     })} />
-                <span className={clsx(styles.counter, content.length > MAX_CONTENT_LENGTH && styles.counterInvalid)}>
-                    {numberFormatter.format(content.length)} / {numberFormatter.format(MAX_CONTENT_LENGTH)} karakter
-                    (min. {numberFormatter.format(MIN_CONTENT_LENGTH)})
+                <span className={clsx(styles.counter, content.length > POST_CONTENT_MAX_LENGTH && styles.counterInvalid)}>
+                    {numberFormatter.format(content.length)} / {numberFormatter.format(POST_CONTENT_MAX_LENGTH)} karakter
+                    (min. {numberFormatter.format(POST_CONTENT_MIN_LENGTH)})
                 </span>
             </div>
             <div className={styles.actions}>

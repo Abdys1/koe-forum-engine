@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { addLocalPost } from "@/features/forum/model/post";
+import { addLocalPost, canSubmitNewPost, isPostContentLengthValid, POST_CONTENT_MAX_LENGTH, POST_CONTENT_MIN_LENGTH } from "@/features/forum/model/post";
 import { LocationPost } from "@/lib/api/posts/types";
 
 const author = { id: "1", name: "Ryldan", imageUrl: "/ryldan.png" };
@@ -29,5 +29,33 @@ describe("addLocalPost", () => {
         const result = addLocalPost(posts, { gameTitle: "Vihar", content: "Szöveg" }, author, meta);
 
         expect(result.map(item => [item.id, item.character.postCount])).toEqual([["new", 4], ["a", 4], ["b", 7], ["c", 4]]);
+    });
+});
+
+describe("isPostContentLengthValid", () => {
+    it("accepts content between the minimum and the maximum length, inclusive", () => {
+        expect(isPostContentLengthValid("a".repeat(POST_CONTENT_MIN_LENGTH))).toBe(true);
+        expect(isPostContentLengthValid("a".repeat(POST_CONTENT_MAX_LENGTH))).toBe(true);
+    });
+
+    it("rejects too short and too long content", () => {
+        expect(isPostContentLengthValid("a".repeat(POST_CONTENT_MIN_LENGTH - 1))).toBe(false);
+        expect(isPostContentLengthValid("a".repeat(POST_CONTENT_MAX_LENGTH + 1))).toBe(false);
+    });
+});
+
+describe("canSubmitNewPost", () => {
+    const content = "a".repeat(POST_CONTENT_MIN_LENGTH);
+
+    it("allows submitting a post with a game title and valid content", () => {
+        expect(canSubmitNewPost({ gameTitle: "Vihar", content })).toBe(true);
+    });
+
+    it("requires a non-blank game title", () => {
+        expect(canSubmitNewPost({ gameTitle: "   ", content })).toBe(false);
+    });
+
+    it("requires valid content", () => {
+        expect(canSubmitNewPost({ gameTitle: "Vihar", content: "rövid" })).toBe(false);
     });
 });

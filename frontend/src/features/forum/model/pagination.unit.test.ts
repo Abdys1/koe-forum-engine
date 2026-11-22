@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { parsePageRequest } from "@/features/forum/model/pagination";
+import { getFirstPostNumber, parsePageRequest } from "@/features/forum/model/pagination";
 import { DEFAULT_POST_PAGE_SIZE } from "@/lib/api/posts/types";
 
 describe("parsePageRequest", () => {
@@ -19,5 +19,15 @@ describe("parsePageRequest", () => {
         ["non-numeric", { page: "abc", pageSize: "abc" }]
     ])("falls back to the defaults for %s values", (_, searchParams) => {
         expect(parsePageRequest(searchParams)).toEqual({ page: 1, pageSize: DEFAULT_POST_PAGE_SIZE });
+    });
+});
+
+describe("getFirstPostNumber", () => {
+    it("numbers the posts of the first page from the total count downwards", () => {
+        expect(getFirstPostNumber(45, 1, 20)).toBe(45);
+    });
+
+    it("continues the numbering on the later pages", () => {
+        expect(getFirstPostNumber(45, 3, 20)).toBe(5);
     });
 });

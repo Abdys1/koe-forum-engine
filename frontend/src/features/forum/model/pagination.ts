@@ -18,3 +18,7 @@ export function parsePageRequest(searchParams: SearchParams): PageRequest {
         pageSize: isPostPageSize(pageSize) ? pageSize : DEFAULT_POST_PAGE_SIZE
     };
 }
+
+export function getFirstPostNumber(totalItems: number, page: number, pageSize: number): number {
+    return totalItems - (page - 1) * pageSize;
+}
