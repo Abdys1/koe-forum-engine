@@ -1,5 +1,5 @@
+import MultiStepLabel from "@/components/molecules/MultiStepLabel/MultiStepLabel";
 import { useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFormContext";
-import MultiStepLabel from "@/components/MultiStepForm/MultiStepLabel/MultiStepLabel";
 
 import * as styles from "./MultiStepBar.css";
 

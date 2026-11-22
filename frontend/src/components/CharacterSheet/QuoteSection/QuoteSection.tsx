@@ -7,7 +7,7 @@ import { useId, useLayoutEffect, useRef, useState } from "react";
 import Button from "@/components/atoms/Button/Button";
 import IconButton from "@/components/atoms/IconButton/IconButton";
 import TextLink from "@/components/atoms/TextLink/TextLink";
-import DropdownSelect from "@/components/Inputs/DropdownSelect/DropdownSelect";
+import DropdownSelect from "@/components/molecules/DropdownSelect/DropdownSelect";
 import { CharacterQuote } from "@/features/character/model/character";
 import { MAX_QUOTE_LENGTH, toCharacterQuote } from "@/features/character/model/quote";
 import { findLocation, locationHref, locations } from "@/features/forum/model/location";

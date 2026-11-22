@@ -7,8 +7,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import Button from "@/components/atoms/Button/Button";
-import PasswordField from "@/components/Inputs/PasswordField/PasswordField";
-import TextField from "@/components/Inputs/TextField/TextField";
+import InputField from "@/components/molecules/InputField/InputField";
 
 import * as styles from "./LoginForm.css";
 
@@ -66,10 +65,10 @@ export default function LoginForm({ onSuccess, callbackUrl }: LoginFormProps) {
         <>
             <form onSubmit={onSubmit} className={styles.form} noValidate>
                 {loginError && <div role="alert" className={styles.errorMsg}>Hibás felhasználónév vagy jelszó!</div>}
-                <TextField {...register('username', { required: "A felhasználónév kitöltése kötelező!" })}
-                    label="Felhasználónév" errors={errors} />
-                <PasswordField {...register('password', { required: "A jelszó kitöltése kötelező!" })}
-                    errors={errors} />
+                <InputField {...register('username', { required: "A felhasználónév kitöltése kötelező!" })}
+                    label="Felhasználónév" error={errors.username?.message} />
+                <InputField {...register('password', { required: "A jelszó kitöltése kötelező!" })}
+                    label="Jelszó" type="password" error={errors.password?.message} />
                 <Link href="/auth/forgot-password" className={styles.forgotLink}>Elfelejtettem a jelszavam</Link>
                 <Button type="submit" size="medium" disabled={isSubmitting}
                     title={isSubmitting ? "Belépés…" : "Belépés"} />

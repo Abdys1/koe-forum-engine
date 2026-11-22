@@ -8,7 +8,7 @@ import { signOut, useSession } from "next-auth/react";
 import { MouseEvent as ReactMouseEvent, useEffect, useId, useRef, useState } from "react";
 
 import Icon from "@/components/atoms/Icon/Icon";
-import DropdownSelect from "@/components/Inputs/DropdownSelect/DropdownSelect";
+import DropdownSelect from "@/components/molecules/DropdownSelect/DropdownSelect";
 import { selectActiveCharacter } from "@/features/character/actions/selectActiveCharacter";
 import { CharacterDetails } from "@/lib/api/character/types";
 

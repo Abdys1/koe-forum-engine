@@ -3,8 +3,9 @@
 import { useState } from "react";
 
 import NewPostForm from "@/components/Forum/NewPostForm/NewPostForm";
-import Pagination from "@/components/Forum/Pagination/Pagination";
-import PostCard from "@/components/Forum/PostCard/PostCard";
+import Pagination from "@/components/molecules/Pagination/Pagination";
+import PostCard from "@/components/molecules/PostCard/PostCard";
+import { DEFAULT_POST_PAGE_SIZE, POST_PAGE_SIZES } from "@/features/forum/model/pagination";
 import { addLocalPost, NewPostInput } from "@/features/forum/model/post";
 import type { LocationPost, Page, PostCharacter } from "@/lib/api/posts/types";
 
@@ -33,7 +34,8 @@ export default function LocationPosts({ locationId, postsPage, author }: Locatio
     };
 
     const pagination = (
-        <Pagination page={page} pageSize={pageSize} totalPages={totalPages} anchorId={POSTS_ANCHOR_ID} />
+        <Pagination page={page} totalPages={totalPages} pageSize={pageSize} pageSizeOptions={POST_PAGE_SIZES}
+            defaultPageSize={DEFAULT_POST_PAGE_SIZE} pageSizeLabel="Hozzászólás / oldal" anchorId={POSTS_ANCHOR_ID} />
     );
 
     return (

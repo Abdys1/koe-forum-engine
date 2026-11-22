@@ -1,13 +1,23 @@
 import Image from "next/image";
 
 import Icon from "@/components/atoms/Icon/Icon";
-import { LocationPost } from "@/lib/api/posts/types";
 import { formatDateTime } from "@/utils/dateFormat";
 
 import * as styles from "./PostCard.css";
 
+export interface PostCardPost {
+    gameTitle: string,
+    content: string,
+    createdAt: string,
+    character: {
+        name: string,
+        imageUrl: string,
+        postCount: number
+    }
+}
+
 type PostCardProps = {
-    post: LocationPost,
+    post: PostCardPost,
     postNumber: number
 }
 

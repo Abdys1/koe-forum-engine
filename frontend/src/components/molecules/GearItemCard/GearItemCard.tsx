@@ -2,22 +2,23 @@ import clsx from "clsx";
 
 import Icon from "@/components/atoms/Icon/Icon";
 import SlotPips from "@/components/atoms/SlotPips/SlotPips";
-import { SelectionResult } from "@/features/equipment/model/equipmentCatalog";
 import { visuallyHidden } from "@/styles/shared.css";
 
 import * as styles from "./GearItemCard.css";
+
+export type GearItemStatus = "add" | "replace" | "blocked";
 
 type GearItemCardProps = {
     name: string,
     cost?: number,
     count: number,
-    status: SelectionResult["kind"],
+    status: GearItemStatus,
     onSelect: () => void,
     onRemove: () => void,
     onPreview: (isActive: boolean) => void
 }
 
-const hints: Record<SelectionResult["kind"], string> = {
+const hints: Record<GearItemStatus, string> = {
     add: "Felveszem",
     replace: "Csere",
     blocked: "Nincs elég slot"
