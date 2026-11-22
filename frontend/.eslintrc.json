@@ -61,6 +61,10 @@
       {
         "pattern": "src/middleware.ts",
         "category": "middleware"
+      },
+      {
+        "pattern": "**/*.stories.tsx",
+        "category": "story"
       }
     ]
   },
@@ -295,6 +299,23 @@
               },
               "dependency": {
                 "kind": "type"
+              }
+            }
+          },
+          {
+            "from": {
+              "file": {
+                "categories": "story"
+              }
+            },
+            "allow": {
+              "to": {
+                "element": {
+                  "type": "feature"
+                },
+                "file": {
+                  "path": "**/__fixtures__/**"
+                }
               }
             }
           },
