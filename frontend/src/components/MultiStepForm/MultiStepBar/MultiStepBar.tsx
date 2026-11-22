@@ -1,5 +1,6 @@
 import { useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFormContext";
 import MultiStepLabel from "@/components/MultiStepForm/MultiStepLabel/MultiStepLabel";
+
 import * as styles from "./MultiStepBar.css";
 
 export default function MultiStepBar() {

@@ -1,6 +1,7 @@
 import SocialLink from "@/components/SocialLink/SocialLink";
 import { SocialLink as SocialLinkData } from "@/lib/socialLinks";
 import { socialLinkList } from "@/styles/shared.css";
+
 import * as styles from "./Footer.css";
 
 type FooterProps = {

@@ -1,4 +1,4 @@
-import { Caveat, Mrs_Saint_Delafield, Sumana, Poppins, Roboto, Splash, Pirata_One, Cinzel, Cinzel_Decorative } from "next/font/google";
+import { Caveat, Cinzel, Cinzel_Decorative,Mrs_Saint_Delafield, Pirata_One, Poppins, Roboto, Splash, Sumana } from "next/font/google";
 
 export const mrsSaintDelafield = Mrs_Saint_Delafield({ weight: "400", subsets: ['latin', 'latin-ext'], variable: "--font-mrsSaintDelafield" });
 export const sumana = Sumana({ weight: ["400", "700"], subsets: ['latin', 'latin-ext'], variable: "--font-sumana"});

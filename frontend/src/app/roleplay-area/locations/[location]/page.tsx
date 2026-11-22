@@ -2,6 +2,7 @@ import LocationPosts from "@/components/Forum/LocationPosts/LocationPosts";
 import { locations } from "@/dummydata/locations";
 import { postsClient } from "@/lib/api/posts";
 import { parsePageRequest } from "@/lib/api/posts/pagination";
+
 import * as styles from "./location.css";
 
 export default async function LocationPage({

@@ -3,6 +3,7 @@
 import clsx from "clsx";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+
 import * as styles from "./BackgroundSlideshow.css";
 
 type Slide = {

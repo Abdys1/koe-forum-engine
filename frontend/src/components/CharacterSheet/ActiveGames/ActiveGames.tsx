@@ -1,9 +1,11 @@
 import Link from "next/link";
+
 import { heading, headingTitle } from "@/components/CharacterSheet/sheetHeading.css";
 import { locations } from "@/dummydata/locations";
 import { CharacterGame } from "@/lib/api/posts/types";
 import { formatShortDate } from "@/lib/dateFormat";
 import { goldLink } from "@/styles/shared.css";
+
 import * as styles from "./ActiveGames.css";
 
 type ActiveGamesProps = {

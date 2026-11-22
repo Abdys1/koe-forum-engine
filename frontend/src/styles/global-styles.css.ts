@@ -1,4 +1,5 @@
 import { globalStyle } from '@vanilla-extract/css';
+
 import { colors, fonts } from './tokens';
 
 globalStyle('*', {

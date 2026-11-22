@@ -1,4 +1,5 @@
 import { style } from '@vanilla-extract/css';
+
 import { alphaColors, fonts } from '@/styles/tokens';
 
 export const stepContent = style({

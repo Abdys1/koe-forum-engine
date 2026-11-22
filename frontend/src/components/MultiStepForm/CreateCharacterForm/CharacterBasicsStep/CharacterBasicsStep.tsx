@@ -1,10 +1,12 @@
 'use client'
 
-import Button from "@/components/Button/Button";
-import SectionHeading from "@/components/SectionHeading/SectionHeading";
-import { useId, useState } from "react";
-import { useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFormContext";
 import clsx from "clsx";
+import { useId, useState } from "react";
+
+import Button from "@/components/Button/Button";
+import { useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFormContext";
+import SectionHeading from "@/components/SectionHeading/SectionHeading";
+
 import * as styles from "./CharacterBasicsStep.css";
 
 export type SelectableSex = "ferfi" | "no";

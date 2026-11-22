@@ -1,4 +1,5 @@
 import { eyebrow } from "@/styles/shared.css";
+
 import * as styles from "./SectionHeading.css";
 
 type SectionHeadingProps = {

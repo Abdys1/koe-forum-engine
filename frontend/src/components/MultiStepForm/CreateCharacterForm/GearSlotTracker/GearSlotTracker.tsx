@@ -2,10 +2,12 @@
 
 import clsx from "clsx";
 import { KeyboardEvent, useRef } from "react";
+
 import GearTypeIcon from "@/components/MultiStepForm/CreateCharacterForm/GearTypeIcon/GearTypeIcon";
 import SlotPips from "@/components/MultiStepForm/CreateCharacterForm/SlotPips/SlotPips";
 import { EquipmentCatalog, SlotPoolUsage } from "@/lib/equipmentCatalog";
 import { visuallyHidden } from "@/styles/shared.css";
+
 import * as styles from "./GearSlotTracker.css";
 
 export const GEAR_CATALOG_ID = "gear-catalog";

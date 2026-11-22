@@ -1,4 +1,5 @@
 import { style } from '@vanilla-extract/css';
+
 import { mainBg } from '@/styles/shared.css';
 import { alphaColors, colors, fonts, shadows } from '@/styles/tokens';
 

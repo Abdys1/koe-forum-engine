@@ -5,6 +5,7 @@ import { postsClient } from "@/lib/api/posts";
 import { toCharacter } from "@/lib/character";
 import { buildEquipmentCatalog } from "@/lib/equipmentCatalog";
 import { toGearOverview } from "@/lib/gearOverview";
+
 import * as styles from "./character.css";
 
 export default async function CharacterPage({ params }: { params: Promise<{ id: string }> }) {

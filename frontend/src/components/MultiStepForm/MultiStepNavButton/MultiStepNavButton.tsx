@@ -1,4 +1,5 @@
 import clsx from "clsx";
+
 import * as styles from "./MultiStepNavButton.css";
 
 type NavDirection = keyof typeof styles.circleVariants;

@@ -4,8 +4,10 @@ import clsx from "clsx";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useId } from "react";
+
 import DropdownSelect from "@/components/Inputs/DropdownSelect/DropdownSelect";
 import { DEFAULT_POST_PAGE_SIZE, POST_PAGE_SIZES, PostPageSize } from "@/lib/api/posts/types";
+
 import * as styles from "./Pagination.css";
 
 type PaginationProps = {

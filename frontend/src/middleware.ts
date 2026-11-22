@@ -1,7 +1,7 @@
+import { NextResponse } from "next/server";
 import { JWT } from "next-auth/jwt";
 import { NextRequestWithAuth, withAuth } from "next-auth/middleware";
 import { signIn } from "next-auth/react";
-import { NextResponse } from "next/server";
 
 const PUBLIC_PATHS: string[] = [
     '/',

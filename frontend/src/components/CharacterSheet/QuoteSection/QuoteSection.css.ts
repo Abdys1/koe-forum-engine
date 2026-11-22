@@ -1,4 +1,5 @@
 import { globalStyle, style } from '@vanilla-extract/css';
+
 import { alphaColors, colors, fonts, gradients, media, shadows, transition, withAlpha } from '@/styles/tokens';
 
 const quoteFontSize = 'clamp(1rem, 1.5vw, 1.2rem)';

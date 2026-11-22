@@ -1,23 +1,24 @@
 "use client"
 
-import CharacterRaceStep from "@/components/MultiStepForm/CreateCharacterForm/CharacterRaceStep/CharacterRaceStep";
-import CharacterBasicsStep, { SelectableSex } from "@/components/MultiStepForm/CreateCharacterForm/CharacterBasicsStep/CharacterBasicsStep";
-import CharacterGearStep from "@/components/MultiStepForm/CreateCharacterForm/CharacterGearStep/CharacterGearStep";
-import CharacterImageStep from "@/components/MultiStepForm/CreateCharacterForm/CharacterImageStep/CharacterImageStep";
-import CreateCharacterHeader from "@/components/MultiStepForm/CreateCharacterForm/CreateCharacterHeader/CreateCharacterHeader";
-import CharacterSummaryStep from "@/components/MultiStepForm/CreateCharacterForm/CharacterSummaryStep/CharacterSummaryStep";
 import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 import { SubmitHandler, useForm, useWatch } from "react-hook-form";
+
+import { createCharacter } from "@/app/character/create/actions";
+import CharacterBasicsStep, { SelectableSex } from "@/components/MultiStepForm/CreateCharacterForm/CharacterBasicsStep/CharacterBasicsStep";
+import CharacterGearStep from "@/components/MultiStepForm/CreateCharacterForm/CharacterGearStep/CharacterGearStep";
+import CharacterImageStep from "@/components/MultiStepForm/CreateCharacterForm/CharacterImageStep/CharacterImageStep";
+import CharacterRaceStep from "@/components/MultiStepForm/CreateCharacterForm/CharacterRaceStep/CharacterRaceStep";
+import CharacterSummaryStep from "@/components/MultiStepForm/CreateCharacterForm/CharacterSummaryStep/CharacterSummaryStep";
+import CreateCharacterHeader from "@/components/MultiStepForm/CreateCharacterForm/CreateCharacterHeader/CreateCharacterHeader";
 import MultiStepForm from "@/components/MultiStepForm/MultiStepForm/MultiStepForm";
 import { findRace, races } from "@/dummydata/races";
-import { raceStepBg, gearStepBg } from "@/styles/shared.css";
-import { createCharacter } from "@/app/character/create/actions";
 import { EquipmentCatalogData } from "@/lib/api/equipment/types";
 import { sexMapping } from "@/lib/character";
 import { compactSelection } from "@/lib/equipment";
 import { buildEquipmentCatalog } from "@/lib/equipmentCatalog";
 import { toGearOverview } from "@/lib/gearOverview";
+import { gearStepBg,raceStepBg } from "@/styles/shared.css";
 
 export interface CharacterInputs {
     raceId: string,

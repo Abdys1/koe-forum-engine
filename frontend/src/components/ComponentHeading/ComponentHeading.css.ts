@@ -1,4 +1,5 @@
 import { style } from '@vanilla-extract/css';
+
 import { colors, fonts, shadows } from '@/styles/tokens';
 
 export const heading = style({

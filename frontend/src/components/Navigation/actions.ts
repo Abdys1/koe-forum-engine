@@ -1,8 +1,9 @@
 "use server"
 
 import { getServerSession } from "next-auth";
-import { config } from "@/app/api/auth/[...nextauth]/auth";
+
 import { userClient } from "@/lib/api/user";
+import { config } from "@/app/api/auth/[...nextauth]/auth";
 
 export type SelectActiveCharacterResult = { success: boolean };
 

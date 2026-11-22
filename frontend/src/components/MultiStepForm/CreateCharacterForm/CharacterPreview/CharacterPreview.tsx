@@ -3,9 +3,11 @@
 import clsx from "clsx";
 import Image from "next/image";
 import { Control, useWatch } from "react-hook-form";
+
 import { sexLabels } from "@/components/MultiStepForm/CreateCharacterForm/CharacterBasicsStep/CharacterBasicsStep";
 import type { CharacterInputs } from "@/components/MultiStepForm/CreateCharacterForm/CreateCharacterForm/CreateCharacterForm";
 import { useObjectUrl } from "@/hooks/useObjectUrl";
+
 import * as styles from "./CharacterPreview.css";
 
 type CharacterPreviewProps = {

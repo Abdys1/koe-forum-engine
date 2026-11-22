@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import Image from "next/image";
+
 import * as styles from "./CharacterPortraitFrame.css";
 
 type PortraitAction = {

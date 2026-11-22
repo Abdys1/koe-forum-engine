@@ -1,4 +1,5 @@
 import { style } from '@vanilla-extract/css';
+
 import { HEADER_TOTAL_HEIGHT } from '@/components/Navigation/Header.css';
 import { authCard, mainBg } from '@/styles/shared.css';
 import { alphaColors, colors, fonts, media, shadows, withAlpha } from '@/styles/tokens';

@@ -3,7 +3,9 @@
 import clsx from "clsx";
 import { useId } from "react";
 import { useForm } from "react-hook-form";
+
 import Button from "@/components/Button/Button";
+
 import * as styles from "./NewPostForm.css";
 
 export interface NewPostInputs {

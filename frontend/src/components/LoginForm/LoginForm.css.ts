@@ -1,4 +1,5 @@
 import { globalStyle, style } from '@vanilla-extract/css';
+
 import { goldLink, mutedLink } from '@/styles/shared.css';
 import { alphaColors, colors, fonts, withAlpha } from '@/styles/tokens';
 

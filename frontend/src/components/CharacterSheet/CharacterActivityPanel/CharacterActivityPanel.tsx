@@ -1,11 +1,13 @@
 'use client'
 
 import Link from "next/link";
+
 import Button from "@/components/Button/Button";
 import { locations } from "@/dummydata/locations";
 import { CharacterActivity } from "@/lib/api/posts/types";
 import { formatLongDate } from "@/lib/dateFormat";
 import { goldLink } from "@/styles/shared.css";
+
 import * as styles from "./CharacterActivityPanel.css";
 
 type CharacterActivityPanelProps = {

@@ -2,15 +2,17 @@
 
 import { useMemo, useState } from "react";
 import { useWatch } from "react-hook-form";
-import GearTypeIcon from "@/components/MultiStepForm/CreateCharacterForm/GearTypeIcon/GearTypeIcon";
+
+import { stepContent, stepIntro } from "@/components/MultiStepForm/CreateCharacterForm/characterStep.css";
 import GearItemCard from "@/components/MultiStepForm/CreateCharacterForm/GearItemCard/GearItemCard";
 import GearSlotTracker, { GEAR_CATALOG_ID, gearTabId } from "@/components/MultiStepForm/CreateCharacterForm/GearSlotTracker/GearSlotTracker";
+import GearTypeIcon from "@/components/MultiStepForm/CreateCharacterForm/GearTypeIcon/GearTypeIcon";
 import SlotPips from "@/components/MultiStepForm/CreateCharacterForm/SlotPips/SlotPips";
 import { useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFormContext";
 import SectionHeading from "@/components/SectionHeading/SectionHeading";
 import { applySelection } from "@/lib/equipment";
 import { EquipmentCatalog } from "@/lib/equipmentCatalog";
-import { stepContent, stepIntro } from "@/components/MultiStepForm/CreateCharacterForm/characterStep.css";
+
 import * as styles from "./CharacterGearStep.css";
 
 const EMPTY_SELECTION: number[] = [];

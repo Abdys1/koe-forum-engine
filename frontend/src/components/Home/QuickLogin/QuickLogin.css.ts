@@ -1,4 +1,5 @@
 import { style } from '@vanilla-extract/css';
+
 import { authCard, eyebrow as eyebrowBase } from '@/styles/shared.css';
 import { alphaColors, colors, fonts } from '@/styles/tokens';
 

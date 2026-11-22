@@ -1,7 +1,8 @@
-import type { Middleware } from "openapi-fetch";
 import { getServerSession } from "next-auth";
-import { config } from "@/app/api/auth/[...nextauth]/auth";
+import type { Middleware } from "openapi-fetch";
+
 import { ApiClient, createApiClient } from "@/lib/api/client/api-client";
+import { config } from "@/app/api/auth/[...nextauth]/auth";
 
 const bearerAuth: Middleware = {
     async onRequest({ request }) {

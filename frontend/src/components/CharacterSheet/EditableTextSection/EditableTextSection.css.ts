@@ -1,4 +1,5 @@
 import { style } from '@vanilla-extract/css';
+
 import { alphaColors, colors, fonts, transition, withAlpha } from '@/styles/tokens';
 
 const textBase = {

@@ -1,17 +1,19 @@
 'use client'
 
 import clsx from "clsx";
+
 import Button from "@/components/Button/Button";
 import EditButton from "@/components/EditButton/EditButton";
 import GearOverview from "@/components/GearOverview/GearOverview";
-import { sexLabels, SelectableSex } from "@/components/MultiStepForm/CreateCharacterForm/CharacterBasicsStep/CharacterBasicsStep";
+import { SelectableSex,sexLabels } from "@/components/MultiStepForm/CreateCharacterForm/CharacterBasicsStep/CharacterBasicsStep";
 import CharacterPortraitFrame from "@/components/MultiStepForm/CreateCharacterForm/CharacterPortraitFrame/CharacterPortraitFrame";
+import { stepContent, stepIntro } from "@/components/MultiStepForm/CreateCharacterForm/characterStep.css";
 import { useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFormContext";
 import SectionHeading from "@/components/SectionHeading/SectionHeading";
 import { useObjectUrl } from "@/hooks/useObjectUrl";
-import { discordLink } from "@/lib/socialLinks";
 import { GearOverviewRoot } from "@/lib/gearOverview";
-import { stepContent, stepIntro } from "@/components/MultiStepForm/CreateCharacterForm/characterStep.css";
+import { discordLink } from "@/lib/socialLinks";
+
 import * as styles from "./CharacterSummaryStep.css";
 
 type CharacterSummaryStepProps = {

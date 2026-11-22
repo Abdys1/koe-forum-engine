@@ -1,4 +1,4 @@
-import { DEFAULT_POST_PAGE_SIZE, POST_PAGE_SIZES, PageRequest, PostPageSize } from "@/lib/api/posts/types";
+import { DEFAULT_POST_PAGE_SIZE, PageRequest, POST_PAGE_SIZES, PostPageSize } from "@/lib/api/posts/types";
 
 type SearchParams = Record<string, string | string[] | undefined>;
 

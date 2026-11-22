@@ -1,11 +1,13 @@
 "use client"
 
 import { useState } from "react";
+
 import NewPostForm, { NewPostInputs } from "@/components/Forum/NewPostForm/NewPostForm";
 import Pagination from "@/components/Forum/Pagination/Pagination";
 import PostCard from "@/components/Forum/PostCard/PostCard";
 import { dummyCharacter } from "@/dummydata/posts";
 import { LocationPost, Page } from "@/lib/api/posts/types";
+
 import * as styles from "./LocationPosts.css";
 
 const POSTS_ANCHOR_ID = "posts";

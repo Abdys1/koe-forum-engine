@@ -1,4 +1,5 @@
 import createClient from "openapi-fetch";
+
 import type { paths } from "@/lib/api/schema";
 
 // TODO legyen egy config fájl, amiből szedjük

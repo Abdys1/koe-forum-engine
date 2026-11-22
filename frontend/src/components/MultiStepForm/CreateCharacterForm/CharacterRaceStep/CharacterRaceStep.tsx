@@ -1,11 +1,13 @@
 "use client"
 
+import { useWatch } from "react-hook-form";
+
 import Button from "@/components/Button/Button";
 import CharacterRaceFilmstrip from "@/components/MultiStepForm/CreateCharacterForm/CharacterRaceFilmstrip/CharacterRaceFilmstrip";
-import { useWatch } from "react-hook-form";
 import { useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFormContext";
-import { findRace } from "@/dummydata/races";
 import SectionHeading from "@/components/SectionHeading/SectionHeading";
+import { findRace } from "@/dummydata/races";
+
 import * as styles from "./CharacterRaceStep.css";
 
 export default function CharacterRaceStep() {

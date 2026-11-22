@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
+
 import Button from "@/components/Button/Button";
 import BackgroundSlideshow from "@/components/Home/BackgroundSlideshow/BackgroundSlideshow";
 import CharacterTeasers from "@/components/Home/CharacterTeasers/CharacterTeasers";
@@ -9,6 +10,7 @@ import SectionHeading from "@/components/SectionHeading/SectionHeading";
 import Showcase from "@/components/Showcase/Showcase";
 import { activityStats, characterSteps, cities, featuredCharacters, heroSlides, latestActivity, newestCharacter, news } from "@/dummydata/homepage";
 import { accentLink, eyebrow, metaText } from "@/styles/shared.css";
+
 import * as styles from "./home.css";
 
 const romanNumerals = ["I", "II", "III"];

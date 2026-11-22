@@ -1,14 +1,16 @@
 'use client'
 
-import Button from "@/components/Button/Button";
-import SectionHeading from "@/components/SectionHeading/SectionHeading";
+import clsx from "clsx";
 import { useRef } from "react";
 import { useWatch } from "react-hook-form";
-import { useObjectUrl } from "@/hooks/useObjectUrl";
-import { useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFormContext";
-import clsx from "clsx";
+
+import Button from "@/components/Button/Button";
 import CharacterPortraitFrame from "@/components/MultiStepForm/CreateCharacterForm/CharacterPortraitFrame/CharacterPortraitFrame";
 import { stepContent, stepIntro } from "@/components/MultiStepForm/CreateCharacterForm/characterStep.css";
+import { useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFormContext";
+import SectionHeading from "@/components/SectionHeading/SectionHeading";
+import { useObjectUrl } from "@/hooks/useObjectUrl";
+
 import * as styles from "./CharacterImageStep.css";
 
 export default function CharacterImageStep() {

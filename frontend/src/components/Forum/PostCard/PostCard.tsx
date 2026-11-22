@@ -1,6 +1,8 @@
 import Image from "next/image";
+
 import { LocationPost } from "@/lib/api/posts/types";
 import { formatDateTime } from "@/lib/dateFormat";
+
 import * as styles from "./PostCard.css";
 
 type PostCardProps = {

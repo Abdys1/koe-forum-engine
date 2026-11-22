@@ -1,4 +1,5 @@
 import { keyframes, style } from '@vanilla-extract/css';
+
 import { glassFrame, riseIn } from '@/styles/shared.css';
 import { alphaColors, characterPortrait, colors, fonts, media, shadows } from '@/styles/tokens';
 

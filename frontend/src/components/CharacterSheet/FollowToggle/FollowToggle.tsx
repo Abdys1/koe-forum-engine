@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { useState } from "react";
+
 import * as styles from "./FollowToggle.css";
 
 export default function FollowToggle() {

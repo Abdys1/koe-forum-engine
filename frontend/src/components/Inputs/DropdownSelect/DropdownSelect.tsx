@@ -2,6 +2,7 @@
 
 import clsx from "clsx";
 import { KeyboardEvent, ReactNode, useEffect, useId, useRef, useState } from "react";
+
 import * as styles from "./DropdownSelect.css";
 
 export type DropdownOption<ValueType> = {

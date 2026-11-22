@@ -3,7 +3,9 @@
 import clsx from "clsx";
 import Image from "next/image";
 import { useId, useState } from "react";
+
 import { glassFrame } from "@/styles/shared.css";
+
 import * as styles from "./Showcase.css";
 
 type ShowcaseElement = {

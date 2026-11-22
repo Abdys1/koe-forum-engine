@@ -1,4 +1,5 @@
 import { style, styleVariants } from '@vanilla-extract/css';
+
 import { fadeDividerTop } from '@/styles/shared.css';
 import { alphaColors, colors, fonts, withAlpha } from '@/styles/tokens';
 

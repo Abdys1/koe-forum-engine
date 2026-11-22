@@ -1,7 +1,9 @@
 import clsx from "clsx";
+
 import SlotPips from "@/components/MultiStepForm/CreateCharacterForm/SlotPips/SlotPips";
 import { SelectionResult } from "@/lib/equipmentCatalog";
 import { visuallyHidden } from "@/styles/shared.css";
+
 import * as styles from "./GearItemCard.css";
 
 type GearItemCardProps = {

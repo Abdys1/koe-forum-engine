@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import Image from "next/image";
 import { forwardRef } from "react";
+
 import * as styles from "./CharacterRaceBtn.css";
 
 type CharacterRaceBtnProps = {

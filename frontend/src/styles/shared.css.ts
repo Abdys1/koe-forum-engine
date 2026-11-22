@@ -1,5 +1,7 @@
 import { globalStyle, keyframes, style } from '@vanilla-extract/css';
+
 import { HEADER_TOTAL_HEIGHT } from '@/components/Navigation/Header.css';
+
 import { alphaColors, backdropBlur, colors, fonts, goldFocusRing, gradients, shadows, transition, withAlpha } from './tokens';
 
 export const riseIn = keyframes({

@@ -6,9 +6,11 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import { MouseEvent as ReactMouseEvent, useEffect, useId, useRef, useState } from "react";
+
 import DropdownSelect from "@/components/Inputs/DropdownSelect/DropdownSelect";
 import { selectActiveCharacter } from "@/components/Navigation/actions";
 import { CharacterDetails } from "@/lib/api/character/types";
+
 import * as styles from "./Sidebar.css";
 
 type MenuItem = {

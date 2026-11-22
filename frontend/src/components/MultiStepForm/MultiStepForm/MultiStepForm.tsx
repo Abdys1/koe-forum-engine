@@ -1,9 +1,11 @@
+import clsx from "clsx";
+import React, { useState } from "react";
+import { SubmitHandler, UseFormReturn } from "react-hook-form";
+
 import MultiStepBar from "@/components/MultiStepForm/MultiStepBar/MultiStepBar";
 import { FormContextState, MultiStepFormContext, useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFormContext";
 import MultiStepNavButton from "@/components/MultiStepForm/MultiStepNavButton/MultiStepNavButton";
-import React, { useState } from "react";
-import { SubmitHandler, UseFormReturn } from "react-hook-form";
-import clsx from "clsx";
+
 import * as styles from "./MultiStepForm.css";
 
 interface MultiStepFormProps {

@@ -2,9 +2,11 @@
 
 import clsx from "clsx";
 import { useId, useState } from "react";
+
 import Button from "@/components/Button/Button";
 import { heading, headingAction, headingTitle } from "@/components/CharacterSheet/sheetHeading.css";
 import EditButton from "@/components/EditButton/EditButton";
+
 import * as styles from "./EditableTextSection.css";
 
 const numberFormatter = new Intl.NumberFormat("hu-HU");

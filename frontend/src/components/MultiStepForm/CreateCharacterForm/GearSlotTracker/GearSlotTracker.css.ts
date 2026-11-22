@@ -1,4 +1,5 @@
 import { keyframes, style } from '@vanilla-extract/css';
+
 import { HEADER_TOTAL_HEIGHT } from '@/components/Navigation/Header.css';
 import { fadeDividerBottom, glassPanel, riseIn } from '@/styles/shared.css';
 import { alphaColors, colors, fonts, goldFocusRing, media, shadows, transition, withAlpha } from '@/styles/tokens';

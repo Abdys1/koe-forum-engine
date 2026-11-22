@@ -1,4 +1,5 @@
 import { style } from '@vanilla-extract/css';
+
 import { colors } from '@/styles/tokens';
 
 export const bar = style({

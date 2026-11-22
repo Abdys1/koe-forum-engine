@@ -1,11 +1,13 @@
 "use client"
 
-import CharacterRaceBtn from "@/components/MultiStepForm/CreateCharacterForm/CharacterRaceBtn/CharacterRaceBtn";
 import clsx from "clsx";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useWatch } from "react-hook-form";
+
+import CharacterRaceBtn from "@/components/MultiStepForm/CreateCharacterForm/CharacterRaceBtn/CharacterRaceBtn";
 import { useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFormContext";
 import { races, SelectableRace } from "@/dummydata/races";
+
 import * as styles from "./CharacterRaceFilmstrip.css";
 
 const DRAG_THRESHOLD = 5;

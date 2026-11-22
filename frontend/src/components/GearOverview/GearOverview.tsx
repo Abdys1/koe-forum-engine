@@ -1,7 +1,9 @@
 import clsx from "clsx";
+
 import GearTypeIcon from "@/components/MultiStepForm/CreateCharacterForm/GearTypeIcon/GearTypeIcon";
 import SlotPips from "@/components/MultiStepForm/CreateCharacterForm/SlotPips/SlotPips";
 import { GearOverviewRoot } from "@/lib/gearOverview";
+
 import * as styles from "./GearOverview.css";
 
 type GearOverviewProps = {

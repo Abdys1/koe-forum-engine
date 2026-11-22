@@ -1,4 +1,5 @@
 import { keyframes, style } from '@vanilla-extract/css';
+
 import { HEADER_TOTAL_HEIGHT } from '@/components/Navigation/Header.css';
 import { accentLink, contentContainer, fadeDividerBottom, fadeDividerTop, featuredPanel, glassPanel, glassPanelHover, goldLink, mainBg, metaText } from '@/styles/shared.css';
 import { alphaColors, backdropBlur, colors, fonts, gradients, media, shadows, transition, withAlpha } from '@/styles/tokens';

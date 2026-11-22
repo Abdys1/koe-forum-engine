@@ -1,6 +1,7 @@
-import InputField from "@/components/Inputs/InputField/InputField";
 import { forwardRef } from "react";
 import { FieldErrors } from "react-hook-form";
+
+import InputField from "@/components/Inputs/InputField/InputField";
 
 type TextFieldProps = {
     label: string,

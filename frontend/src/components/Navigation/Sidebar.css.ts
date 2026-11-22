@@ -1,4 +1,5 @@
 import { keyframes, style } from '@vanilla-extract/css';
+
 import { HEADER_TOTAL_HEIGHT } from '@/components/Navigation/Header.css';
 import { alphaColors, colors, fonts, gradients } from '@/styles/tokens';
 
