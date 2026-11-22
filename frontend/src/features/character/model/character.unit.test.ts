@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
+import { toCharacter } from "@/features/character/model/character";
 import { Sex } from "@/lib/api/character/types";
-import { sexMapping, toCharacter } from "@/lib/character";
 
 describe("toCharacter", () => {
     it("maps the API character details to the view model", () => {
@@ -15,9 +15,5 @@ describe("toCharacter", () => {
             sex: "no",
             equipmentIds: [100, 103]
         });
-    });
-
-    it("maps the selectable sexes back to the API values", () => {
-        expect(sexMapping).toEqual({ ferfi: Sex.MALE, no: Sex.FEMALE });
     });
 });

@@ -11,13 +11,13 @@ import FollowToggle from "@/components/CharacterSheet/FollowToggle/FollowToggle"
 import QuoteSection from "@/components/CharacterSheet/QuoteSection/QuoteSection";
 import { heading, headingTitle } from "@/components/CharacterSheet/sheetHeading.css";
 import GearOverview from "@/components/GearOverview/GearOverview";
-import { sexLabels } from "@/components/MultiStepForm/CreateCharacterForm/CharacterBasicsStep/CharacterBasicsStep";
 import CharacterPortraitFrame from "@/components/MultiStepForm/CreateCharacterForm/CharacterPortraitFrame/CharacterPortraitFrame";
-import { findRace } from "@/dummydata/races";
+import { Character } from "@/features/character/model/character";
+import { findRace } from "@/features/character/model/race";
+import { sexLabels } from "@/features/character/model/sex";
+import { GearOverviewRoot } from "@/features/equipment/model/gearOverview";
 import { useObjectUrl } from "@/hooks/useObjectUrl";
 import { CharacterActivity } from "@/lib/api/posts/types";
-import { Character } from "@/lib/character";
-import { GearOverviewRoot } from "@/lib/gearOverview";
 import { eyebrow, visuallyHidden } from "@/styles/shared.css";
 
 import * as styles from "./CharacterSheet.css";

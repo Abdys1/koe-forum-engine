@@ -41,6 +41,10 @@
         "pattern": "src/styles"
       },
       {
+        "type": "util",
+        "pattern": "src/utils"
+      },
+      {
         "type": "lib",
         "pattern": "src/lib"
       },
@@ -71,7 +75,8 @@
                   "types": [
                     "atom",
                     "hook",
-                    "style"
+                    "style",
+                    "util"
                   ]
                 }
               }
@@ -90,7 +95,8 @@
                     "atom",
                     "molecule",
                     "hook",
-                    "style"
+                    "style",
+                    "util"
                   ]
                 }
               }
@@ -111,7 +117,8 @@
                     "organism",
                     "feature",
                     "hook",
-                    "style"
+                    "style",
+                    "util"
                   ]
                 }
               }
@@ -148,7 +155,8 @@
                     "molecule",
                     "organism",
                     "hook",
-                    "style"
+                    "style",
+                    "util"
                   ]
                 }
               }
@@ -186,7 +194,8 @@
                   "types": [
                     "feature",
                     "lib",
-                    "hook"
+                    "hook",
+                    "util"
                   ]
                 }
               }
@@ -201,7 +210,10 @@
             "allow": {
               "to": {
                 "element": {
-                  "type": "hook"
+                  "types": [
+                    "hook",
+                    "util"
+                  ]
                 }
               }
             }
@@ -215,7 +227,10 @@
             "allow": {
               "to": {
                 "element": {
-                  "type": "style"
+                  "types": [
+                    "style",
+                    "util"
+                  ]
                 }
               }
             }
@@ -229,7 +244,24 @@
             "allow": {
               "to": {
                 "element": {
-                  "type": "lib"
+                  "types": [
+                    "lib",
+                    "util"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "from": {
+              "element": {
+                "type": "util"
+              }
+            },
+            "allow": {
+              "to": {
+                "element": {
+                  "type": "util"
                 }
               }
             }
@@ -252,7 +284,8 @@
                     "hook",
                     "style",
                     "lib",
-                    "app"
+                    "app",
+                    "util"
                   ]
                 }
               }

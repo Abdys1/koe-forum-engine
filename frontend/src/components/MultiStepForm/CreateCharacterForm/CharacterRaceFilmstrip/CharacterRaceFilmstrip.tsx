@@ -6,7 +6,7 @@ import { useWatch } from "react-hook-form";
 
 import CharacterRaceBtn from "@/components/MultiStepForm/CreateCharacterForm/CharacterRaceBtn/CharacterRaceBtn";
 import { useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFormContext";
-import { races, SelectableRace } from "@/dummydata/races";
+import { races, SelectableRace } from "@/features/character/model/race";
 
 import * as styles from "./CharacterRaceFilmstrip.css";
 

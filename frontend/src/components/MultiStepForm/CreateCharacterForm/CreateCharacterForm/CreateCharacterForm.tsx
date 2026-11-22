@@ -4,30 +4,21 @@ import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 import { SubmitHandler, useForm, useWatch } from "react-hook-form";
 
-import { createCharacter } from "@/app/character/create/actions";
-import CharacterBasicsStep, { SelectableSex } from "@/components/MultiStepForm/CreateCharacterForm/CharacterBasicsStep/CharacterBasicsStep";
+import CharacterBasicsStep from "@/components/MultiStepForm/CreateCharacterForm/CharacterBasicsStep/CharacterBasicsStep";
 import CharacterGearStep from "@/components/MultiStepForm/CreateCharacterForm/CharacterGearStep/CharacterGearStep";
 import CharacterImageStep from "@/components/MultiStepForm/CreateCharacterForm/CharacterImageStep/CharacterImageStep";
 import CharacterRaceStep from "@/components/MultiStepForm/CreateCharacterForm/CharacterRaceStep/CharacterRaceStep";
 import CharacterSummaryStep from "@/components/MultiStepForm/CreateCharacterForm/CharacterSummaryStep/CharacterSummaryStep";
 import CreateCharacterHeader from "@/components/MultiStepForm/CreateCharacterForm/CreateCharacterHeader/CreateCharacterHeader";
 import MultiStepForm from "@/components/MultiStepForm/MultiStepForm/MultiStepForm";
-import { findRace, races } from "@/dummydata/races";
+import { createCharacter } from "@/features/character/actions/createCharacter";
+import { CharacterInputs, createCharacterDefaults, toCreateCharacterFormData } from "@/features/character/model/createCharacter";
+import { findRace } from "@/features/character/model/race";
+import { buildEquipmentCatalog } from "@/features/equipment/model/equipmentCatalog";
+import { toGearOverview } from "@/features/equipment/model/gearOverview";
+import { compactSelection } from "@/features/equipment/model/selection";
 import { EquipmentCatalogData } from "@/lib/api/equipment/types";
-import { sexMapping } from "@/lib/character";
-import { compactSelection } from "@/lib/equipment";
-import { buildEquipmentCatalog } from "@/lib/equipmentCatalog";
-import { toGearOverview } from "@/lib/gearOverview";
 import { gearStepBg,raceStepBg } from "@/styles/shared.css";
-
-export interface CharacterInputs {
-    raceId: string,
-    raceTitle: string,
-    characterName: string,
-    characterSex: SelectableSex,
-    equipmentIds: number[],
-    characterImg: FileList
-}
 
 type CreateCharacterFormProps = {
     equipmentCatalogData: EquipmentCatalogData
@@ -36,12 +27,7 @@ type CreateCharacterFormProps = {
 export default function CreateCharacterForm({ equipmentCatalogData }: CreateCharacterFormProps) {
     const router = useRouter();
     const form = useForm<CharacterInputs>({
-        defaultValues: {
-            raceId: races[0].id,
-            raceTitle: races[0].title,
-            characterSex: "ferfi",
-            equipmentIds: []
-        }
+        defaultValues: createCharacterDefaults
     });
 
     const equipmentCatalog = useMemo(() => buildEquipmentCatalog(equipmentCatalogData), [equipmentCatalogData]);
@@ -60,14 +46,7 @@ export default function CreateCharacterForm({ equipmentCatalogData }: CreateChar
     const raceStepStyle = { '--raceUrl': `url('${findRace(raceId).img}')` } as React.CSSProperties;
 
     const submit: SubmitHandler<CharacterInputs> = async values => {
-        const formData = new FormData();
-        formData.append("name", values.characterName);
-        formData.append("sex", String(sexMapping[values.characterSex]));
-        formData.append("race", values.raceId);
-        formData.append("image", values.characterImg[0]);
-        values.equipmentIds.forEach(equipmentId => formData.append("equipmentIds", String(equipmentId)));
-
-        const result = await createCharacter(formData);
+        const result = await createCharacter(toCreateCharacterFormData(values));
         if (!result.success) {
             console.error(result.errorCodes);
             return;

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import { equipmentCatalogData } from "@/lib/__fixtures__/equipmentCatalogData";
-import { buildEquipmentCatalog } from "@/lib/equipmentCatalog";
+import { equipmentCatalogData } from "@/features/equipment/model/__fixtures__/equipmentCatalogData";
+import { buildEquipmentCatalog } from "@/features/equipment/model/equipmentCatalog";
 
 const catalog = buildEquipmentCatalog(equipmentCatalogData);
 

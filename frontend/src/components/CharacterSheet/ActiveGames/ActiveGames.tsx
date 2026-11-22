@@ -1,10 +1,10 @@
 import Link from "next/link";
 
 import { heading, headingTitle } from "@/components/CharacterSheet/sheetHeading.css";
-import { locations } from "@/dummydata/locations";
+import { findLocation, locationHref } from "@/features/forum/model/location";
 import { CharacterGame } from "@/lib/api/posts/types";
-import { formatShortDate } from "@/lib/dateFormat";
 import { goldLink } from "@/styles/shared.css";
+import { formatShortDate } from "@/utils/dateFormat";
 
 import * as styles from "./ActiveGames.css";
 
@@ -22,13 +22,13 @@ export default function ActiveGames({ games, className }: ActiveGamesProps) {
             {games.length > 0
                 ? <ul className={styles.list}>
                     {games.map(game => {
-                        const location = locations[game.locationId as keyof typeof locations];
+                        const location = findLocation(game.locationId);
                         return (
                             <li key={`${game.locationId}/${game.title}`} className={styles.game}>
                                 <span className={styles.title}>{game.title}</span>
                                 <span className={styles.meta}>
                                     {location
-                                        ? <Link href={`/roleplay-area/locations/${game.locationId}`} className={goldLink}>
+                                        ? <Link href={locationHref(game.locationId)} className={goldLink}>
                                             {location.name}
                                           </Link>
                                         : game.locationId

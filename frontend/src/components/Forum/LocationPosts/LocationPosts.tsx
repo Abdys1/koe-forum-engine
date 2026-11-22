@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 
-import NewPostForm, { NewPostInputs } from "@/components/Forum/NewPostForm/NewPostForm";
+import NewPostForm from "@/components/Forum/NewPostForm/NewPostForm";
 import Pagination from "@/components/Forum/Pagination/Pagination";
 import PostCard from "@/components/Forum/PostCard/PostCard";
-import { dummyCharacter } from "@/dummydata/posts";
-import { LocationPost, Page } from "@/lib/api/posts/types";
+import { addLocalPost, NewPostInput } from "@/features/forum/model/post";
+import type { LocationPost, Page, PostCharacter } from "@/lib/api/posts/types";
 
 import * as styles from "./LocationPosts.css";
 
@@ -14,29 +14,21 @@ const POSTS_ANCHOR_ID = "posts";
 
 type LocationPostsProps = {
     locationId: string,
-    postsPage: Page<LocationPost>
+    postsPage: Page<LocationPost>,
+    author: PostCharacter
 }
 
-export default function LocationPosts({ locationId, postsPage }: LocationPostsProps) {
+export default function LocationPosts({ locationId, postsPage, author }: LocationPostsProps) {
     const { page, pageSize, totalPages } = postsPage;
     const [posts, setPosts] = useState<LocationPost[]>(postsPage.items);
     const [totalItems, setTotalItems] = useState(postsPage.totalItems);
     const firstPostNumber = totalItems - (page - 1) * pageSize;
-    const addPost = ({ gameTitle, content }: NewPostInputs) => {
-        setPosts(prev => {
-            const postCount = (prev.find(post => post.character.id === dummyCharacter.id)?.character.postCount ?? 0) + 1;
-            const updatedPosts = prev.map(post => post.character.id === dummyCharacter.id
-                ? { ...post, character: { ...post.character, postCount } }
-                : post);
-            return [{
-                id: crypto.randomUUID(),
-                locationId,
-                gameTitle: gameTitle.trim(),
-                content,
-                createdAt: new Date().toISOString(),
-                character: { ...dummyCharacter, postCount }
-            }, ...updatedPosts];
-        });
+    const addPost = (input: NewPostInput) => {
+        setPosts(prev => addLocalPost(prev, input, author, {
+            id: crypto.randomUUID(),
+            locationId,
+            createdAt: new Date().toISOString()
+        }));
         setTotalItems(prev => prev + 1);
     };
 

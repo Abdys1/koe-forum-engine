@@ -6,7 +6,7 @@ import Button from "@/components/Button/Button";
 import CharacterRaceFilmstrip from "@/components/MultiStepForm/CreateCharacterForm/CharacterRaceFilmstrip/CharacterRaceFilmstrip";
 import { useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFormContext";
 import SectionHeading from "@/components/SectionHeading/SectionHeading";
-import { findRace } from "@/dummydata/races";
+import { findRace } from "@/features/character/model/race";
 
 import * as styles from "./CharacterRaceStep.css";
 

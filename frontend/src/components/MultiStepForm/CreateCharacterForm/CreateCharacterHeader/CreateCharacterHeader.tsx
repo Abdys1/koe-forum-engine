@@ -2,9 +2,9 @@ import { Control } from "react-hook-form";
 
 import ComponentHeading from "@/components/ComponentHeading/ComponentHeading";
 import CharacterPreview from "@/components/MultiStepForm/CreateCharacterForm/CharacterPreview/CharacterPreview";
-import type { CharacterInputs } from "@/components/MultiStepForm/CreateCharacterForm/CreateCharacterForm/CreateCharacterForm";
 import MultiStepBar from "@/components/MultiStepForm/MultiStepBar/MultiStepBar";
 import { useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFormContext";
+import type { CharacterInputs } from "@/features/character/model/createCharacter";
 
 import * as styles from "./CreateCharacterHeader.css";
 

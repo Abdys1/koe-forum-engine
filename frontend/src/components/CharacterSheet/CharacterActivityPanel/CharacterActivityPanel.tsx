@@ -3,10 +3,10 @@
 import Link from "next/link";
 
 import Button from "@/components/Button/Button";
-import { locations } from "@/dummydata/locations";
+import { findLocation, locationHref } from "@/features/forum/model/location";
 import { CharacterActivity } from "@/lib/api/posts/types";
-import { formatLongDate } from "@/lib/dateFormat";
 import { goldLink } from "@/styles/shared.css";
+import { formatLongDate } from "@/utils/dateFormat";
 
 import * as styles from "./CharacterActivityPanel.css";
 
@@ -18,7 +18,7 @@ const numberFormatter = new Intl.NumberFormat("hu-HU");
 
 export default function CharacterActivityPanel({ activity }: CharacterActivityPanelProps) {
     const lastPost = activity.lastPost;
-    const lastLocation = lastPost && locations[lastPost.locationId as keyof typeof locations];
+    const lastLocation = lastPost && findLocation(lastPost.locationId);
 
     return (
         <section className={styles.panel} aria-label="Aktivitás">
@@ -33,7 +33,7 @@ export default function CharacterActivityPanel({ activity }: CharacterActivityPa
                     {lastPost && lastLocation
                         ? <>
                             <dd className={styles.statValue}>
-                                <Link href={`/roleplay-area/locations/${lastPost.locationId}`} className={goldLink}>
+                                <Link href={locationHref(lastPost.locationId)} className={goldLink}>
                                     {lastLocation.name}
                                 </Link>
                             </dd>

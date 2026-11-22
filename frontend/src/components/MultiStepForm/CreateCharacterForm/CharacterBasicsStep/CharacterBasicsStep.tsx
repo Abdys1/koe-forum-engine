@@ -6,17 +6,9 @@ import { useId, useState } from "react";
 import Button from "@/components/Button/Button";
 import { useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFormContext";
 import SectionHeading from "@/components/SectionHeading/SectionHeading";
+import { SelectableSex, sexOptions } from "@/features/character/model/sex";
 
 import * as styles from "./CharacterBasicsStep.css";
-
-export type SelectableSex = "ferfi" | "no";
-
-const sexOptions: { value: SelectableSex, label: string, icon: string }[] = [
-    { value: "ferfi", label: "Férfi", icon: "male" },
-    { value: "no", label: "Nő", icon: "female" }
-];
-
-export const sexLabels = Object.fromEntries(sexOptions.map(option => [option.value, option.label])) as Record<SelectableSex, string>;
 
 export default function CharacterBasicsStep() {
     const formContext = useMultiStepFormContext();

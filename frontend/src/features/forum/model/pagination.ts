@@ -1,6 +1,6 @@
 import { DEFAULT_POST_PAGE_SIZE, PageRequest, POST_PAGE_SIZES, PostPageSize } from "@/lib/api/posts/types";
 
-type SearchParams = Record<string, string | string[] | undefined>;
+export type SearchParams = Record<string, string | string[] | undefined>;
 
 const firstValue = (value: string | string[] | undefined) => Array.isArray(value) ? value[0] : value;
 

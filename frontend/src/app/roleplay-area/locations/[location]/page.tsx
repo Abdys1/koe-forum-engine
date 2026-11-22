@@ -1,7 +1,5 @@
 import LocationPosts from "@/components/Forum/LocationPosts/LocationPosts";
-import { locations } from "@/dummydata/locations";
-import { postsClient } from "@/lib/api/posts";
-import { parsePageRequest } from "@/lib/api/posts/pagination";
+import { getLocationPage } from "@/features/forum/queries/getLocationPage";
 
 import * as styles from "./location.css";
 
@@ -12,11 +10,10 @@ export default async function LocationPage({
   params: Promise<{ location: string }>;
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  const { location } = await params;
+  const { location: locationId } = await params;
+  const locationPage = await getLocationPage(locationId, await searchParams);
 
-  const locationData = locations[location as keyof typeof locations];
-
-  if (!locationData) {
+  if (!locationPage) {
     return (
       <main className={styles.page}>
         <h1 className={styles.notFound}>Location not found</h1>
@@ -24,21 +21,22 @@ export default async function LocationPage({
     );
   }
 
-  const postsPage = await postsClient.getLocationPosts(location, parsePageRequest(await searchParams));
+  const { location, postsPage, author } = locationPage;
 
   return (
     <main className={styles.page}>
       <header className={styles.hero}>
         <div className={styles.heroContent}>
-          <h1 className={styles.locationName}>{locationData.name}</h1>
-          <p className={styles.description}>{locationData.description}</p>
+          <h1 className={styles.locationName}>{location.name}</h1>
+          <p className={styles.description}>{location.description}</p>
         </div>
       </header>
       <div className={styles.stream}>
         <LocationPosts
           key={`${postsPage.page}-${postsPage.pageSize}`}
-          locationId={location}
+          locationId={location.id}
           postsPage={postsPage}
+          author={author}
         />
       </div>
     </main>

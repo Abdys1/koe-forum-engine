@@ -5,7 +5,7 @@ import { KeyboardEvent, useRef } from "react";
 
 import GearTypeIcon from "@/components/MultiStepForm/CreateCharacterForm/GearTypeIcon/GearTypeIcon";
 import SlotPips from "@/components/MultiStepForm/CreateCharacterForm/SlotPips/SlotPips";
-import { EquipmentCatalog, SlotPoolUsage } from "@/lib/equipmentCatalog";
+import { EquipmentCatalog, SlotPoolUsage } from "@/features/equipment/model/equipmentCatalog";
 import { visuallyHidden } from "@/styles/shared.css";
 
 import * as styles from "./GearSlotTracker.css";

@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 import { LocationPost } from "@/lib/api/posts/types";
-import { formatDateTime } from "@/lib/dateFormat";
+import { formatDateTime } from "@/utils/dateFormat";
 
 import * as styles from "./PostCard.css";
 

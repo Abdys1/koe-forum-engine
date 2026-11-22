@@ -5,13 +5,13 @@ import clsx from "clsx";
 import Button from "@/components/Button/Button";
 import EditButton from "@/components/EditButton/EditButton";
 import GearOverview from "@/components/GearOverview/GearOverview";
-import { SelectableSex,sexLabels } from "@/components/MultiStepForm/CreateCharacterForm/CharacterBasicsStep/CharacterBasicsStep";
 import CharacterPortraitFrame from "@/components/MultiStepForm/CreateCharacterForm/CharacterPortraitFrame/CharacterPortraitFrame";
 import { stepContent, stepIntro } from "@/components/MultiStepForm/CreateCharacterForm/characterStep.css";
 import { useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFormContext";
 import SectionHeading from "@/components/SectionHeading/SectionHeading";
+import { SelectableSex, sexLabels } from "@/features/character/model/sex";
+import { GearOverviewRoot } from "@/features/equipment/model/gearOverview";
 import { useObjectUrl } from "@/hooks/useObjectUrl";
-import { GearOverviewRoot } from "@/lib/gearOverview";
 import { discordLink } from "@/lib/socialLinks";
 
 import * as styles from "./CharacterSummaryStep.css";

@@ -101,14 +101,14 @@ Next.js 14 App Router. Authentication via NextAuth.js with a Credentials provide
 **Atomic design** (refactor in progress; the legacy `src/components/<Name>/` folders are being migrated level by level). Target layout:
 - `src/components/atoms/<Name>/`, `molecules/<Name>/`, `organisms/<domain>/<Name>/`, `templates/<Name>/` — presentation only; each folder holds `<Name>.tsx`, `<Name>.css.ts` and `<Name>.stories.tsx`.
 - `src/features/<domain>/` — business logic without markup: `model/` (types, pure functions), `hooks/`, `actions/` (server actions), `queries/` (server-side data loading).
-- `src/lib/` — infrastructure: API clients, auth config, generic utils. `src/hooks/` — generic UI hooks. `src/styles/` — tokens and global styles.
+- `src/lib/` — infrastructure: API clients, auth config. `src/utils/` — dependency-free generic helpers (e.g. `dateFormat`), usable from every level. `src/hooks/` — generic UI hooks. `src/styles/` — tokens and global styles.
 - `src/app/` — routing only: pages load data via `features/*/queries` and render a template.
 
 The levels are enforced by `boundaries/dependencies` in `frontend/.eslintrc.json`: a level only imports lower levels; atoms and molecules are domain-agnostic (no `features`, `lib`, dummy data or server actions); organisms may use `features` and only *type* imports from `lib`; features never import components; lib only imports lib. Files outside the classified folders are not checked yet.
 
 ### Frontend Tests
 
-Vitest (`frontend/vitest.config.mts`), unit tests only, co-located as `*.unit.test.ts(x)`. Business logic is tested through pure functions in `features/*/model` (shared fixtures in `__fixtures__/`). Every new atom, molecule and organism gets a Storybook story.
+Vitest (`frontend/vitest.config.mts`), unit tests only, co-located as `*.unit.test.ts(x)`. Business logic is tested through pure functions in `features/*/model` (shared fixtures in `__fixtures__/`); server actions and queries stay thin wrappers around them. Server actions only export async functions, so their result types and constants live in the model. Every new atom, molecule and organism gets a Storybook story.
 
 ## Environment
 

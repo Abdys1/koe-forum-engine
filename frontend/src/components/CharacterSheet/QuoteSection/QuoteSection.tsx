@@ -7,8 +7,9 @@ import { useId, useLayoutEffect, useRef, useState } from "react";
 import Button from "@/components/Button/Button";
 import EditButton from "@/components/EditButton/EditButton";
 import DropdownSelect from "@/components/Inputs/DropdownSelect/DropdownSelect";
-import { locations } from "@/dummydata/locations";
-import { CharacterQuote } from "@/lib/character";
+import { CharacterQuote } from "@/features/character/model/character";
+import { MAX_QUOTE_LENGTH, toCharacterQuote } from "@/features/character/model/quote";
+import { findLocation, locationHref, locations } from "@/features/forum/model/location";
 import { goldLink } from "@/styles/shared.css";
 
 import * as styles from "./QuoteSection.css";
@@ -20,13 +21,7 @@ type QuoteSectionProps = {
 }
 
 const TITLE = "Róla mondták";
-const MAX_QUOTE_LENGTH = 300;
-
-type LocationId = keyof typeof locations;
-
-const locationOptions = (Object.keys(locations) as LocationId[]).map(id => ({ value: id, label: locations[id].name }));
-
-const locationHref = (locationId: string) => `/roleplay-area/locations/${locationId}`;
+const locationOptions = locations.map(location => ({ value: location.id, label: location.name }));
 
 const numberFormatter = new Intl.NumberFormat("hu-HU");
 
@@ -38,7 +33,7 @@ export default function QuoteSection({ quote, canEdit, onSave }: QuoteSectionPro
     const [isEditing, setIsEditing] = useState(false);
     const textRef = useRef<HTMLTextAreaElement>(null);
     const [text, setText] = useState("");
-    const [locationId, setLocationId] = useState<LocationId>(locationOptions[0].value);
+    const [locationId, setLocationId] = useState(locationOptions[0].value);
     const [postNumber, setPostNumber] = useState("");
 
     useLayoutEffect(() => {
@@ -48,20 +43,19 @@ export default function QuoteSection({ quote, canEdit, onSave }: QuoteSectionPro
         textarea.style.height = `${textarea.scrollHeight + textarea.offsetHeight - textarea.clientHeight}px`;
     }, [text, isEditing]);
 
-    const parsedPostNumber = Number(postNumber);
-    const canSave = !!text.trim() && !!locationId && Number.isInteger(parsedPostNumber) && parsedPostNumber > 0;
-    const savedLocation = quote && locations[quote.locationId as LocationId];
+    const draftQuote = toCharacterQuote({ text, locationId, postNumber });
+    const savedLocation = quote && findLocation(quote.locationId);
 
     function startEditing(): void {
         setText(quote?.text ?? "");
-        setLocationId(quote && quote.locationId in locations ? quote.locationId as LocationId : locationOptions[0].value);
+        setLocationId(quote && findLocation(quote.locationId) ? quote.locationId : locationOptions[0].value);
         setPostNumber(quote ? String(quote.postNumber) : "");
         setIsEditing(true);
     }
 
     function save(): void {
-        if (!canSave) return;
-        onSave({ text: text.trim(), locationId, postNumber: parsedPostNumber });
+        if (!draftQuote) return;
+        onSave(draftQuote);
         setIsEditing(false);
     }
 
@@ -98,7 +92,7 @@ export default function QuoteSection({ quote, canEdit, onSave }: QuoteSectionPro
                     </div>
                     <div className={styles.actions}>
                         <Button title="Mégse" variant="ghost" size="small" onClick={() => setIsEditing(false)}/>
-                        <Button title="Mentés" variant="gold" size="small" type="submit" disabled={!canSave}/>
+                        <Button title="Mentés" variant="gold" size="small" type="submit" disabled={!draftQuote}/>
                     </div>
                   </form>
                 : quote

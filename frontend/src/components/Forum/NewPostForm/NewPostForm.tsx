@@ -5,13 +5,9 @@ import { useId } from "react";
 import { useForm } from "react-hook-form";
 
 import Button from "@/components/Button/Button";
+import { NewPostInput } from "@/features/forum/model/post";
 
 import * as styles from "./NewPostForm.css";
-
-export interface NewPostInputs {
-    gameTitle: string,
-    content: string
-}
 
 export const MIN_CONTENT_LENGTH = 500;
 export const MAX_CONTENT_LENGTH = 30000;
@@ -19,13 +15,13 @@ export const MAX_CONTENT_LENGTH = 30000;
 const numberFormatter = new Intl.NumberFormat("hu-HU");
 
 type NewPostFormProps = {
-    onSubmit: (inputs: NewPostInputs) => void
+    onSubmit: (inputs: NewPostInput) => void
 }
 
 export default function NewPostForm({ onSubmit }: NewPostFormProps) {
     const gameTitleId = useId();
     const contentId = useId();
-    const { register, handleSubmit, watch, reset } = useForm<NewPostInputs>({
+    const { register, handleSubmit, watch, reset } = useForm<NewPostInput>({
         defaultValues: { gameTitle: "", content: "" }
     });
 
@@ -34,7 +30,7 @@ export default function NewPostForm({ onSubmit }: NewPostFormProps) {
     const isContentLengthValid = content.length >= MIN_CONTENT_LENGTH && content.length <= MAX_CONTENT_LENGTH;
     const canSubmit = gameTitle.trim() !== "" && isContentLengthValid;
 
-    const submit = (inputs: NewPostInputs) => {
+    const submit = (inputs: NewPostInput) => {
         onSubmit(inputs);
         reset();
     };

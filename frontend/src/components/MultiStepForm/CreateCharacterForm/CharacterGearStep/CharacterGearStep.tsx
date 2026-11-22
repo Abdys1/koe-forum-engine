@@ -10,8 +10,8 @@ import GearTypeIcon from "@/components/MultiStepForm/CreateCharacterForm/GearTyp
 import SlotPips from "@/components/MultiStepForm/CreateCharacterForm/SlotPips/SlotPips";
 import { useMultiStepFormContext } from "@/components/MultiStepForm/MultiStepFormContext";
 import SectionHeading from "@/components/SectionHeading/SectionHeading";
-import { applySelection } from "@/lib/equipment";
-import { EquipmentCatalog } from "@/lib/equipmentCatalog";
+import { EquipmentCatalog } from "@/features/equipment/model/equipmentCatalog";
+import { applySelection } from "@/features/equipment/model/selection";
 
 import * as styles from "./CharacterGearStep.css";
 

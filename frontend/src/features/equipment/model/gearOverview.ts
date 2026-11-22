@@ -1,5 +1,5 @@
+import { filterRootSlotPoolUsages, Occupant, SlotPoolUsage, sumSlotPoolUsages } from "@/features/equipment/model/equipmentCatalog";
 import type { EquipmentType } from "@/lib/api/equipment/types";
-import { filterRootSlotPoolUsages, Occupant, SlotPoolUsage, sumSlotPoolUsages } from "@/lib/equipmentCatalog";
 
 export interface GearOverviewItem {
     id: number,

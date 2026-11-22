@@ -1,4 +1,4 @@
-import { SelectionResult } from "@/lib/equipmentCatalog";
+import { SelectionResult } from "@/features/equipment/model/equipmentCatalog";
 
 export function applySelection(itemId: number, selectedIds: number[], result: SelectionResult): number[] {
     if (result.kind === "add") return [...selectedIds, itemId];

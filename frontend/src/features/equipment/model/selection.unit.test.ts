@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { applySelection, compactSelection } from "@/lib/equipment";
+import { applySelection, compactSelection } from "@/features/equipment/model/selection";
 
 describe("applySelection", () => {
     it("appends the item when it can be added", () => {
