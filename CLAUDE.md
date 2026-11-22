@@ -98,7 +98,7 @@ Next.js 14 App Router. Authentication via NextAuth.js with a Credentials provide
 - `src/lib/api/` — HTTP client and auth API client
 - `src/middleware.ts` — route protection via NextAuth
 
-**Atomic design** (refactor in progress; the legacy `src/components/<Name>/` folders are being migrated level by level). Target layout:
+**Atomic design.** Layout:
 - `src/components/atoms/<Name>/`, `molecules/<Name>/`, `organisms/<domain>/<Name>/`, `templates/<Name>/` — presentation only; each folder holds `<Name>.tsx`, `<Name>.css.ts` and `<Name>.stories.tsx`.
 - `src/features/<domain>/` — business logic without markup: `model/` (types, pure functions), `hooks/`, `actions/` (server actions), `queries/` (server-side data loading).
 - `src/lib/` — infrastructure: API clients, auth config. `src/utils/` — dependency-free generic helpers (e.g. `dateFormat`), usable from every level. `src/hooks/` — generic UI hooks. `src/styles/` — tokens and global styles.
@@ -106,7 +106,7 @@ Next.js 14 App Router. Authentication via NextAuth.js with a Credentials provide
 
 Material icons are always rendered with the `Icon` atom, never with a hand-written `material-icons` span. Styles use tokens from `src/styles/tokens.ts` (colors, `withAlpha`, `layout` sizes such as `layout.headerTotalHeight`) instead of raw color values; `src/styles/shared.css.ts` holds only generic surfaces and typography, never feature-specific styles, and style files never import from components.
 
-The levels are enforced by `boundaries/dependencies` in `frontend/.eslintrc.json`: a level only imports lower levels; atoms and molecules are domain-agnostic (no `features`, `lib`, dummy data or server actions); organisms may use `features` and only *type* imports from `lib`; features never import components; lib only imports lib. An organism that needs the session, the router or server actions is split into a thin container (calls the `features/*/hooks`, passes plain props) and a presentational component that holds only UI state; stories target the presentational one. Generic UI hooks (e.g. `useDismissable`) live in `src/hooks/`. When an atom or molecule renders domain data, it declares its own minimal prop type (e.g. `PostCardPost`) that the domain type satisfies structurally, and takes domain-specific labels and options (e.g. page sizes) as props. Files outside the classified folders are not checked yet.
+The levels are enforced by `boundaries/dependencies` in `frontend/.eslintrc.json`: a level only imports lower levels; atoms and molecules are domain-agnostic (no `features`, `lib`, dummy data or server actions); organisms may use `features` and only *type* imports from `lib`; features never import components; lib only imports lib. An organism that needs the session, the router or server actions is split into a thin container (calls the `features/*/hooks`, passes plain props) and a presentational component that holds only UI state; stories target the presentational one. Generic UI hooks (e.g. `useDismissable`) live in `src/hooks/`. When an atom or molecule renders domain data, it declares its own minimal prop type (e.g. `PostCardPost`) that the domain type satisfies structurally, and takes domain-specific labels and options (e.g. page sizes) as props. `boundaries/no-unknown-files` rejects any file under `src/` that belongs to no element (e.g. a component outside `atoms`/`molecules`/`organisms`/`templates`); `src/dummydata/` is its own element, importable only from `app`, `features` and `lib`.
 
 ### Frontend Tests
 

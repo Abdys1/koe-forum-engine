@@ -51,6 +51,16 @@
       {
         "type": "app",
         "pattern": "src/app"
+      },
+      {
+        "type": "dummydata",
+        "pattern": "src/dummydata"
+      }
+    ],
+    "boundaries/files": [
+      {
+        "pattern": "src/middleware.ts",
+        "category": "middleware"
       }
     ]
   },
@@ -195,7 +205,8 @@
                     "feature",
                     "lib",
                     "hook",
-                    "util"
+                    "util",
+                    "dummydata"
                   ]
                 }
               }
@@ -246,7 +257,8 @@
                 "element": {
                   "types": [
                     "lib",
-                    "util"
+                    "util",
+                    "dummydata"
                   ]
                 }
               }
@@ -269,6 +281,26 @@
           {
             "from": {
               "element": {
+                "type": "dummydata"
+              }
+            },
+            "allow": {
+              "to": {
+                "element": {
+                  "types": [
+                    "lib",
+                    "util"
+                  ]
+                }
+              },
+              "dependency": {
+                "kind": "type"
+              }
+            }
+          },
+          {
+            "from": {
+              "element": {
                 "type": "app"
               }
             },
@@ -285,7 +317,8 @@
                     "style",
                     "lib",
                     "app",
-                    "util"
+                    "util",
+                    "dummydata"
                   ]
                 }
               }
@@ -293,6 +326,7 @@
           }
         ]
       }
-    ]
+    ],
+    "boundaries/no-unknown-files": "error"
   }
 }

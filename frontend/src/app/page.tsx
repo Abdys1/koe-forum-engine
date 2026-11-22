@@ -7,10 +7,10 @@ import Eyebrow from "@/components/atoms/Eyebrow/Eyebrow";
 import Icon from "@/components/atoms/Icon/Icon";
 import SectionHeading from "@/components/atoms/SectionHeading/SectionHeading";
 import TextLink from "@/components/atoms/TextLink/TextLink";
-import BackgroundSlideshow from "@/components/Home/BackgroundSlideshow/BackgroundSlideshow";
-import CharacterTeasers from "@/components/Home/CharacterTeasers/CharacterTeasers";
+import BackgroundSlideshow from "@/components/molecules/BackgroundSlideshow/BackgroundSlideshow";
+import Showcase from "@/components/molecules/Showcase/Showcase";
 import QuickLogin from "@/components/organisms/auth/QuickLogin/QuickLogin";
-import Showcase from "@/components/Showcase/Showcase";
+import CharacterTeasers from "@/components/organisms/character/CharacterTeasers/CharacterTeasers";
 import { activityStats, characterSteps, cities, featuredCharacters, heroSlides, latestActivity, newestCharacter, news } from "@/dummydata/homepage";
 import { metaText } from "@/styles/shared.css";
 

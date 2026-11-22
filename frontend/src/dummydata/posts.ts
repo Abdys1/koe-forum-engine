@@ -1,4 +1,4 @@
-import { Post, PostCharacter } from "@/lib/api/posts/types";
+import type { Post, PostCharacter } from "@/lib/api/posts/types";
 
 export const dummyCharacter: PostCharacter = {
   id: "1",

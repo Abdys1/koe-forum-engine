@@ -1,4 +1,4 @@
-import BackgroundSlideshow from "@/components/Home/BackgroundSlideshow/BackgroundSlideshow";
+import BackgroundSlideshow from "@/components/molecules/BackgroundSlideshow/BackgroundSlideshow";
 import LoginForm from "@/components/organisms/auth/LoginForm/LoginForm";
 import { heroSlides } from "@/dummydata/homepage";
 
