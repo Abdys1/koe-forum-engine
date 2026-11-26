@@ -45,7 +45,7 @@ describe('CharacterEquipmentModificationUseCase', () => {
     describe('execute()', () => {
         it('should replace the equipment of the character and return the new list', async () => {
             equipmentRepository.findAllByCharacterId.mockResolvedValue([
-                { id: 5, name: 'Gyógyító ital', typeId: 2, description: 'Gyógyít', slotCost: null, type: { id: 2, label: 'Bájital' } }
+                { id: 5, name: 'Gyógyító ital', typeId: 2, description: 'Gyógyít', slotCost: null }
             ]);
 
             const result = await characterEquipmentModification.execute(inputWithEquipmentIds([5]));

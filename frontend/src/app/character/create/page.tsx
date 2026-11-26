@@ -1,13 +1,14 @@
 import CreateCharacterForm from "@/components/organisms/character/CreateCharacterForm/CreateCharacterForm";
 import CreateCharacterTemplate from "@/components/templates/CreateCharacterTemplate/CreateCharacterTemplate";
-import { getEquipmentCatalogData } from "@/features/equipment/queries/getEquipmentCatalogData";
+import { getEquipment } from "@/features/equipment/queries/getEquipment";
+import { getEquipmentTypes } from "@/features/equipment/queries/getEquipmentTypes";
 
 export default async function CharacterCreatePage() {
-    const equipmentCatalogData = await getEquipmentCatalogData();
+    const [equipmentTypes, equipment] = await Promise.all([getEquipmentTypes(), getEquipment()]);
 
     return (
         <CreateCharacterTemplate>
-            <CreateCharacterForm equipmentCatalogData={equipmentCatalogData}/>
+            <CreateCharacterForm equipmentTypes={equipmentTypes} equipment={equipment}/>
         </CreateCharacterTemplate>
     );
 }

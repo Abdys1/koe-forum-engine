@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import { equipmentCatalogData } from "@/features/equipment/model/__fixtures__/equipmentCatalogData";
+import { equipment, equipmentTypes } from "@/features/equipment/model/__fixtures__/equipment";
 import { buildEquipmentCatalog } from "@/features/equipment/model/equipmentCatalog";
 
-const catalog = buildEquipmentCatalog(equipmentCatalogData);
+const catalog = buildEquipmentCatalog(equipmentTypes, equipment);
 
 describe("buildEquipmentCatalog", () => {
     it("returns the root equipment types", () => {

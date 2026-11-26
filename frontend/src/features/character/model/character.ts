@@ -12,7 +12,6 @@ export interface CharacterQuote {
 export interface Character extends PostCharacter {
     raceId: string,
     sex: SelectableSex,
-    equipmentIds: number[],
     appearance?: string,
     backstory?: string,
     secrets?: string,
@@ -20,13 +19,12 @@ export interface Character extends PostCharacter {
     quote?: CharacterQuote
 }
 
-export function toCharacter(details: CharacterDetails, equipmentIds: number[]): Character {
+export function toCharacter(details: CharacterDetails): Character {
     return {
         id: String(details.id),
         name: details.name,
         imageUrl: details.imageUrl,
         raceId: details.race,
-        sex: toSelectableSex(details.sex),
-        equipmentIds
+        sex: toSelectableSex(details.sex)
     };
 }

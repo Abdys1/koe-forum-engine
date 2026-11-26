@@ -810,7 +810,7 @@ export interface paths {
             };
             requestBody?: never;
             responses: {
-                /** @description Equipment of the character with its type; an equipment assigned multiple times is listed multiple times */
+                /** @description Equipment of the character; an equipment assigned multiple times is listed multiple times */
                 200: {
                     headers: {
                         [name: string]: unknown;
@@ -1079,7 +1079,8 @@ export interface components {
         EquipmentType: {
             id: number;
             label: string;
-            slotId: number | null;
+            /** @description The slot that limits how many equipment of this type a character can equip; null if unlimited */
+            slot: components["schemas"]["Slot"] | null;
             /** @description The parent type; null for a root type (category) */
             parentId: number | null;
             icon: string | null;
@@ -1091,7 +1092,7 @@ export interface components {
             description: string;
             /** @description Only meaningful (and required on creation) when the equipment's type has a slot; null otherwise */
             slotCost: number | null;
-            type: components["schemas"]["EquipmentType"];
+            typeId: number;
         };
         Character: {
             id: number;

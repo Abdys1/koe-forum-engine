@@ -38,7 +38,7 @@ describe('/api/equipment/type', () => {
             const resp = await equipmentTypeClient.getAllEquipmentTypes();
 
             expect(resp.status).toBe(200);
-            expect(resp.body.equipmentTypes).toStrictEqual([{ id: type.id, label: 'Pajzs', slotId: null, parentId: null, icon: null, sortOrder: 0 }]);
+            expect(resp.body.equipmentTypes).toStrictEqual([{ id: type.id, label: 'Pajzs', slot: null, parentId: null, icon: null, sortOrder: 0 }]);
         });
 
         it('when there are multiple types with the same sortOrder then should return them ordered by label', async () => {
@@ -165,7 +165,7 @@ describe('/api/equipment/type', () => {
             const createResp = await equipmentTypeClient.createEquipmentType({ label: generateEquipmentTypeLabel(), slotId: slot.id });
 
             expect(createResp.status).toBe(201);
-            expect(createResp.body.slotId).toBe(slot.id);
+            expect(createResp.body.slot).toStrictEqual({ id: slot.id, label: slot.label, maxCapacity: slot.maxCapacity });
         });
 
         it('when create a type with a non-existent slotId then should return not exists error', async () => {
@@ -185,7 +185,7 @@ describe('/api/equipment/type', () => {
             expect(createResp.status).toBe(201);
             const listResp = await equipmentTypeClient.getAllEquipmentTypes();
             const created = listResp.body.equipmentTypes.find((item: EquipmentTypeResponseItem) => item.id === createResp.body.id);
-            expect(created).toStrictEqual({ id: createResp.body.id, label: 'Kardok', slotId: null, parentId: parent.id, icon: 'swords', sortOrder: 3 });
+            expect(created).toStrictEqual({ id: createResp.body.id, label: 'Kardok', slot: null, parentId: parent.id, icon: 'swords', sortOrder: 3 });
         });
 
         it('when two types are created with the same slotId then both should be assigned to it', async () => {
@@ -196,8 +196,8 @@ describe('/api/equipment/type', () => {
 
             expect(firstResp.status).toBe(201);
             expect(secondResp.status).toBe(201);
-            expect(firstResp.body.slotId).toBe(slot.id);
-            expect(secondResp.body.slotId).toBe(slot.id);
+            expect(firstResp.body.slot).toStrictEqual({ id: slot.id, label: slot.label, maxCapacity: slot.maxCapacity });
+            expect(secondResp.body.slot).toStrictEqual({ id: slot.id, label: slot.label, maxCapacity: slot.maxCapacity });
         });
     });
 
@@ -209,7 +209,7 @@ describe('/api/equipment/type', () => {
 
             expect(updateResp.status).toBe(200);
             const listResp = await equipmentTypeClient.getAllEquipmentTypes();
-            expect(listResp.body.equipmentTypes).toStrictEqual([{ id: type.id, label: 'Új név', slotId: null, parentId: null, icon: null, sortOrder: 0 }]);
+            expect(listResp.body.equipmentTypes).toStrictEqual([{ id: type.id, label: 'Új név', slot: null, parentId: null, icon: null, sortOrder: 0 }]);
         });
 
         /*
@@ -225,7 +225,7 @@ describe('/api/equipment/type', () => {
             expect(updateResp.status).toBe(200);
             const listResp = await equipmentClient.getAllEquipment();
             const found = listResp.body.equipments.find((item: { id: number }) => item.id === equipment.id);
-            expect(found.type).toStrictEqual({ id: type.id, label: 'Új név', slotId: null, parentId: null, icon: null, sortOrder: 0 });
+            expect(found.typeId).toBe(type.id);
         });
 
         it('when save a type with its own unchanged label then should not be a conflict', async () => {

@@ -2,7 +2,15 @@ import { EquipmentType, EquipmentTypeUpdate } from "@src/components/equipment-ty
 import { EquipmentTypeRepository } from "@src/components/equipment-type/repositories/types";
 import { DbClient } from "@src/prisma-client";
 
-const FIELDS = { id: true, label: true, slotId: true, parentId: true, icon: true, sortOrder: true } as const;
+const FIELDS = {
+    id: true,
+    label: true,
+    slotId: true,
+    slot: { select: { id: true, label: true, maxCapacity: true } },
+    parentId: true,
+    icon: true,
+    sortOrder: true
+} as const;
 
 export default class EquipmentTypeRepositoryImpl implements EquipmentTypeRepository {
     private db: DbClient;

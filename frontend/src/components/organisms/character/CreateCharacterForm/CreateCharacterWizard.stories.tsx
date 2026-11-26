@@ -3,12 +3,12 @@ import { fn, userEvent, within } from "storybook/test";
 
 import { useCharacterCreation } from "@/features/character/hooks/useCharacterCreation";
 import type { CharacterInputs } from "@/features/character/model/createCharacter";
-import { equipmentCatalogData } from "@/features/equipment/model/__fixtures__/equipmentCatalogData";
+import { equipment, equipmentTypes } from "@/features/equipment/model/__fixtures__/equipment";
 
 import CreateCharacterWizard from "./CreateCharacterWizard";
 
 export function CreateCharacterWizardDemo({ onSubmit }: { onSubmit: (values: CharacterInputs) => void }) {
-    const creation = useCharacterCreation(equipmentCatalogData);
+    const creation = useCharacterCreation(equipmentTypes, equipment);
     return <CreateCharacterWizard creation={creation} onSubmit={onSubmit}/>;
 }
 

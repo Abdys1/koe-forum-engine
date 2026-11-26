@@ -14,7 +14,6 @@ const meta = {
                 imageUrl: "/images/ryldan2.png",
                 raceId: "sotetelf",
                 sex: "ferfi",
-                equipmentIds: [100, 103],
             },
             activity: { postCount: 42, activeGames: [] },
             gearOverview: gearOverviewFor([100, 103]),

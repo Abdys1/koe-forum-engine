@@ -1,3 +1,4 @@
+import type { Equipment } from "@/lib/api/equipment/types";
 import type { components, paths } from "@/lib/api/schema";
 
 type CreateCharacterRequestBody = paths["/characters"]["post"]["requestBody"]["content"]["multipart/form-data"];
@@ -24,5 +25,5 @@ export interface CharacterClient {
     validateName: (name: string) => Promise<void>,
     getById: (id: number) => Promise<CharacterDetails | null>,
     getOwnCharacters: () => Promise<CharacterDetails[]>,
-    getEquipmentIds: (id: number) => Promise<number[]>
+    getEquipment: (id: number) => Promise<Equipment[]>
 };

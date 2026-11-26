@@ -18,7 +18,7 @@ interface EquipmentResponseItem {
     name: string;
     description: string;
     slotCost: number | null;
-    type: { id: number; label: string };
+    typeId: number;
 }
 
 describe('/api/equipment', () => {
@@ -48,7 +48,7 @@ describe('/api/equipment', () => {
             });
         });
 
-        it('when get all equipment then every item should contain its type object', async () => {
+        it('when get all equipment then every item should contain its type id', async () => {
             const type = await saveEquipmentTypeToDb('Pajzs');
             await saveEquipmentToDb({ typeId: type.id });
 
@@ -56,7 +56,7 @@ describe('/api/equipment', () => {
 
             expect(resp.status).toBe(200);
             expect(resp.body.equipments.length).toBe(1);
-            expect(resp.body.equipments[0].type).toStrictEqual({ id: type.id, label: 'Pajzs', slotId: null, parentId: null, icon: null, sortOrder: 0 });
+            expect(resp.body.equipments[0].typeId).toBe(type.id);
         });
 
         it('when there is no equipment then should return an empty list', async () => {
@@ -83,7 +83,7 @@ describe('/api/equipment', () => {
             const created = listResp.body.equipments.find((item: EquipmentResponseItem) => item.name === name);
             expect(created).toBeDefined();
             expect(created.description).toBe('Egy vadonatúj felszerelés');
-            expect(created.type).toStrictEqual({ id: type.id, label: type.label, slotId: null, parentId: null, icon: null, sortOrder: 0 });
+            expect(created.typeId).toBe(type.id);
         });
 
         it('when create equipment then should return the created equipment with its id', async () => {
@@ -305,9 +305,9 @@ describe('/api/equipment', () => {
             });
 
             expect(updateResp.status).toBe(200);
-            expect(updateResp.body.type).toStrictEqual({ id: firstType.id, label: firstType.label, slotId: null, parentId: null, icon: null, sortOrder: 0 });
+            expect(updateResp.body.typeId).toBe(firstType.id);
             const listResp = await equipmentClient.getAllEquipment();
-            expect(listResp.body.equipments[0].type).toStrictEqual({ id: firstType.id, label: firstType.label, slotId: null, parentId: null, icon: null, sortOrder: 0 });
+            expect(listResp.body.equipments[0].typeId).toBe(firstType.id);
         });
 
         it('when update a non-existent equipment then should return not exists error', async () => {

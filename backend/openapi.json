@@ -99,7 +99,7 @@
         "required": [
           "id",
           "label",
-          "slotId",
+          "slot",
           "parentId",
           "icon",
           "sortOrder"
@@ -111,9 +111,14 @@
           "label": {
             "type": "string"
           },
-          "slotId": {
-            "type": "integer",
-            "nullable": true
+          "slot": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Slot"
+              }
+            ],
+            "nullable": true,
+            "description": "The slot that limits how many equipment of this type a character can equip; null if unlimited"
           },
           "parentId": {
             "type": "integer",
@@ -136,7 +141,7 @@
           "name",
           "description",
           "slotCost",
-          "type"
+          "typeId"
         ],
         "properties": {
           "id": {
@@ -153,8 +158,8 @@
             "nullable": true,
             "description": "Only meaningful (and required on creation) when the equipment's type has a slot; null otherwise"
           },
-          "type": {
-            "$ref": "#/components/schemas/EquipmentType"
+          "typeId": {
+            "type": "integer"
           }
         }
       },
@@ -988,7 +993,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Equipment of the character with its type; an equipment assigned multiple times is listed multiple times",
+            "description": "Equipment of the character; an equipment assigned multiple times is listed multiple times",
             "content": {
               "application/json": {
                 "schema": {

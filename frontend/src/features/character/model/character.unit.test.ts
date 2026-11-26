@@ -7,13 +7,12 @@ describe("toCharacter", () => {
     it("maps the API character details to the view model", () => {
         const details = { id: 7, name: "Arwen", sex: Sex.FEMALE, race: "elf", imageUrl: "/arwen.png" };
 
-        expect(toCharacter(details, [100, 103])).toEqual({
+        expect(toCharacter(details)).toEqual({
             id: "7",
             name: "Arwen",
             imageUrl: "/arwen.png",
             raceId: "elf",
-            sex: "no",
-            equipmentIds: [100, 103]
+            sex: "no"
         });
     });
 });

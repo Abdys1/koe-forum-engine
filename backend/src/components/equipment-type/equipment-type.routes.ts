@@ -23,15 +23,17 @@ const idValidation = param('id').isInt().withMessage(ErrorMessages.EQUIPMENT_TYP
  *   schemas:
  *     EquipmentType:
  *       type: object
- *       required: [id, label, slotId, parentId, icon, sortOrder]
+ *       required: [id, label, slot, parentId, icon, sortOrder]
  *       properties:
  *         id:
  *           type: integer
  *         label:
  *           type: string
- *         slotId:
- *           type: integer
+ *         slot:
+ *           allOf:
+ *             - $ref: '#/components/schemas/Slot'
  *           nullable: true
+ *           description: The slot that limits how many equipment of this type a character can equip; null if unlimited
  *         parentId:
  *           type: integer
  *           nullable: true

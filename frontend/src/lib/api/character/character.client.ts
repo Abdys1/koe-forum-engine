@@ -2,6 +2,7 @@ import { CharacterClient, CharacterDetails, CreateCharacterRequest } from "@/lib
 import { ApiClient } from "@/lib/api/client/api-client";
 import { ApiResponseError } from "@/lib/api/client/api-response.error";
 import { toFormData } from "@/lib/api/client/form-data";
+import { Equipment } from "@/lib/api/equipment/types";
 
 export default class CharacterClientImpl implements CharacterClient {
     private api: ApiClient;
@@ -51,13 +52,13 @@ export default class CharacterClientImpl implements CharacterClient {
         return data.map(character => ({ ...character, imageUrl: new URL(character.imageUrl, response.url).href }));
     }
 
-    public async getEquipmentIds(id: number): Promise<number[]> {
+    public async getEquipment(id: number): Promise<Equipment[]> {
         const { data, error, response } = await this.api.GET('/characters/{id}/equipment', {
             params: { path: { id } }
         });
         if (!response.ok || !data) {
             throw new ApiResponseError(response, error);
         }
-        return data.map(equipment => equipment.id);
+        return data;
     }
 }

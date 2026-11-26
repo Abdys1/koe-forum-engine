@@ -1,5 +1,5 @@
-import { filterRootSlotPoolUsages, Occupant, SlotPoolUsage, sumSlotPoolUsages } from "@/features/equipment/model/equipmentCatalog";
-import type { EquipmentType } from "@/lib/api/equipment/types";
+import { buildEquipmentCatalog, filterRootSlotPoolUsages, Occupant, SlotPoolUsage, sumSlotPoolUsages } from "@/features/equipment/model/equipmentCatalog";
+import type { Equipment, EquipmentType } from "@/lib/api/equipment/types";
 
 export interface GearOverviewItem {
     id: number,
@@ -22,7 +22,7 @@ export interface GearOverviewRoot {
     rows: GearOverviewRow[]
 }
 
-export function toGearOverview(equipmentTypeRoots: EquipmentType[], slotPoolUsages: Map<number, SlotPoolUsage>): GearOverviewRoot[] {
+export function buildGearOverview(equipmentTypeRoots: EquipmentType[], slotPoolUsages: Map<number, SlotPoolUsage>): GearOverviewRoot[] {
     return equipmentTypeRoots.map(root => {
         const rootSlotPoolUsages = filterRootSlotPoolUsages(slotPoolUsages, root.id);
         return {
@@ -33,6 +33,15 @@ export function toGearOverview(equipmentTypeRoots: EquipmentType[], slotPoolUsag
             rows: rootSlotPoolUsages.flatMap(toRows)
         };
     });
+}
+
+export function buildCharacterGearOverview(equipmentTypes: EquipmentType[], characterEquipment: Equipment[]): GearOverviewRoot[] {
+    const uniqueEquipment = Array.from(new Map(characterEquipment.map(equipment => [equipment.id, equipment])).values());
+    const catalog = buildEquipmentCatalog(equipmentTypes, uniqueEquipment);
+    return buildGearOverview(
+        catalog.getEquipmentTypeRoots(),
+        catalog.getSlotPoolUsages(characterEquipment.map(equipment => equipment.id))
+    );
 }
 
 function toRows({ slotPool, occupants }: SlotPoolUsage): GearOverviewRow[] {

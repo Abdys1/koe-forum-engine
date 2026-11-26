@@ -1,3 +1,5 @@
+import { SlotDetails } from "@src/components/slot/usecases/collection/types";
+
 export interface EquipmentTypeCollection {
     execute: () => Promise<EquipmentTypeCollectionOutput>
 }
@@ -5,7 +7,7 @@ export interface EquipmentTypeCollection {
 export interface EquipmentTypeDetails {
     id?: number;
     label: string;
-    slotId?: number | null;
+    slot: SlotDetails | null;
     parentId: number | null;
     icon: string | null;
     sortOrder: number;

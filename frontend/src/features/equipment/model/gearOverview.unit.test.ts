@@ -1,14 +1,14 @@
 import { describe, expect, it } from "vitest";
 
-import { equipmentCatalogData } from "@/features/equipment/model/__fixtures__/equipmentCatalogData";
+import { equipment, equipmentTypes } from "@/features/equipment/model/__fixtures__/equipment";
 import { buildEquipmentCatalog } from "@/features/equipment/model/equipmentCatalog";
-import { toGearOverview } from "@/features/equipment/model/gearOverview";
+import { buildCharacterGearOverview, buildGearOverview } from "@/features/equipment/model/gearOverview";
 
-const catalog = buildEquipmentCatalog(equipmentCatalogData);
+const catalog = buildEquipmentCatalog(equipmentTypes, equipment);
 
-describe("toGearOverview", () => {
+describe("buildGearOverview", () => {
     it("groups the root slot pool by type and lists other slot pools as their own rows", () => {
-        const overview = toGearOverview(catalog.getEquipmentTypeRoots(), catalog.getSlotPoolUsages([100, 102, 103, 100]));
+        const overview = buildGearOverview(catalog.getEquipmentTypeRoots(), catalog.getSlotPoolUsages([100, 102, 103, 100]));
 
         expect(overview).toEqual([
             {
@@ -28,8 +28,23 @@ describe("toGearOverview", () => {
     });
 
     it("keeps an empty row for an unused non-root slot pool", () => {
-        const [weapons] = toGearOverview(catalog.getEquipmentTypeRoots(), catalog.getSlotPoolUsages([]));
+        const [weapons] = buildGearOverview(catalog.getEquipmentTypeRoots(), catalog.getSlotPoolUsages([]));
 
         expect(weapons.rows).toEqual([{ id: "slot-2", label: "Pajzs", items: [] }]);
+    });
+});
+
+describe("buildCharacterGearOverview", () => {
+    it("builds the same overview from the character's own equipment as from the full catalog", () => {
+        const selectedIds = [100, 102, 103, 100];
+        const characterEquipment = selectedIds.map(id => equipment.find(item => item.id === id)!);
+
+        expect(buildCharacterGearOverview(equipmentTypes, characterEquipment))
+            .toEqual(buildGearOverview(catalog.getEquipmentTypeRoots(), catalog.getSlotPoolUsages(selectedIds)));
+    });
+
+    it("keeps every root and slot pool when the character has no equipment", () => {
+        expect(buildCharacterGearOverview(equipmentTypes, []))
+            .toEqual(buildGearOverview(catalog.getEquipmentTypeRoots(), catalog.getSlotPoolUsages([])));
     });
 });

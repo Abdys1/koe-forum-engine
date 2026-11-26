@@ -185,7 +185,7 @@ const imageValidation = body('image').custom((_value, { req }) => {
  *           type: integer
  *     responses:
  *       200:
- *         description: Equipment of the character with its type; an equipment assigned multiple times is listed multiple times
+ *         description: Equipment of the character; an equipment assigned multiple times is listed multiple times
  *         content:
  *           application/json:
  *             schema:

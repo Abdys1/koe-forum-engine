@@ -23,7 +23,7 @@ interface EquipmentResponseItem {
   id: number;
   name: string;
   description: string;
-  type: { id: number; label: string };
+  typeId: number;
 }
 
 describe("/api/characters", () => {
@@ -134,7 +134,7 @@ describe("/api/characters", () => {
       expect(createResp.status).toBe(200);
       const stored = await getCharacterEquipment(user.username, await getCharacterIdOf(user.id));
       expect(stored.length).toBe(12);
-      expect(new Set(stored.map((item) => item.type.id)).size).toBe(12);
+      expect(new Set(stored.map((item) => item.typeId)).size).toBe(12);
     });
 
     it("when character already exists then should not be added", async () => {
@@ -459,7 +459,7 @@ describe("/api/characters", () => {
       expect(resp.status).toBe(200);
       const stored = await getCharacterEquipment(user.username, characterId);
       expect(stored.length).toBe(12);
-      expect(new Set(stored.map((item) => item.type.id)).size).toBe(12);
+      expect(new Set(stored.map((item) => item.typeId)).size).toBe(12);
     });
 
     it("when set the equipment then the response should contain the type of every equipment", async () => {
@@ -475,7 +475,7 @@ describe("/api/characters", () => {
       expect(resp.body[0].id).toBe(potion.id);
       expect(resp.body[0].name).toBe("Gyógyító ital");
       expect(resp.body[0].description).toBe("Gyógyít");
-      expect(resp.body[0].type).toStrictEqual({ id: type.id, label: "Bájital", slotId: null, parentId: null, icon: null, sortOrder: 0 });
+      expect(resp.body[0].typeId).toBe(type.id);
     });
 
     it("when the character belongs to another user then should return character not owned error", async () => {

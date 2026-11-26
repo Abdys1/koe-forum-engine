@@ -11,9 +11,9 @@ import {
 import { CharacterInputs, createCharacterDefaults } from "@/features/character/model/createCharacter";
 import { findRace, SelectableRace } from "@/features/character/model/race";
 import { buildEquipmentCatalog, EquipmentCatalog } from "@/features/equipment/model/equipmentCatalog";
-import { GearOverviewRoot, toGearOverview } from "@/features/equipment/model/gearOverview";
+import { buildGearOverview,GearOverviewRoot } from "@/features/equipment/model/gearOverview";
 import { compactSelection } from "@/features/equipment/model/selection";
-import { EquipmentCatalogData } from "@/lib/api/equipment/types";
+import { Equipment, EquipmentType } from "@/lib/api/equipment/types";
 
 export interface CharacterCreation {
     form: UseFormReturn<CharacterInputs>,
@@ -27,16 +27,16 @@ export interface CharacterCreation {
     applyServerErrors: (errors: CharacterFormError[]) => void
 }
 
-export function useCharacterCreation(equipmentCatalogData: EquipmentCatalogData): CharacterCreation {
+export function useCharacterCreation(equipmentTypes: EquipmentType[], equipment: Equipment[]): CharacterCreation {
     const form = useForm<CharacterInputs>({ defaultValues: createCharacterDefaults, reValidateMode: "onSubmit" });
-    const equipmentCatalog = useMemo(() => buildEquipmentCatalog(equipmentCatalogData), [equipmentCatalogData]);
+    const equipmentCatalog = useMemo(() => buildEquipmentCatalog(equipmentTypes, equipment), [equipmentTypes, equipment]);
 
     const [raceId, characterName, characterImg, equipmentIds] = useWatch({
         control: form.control,
         name: ["raceId", "characterName", "characterImg", "equipmentIds"]
     });
     const gearOverview = useMemo(
-        () => toGearOverview(
+        () => buildGearOverview(
             equipmentCatalog.getEquipmentTypeRoots(),
             equipmentCatalog.getSlotPoolUsages(compactSelection(equipmentIds))
         ),

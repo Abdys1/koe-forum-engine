@@ -13,7 +13,6 @@ const meta = {
             imageUrl: "/images/ryldan2.png",
             raceId: "sotetelf",
             sex: "ferfi",
-            equipmentIds: [100, 103],
             appearance: "Magas, szikár alak, sötét köpenyben.\n\nA bal arcán régi heg húzódik.",
             quote: { text: "Sosem hátrál meg, ha egy barátja bajban van.", locationId: "fogado-a-feher-siralyhoz", postNumber: 12 },
         },

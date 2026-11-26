@@ -1,9 +1,9 @@
-import { equipmentCatalogData } from "@/features/equipment/model/__fixtures__/equipmentCatalogData";
+import { equipment, equipmentTypes } from "@/features/equipment/model/__fixtures__/equipment";
 import { buildEquipmentCatalog } from "@/features/equipment/model/equipmentCatalog";
-import { GearOverviewRoot, toGearOverview } from "@/features/equipment/model/gearOverview";
+import { buildGearOverview,GearOverviewRoot } from "@/features/equipment/model/gearOverview";
 
-const catalog = buildEquipmentCatalog(equipmentCatalogData);
+const catalog = buildEquipmentCatalog(equipmentTypes, equipment);
 
 export function gearOverviewFor(selectedIds: number[]): GearOverviewRoot[] {
-    return toGearOverview(catalog.getEquipmentTypeRoots(), catalog.getSlotPoolUsages(selectedIds));
+    return buildGearOverview(catalog.getEquipmentTypeRoots(), catalog.getSlotPoolUsages(selectedIds));
 }

@@ -1,6 +1,5 @@
 import { Character, toCharacter } from "@/features/character/model/character";
-import { buildEquipmentCatalog } from "@/features/equipment/model/equipmentCatalog";
-import { GearOverviewRoot, toGearOverview } from "@/features/equipment/model/gearOverview";
+import { buildCharacterGearOverview, GearOverviewRoot } from "@/features/equipment/model/gearOverview";
 import { characterClient } from "@/lib/api/character";
 import { equipmentClient } from "@/lib/api/equipment";
 import { postsClient } from "@/lib/api/posts";
@@ -19,17 +18,13 @@ export async function getCharacterSheet(id: string): Promise<CharacterSheetData 
         return null;
     }
 
-    const [equipmentIds, activity, equipmentCatalogData] = await Promise.all([
-        characterClient.getEquipmentIds(details.id),
+    const [equipment, activity, equipmentTypes] = await Promise.all([
+        characterClient.getEquipment(details.id),
         postsClient.getCharacterActivity(String(details.id)),
-        equipmentClient.getCatalogData()
+        equipmentClient.getEquipmentTypes()
     ]);
-    const character = toCharacter(details, equipmentIds);
-    const equipmentCatalog = buildEquipmentCatalog(equipmentCatalogData);
-    const gearOverview = toGearOverview(
-        equipmentCatalog.getEquipmentTypeRoots(),
-        equipmentCatalog.getSlotPoolUsages(character.equipmentIds)
-    );
+    const character = toCharacter(details);
+    const gearOverview = buildCharacterGearOverview(equipmentTypes, equipment);
 
     return { character, activity, gearOverview };
 }

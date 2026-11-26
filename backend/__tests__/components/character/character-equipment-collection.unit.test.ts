@@ -36,7 +36,7 @@ describe('CharacterEquipmentCollectionUseCase', () => {
     describe('execute()', () => {
         it('should return the equipment of the character', async () => {
             equipmentRepository.findAllByCharacterId.mockResolvedValue([
-                { id: 5, name: 'Gyógyító ital', typeId: 2, description: 'Gyógyít', slotCost: null, type: { id: 2, label: 'Bájital' } }
+                { id: 5, name: 'Gyógyító ital', typeId: 2, description: 'Gyógyít', slotCost: null }
             ]);
 
             const result = await characterEquipmentCollection.execute({ characterId: 3 });

@@ -45,14 +45,14 @@ describe('equipment-type use cases', () => {
         it('should return the types provided by the database', async () => {
             equipmentTypeRepository.findAll.mockResolvedValue([
                 { id: 1, label: 'Páncélzat', slotId: null, parentId: null, icon: 'shield', sortOrder: 1 },
-                { id: 2, label: 'Fejvédő', slotId: 9, parentId: 1, icon: null, sortOrder: 0 },
+                { id: 2, label: 'Fejvédő', slotId: 9, slot: { id: 9, label: 'Fej', maxCapacity: 1 }, parentId: 1, icon: null, sortOrder: 0 },
             ]);
 
             const result = await equipmentTypeCollection.execute();
 
             expect(result).toStrictEqual([
-                { id: 1, label: 'Páncélzat', slotId: null, parentId: null, icon: 'shield', sortOrder: 1 },
-                { id: 2, label: 'Fejvédő', slotId: 9, parentId: 1, icon: null, sortOrder: 0 },
+                { id: 1, label: 'Páncélzat', slot: null, parentId: null, icon: 'shield', sortOrder: 1 },
+                { id: 2, label: 'Fejvédő', slot: { id: 9, label: 'Fej', maxCapacity: 1 }, parentId: 1, icon: null, sortOrder: 0 },
             ]);
         });
 
@@ -61,7 +61,7 @@ describe('equipment-type use cases', () => {
 
             const result = await equipmentTypeCollection.execute();
 
-            expect(result).toStrictEqual([{ id: 1, label: 'Pajzs', slotId: null, parentId: null, icon: null, sortOrder: 0 }]);
+            expect(result).toStrictEqual([{ id: 1, label: 'Pajzs', slot: null, parentId: null, icon: null, sortOrder: 0 }]);
         });
 
         it('should return an empty list when there is no type', async () => {
@@ -82,7 +82,7 @@ describe('equipment-type use cases', () => {
             const result = await equipmentTypeCreation.execute({ label: 'Gyűrű' });
 
             expect(result.status).toBe(EquipmentTypeCreationResult.CREATED);
-            expect(result.equipmentType).toStrictEqual({ id: 1, label: 'Gyűrű', slotId: null, parentId: null, icon: null, sortOrder: 0 });
+            expect(result.equipmentType).toStrictEqual({ id: 1, label: 'Gyűrű', slot: null, parentId: null, icon: null, sortOrder: 0 });
         });
 
         it('should return ALREADY_EXISTS when the label is taken', async () => {
@@ -138,7 +138,7 @@ describe('equipment-type use cases', () => {
 
             expect(result.status).toBe(EquipmentTypeCreationResult.CREATED);
             expect(equipmentTypeRepository.findById).toHaveBeenCalledWith(7);
-            expect(result.equipmentType).toStrictEqual({ id: 1, label: 'Kardok', slotId: null, parentId: 7, icon: null, sortOrder: 0 });
+            expect(result.equipmentType).toStrictEqual({ id: 1, label: 'Kardok', slot: null, parentId: 7, icon: null, sortOrder: 0 });
         });
 
         it('should return PARENT_NOT_EXISTS when the referenced parent does not exist', async () => {
@@ -160,7 +160,7 @@ describe('equipment-type use cases', () => {
         it('should save the given icon and sortOrder', async () => {
             const result = await equipmentTypeCreation.execute({ label: 'Fegyverzet', icon: 'swords', sortOrder: 2 });
 
-            expect(result.equipmentType).toStrictEqual({ id: 1, label: 'Fegyverzet', slotId: null, parentId: null, icon: 'swords', sortOrder: 2 });
+            expect(result.equipmentType).toStrictEqual({ id: 1, label: 'Fegyverzet', slot: null, parentId: null, icon: 'swords', sortOrder: 2 });
         });
 
         it('should save a blank icon as null', async () => {

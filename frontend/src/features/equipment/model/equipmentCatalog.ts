@@ -1,4 +1,4 @@
-import type { EquipmentCatalogData, EquipmentType } from "@/lib/api/equipment/types";
+import type { Equipment, EquipmentType } from "@/lib/api/equipment/types";
 
 export interface EquipmentItem {
     id: number,
@@ -118,8 +118,7 @@ export class EquipmentCatalog {
     }
 }
 
-export function buildEquipmentCatalog({ equipmentTypes, slots, equipments }: EquipmentCatalogData): EquipmentCatalog {
-    const slotsById = new Map(slots.map(slot => [slot.id, slot]));
+export function buildEquipmentCatalog(equipmentTypes: EquipmentType[], equipment: Equipment[]): EquipmentCatalog {
     const childrenByParentId = new Map<number | null, EquipmentType[]>();
     equipmentTypes.forEach(type => {
         const siblings = childrenByParentId.get(type.parentId) ?? [];
@@ -128,10 +127,10 @@ export function buildEquipmentCatalog({ equipmentTypes, slots, equipments }: Equ
     });
     const equipmentsByTypeId = new Map<number, EquipmentItem[]>();
     const costsByItemId = new Map<number, number | null>();
-    equipments.forEach(equipment => {
-        const items = equipmentsByTypeId.get(equipment.type.id) ?? [];
+    equipment.forEach(equipment => {
+        const items = equipmentsByTypeId.get(equipment.typeId) ?? [];
         items.push({ id: equipment.id, name: equipment.name, description: equipment.description });
-        equipmentsByTypeId.set(equipment.type.id, items);
+        equipmentsByTypeId.set(equipment.typeId, items);
         costsByItemId.set(equipment.id, equipment.slotCost);
     });
 
@@ -140,12 +139,11 @@ export function buildEquipmentCatalog({ equipmentTypes, slots, equipments }: Equ
     const sections: CatalogSection[] = [];
     const entries = new Map<number, EquipmentEntry>();
 
-    function getOrCreateSlotPool(slotId: number | null, root: EquipmentType): SlotPool | undefined {
-        const slot = slotId === null ? undefined : slotsById.get(slotId);
+    function getOrCreateSlotPool(slot: EquipmentType["slot"], root: EquipmentType): SlotPool | undefined {
         if (!slot) return undefined;
         const existing = slotPools.find(slotPool => slotPool.id === slot.id);
         if (existing) return existing;
-        const slotPool = { id: slot.id, label: slot.label, rootId: root.id, capacity: slot.maxCapacity, isRootSlotPool: root.slotId === slot.id };
+        const slotPool = { id: slot.id, label: slot.label, rootId: root.id, capacity: slot.maxCapacity, isRootSlotPool: root.slot?.id === slot.id };
         slotPools.push(slotPool);
         return slotPool;
     }
@@ -154,7 +152,7 @@ export function buildEquipmentCatalog({ equipmentTypes, slots, equipments }: Equ
         if (visited.has(type.id)) return;
         visited.add(type.id);
 
-        const slotPool = getOrCreateSlotPool(type.slotId, root);
+        const slotPool = getOrCreateSlotPool(type.slot, root);
         const items = equipmentsByTypeId.get(type.id) ?? [];
         const sectionEntries = slotPool
             ? items.flatMap(item => {

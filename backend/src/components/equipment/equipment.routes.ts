@@ -22,7 +22,7 @@ const idValidation = param("id").isInt().withMessage(ErrorMessages.EQUIPMENT_NOT
  *   schemas:
  *     Equipment:
  *       type: object
- *       required: [id, name, description, slotCost, type]
+ *       required: [id, name, description, slotCost, typeId]
  *       properties:
  *         id:
  *           type: integer
@@ -34,8 +34,8 @@ const idValidation = param("id").isInt().withMessage(ErrorMessages.EQUIPMENT_NOT
  *           type: integer
  *           nullable: true
  *           description: Only meaningful (and required on creation) when the equipment's type has a slot; null otherwise
- *         type:
- *           $ref: '#/components/schemas/EquipmentType'
+ *         typeId:
+ *           type: integer
  */
 
 /**

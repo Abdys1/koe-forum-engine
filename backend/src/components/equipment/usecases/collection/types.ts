@@ -1,5 +1,3 @@
-import { EquipmentTypeDetails } from "@src/components/equipment-type/usecases/collection/types";
-
 export interface EquipmentCollectionUseCase {
     execute: () => Promise<EquipmentCollectionOutput>;
 }
@@ -9,7 +7,7 @@ export interface EquipmentCollectionDetails {
     name: string;
     description: string;
     slotCost: number | null;
-    type?: EquipmentTypeDetails;
+    typeId: number;
 }
 
 export type EquipmentCollectionOutput = EquipmentCollectionDetails[];
