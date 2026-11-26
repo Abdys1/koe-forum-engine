@@ -28,11 +28,15 @@ export const btn = style([glassPanel, glassPanelHover, {
 }]);
 
 export const btnActive = style({
-  borderColor: colors.mainLight,
-  background: `linear-gradient(to bottom, ${alphaColors.primaryGlow} 0%, ${alphaColors.cardBlackVeil} 100%)`,
-  boxShadow: shadows.glassHover,
-  ':hover': {
-    borderColor: colors.mainLight,
+  selectors: {
+    [`${btn}&`]: {
+      borderColor: colors.mainLight,
+      background: `linear-gradient(to bottom, ${alphaColors.primaryGlow} 0%, ${alphaColors.cardBlackVeil} 100%)`,
+      boxShadow: shadows.glassHover,
+    },
+    [`${btn}&:hover`]: {
+      borderColor: colors.mainLight,
+    },
   },
 });
 

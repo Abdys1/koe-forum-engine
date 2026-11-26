@@ -16,19 +16,25 @@ export const card = style([glassPanel, glassPanelHover, {
 }]);
 
 export const cardSelected = style({
-  borderColor: colors.mainLight,
-  background: `linear-gradient(to bottom, ${alphaColors.primaryGlow} 0%, ${alphaColors.cardBlackVeil} 100%)`,
-  boxShadow: shadows.glassHover,
-  ':hover': {
-    borderColor: colors.mainLight,
+  selectors: {
+    [`${card}&`]: {
+      borderColor: colors.mainLight,
+      background: `linear-gradient(to bottom, ${alphaColors.primaryGlow} 0%, ${alphaColors.cardBlackVeil} 100%)`,
+      boxShadow: shadows.glassHover,
+    },
+    [`${card}&:hover`]: {
+      borderColor: colors.mainLight,
+    },
   },
 });
 
 export const cardBlocked = style({
   opacity: 0.45,
-  ':hover': {
-    borderColor: alphaColors.primaryBorder,
-    boxShadow: shadows.glass,
+  selectors: {
+    [`${card}&:hover`]: {
+      borderColor: alphaColors.primaryBorder,
+      boxShadow: shadows.glass,
+    },
   },
 });
 

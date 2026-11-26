@@ -180,12 +180,16 @@ export const sexBtn = style([glassPanel, glassPanelHover, {
 }]);
 
 export const sexBtnActive = style({
-  borderColor: colors.mainLight,
-  background: `linear-gradient(to bottom, ${alphaColors.primaryGlow} 0%, ${alphaColors.cardBlackVeil} 100%)`,
-  boxShadow: shadows.glassHover,
-  color: colors.white,
-  ':hover': {
-    borderColor: colors.mainLight,
+  selectors: {
+    [`${sexBtn}&`]: {
+      borderColor: colors.mainLight,
+      background: `linear-gradient(to bottom, ${alphaColors.primaryGlow} 0%, ${alphaColors.cardBlackVeil} 100%)`,
+      boxShadow: shadows.glassHover,
+      color: colors.white,
+    },
+    [`${sexBtn}&:hover`]: {
+      borderColor: colors.mainLight,
+    },
   },
 });
 
