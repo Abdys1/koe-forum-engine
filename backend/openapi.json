@@ -94,6 +94,37 @@
           }
         }
       },
+      "Race": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "teaser",
+          "description",
+          "imageUrl",
+          "buttonImageUrl"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "teaser": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "imageUrl": {
+            "type": "string"
+          },
+          "buttonImageUrl": {
+            "type": "string"
+          }
+        }
+      },
       "EquipmentType": {
         "type": "object",
         "required": [
@@ -188,7 +219,19 @@
             "description": "1 = male, 2 = female (ISO/IEC 5218)"
           },
           "race": {
-            "type": "string"
+            "type": "object",
+            "required": [
+              "id",
+              "name"
+            ],
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              }
+            }
           },
           "imageUrl": {
             "type": "string"
@@ -412,6 +455,37 @@
           },
           "404": {
             "description": "Slot not found"
+          }
+        }
+      }
+    },
+    "/races": {
+      "get": {
+        "tags": [
+          "Race"
+        ],
+        "summary": "List the races a character can be created with, in display order",
+        "responses": {
+          "200": {
+            "description": "List of races",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "races"
+                  ],
+                  "properties": {
+                    "races": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Race"
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -796,7 +870,7 @@
                 "required": [
                   "name",
                   "sex",
-                  "race",
+                  "raceId",
                   "image"
                 ],
                 "properties": {
@@ -813,8 +887,9 @@
                       2
                     ]
                   },
-                  "race": {
-                    "type": "string"
+                  "raceId": {
+                    "type": "integer",
+                    "description": "The id of a race listed by GET /races"
                   },
                   "image": {
                     "type": "string",
@@ -866,7 +941,7 @@
             }
           },
           "422": {
-            "description": "One of the referenced equipment ids does not exist, or the equipment list exceeds a slot's capacity",
+            "description": "The race or one of the referenced equipment ids does not exist, or the equipment list exceeds a slot's capacity",
             "content": {
               "application/json": {
                 "schema": {

@@ -1,14 +1,16 @@
 import { Character as CharacterRecord } from "@prisma/client";
-import Character from "@src/components/character/models/character";
+import Character, { CharacterRace, NewCharacter } from "@src/components/character/models/character";
 import { CharacterRepository } from "@src/components/character/repositories/types";
 import { DbClient } from "@src/prisma-client";
 
-function toCharacter(record: CharacterRecord): Character {
+const INCLUDE_RACE = { race: { select: { id: true, name: true } } } as const;
+
+function toCharacter(record: CharacterRecord & { race: CharacterRace }): Character {
   return {
     id: record.id,
     userId: record.userId,
     name: record.name,
-    race: record.race,
+    race: { id: record.race.id, name: record.race.name },
     sex: record.sex,
     imageUrl: record.imageUrl,
   };
@@ -22,7 +24,7 @@ export default class CharacterRepositoryImpl implements CharacterRepository {
   }
 
   public async findById(id: number): Promise<Character | null> {
-    const character = await this.db.character.findUnique({ where: { id } });
+    const character = await this.db.character.findUnique({ where: { id }, include: INCLUDE_RACE });
     return character ? toCharacter(character) : null;
   }
 
@@ -31,6 +33,7 @@ export default class CharacterRepositoryImpl implements CharacterRepository {
   ): Promise<Character[]> {
     const characters = await this.db.character.findMany({
       where: { user: { id: userId } },
+      include: INCLUDE_RACE,
     });
 
     return characters.map(toCharacter);
@@ -43,15 +46,16 @@ export default class CharacterRepositoryImpl implements CharacterRepository {
     return count > 0;
   }
 
-  public async create(character: Character): Promise<Character> {
+  public async create(character: NewCharacter): Promise<Character> {
     const created = await this.db.character.create({
       data: {
         name: character.name,
         sex: character.sex,
-        race: character.race,
+        race: { connect: { id: character.raceId } },
         imageUrl: character.imageUrl,
         user: { connect: { id: character.userId } },
       },
+      include: INCLUDE_RACE,
     });
     return toCharacter(created);
   }

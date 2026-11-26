@@ -7,6 +7,6 @@ export enum Sex {
 export interface CharacterRegistrationRequestDto {
   name: string;
   sex: Sex;
-  race: string;
+  raceId: number;
   equipmentIds?: number[];
 }

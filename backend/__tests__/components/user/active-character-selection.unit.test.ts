@@ -20,7 +20,7 @@ describe('ActiveCharacterSelectionUseCase', () => {
         };
         characterRepository = {
             create: vi.fn(),
-            findById: vi.fn().mockResolvedValue({ id: 3, userId: 7, name: 'Aragorn', race: 'human', sex: 1, imageUrl: '/a.jpg' }),
+            findById: vi.fn().mockResolvedValue({ id: 3, userId: 7, name: 'Aragorn', race: { id: 1, name: 'Ember' }, sex: 1, imageUrl: '/a.jpg' }),
             findAllCharacterByUserId: vi.fn(),
             existsByCharacterName: vi.fn(),
         };
@@ -40,7 +40,7 @@ describe('ActiveCharacterSelectionUseCase', () => {
         });
 
         it('should return NOT_OWNED and not select when the character belongs to another user', async () => {
-            characterRepository.findById.mockResolvedValue({ id: 3, userId: 8, name: 'Legolas', race: 'elf', sex: 1, imageUrl: '/l.jpg' });
+            characterRepository.findById.mockResolvedValue({ id: 3, userId: 8, name: 'Legolas', race: { id: 2, name: 'Elf' }, sex: 1, imageUrl: '/l.jpg' });
 
             const result = await activeCharacterSelection.execute({ userId: 7, characterId: 3 });
 

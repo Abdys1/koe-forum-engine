@@ -23,8 +23,8 @@ export interface Readable<T> {
   findById: (id: number) => Promise<T | null>;
 }
 
-export interface Creatable<T> {
-  create: (entity: T) => Promise<T>;
+export interface Creatable<T, TCreate = T> {
+  create: (entity: TCreate) => Promise<T>;
 }
 
 export interface Updatable<T, TUpdate> {

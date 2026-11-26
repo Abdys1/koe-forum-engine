@@ -226,6 +226,44 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/races": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List the races a character can be created with, in display order */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description List of races */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            races: components["schemas"]["Race"][];
+                        };
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/equipment/type": {
         parameters: {
             query?: never;
@@ -622,7 +660,8 @@ export interface paths {
                         name: string;
                         /** @enum {integer} */
                         sex: 1 | 2;
-                        race: string;
+                        /** @description The id of a race listed by GET /races */
+                        raceId: number;
                         /**
                          * Format: binary
                          * @description The character portrait (jpeg, png, webp or gif, at most 5 MB)
@@ -661,7 +700,7 @@ export interface paths {
                         "application/json": components["schemas"]["ErrorCode"];
                     };
                 };
-                /** @description One of the referenced equipment ids does not exist, or the equipment list exceeds a slot's capacity */
+                /** @description The race or one of the referenced equipment ids does not exist, or the equipment list exceeds a slot's capacity */
                 422: {
                     headers: {
                         [name: string]: unknown;
@@ -1076,6 +1115,14 @@ export interface components {
             label: string;
             maxCapacity: number;
         };
+        Race: {
+            id: number;
+            name: string;
+            teaser: string;
+            description: string;
+            imageUrl: string;
+            buttonImageUrl: string;
+        };
         EquipmentType: {
             id: number;
             label: string;
@@ -1102,7 +1149,10 @@ export interface components {
              * @enum {integer}
              */
             sex: 1 | 2;
-            race: string;
+            race: {
+                id: number;
+                name: string;
+            };
             imageUrl: string;
         };
         AuthTokens: {

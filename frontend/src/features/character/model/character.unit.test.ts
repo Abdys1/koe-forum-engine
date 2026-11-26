@@ -5,13 +5,13 @@ import { Sex } from "@/lib/api/character/types";
 
 describe("toCharacter", () => {
     it("maps the API character details to the view model", () => {
-        const details = { id: 7, name: "Arwen", sex: Sex.FEMALE, race: "elf", imageUrl: "/arwen.png" };
+        const details = { id: 7, name: "Arwen", sex: Sex.FEMALE, race: { id: 2, name: "Elf" }, imageUrl: "/arwen.png" };
 
         expect(toCharacter(details)).toEqual({
             id: "7",
             name: "Arwen",
             imageUrl: "/arwen.png",
-            raceId: "elf",
+            raceName: "Elf",
             sex: "no"
         });
     });

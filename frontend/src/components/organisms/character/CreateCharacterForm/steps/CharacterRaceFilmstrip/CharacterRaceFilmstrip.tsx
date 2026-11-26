@@ -8,21 +8,25 @@ import Icon from "@/components/atoms/Icon/Icon";
 import CharacterRaceBtn from "@/components/organisms/character/CreateCharacterForm/steps/CharacterRaceBtn/CharacterRaceBtn";
 import { useMultiStepFormContext } from "@/components/organisms/form/MultiStepForm/MultiStepFormContext";
 import type { CharacterInputs } from "@/features/character/model/createCharacter";
-import { races, SelectableRace } from "@/features/character/model/race";
+import type { Race } from "@/lib/api/race/types";
 
 import * as styles from "./CharacterRaceFilmstrip.css";
 
 const DRAG_THRESHOLD = 5;
 const SCROLL_EDGE_TOLERANCE = 1;
 
-export default function CharacterRaceFilmstrip() {
+type CharacterRaceFilmstripProps = {
+    races: Race[]
+}
+
+export default function CharacterRaceFilmstrip({ races }: CharacterRaceFilmstripProps) {
     const { control, register, setValue } = useMultiStepFormContext<CharacterInputs>().form;
-    const selectedRaceId: string = useWatch({ control, name: "raceId" });
+    const selectedRaceId: number = useWatch({ control, name: "raceId" });
 
     const [canScrollPrev, setCanScrollPrev] = useState(false);
     const [canScrollNext, setCanScrollNext] = useState(false);
     const trackRef = useRef<HTMLUListElement>(null);
-    const raceBtnRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+    const raceBtnRefs = useRef<Record<number, HTMLButtonElement | null>>({});
     const dragState = useRef({ pointerId: -1, startX: 0, startScrollLeft: 0, moved: false });
     const [isDragging, setIsDragging] = useState(false);
 
@@ -43,9 +47,9 @@ export default function CharacterRaceFilmstrip() {
         raceBtnRefs.current[selectedRaceId]?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
     }, [selectedRaceId]);
 
-    function selectRace(race: SelectableRace): void {
+    function selectRace(race: Race): void {
         setValue("raceId", race.id);
-        setValue("raceTitle", race.title);
+        setValue("raceTitle", race.name);
     }
 
     function scrollTrack(direction: 1 | -1): void {
@@ -96,6 +100,7 @@ export default function CharacterRaceFilmstrip() {
         if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
         event.preventDefault();
         const step = event.key === "ArrowRight" ? 1 : -1;
+        if (!races.length) return;
         const index = races.findIndex(race => race.id === selectedRaceId);
         const nextRace = races[(index + step + races.length) % races.length];
         selectRace(nextRace);
@@ -122,8 +127,8 @@ export default function CharacterRaceFilmstrip() {
                     <CharacterRaceBtn
                         key={race.id}
                         ref={element => { raceBtnRefs.current[race.id] = element; }}
-                        title={race.title}
-                        img={race.buttonImg}
+                        title={race.name}
+                        img={race.buttonImageUrl}
                         onClick={() => selectRace(race)}
                         active={selectedRaceId === race.id}
                     />
@@ -133,7 +138,7 @@ export default function CharacterRaceFilmstrip() {
                 className={styles.scrollBtn} onClick={() => scrollTrack(1)}>
                 <Icon name="chevron_right" className={styles.scrollIcon}/>
             </button>
-            <input type="hidden" {...register("raceId")}/>
+            <input type="hidden" {...register("raceId", { valueAsNumber: true })}/>
             <input type="hidden" {...register("raceTitle")}/>
         </div>
     );

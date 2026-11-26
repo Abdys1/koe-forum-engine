@@ -1,5 +1,6 @@
 import { CharacterRepository } from "@src/components/character/repositories/types";
 import { CharacterEquipmentValidationResult, CharacterEquipmentValidationUseCase } from "@src/components/character/usecases/equipment_validation/types";
+import { RaceRepository } from "@src/components/race/repositories/types";
 import { RepositoryProvider } from "@src/components/transaction/types";
 
 import { CharacterUpdateValidatorUseCase, ValidateCharacterUpdateInput, ValidateCharacterUpdateOutput, ValidateCharacterUpdateResult } from "./types";
@@ -12,6 +13,7 @@ const EQUIPMENT_VALIDATION_FAILURES = {
 export default class CharacterUpdateValidatorUseCaseImpl implements CharacterUpdateValidatorUseCase {
     constructor(
         private readonly characterRepositories: RepositoryProvider<CharacterRepository>,
+        private readonly raceRepositories: RepositoryProvider<RaceRepository>,
         private readonly characterEquipmentValidation: CharacterEquipmentValidationUseCase
     ) {}
 
@@ -19,6 +21,11 @@ export default class CharacterUpdateValidatorUseCaseImpl implements CharacterUpd
         const hasRegisteredCharName: boolean = await this.characterRepositories.get().existsByCharacterName(input.name);
         if (hasRegisteredCharName) {
             return { status: ValidateCharacterUpdateResult.ALREADY_EXISTS };
+        }
+
+        const raceExists = await this.raceRepositories.get().existsById(input.raceId);
+        if (!raceExists) {
+            return { status: ValidateCharacterUpdateResult.RACE_NOT_EXISTS };
         }
 
         const equipmentValidation = await this.characterEquipmentValidation.execute(input.equipmentIds);

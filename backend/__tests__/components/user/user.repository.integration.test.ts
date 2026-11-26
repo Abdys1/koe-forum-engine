@@ -1,5 +1,5 @@
 import { db, userRepositories } from '@test/utils/test-container';
-import { saveTestUserToDb } from '@test/utils/test-data-generator';
+import { saveRaceToDb, saveTestUserToDb } from '@test/utils/test-data-generator';
 import { describe, expect, it } from 'vitest';
 
 describe('UserRepository', () => {
@@ -34,8 +34,9 @@ describe('UserRepository', () => {
     });
 
     async function saveCharacterToDb(userId: number): Promise<number> {
+        const race = await saveRaceToDb();
         const character = await db.character.create({
-            data: { userId, name: 'Aragorn', race: 'human', sex: 1, imageUrl: '/character.jpg' }
+            data: { userId, name: 'Aragorn', raceId: race.id, sex: 1, imageUrl: '/character.jpg' }
         });
         return character.id;
     }

@@ -9,17 +9,18 @@ import {
     isCharacterErrorCode
 } from "@/features/character/model/characterValidation";
 import { CharacterInputs, createCharacterDefaults } from "@/features/character/model/createCharacter";
-import { findRace, SelectableRace } from "@/features/character/model/race";
 import { buildEquipmentCatalog, EquipmentCatalog } from "@/features/equipment/model/equipmentCatalog";
 import { buildGearOverview,GearOverviewRoot } from "@/features/equipment/model/gearOverview";
 import { compactSelection } from "@/features/equipment/model/selection";
 import { Equipment, EquipmentType } from "@/lib/api/equipment/types";
+import type { Race } from "@/lib/api/race/types";
 
 export interface CharacterCreation {
     form: UseFormReturn<CharacterInputs>,
     equipmentCatalog: EquipmentCatalog,
     gearOverview: GearOverviewRoot[],
-    selectedRace: SelectableRace,
+    races: Race[],
+    selectedRace: Race | undefined,
     isNameComplete: boolean,
     isImageComplete: boolean,
     validateName: () => Promise<boolean>,
@@ -27,8 +28,8 @@ export interface CharacterCreation {
     applyServerErrors: (errors: CharacterFormError[]) => void
 }
 
-export function useCharacterCreation(equipmentTypes: EquipmentType[], equipment: Equipment[]): CharacterCreation {
-    const form = useForm<CharacterInputs>({ defaultValues: createCharacterDefaults, reValidateMode: "onSubmit" });
+export function useCharacterCreation(races: Race[], equipmentTypes: EquipmentType[], equipment: Equipment[]): CharacterCreation {
+    const form = useForm<CharacterInputs>({ defaultValues: createCharacterDefaults(races), reValidateMode: "onSubmit" });
     const equipmentCatalog = useMemo(() => buildEquipmentCatalog(equipmentTypes, equipment), [equipmentTypes, equipment]);
 
     const [raceId, characterName, characterImg, equipmentIds] = useWatch({
@@ -47,7 +48,8 @@ export function useCharacterCreation(equipmentTypes: EquipmentType[], equipment:
         form,
         equipmentCatalog,
         gearOverview,
-        selectedRace: findRace(raceId),
+        races,
+        selectedRace: races.find(race => race.id === raceId),
         isNameComplete: !!characterName?.trim(),
         isImageComplete: !!characterImg?.length,
         validateName: async () => {

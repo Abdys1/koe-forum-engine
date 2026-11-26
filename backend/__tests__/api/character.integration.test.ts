@@ -10,6 +10,7 @@ import {
   saveEquipmentListToDb,
   saveEquipmentToDb,
   saveEquipmentTypeToDb,
+  saveRaceToDb,
   saveSlotToDb,
   saveTestUserToDb,
 } from "@test/utils/test-data-generator";
@@ -17,7 +18,7 @@ import { assertFieldError } from "@test/utils/validator-test-helper";
 import { existsSync, readdirSync, readFileSync } from "fs";
 import { join } from "path";
 import { Response } from "supertest";
-import { describe, it } from "vitest";
+import { beforeEach, describe, it } from "vitest";
 
 interface EquipmentResponseItem {
   id: number;
@@ -31,6 +32,10 @@ describe("/api/characters", () => {
 
   beforeAll(async () => {
     characterClient = new CharacterClient();
+  });
+
+  beforeEach(async () => {
+    race = await saveRaceToDb();
   });
 
   describe("POST /", () => {
@@ -48,7 +53,7 @@ describe("/api/characters", () => {
         id: expect.any(Number),
         name: newCharacter.name,
         sex: newCharacter.sex,
-        race: newCharacter.race,
+        race: { id: race.id, name: race.name },
         imageUrl: expect.any(String),
       }));
       await assertUserCharacterList(user.username, [newCharacter]);
@@ -222,16 +227,26 @@ describe("/api/characters", () => {
     });
 
     it("when try create character without race then should return character race required error", async () => {
-      const character = characterReq({ race: "" });
+      const character = characterReq();
+      // @ts-expect-error tesztelni kell, hogy mi van ha nem jön érték
+      delete character.raceId;
       const resp = await createCharacterToRandomUser(character);
-      assertFieldError(resp, "race", [ErrorMessages.CHARACTER_RACE_REQUIRED]);
+      assertFieldError(resp, "raceId", [ErrorMessages.CHARACTER_RACE_REQUIRED]);
+    });
+
+    it("when try create character with non-integer race id then should return character race id invalid error", async () => {
+      // @ts-expect-error tesztelni kell, hogy mi van ha nem szám jön
+      const resp = await createCharacterToRandomUser(characterReq({ raceId: "ember" }));
+      assertFieldError(resp, "raceId", [ErrorMessages.CHARACTER_RACE_ID_INVALID]);
     });
 
     it("when try create character with not existent race then should return character race not exists error", async () => {
-      // TODO: ha kész lesz a fajokat listázó végpont, akkor ezt a validációt is be kell kötni
-      /*const character = characterReq({ race: 'NOT_EXISTENT_RACE' });
-            const resp = await createCharacterToRandomUser(character);
-            assertFieldError(resp, 'race', [ErrorMessages.CHARACTER_RACE_NOT_EXISTS]);*/
+      const user = await saveTestUserToDb();
+      const resp = await characterClient.createCharacter(user.username, characterReq({ raceId: race.id + 1000 }));
+
+      expect(resp.status).toBe(422);
+      expect(resp.body).toStrictEqual({ errorCode: ErrorMessages.CHARACTER_RACE_NOT_EXISTS });
+      await assertUserCharacterList(user.username, []);
     });
 
     it("when try create character with non-existent equipment then should return equipment not exists error", async () => {
@@ -720,6 +735,24 @@ describe("/api/characters", () => {
     });
   });
 
+  describe("GET /:id", () => {
+    it("when the character exists then should return it with the id and name of its race", async () => {
+      const owner = await saveTestUserToDb();
+      const characterId = await createCharacterOf(owner);
+
+      const resp = await characterClient.getCharacter(owner.username, characterId);
+
+      expect(resp.status).toBe(200);
+      expect(resp.body).toStrictEqual({
+        id: characterId,
+        name: characterReq().name,
+        sex: characterReq().sex,
+        race: { id: race.id, name: race.name },
+        imageUrl: expect.any(String),
+      });
+    });
+  });
+
   describe("GET /:id/equipment", () => {
     it("when the character belongs to another user then should still return its equipment", async () => {
       const owner = await saveTestUserToDb();
@@ -841,7 +874,7 @@ describe("/api/characters", () => {
       expect(character.id).toBeDefined();
       expect(character.name).toBe(expectedCharacter.name);
       expect(character.sex).toBe(expectedCharacter.sex);
-      expect(character.race).toBe(expectedCharacter.race);
+      expect(character.race).toStrictEqual({ id: expectedCharacter.raceId, name: race.name });
       expect(character.imageUrl).toMatch(/^\/\.data\/uploads\/characters\/[0-9a-f-]{36}\.png$/);
       expect(character).not.toHaveProperty("equipment");
     }
@@ -862,13 +895,15 @@ describe("/api/characters", () => {
   }
 });
 
+let race: { id: number, name: string };
+
 function characterReq(
   overrides: Partial<CharacterRegistrationRequestDto> = {},
 ): CharacterRegistrationRequestDto {
   return {
     name: "Aragorn a Kósza",
     sex: Sex.MALE,
-    race: "human",
+    raceId: race.id,
     ...overrides,
   };
 }

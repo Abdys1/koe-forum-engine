@@ -44,6 +44,10 @@ class CharacterClient extends BaseClient {
         return this.request.get(CharacterClient.BASE_URL).set(await this.getAuthorizationHeader({ username }));
     }
 
+    public async getCharacter(username: string, characterId: number | string): Promise<Response> {
+        return this.request.get(`${CharacterClient.BASE_URL}/${characterId}`).set(await this.getAuthorizationHeader({ username }));
+    }
+
     public async getCharacterEquipment(username: string, characterId: number | string): Promise<Response> {
         return this.request.get(`${CharacterClient.BASE_URL}/${characterId}/equipment`).set(await this.getAuthorizationHeader({ username }));
     }

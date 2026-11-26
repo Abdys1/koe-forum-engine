@@ -1,7 +1,7 @@
 import { ErrorMessages } from "@src/messages";
 import UserClient from "@test/clients/user-client";
 import { db } from "@test/utils/test-container";
-import { saveTestUserToDb } from "@test/utils/test-data-generator";
+import { saveRaceToDb, saveTestUserToDb } from "@test/utils/test-data-generator";
 import { assertFieldError } from "@test/utils/validator-test-helper";
 import { describe, expect, it } from "vitest";
 
@@ -27,7 +27,7 @@ describe("/api/users", () => {
     it("when select an own character then it should be the active character of the user", async () => {
       const user = await saveTestUserToDb();
       const character = await db.character.create({
-        data: { userId: user.id, name: "Aragorn", race: "human", sex: 1, imageUrl: "/aragorn.jpg" }
+        data: { userId: user.id, name: "Aragorn", raceId: (await saveRaceToDb()).id, sex: 1, imageUrl: "/aragorn.jpg" }
       });
 
       const resp = await userClient.setActiveCharacter(user.username, character.id);
@@ -41,7 +41,7 @@ describe("/api/users", () => {
       const user = await saveTestUserToDb();
       const other = await saveTestUserToDb();
       const character = await db.character.create({
-        data: { userId: other.id, name: "Legolas", race: "elf", sex: 1, imageUrl: "/legolas.jpg" }
+        data: { userId: other.id, name: "Legolas", raceId: (await saveRaceToDb()).id, sex: 1, imageUrl: "/legolas.jpg" }
       });
 
       const resp = await userClient.setActiveCharacter(user.username, character.id);

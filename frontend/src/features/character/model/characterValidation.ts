@@ -6,6 +6,7 @@ export const CHARACTER_NAME_INVALID_LETTERS = "CHARACTER_NAME_INVALID_LETTERS";
 export const CHARACTER_ALREADY_EXISTS = "CHARACTER_ALREADY_EXISTS";
 export const CHARACTER_IMAGE_INVALID_TYPE = "CHARACTER_IMAGE_INVALID_TYPE";
 export const CHARACTER_IMAGE_TOO_LARGE = "CHARACTER_IMAGE_TOO_LARGE";
+export const CHARACTER_RACE_NOT_EXISTS = "CHARACTER_RACE_NOT_EXISTS";
 export const EQUIPMENT_NOT_EXISTS = "EQUIPMENT_NOT_EXISTS";
 export const CHARACTER_SLOT_CAPACITY_EXCEEDED = "CHARACTER_SLOT_CAPACITY_EXCEEDED";
 
@@ -20,7 +21,7 @@ export type CharacterNameCheckResult =
     | { success: true }
     | { success: false, errorCodes: string[] };
 
-export type CharacterErrorField = keyof Pick<CharacterInputs, "characterName" | "characterImg" | "equipmentIds">;
+export type CharacterErrorField = keyof Pick<CharacterInputs, "raceId" | "characterName" | "characterImg" | "equipmentIds">;
 
 export interface CharacterFormError {
     field: CharacterErrorField,
@@ -35,6 +36,7 @@ const errorMessages = {
     [CHARACTER_IMAGE_REQUIRED]: "Tölts fel egy képet a karakteredről!",
     [CHARACTER_IMAGE_INVALID_TYPE]: "A kép formátuma png, jpg vagy jpeg lehet.",
     [CHARACTER_IMAGE_TOO_LARGE]: "A kép mérete legfeljebb 5 MB lehet.",
+    [CHARACTER_RACE_NOT_EXISTS]: "A kiválasztott faj már nem elérhető, válassz másikat!",
     [EQUIPMENT_NOT_EXISTS]: "A kiválasztott felszerelések egyike már nem elérhető, módosítsd a felszerelésed!",
     [CHARACTER_SLOT_CAPACITY_EXCEEDED]: "A kiválasztott felszerelés nem fér el a rendelkezésre álló slotokban."
 } satisfies Record<string, string>;
@@ -49,6 +51,7 @@ const errorFields: Record<CharacterErrorCode, CharacterErrorField> = {
     [CHARACTER_IMAGE_REQUIRED]: "characterImg",
     [CHARACTER_IMAGE_INVALID_TYPE]: "characterImg",
     [CHARACTER_IMAGE_TOO_LARGE]: "characterImg",
+    [CHARACTER_RACE_NOT_EXISTS]: "raceId",
     [EQUIPMENT_NOT_EXISTS]: "equipmentIds",
     [CHARACTER_SLOT_CAPACITY_EXCEEDED]: "equipmentIds"
 };

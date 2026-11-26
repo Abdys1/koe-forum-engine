@@ -2,6 +2,7 @@ import { verifyToken } from '@src/components/auth/jwt-token-generator';
 import { characterRoutes } from '@src/components/character/character.routes';
 import { equipmentRoutes } from '@src/components/equipment/equipment.routes';
 import { equipmentTypeRoutes } from '@src/components/equipment-type/equipment-type.routes';
+import { raceRoutes } from '@src/components/race/race.routes';
 import { useDefineRouter } from '@src/components/routerconf/router-config';
 import { slotRoutes } from '@src/components/slot/slot.routes';
 import { userRoutes } from '@src/components/user/user.routes';
@@ -23,6 +24,7 @@ export const createApiRouter = (cradle: Cradle) => {
     router.use('/auth', defineRouter(authRoutes(cradle)));
     router.use('/users', defineRouter(userRoutes(cradle)));
     router.use('/characters', defineRouter(characterRoutes(cradle)));
+    router.use('/races', defineRouter(raceRoutes(cradle)));
     router.use('/equipment/type', defineRouter(equipmentTypeRoutes(cradle)));
     router.use('/equipment/slot', defineRouter(slotRoutes(cradle)));
     router.use('/equipment', defineRouter(equipmentRoutes(cradle)));

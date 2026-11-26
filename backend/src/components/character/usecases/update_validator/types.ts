@@ -8,7 +8,7 @@ export interface ValidateCharacterUpdateInput {
     owner: { id: number, username: string },
     name: string,
     sex: Sex,
-    race: string,
+    raceId: number,
     equipmentIds: number[]
 };
 
@@ -19,6 +19,7 @@ export interface ValidateCharacterUpdateOutput {
 export enum ValidateCharacterUpdateResult {
     VALID,
     ALREADY_EXISTS,
+    RACE_NOT_EXISTS,
     EQUIPMENT_NOT_EXISTS,
     SLOT_CAPACITY_EXCEEDED
 }

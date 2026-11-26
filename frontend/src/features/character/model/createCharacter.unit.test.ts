@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 
+import { races } from "@/features/character/model/__fixtures__/races";
 import {
     CharacterInputs,
+    createCharacterDefaults,
     parseCreateCharacterFormData,
     toCreateCharacterErrorCodes,
     toCreateCharacterFormData
@@ -11,7 +13,7 @@ import { Sex } from "@/lib/api/character/types";
 const image = new File(["portrait"], "portrait.png", { type: "image/png" });
 
 const values = {
-    raceId: "ork",
+    raceId: 3,
     raceTitle: "Ork",
     characterName: "Grumsh",
     characterSex: "no",
@@ -19,13 +21,23 @@ const values = {
     characterImg: [image] as unknown as FileList
 } satisfies CharacterInputs;
 
+describe("createCharacterDefaults", () => {
+    it("selects the first race", () => {
+        expect(createCharacterDefaults(races)).toMatchObject({ raceId: races[0].id, raceTitle: races[0].name });
+    });
+
+    it("leaves the race empty when there is no race", () => {
+        expect(createCharacterDefaults([])).toMatchObject({ raceId: undefined, raceTitle: undefined });
+    });
+});
+
 describe("toCreateCharacterFormData", () => {
     it("serializes the form values for the create character action", () => {
         const formData = toCreateCharacterFormData(values);
 
         expect(formData.get("name")).toBe("Grumsh");
         expect(formData.get("sex")).toBe(String(Sex.FEMALE));
-        expect(formData.get("race")).toBe("ork");
+        expect(formData.get("raceId")).toBe("3");
         expect(formData.get("image")).toBeInstanceOf(File);
         expect(formData.getAll("equipmentIds")).toEqual(["100", "100", "103"]);
     });
@@ -35,7 +47,7 @@ describe("parseCreateCharacterFormData", () => {
     it("restores the create character request from the serialized form values", () => {
         const request = parseCreateCharacterFormData(toCreateCharacterFormData(values));
 
-        expect(request).toMatchObject({ name: "Grumsh", sex: Sex.FEMALE, race: "ork", equipmentIds: [100, 100, 103] });
+        expect(request).toMatchObject({ name: "Grumsh", sex: Sex.FEMALE, raceId: 3, equipmentIds: [100, 100, 103] });
         expect(request?.image).toBeInstanceOf(File);
     });
 

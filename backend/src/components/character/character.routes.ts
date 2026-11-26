@@ -40,7 +40,13 @@ const imageValidation = body('image').custom((_value, { req }) => {
  *           enum: [1, 2]
  *           description: 1 = male, 2 = female (ISO/IEC 5218)
  *         race:
- *           type: string
+ *           type: object
+ *           required: [id, name]
+ *           properties:
+ *             id:
+ *               type: integer
+ *             name:
+ *               type: string
  *         imageUrl:
  *           type: string
  */
@@ -69,7 +75,7 @@ const imageValidation = body('image').custom((_value, { req }) => {
  *         multipart/form-data:
  *           schema:
  *             type: object
- *             required: [name, sex, race, image]
+ *             required: [name, sex, raceId, image]
  *             properties:
  *               name:
  *                 type: string
@@ -79,8 +85,9 @@ const imageValidation = body('image').custom((_value, { req }) => {
  *               sex:
  *                 type: integer
  *                 enum: [1, 2]
- *               race:
- *                 type: string
+ *               raceId:
+ *                 type: integer
+ *                 description: The id of a race listed by GET /races
  *               image:
  *                 type: string
  *                 format: binary
@@ -111,7 +118,7 @@ const imageValidation = body('image').custom((_value, { req }) => {
  *             schema:
  *               $ref: '#/components/schemas/ErrorCode'
  *       422:
- *         description: One of the referenced equipment ids does not exist, or the equipment list exceeds a slot's capacity
+ *         description: The race or one of the referenced equipment ids does not exist, or the equipment list exceeds a slot's capacity
  *         content:
  *           application/json:
  *             schema:
@@ -245,7 +252,8 @@ export const characterRoutes = ({ characterController }: Pick<Cradle, 'character
             createImageUploadMiddleware(),
             nameValidation,
             body('sex').isIn([Sex.MALE, Sex.FEMALE]).withMessage(ErrorMessages.CHARACTER_SEX_INVALID).toInt(),
-            body('race').notEmpty().withMessage(ErrorMessages.CHARACTER_RACE_REQUIRED),
+            body('raceId').notEmpty().withMessage(ErrorMessages.CHARACTER_RACE_REQUIRED).bail()
+                .isInt().withMessage(ErrorMessages.CHARACTER_RACE_ID_INVALID).toInt(),
             imageValidation,
             body('equipmentIds').optional().isArray({ max: 100 }).withMessage(ErrorMessages.CHARACTER_EQUIPMENT_IDS_INVALID),
             body('equipmentIds.*').isInt().withMessage(ErrorMessages.CHARACTER_EQUIPMENT_ID_INVALID).toInt()

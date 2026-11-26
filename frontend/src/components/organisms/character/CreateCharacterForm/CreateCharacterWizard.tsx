@@ -20,13 +20,13 @@ type CreateCharacterWizardProps = {
 }
 
 export default function CreateCharacterWizard({ creation, onSubmit }: CreateCharacterWizardProps) {
-    const { form, equipmentCatalog, gearOverview, selectedRace, isNameComplete, isImageComplete, validateName, validateImage } = creation;
-    const raceStepStyle = { '--raceUrl': `url('${selectedRace.img}')` } as React.CSSProperties;
+    const { form, equipmentCatalog, gearOverview, races, selectedRace, isNameComplete, isImageComplete, validateName, validateImage } = creation;
+    const raceStepStyle = { '--raceUrl': `url('${selectedRace?.imageUrl}')` } as React.CSSProperties;
 
     return (
         <MultiStepForm form={form} header={<CreateCharacterHeader control={form.control}/>} onSubmit={onSubmit}>
             <MultiStepForm.Step label="Faj" style={raceStepStyle} className={styles.raceStepBg}>
-                <CharacterRaceStep/>
+                <CharacterRaceStep races={races} selectedRace={selectedRace}/>
             </MultiStepForm.Step>
             <MultiStepForm.Step label="Identitás"
                                 validate={validateName}

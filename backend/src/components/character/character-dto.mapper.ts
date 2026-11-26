@@ -10,7 +10,7 @@ export default class CharacterRegistrationRequestMapper {
             name: dto.name,
             owner: user,
             sex: dto.sex,
-            race: dto.race,
+            raceId: dto.raceId,
             equipmentIds: CharacterRegistrationRequestMapper.toEquipmentIds(dto),
             image: CharacterRegistrationRequestMapper.toUploadedFile(image)
         };
@@ -21,7 +21,7 @@ export default class CharacterRegistrationRequestMapper {
             name: dto.name,
             owner: user,
             sex: dto.sex,
-            race: dto.race,
+            raceId: dto.raceId,
             equipmentIds: CharacterRegistrationRequestMapper.toEquipmentIds(dto)
         };
     }

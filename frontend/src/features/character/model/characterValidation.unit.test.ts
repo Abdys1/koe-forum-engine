@@ -8,6 +8,7 @@ import {
     CHARACTER_NAME_INVALID_LENGTH,
     CHARACTER_NAME_INVALID_LETTERS,
     CHARACTER_NAME_REQUIRED,
+    CHARACTER_RACE_NOT_EXISTS,
     characterErrorMessage,
     characterImageRule,
     characterNameRule,
@@ -115,6 +116,12 @@ describe("toCharacterFormErrors", () => {
             { field: "characterName", message: characterErrorMessage(CHARACTER_ALREADY_EXISTS) },
             { field: "characterImg", message: characterErrorMessage(CHARACTER_IMAGE_TOO_LARGE) },
             { field: "equipmentIds", message: characterErrorMessage(EQUIPMENT_NOT_EXISTS) }
+        ]);
+    });
+
+    it("assigns the missing race error to the race field", () => {
+        expect(toCharacterFormErrors([CHARACTER_RACE_NOT_EXISTS])).toEqual([
+            { field: "raceId", message: characterErrorMessage(CHARACTER_RACE_NOT_EXISTS) }
         ]);
     });
 

@@ -1,9 +1,9 @@
-import { races } from "@/features/character/model/race";
 import { SelectableSex, sexMapping } from "@/features/character/model/sex";
 import { CreateCharacterRequest, ErrorCode, Sex, ValidationErrors } from "@/lib/api/character/types";
+import type { Race } from "@/lib/api/race/types";
 
 export interface CharacterInputs {
-    raceId: string,
+    raceId: number,
     raceTitle: string,
     characterName: string,
     characterSex: SelectableSex,
@@ -19,18 +19,20 @@ export const UNAUTHORIZED = "UNAUTHORIZED";
 export const CHARACTER_IMAGE_REQUIRED = "CHARACTER_IMAGE_REQUIRED";
 export const UNKNOWN_ERROR = "UNKNOWN_ERROR";
 
-export const createCharacterDefaults: Partial<CharacterInputs> = {
-    raceId: races[0].id,
-    raceTitle: races[0].title,
-    characterSex: "ferfi",
-    equipmentIds: []
-};
+export function createCharacterDefaults(races: Race[]): Partial<CharacterInputs> {
+    return {
+        raceId: races[0]?.id,
+        raceTitle: races[0]?.name,
+        characterSex: "ferfi",
+        equipmentIds: []
+    };
+}
 
 export function toCreateCharacterFormData(values: CharacterInputs): FormData {
     const formData = new FormData();
     formData.append("name", values.characterName);
     formData.append("sex", String(sexMapping[values.characterSex]));
-    formData.append("race", values.raceId);
+    formData.append("raceId", String(values.raceId));
     formData.append("image", values.characterImg[0]);
     values.equipmentIds.forEach(equipmentId => formData.append("equipmentIds", String(equipmentId)));
     return formData;
@@ -44,7 +46,7 @@ export function parseCreateCharacterFormData(formData: FormData): CreateCharacte
     return {
         name: String(formData.get("name") ?? ""),
         sex: Number(formData.get("sex")) as Sex,
-        race: String(formData.get("race") ?? ""),
+        raceId: Number(formData.get("raceId")),
         image,
         equipmentIds: formData.getAll("equipmentIds").map(Number)
     };

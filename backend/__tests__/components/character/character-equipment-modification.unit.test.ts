@@ -17,7 +17,7 @@ describe('CharacterEquipmentModificationUseCase', () => {
     beforeEach(() => {
         characterRepository = {
             create: vi.fn(),
-            findById: vi.fn().mockResolvedValue({ id: CHARACTER_ID, userId: OWNER_ID, name: 'Aragorn', race: 'human', sex: 1, imageUrl: '/a.jpg' }),
+            findById: vi.fn().mockResolvedValue({ id: CHARACTER_ID, userId: OWNER_ID, name: 'Aragorn', race: { id: 1, name: 'Ember' }, sex: 1, imageUrl: '/a.jpg' }),
             findAllCharacterByUserId: vi.fn(),
             existsByCharacterName: vi.fn(),
         };

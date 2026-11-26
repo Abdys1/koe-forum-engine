@@ -2,13 +2,14 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { fn, userEvent, within } from "storybook/test";
 
 import { useCharacterCreation } from "@/features/character/hooks/useCharacterCreation";
+import { races } from "@/features/character/model/__fixtures__/races";
 import type { CharacterInputs } from "@/features/character/model/createCharacter";
 import { equipment, equipmentTypes } from "@/features/equipment/model/__fixtures__/equipment";
 
 import CreateCharacterWizard from "./CreateCharacterWizard";
 
 export function CreateCharacterWizardDemo({ onSubmit }: { onSubmit: (values: CharacterInputs) => void }) {
-    const creation = useCharacterCreation(equipmentTypes, equipment);
+    const creation = useCharacterCreation(races, equipmentTypes, equipment);
     return <CreateCharacterWizard creation={creation} onSubmit={onSubmit}/>;
 }
 

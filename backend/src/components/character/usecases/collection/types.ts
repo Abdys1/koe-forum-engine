@@ -1,3 +1,4 @@
+import { CharacterRace } from "@src/components/character/models/character";
 import { Sex } from "@src/components/character/types";
 
 export interface CharacterCollectionUseCase {
@@ -8,7 +9,7 @@ export interface CharacterCollectionDetails {
     id?: number,
     name: string,
     sex: Sex,
-    race: string,
+    race: CharacterRace,
     imageUrl: string
 };
 

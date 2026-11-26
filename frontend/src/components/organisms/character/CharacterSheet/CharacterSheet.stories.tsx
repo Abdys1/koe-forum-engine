@@ -11,7 +11,7 @@ const meta = {
             id: "1",
             name: "Ryldan Dolzack",
             imageUrl: "/images/ryldan2.png",
-            raceId: "sotetelf",
+            raceName: "Sötételf",
             sex: "ferfi",
             appearance: "Magas, szikár alak, sötét köpenyben.\n\nA bal arcán régi heg húzódik.",
             quote: { text: "Sosem hátrál meg, ha egy barátja bajban van.", locationId: "fogado-a-feher-siralyhoz", postNumber: 12 },

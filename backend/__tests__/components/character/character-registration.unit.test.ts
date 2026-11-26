@@ -18,7 +18,7 @@ describe('CharacterRegistrationUseCase', () => {
 
     beforeEach(() => {
         characterRepository = {
-            create: vi.fn().mockImplementation(async (character) => ({ ...character, id: CREATED_ID })),
+            create: vi.fn().mockImplementation(async ({ raceId, ...character }) => ({ ...character, id: CREATED_ID, race: { id: raceId, name: 'Ember' } })),
             findById: vi.fn(),
             findAllCharacterByUserId: vi.fn(),
             existsByCharacterName: vi.fn(),
@@ -67,7 +67,7 @@ describe('CharacterRegistrationUseCase', () => {
             expect(characterRepository.create).toHaveBeenCalledWith({
                 userId: 1,
                 name: 'Aragorn a Kósza',
-                race: 'human',
+                raceId: 1,
                 sex: Sex.MALE,
                 imageUrl: '/.data/uploads/characters/abc.png'
             });
@@ -80,7 +80,7 @@ describe('CharacterRegistrationUseCase', () => {
                 id: CREATED_ID,
                 name: 'Aragorn a Kósza',
                 sex: Sex.MALE,
-                race: 'human',
+                race: { id: 1, name: 'Ember' },
                 imageUrl: '/.data/uploads/characters/abc.png'
             });
         });
@@ -130,7 +130,7 @@ describe('CharacterRegistrationUseCase', () => {
             owner: { id: 1, username: 'test_user' },
             name: 'Aragorn a Kósza',
             sex: Sex.MALE,
-            race: 'human',
+            raceId: 1,
             equipmentIds,
             image: IMAGE
         };

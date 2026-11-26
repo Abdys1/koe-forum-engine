@@ -47,6 +47,9 @@ export default class CharacterController {
             case ValidateCharacterUpdateResult.ALREADY_EXISTS:
                 res.status(409).json({ errorCode: ErrorMessages.CHARACTER_ALREADY_EXISTS });
                 break;
+            case ValidateCharacterUpdateResult.RACE_NOT_EXISTS:
+                res.status(422).json({ errorCode: ErrorMessages.CHARACTER_RACE_NOT_EXISTS });
+                break;
             case ValidateCharacterUpdateResult.EQUIPMENT_NOT_EXISTS:
                 res.status(422).json({ errorCode: ErrorMessages.EQUIPMENT_NOT_EXISTS });
                 break;

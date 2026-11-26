@@ -3,11 +3,15 @@ import { Sex } from '@src/components/character/types';
 import { CharacterEquipmentValidationResult, CharacterEquipmentValidationUseCase } from '@src/components/character/usecases/equipment_validation/types';
 import CharacterUpdateValidatorUseCaseImpl from '@src/components/character/usecases/update_validator/character-update-validator';
 import { CharacterUpdateValidatorUseCase, ValidateCharacterUpdateInput, ValidateCharacterUpdateResult } from '@src/components/character/usecases/update_validator/types';
+import { RaceRepository } from '@src/components/race/repositories/types';
 import { fakeRepositoryProvider } from '@test/utils/fake-repository-provider';
 import { beforeEach, describe, expect, it, Mocked, vi } from 'vitest';
 
+const RACE_ID = 5;
+
 describe('CharacterUpdateValidatorUseCase', () => {
     let characterRepository: Mocked<CharacterRepository>;
+    let raceRepository: Mocked<RaceRepository>;
     let characterEquipmentValidation: Mocked<CharacterEquipmentValidationUseCase>;
     let characterUpdateValidator: CharacterUpdateValidatorUseCase;
 
@@ -18,8 +22,12 @@ describe('CharacterUpdateValidatorUseCase', () => {
             findAllCharacterByUserId: vi.fn(),
             existsByCharacterName: vi.fn().mockResolvedValue(false),
         };
+        raceRepository = {
+            findAll: vi.fn(),
+            existsById: vi.fn().mockResolvedValue(true),
+        };
         characterEquipmentValidation = { execute: vi.fn().mockResolvedValue(CharacterEquipmentValidationResult.VALID) };
-        characterUpdateValidator = new CharacterUpdateValidatorUseCaseImpl(fakeRepositoryProvider(characterRepository), characterEquipmentValidation);
+        characterUpdateValidator = new CharacterUpdateValidatorUseCaseImpl(fakeRepositoryProvider(characterRepository), fakeRepositoryProvider(raceRepository), characterEquipmentValidation);
     });
 
     describe('execute()', () => {
@@ -39,6 +47,28 @@ describe('CharacterUpdateValidatorUseCase', () => {
 
         it('should not validate the equipment when the character name is taken', async () => {
             characterRepository.existsByCharacterName.mockResolvedValue(true);
+
+            await characterUpdateValidator.execute(inputWithEquipmentIds([1]));
+
+            expect(characterEquipmentValidation.execute).not.toHaveBeenCalled();
+        });
+
+        it('should check the existence of the selected race', async () => {
+            await characterUpdateValidator.execute(inputWithEquipmentIds([1]));
+
+            expect(raceRepository.existsById).toHaveBeenCalledWith(RACE_ID);
+        });
+
+        it('should return RACE_NOT_EXISTS when the selected race does not exist', async () => {
+            raceRepository.existsById.mockResolvedValue(false);
+
+            const result = await characterUpdateValidator.execute(inputWithEquipmentIds([1]));
+
+            expect(result.status).toBe(ValidateCharacterUpdateResult.RACE_NOT_EXISTS);
+        });
+
+        it('should not validate the equipment when the selected race does not exist', async () => {
+            raceRepository.existsById.mockResolvedValue(false);
 
             await characterUpdateValidator.execute(inputWithEquipmentIds([1]));
 
@@ -73,7 +103,7 @@ describe('CharacterUpdateValidatorUseCase', () => {
             owner: { id: 1, username: 'test_user' },
             name: 'Aragorn a Kósza',
             sex: Sex.MALE,
-            race: 'human',
+            raceId: RACE_ID,
             equipmentIds
         };
     }

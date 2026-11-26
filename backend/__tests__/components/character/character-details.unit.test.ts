@@ -11,7 +11,7 @@ describe('CharacterDetailsUseCase', () => {
     beforeEach(() => {
         characterRepository = {
             create: vi.fn(),
-            findById: vi.fn().mockResolvedValue({ id: 3, userId: 7, name: 'Aragorn', race: 'ember', sex: 1, imageUrl: '/a.jpg' }),
+            findById: vi.fn().mockResolvedValue({ id: 3, userId: 7, name: 'Aragorn', race: { id: 2, name: 'Elf' }, sex: 1, imageUrl: '/a.jpg' }),
             findAllCharacterByUserId: vi.fn(),
             existsByCharacterName: vi.fn(),
         };
@@ -24,7 +24,7 @@ describe('CharacterDetailsUseCase', () => {
 
             expect(result).toEqual({
                 status: CharacterDetailsResult.FOUND,
-                character: { id: 3, name: 'Aragorn', sex: 1, race: 'ember', imageUrl: '/a.jpg' }
+                character: { id: 3, name: 'Aragorn', sex: 1, race: { id: 2, name: 'Elf' }, imageUrl: '/a.jpg' }
             });
             expect(characterRepository.findById).toHaveBeenCalledWith(3);
         });

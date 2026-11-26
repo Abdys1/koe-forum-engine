@@ -13,7 +13,6 @@ import QuoteSection from "@/components/organisms/character/CharacterSheet/QuoteS
 import GearOverview from "@/components/organisms/equipment/GearOverview/GearOverview";
 import { useCharacterSheetDraft } from "@/features/character/hooks/useCharacterSheetDraft";
 import { Character } from "@/features/character/model/character";
-import { findRace } from "@/features/character/model/race";
 import { sexLabels } from "@/features/character/model/sex";
 import { GearOverviewRoot } from "@/features/equipment/model/gearOverview";
 import type { CharacterActivity } from "@/lib/api/posts/types";
@@ -52,7 +51,7 @@ export default function CharacterSheet({ character, activity, gearOverview, canE
                         <dl className={styles.traits}>
                             <div className={styles.trait}>
                                 <dt className={visuallyHidden}>Faj</dt>
-                                <dd className={styles.traitValue}>{findRace(character.raceId).title}</dd>
+                                <dd className={styles.traitValue}>{character.raceName}</dd>
                             </div>
                             <div className={styles.trait}>
                                 <dt className={visuallyHidden}>Nem</dt>

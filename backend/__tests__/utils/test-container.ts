@@ -18,5 +18,6 @@ export const {
     userDao,
     characterRepositories,
     equipmentRepositories,
+    raceRepositories,
     userRepositories
 } = testContainer.cradle;

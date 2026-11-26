@@ -12,7 +12,7 @@ const meta = {
                 id: "1",
                 name: "Ryldan Dolzack",
                 imageUrl: "/images/ryldan2.png",
-                raceId: "sotetelf",
+                raceName: "Sötételf",
                 sex: "ferfi",
             },
             activity: { postCount: 42, activeGames: [] },

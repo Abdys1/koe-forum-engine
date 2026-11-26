@@ -1,10 +1,16 @@
-import Character from '@src/components/character/models/character';
+import { NewCharacter } from '@src/components/character/models/character';
 import { NestedTransactionError, rollback } from '@src/components/transaction/types';
 import { characterRepositories, db, equipmentRepositories, transactionManager } from '@test/utils/test-container';
-import { saveEquipmentToDb, saveTestUserToDb } from '@test/utils/test-data-generator';
-import { describe, expect, it } from 'vitest';
+import { saveEquipmentToDb, saveRaceToDb, saveTestUserToDb } from '@test/utils/test-data-generator';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('PrismaTransactionManager', () => {
+    let raceId: number;
+
+    beforeEach(async () => {
+        raceId = (await saveRaceToDb()).id;
+    });
+
     describe('execute()', () => {
         it('should commit the changes and return the result of the work', async () => {
             const user = await saveTestUserToDb();
@@ -114,7 +120,7 @@ describe('PrismaTransactionManager', () => {
         });
     });
 
-    function characterOf(userId: number): Character {
-        return { userId, name: 'Aragorn a Kósza', race: 'human', sex: 1, imageUrl: '/aragorn.jpg' };
+    function characterOf(userId: number): NewCharacter {
+        return { userId, name: 'Aragorn a Kósza', raceId, sex: 1, imageUrl: '/aragorn.jpg' };
     }
 });

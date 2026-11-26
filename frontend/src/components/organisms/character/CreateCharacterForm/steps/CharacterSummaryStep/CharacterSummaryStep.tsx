@@ -29,6 +29,7 @@ export default function CharacterSummaryStep({ gearOverview }: CharacterSummaryS
     const { form, steps, goToStep } = useMultiStepFormContext<CharacterInputs>();
     const { getValues, formState: { errors, isSubmitting, isSubmitSuccessful } } = form;
     const submitErrors = {
+        raceId: errors.raceId?.message,
         characterName: errors.characterName?.message,
         characterImg: errors.characterImg?.message,
         equipmentIds: errors.equipmentIds?.message

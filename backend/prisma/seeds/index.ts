@@ -1,10 +1,12 @@
 import { seedEquipment } from "prisma/seeds/equipment";
+import { seedRaces } from "prisma/seeds/race";
 
 import { db } from "./db";
 import { seedUsers } from "./user";
 
 async function main() {
   await seedUsers();
+  await seedRaces();
   await seedEquipment();
 }
 

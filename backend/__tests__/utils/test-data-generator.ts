@@ -65,6 +65,23 @@ export async function saveSlotToDb(overrides: { label?: string, maxCapacity?: nu
   });
 }
 
+export function generateRaceName(): string {
+  return `Teszt faj ${randomSuffix()}`;
+}
+
+export async function saveRaceToDb(overrides: { name?: string, sortOrder?: number } = {}) {
+  return db.race.create({
+    data: {
+      name: overrides.name ?? generateRaceName(),
+      teaser: `Teaser ${randomSuffix()}`,
+      description: `Leírás ${randomSuffix()}`,
+      imageUrl: "/images/race.png",
+      buttonImageUrl: "/images/race-button.png",
+      sortOrder: overrides.sortOrder ?? 0
+    }
+  });
+}
+
 function randomSuffix(): number {
   return Math.floor(Date.now() * Math.random());
 }

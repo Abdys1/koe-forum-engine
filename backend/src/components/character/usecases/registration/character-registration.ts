@@ -25,7 +25,7 @@ export default class CharacterRegistrationUseCaseImpl implements CharacterRegist
     try {
       const character = await this.transactionManager.execute(async (tx) => {
         const character = await this.characterRepositories.inTransaction(tx).create(fromInput(createCharacterDto, image.url));
-        await this.equipmentRepositories.inTransaction(tx).replaceAllByCharacterId(character.id!, createCharacterDto.equipmentIds);
+        await this.equipmentRepositories.inTransaction(tx).replaceAllByCharacterId(character.id, createCharacterDto.equipmentIds);
         return character;
       });
       return toOutput(character);

@@ -29,9 +29,24 @@ model Character {
   activeForUser ForumUser? @relation("ActiveCharacter")
   name String @unique @db.VarChar(64)
   sex Int @db.SmallInt
-  race String @db.VarChar(64)
+  raceId Int
+  race Race @relation(fields: [raceId], references: [id], onDelete: Restrict)
   imageUrl String
   equipment CharacterEquipment[]
+
+  @@index([raceId])
+}
+
+model Race {
+  id Int @id @default(autoincrement())
+  name String @unique @db.VarChar(128)
+  teaser String
+  description String
+  imageUrl String
+  buttonImageUrl String
+  sortOrder Int @default(0)
+  createdAt DateTime @default(now())
+  characters Character[]
 }
 
 model Equipment {
