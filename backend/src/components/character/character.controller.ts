@@ -3,6 +3,7 @@ import { CharacterCollectionUseCase } from "@src/components/character/usecases/c
 import { CharacterDetailsResult, CharacterDetailsUseCase } from "@src/components/character/usecases/details/types";
 import { CharacterEquipmentCollectionResult, CharacterEquipmentCollectionUseCase } from "@src/components/character/usecases/equipment_collection/types";
 import { CharacterEquipmentModificationResult, CharacterEquipmentModificationUseCase } from "@src/components/character/usecases/equipment_modification/types";
+import { CharacterNameAvailabilityResult, CharacterNameAvailabilityUseCase } from "@src/components/character/usecases/name_availability/types";
 import { CharacterRegistrationUseCase, CreateCharacterInput } from "@src/components/character/usecases/registration/types";
 import { CharacterUpdateValidatorUseCase, ValidateCharacterUpdateResult } from "@src/components/character/usecases/update_validator/types";
 import { ErrorMessages } from "@src/messages";
@@ -15,7 +16,8 @@ export default class CharacterController {
         private readonly characterDetails: CharacterDetailsUseCase,
         private readonly characterUpdateValidator: CharacterUpdateValidatorUseCase,
         private readonly characterEquipmentCollection: CharacterEquipmentCollectionUseCase,
-        private readonly characterEquipmentModification: CharacterEquipmentModificationUseCase
+        private readonly characterEquipmentModification: CharacterEquipmentModificationUseCase,
+        private readonly characterNameAvailability: CharacterNameAvailabilityUseCase
     ) {}
 
     createCharacter = async (req: Request, res: Response): Promise<void> => {
@@ -29,6 +31,15 @@ export default class CharacterController {
         const createCharInput: CreateCharacterInput = CharacterRegistrationRequestMapper.toCreateCharacterInput(req.user, req.body, req.file!);
         const character = await this.characterRegistration.execute(createCharInput);
         res.status(200).send(character);
+    }
+
+    validateCharacterName = async (req: Request, res: Response): Promise<void> => {
+        const result = await this.characterNameAvailability.execute(req.body.name);
+        if (result === CharacterNameAvailabilityResult.TAKEN) {
+            res.status(409).json({ errorCode: ErrorMessages.CHARACTER_ALREADY_EXISTS });
+            return;
+        }
+        res.status(204).send();
     }
 
     private sendCreateCharErrorByStatus = (res: Response, status: ValidateCharacterUpdateResult): void => {

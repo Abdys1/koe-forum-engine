@@ -7,6 +7,9 @@ import { body, param } from "express-validator";
 
 const idValidation = param('id').isInt().withMessage(ErrorMessages.CHARACTER_NOT_EXISTS);
 
+const nameValidation = body('name').isLength({ min: 3, max: 64 }).withMessage(ErrorMessages.CHARACTER_NAME_INVALID_LENGTH)
+    .matches(/^[a-zA-ZaäáeëéiíoóöőuúüűAÄÁEÉËIÍOÓÖŐUÚÜŰ\s']*$/).withMessage(ErrorMessages.CHARACTER_NAME_INVALID_LETTERS);
+
 const imageValidation = body('image').custom((_value, { req }) => {
     if (req.imageUploadError === ImageUploadError.INVALID_TYPE) {
         throw new Error(ErrorMessages.CHARACTER_IMAGE_INVALID_TYPE);
@@ -113,6 +116,38 @@ const imageValidation = body('image').custom((_value, { req }) => {
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorCode'
+ * /characters/validate-name:
+ *   post:
+ *     tags: [Character]
+ *     summary: Check whether a character name is valid and not taken yet
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [name]
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 minLength: 3
+ *                 maxLength: 64
+ *                 description: Letters, spaces and apostrophes only
+ *     responses:
+ *       204:
+ *         description: The name is valid and available
+ *       400:
+ *         description: The name is invalid
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ValidationErrors'
+ *       409:
+ *         description: A character with this name already exists
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorCode'
  * /characters/{id}:
  *   get:
  *     tags: [Character]
@@ -208,8 +243,7 @@ export const characterRoutes = ({ characterController }: Pick<Cradle, 'character
         method: HttpMethod.POST,
         middlewares: [
             createImageUploadMiddleware(),
-            body('name').isLength({ min: 3, max: 64 }).withMessage(ErrorMessages.CHARACTER_NAME_INVALID_LENGTH)
-                .matches(/^[a-zA-ZaäáeëéiíoóöőuúüűAÄÁEÉËIÍOÓÖŐUÚÜŰ\s']*$/).withMessage(ErrorMessages.CHARACTER_NAME_INVALID_LETTERS),
+            nameValidation,
             body('sex').isIn([Sex.MALE, Sex.FEMALE]).withMessage(ErrorMessages.CHARACTER_SEX_INVALID).toInt(),
             body('race').notEmpty().withMessage(ErrorMessages.CHARACTER_RACE_REQUIRED),
             imageValidation,
@@ -217,6 +251,12 @@ export const characterRoutes = ({ characterController }: Pick<Cradle, 'character
             body('equipmentIds.*').isInt().withMessage(ErrorMessages.CHARACTER_EQUIPMENT_ID_INVALID).toInt()
         ],
         controller: characterController.createCharacter
+    },
+    {
+        path: '/validate-name',
+        method: HttpMethod.POST,
+        middlewares: [nameValidation],
+        controller: characterController.validateCharacterName
     },
     {
         path: '/',

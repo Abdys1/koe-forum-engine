@@ -344,6 +344,37 @@ describe("/api/characters", () => {
     });
   });
 
+  describe("POST /validate-name", () => {
+    it("when the name is free then should return no content", async () => {
+      const user = await saveTestUserToDb();
+
+      const resp = await characterClient.validateName(user.username, "Aragorn a Kósza");
+
+      expect(resp.status).toBe(204);
+    });
+
+    it("when a character already has the name then should return conflict", async () => {
+      const user = await saveTestUserToDb();
+      await createCharacterOf(user);
+
+      const resp = await characterClient.validateName(user.username, characterReq().name);
+
+      expect(resp.status).toBe(409);
+      expect(resp.body).toStrictEqual({ errorCode: ErrorMessages.CHARACTER_ALREADY_EXISTS });
+    });
+
+    it("when the name is invalid then should return the name validation errors", async () => {
+      const user = await saveTestUserToDb();
+
+      const resp = await characterClient.validateName(user.username, "$A");
+
+      assertFieldError(resp, "name", [
+        ErrorMessages.CHARACTER_NAME_INVALID_LENGTH,
+        ErrorMessages.CHARACTER_NAME_INVALID_LETTERS,
+      ]);
+    });
+  });
+
   describe("PUT /:id/equipment", () => {
     it("when set the equipment of the character then should return and store the new list", async () => {
       const user = await saveTestUserToDb();

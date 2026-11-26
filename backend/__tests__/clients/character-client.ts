@@ -34,6 +34,12 @@ class CharacterClient extends BaseClient {
         return req;
     }
 
+    public async validateName(username: string, name: unknown): Promise<Response> {
+        return this.request.post(`${CharacterClient.BASE_URL}/validate-name`)
+            .set(await this.getAuthorizationHeader({ username }))
+            .send({ name });
+    }
+
     public async getCharacters(username: string): Promise<Response> {
         return this.request.get(CharacterClient.BASE_URL).set(await this.getAuthorizationHeader({ username }));
     }

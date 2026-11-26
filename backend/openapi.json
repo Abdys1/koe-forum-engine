@@ -873,6 +873,60 @@
         }
       }
     },
+    "/characters/validate-name": {
+      "post": {
+        "tags": [
+          "Character"
+        ],
+        "summary": "Check whether a character name is valid and not taken yet",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 3,
+                    "maxLength": 64,
+                    "description": "Letters, spaces and apostrophes only"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "The name is valid and available"
+          },
+          "400": {
+            "description": "The name is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrors"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "A character with this name already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorCode"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/characters/{id}": {
       "get": {
         "tags": [
