@@ -15,7 +15,8 @@ type PortraitFrameProps = {
     imageAlt?: string,
     placeholder?: PortraitAction,
     overlay: PortraitAction,
-    size?: keyof typeof styles.frameSizes
+    size?: keyof typeof styles.frameSizes,
+    invalid?: boolean
 } & (
     | { htmlFor: string, onClick?: never, label?: never }
     | { onClick: () => void, label: string, htmlFor?: never }
@@ -33,8 +34,8 @@ const imageSizes: Record<keyof typeof styles.frameSizes, string> = {
     large: "272px"
 };
 
-export default function PortraitFrame({ imageUrl, imageAlt = "", placeholder, overlay, size = "medium", ...props }: PortraitFrameProps) {
-    const frameClassName = clsx(styles.frame, styles.frameSizes[size]);
+export default function PortraitFrame({ imageUrl, imageAlt = "", placeholder, overlay, size = "medium", invalid = false, ...props }: PortraitFrameProps) {
+    const frameClassName = clsx(styles.frame, styles.frameSizes[size], invalid && styles.invalid);
     const content = imageUrl
         ? <>
             <Image src={imageUrl} alt={imageAlt} fill sizes={imageSizes[size]} className={styles.image}/>

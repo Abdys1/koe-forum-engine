@@ -46,7 +46,10 @@ function MultiStepForm<Values extends FieldValues>({ form, header, onSubmit, chi
         onNextStep: nextStep,
         goToStep,
         canReturnToSummary: canReturnToSummary(summaryReached, actualStep, stepsComplete),
-        onSubmit: form.handleSubmit(onSubmit)
+        onSubmit: e => {
+            form.clearErrors();
+            return form.handleSubmit(onSubmit)(e);
+        }
     };
 
     return (
@@ -77,6 +80,13 @@ function Step({ children, validate, canProceed = true, style, className }: StepP
             return;
         }
         onNextStep(e);
+    }
+
+    async function returnToSummary() {
+        if (validate && !(await validate())) {
+            return;
+        }
+        goToStep(lastStep);
     }
 
     async function submit(e: React.FormEvent<HTMLFormElement>) {
@@ -111,7 +121,7 @@ function Step({ children, validate, canProceed = true, style, className }: StepP
                                             disabled={!canProceed}/>
                         {canReturnToSummary &&
                             <div className={styles.railExtra}>
-                                <MultiStepNavButton direction="summary" label={steps[lastStep]} onClick={() => goToStep(lastStep)}/>
+                                <MultiStepNavButton direction="summary" label={steps[lastStep]} onClick={returnToSummary}/>
                             </div>
                         }
                     </div>

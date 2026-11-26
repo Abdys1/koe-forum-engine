@@ -11,7 +11,7 @@ type CreateCharacterFormProps = {
 
 export default function CreateCharacterForm({ equipmentCatalogData }: CreateCharacterFormProps) {
     const creation = useCharacterCreation(equipmentCatalogData);
-    const submit = useCreateCharacterSubmit();
+    const submit = useCreateCharacterSubmit(creation.applyServerErrors);
 
     return <CreateCharacterWizard creation={creation} onSubmit={submit}/>;
 }

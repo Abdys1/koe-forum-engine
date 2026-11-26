@@ -15,3 +15,5 @@ type Story = StoryObj<typeof meta>;
 export const Edit: Story = {};
 
 export const Delete: Story = { args: { icon: "delete", label: "Törlés" } };
+
+export const Invalid: Story = { args: { invalid: true } };

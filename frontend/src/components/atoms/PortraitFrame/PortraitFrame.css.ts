@@ -30,6 +30,16 @@ export const frame = style({
   ':focus-visible': frameHighlight,
 });
 
+export const invalid = style({
+  borderColor: colors.alert,
+  outlineColor: withAlpha(colors.alert, 0.6),
+  ':hover': {
+    borderColor: colors.alert,
+    outlineColor: colors.alert,
+    boxShadow: `0 0 24px -2px ${withAlpha(colors.alert, 0.5)}`,
+  },
+});
+
 export const placeholder = style({
   display: 'flex',
   flexDirection: 'column',

@@ -109,9 +109,6 @@ export const nameInputError = style({
 
 export const nameError = style({
   marginTop: '0.5rem',
-  fontFamily: fonts.roboto,
-  fontSize: '0.875rem',
-  color: colors.alert,
 });
 
 export const rulesRow = style({

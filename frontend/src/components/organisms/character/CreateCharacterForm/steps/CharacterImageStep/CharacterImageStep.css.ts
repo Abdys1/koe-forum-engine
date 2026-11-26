@@ -34,6 +34,14 @@ export const portraitColumn = style({
   gap: '1.25rem',
 });
 
+export const imageError = style({
+  maxWidth: '17rem',
+  fontFamily: fonts.roboto,
+  fontSize: '0.875rem',
+  color: colors.alert,
+  textAlign: 'center',
+});
+
 export const hiddenInput = style({ display: 'none' });
 
 export const panel = style([glassPanel, {

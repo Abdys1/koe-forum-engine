@@ -82,6 +82,28 @@ export const infoText = style({
   color: alphaColors.textSoft,
 });
 
+export const infoIconError = style({
+  borderColor: colors.alert,
+  background: withAlpha(colors.alert, 0.12),
+  color: colors.alert,
+  filter: `drop-shadow(0 0 6px ${withAlpha(colors.alert, 0.3)})`,
+});
+
+export const errorList = style({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '0.35rem',
+  margin: 0,
+  paddingLeft: '1.1rem',
+});
+
+export const errorItem = style({
+  fontFamily: fonts.roboto,
+  fontSize: '0.8rem',
+  lineHeight: 1.5,
+  color: colors.alert,
+});
+
 export const createBtn = style({
   width: '100%',
   height: 'auto',

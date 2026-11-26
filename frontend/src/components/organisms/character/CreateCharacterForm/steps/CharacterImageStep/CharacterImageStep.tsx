@@ -1,7 +1,7 @@
 'use client'
 
 import clsx from "clsx";
-import { useRef } from "react";
+import { useId, useRef } from "react";
 import { useWatch } from "react-hook-form";
 
 import Button from "@/components/atoms/Button/Button";
@@ -9,6 +9,7 @@ import PortraitFrame from "@/components/atoms/PortraitFrame/PortraitFrame";
 import SectionHeading from "@/components/atoms/SectionHeading/SectionHeading";
 import { stepContent, stepIntro } from "@/components/organisms/character/CreateCharacterForm/steps/characterStep.css";
 import { useMultiStepFormContext } from "@/components/organisms/form/MultiStepForm/MultiStepFormContext";
+import { characterImageRule } from "@/features/character/model/characterValidation";
 import type { CharacterInputs } from "@/features/character/model/createCharacter";
 import { useObjectUrl } from "@/hooks/useObjectUrl";
 
@@ -16,11 +17,13 @@ import * as styles from "./CharacterImageStep.css";
 
 export default function CharacterImageStep() {
     const formContext = useMultiStepFormContext<CharacterInputs>();
-    const { register, control } = formContext.form;
+    const { register, control, formState: { errors } } = formContext.form;
+    const imageErrorId = useId();
+    const imageError = errors.characterImg?.message as string | undefined;
     const images: FileList | undefined = useWatch({ control, name: "characterImg" });
     const characterImage = useObjectUrl(images?.[0]);
     const imageInputRef = useRef<HTMLInputElement | null>(null);
-    const { ref: registerImageRef, ...imageField } = register("characterImg", {validate: (files: FileList | undefined) => !!files?.length});
+    const { ref: registerImageRef, ...imageField } = register("characterImg", { validate: characterImageRule });
 
     return (
         <div className={stepContent}>
@@ -37,8 +40,10 @@ export default function CharacterImageStep() {
                         <Button variant="soft" size="small" icon="swap_horiz" title="Kép cseréje"
                             onClick={() => imageInputRef.current?.click()}/>
                     }
+                    {imageError && <span id={imageErrorId} role="alert" className={styles.imageError}>{imageError}</span>}
                 </div>
                 <input type="file" id="characterImg" accept="image/png, image/jpeg" className={styles.hiddenInput}
+                    aria-invalid={!!imageError} aria-describedby={imageError ? imageErrorId : undefined}
                     {...imageField}
                     ref={element => {
                         registerImageRef(element);

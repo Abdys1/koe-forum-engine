@@ -23,7 +23,7 @@ type CharacterGearStepProps = {
 }
 
 export default function CharacterGearStep({ equipmentCatalog }: CharacterGearStepProps) {
-    const { control, setValue } = useMultiStepFormContext<CharacterInputs>().form;
+    const { control, setValue, clearErrors } = useMultiStepFormContext<CharacterInputs>().form;
     const selectedIds: number[] = useWatch({ control, name: "equipmentIds" }) ?? EMPTY_SELECTION;
     const equipmentTypeRoots = equipmentCatalog.getEquipmentTypeRoots();
 
@@ -49,6 +49,7 @@ export default function CharacterGearStep({ equipmentCatalog }: CharacterGearSte
 
     function updateSelection(nextIds: number[]) {
         setValue("equipmentIds", nextIds, { shouldDirty: true });
+        clearErrors("equipmentIds");
     }
 
     function selectItem(itemId: number) {

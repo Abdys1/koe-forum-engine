@@ -21,6 +21,15 @@ export default class CharacterClientImpl implements CharacterClient {
         return { ...data, imageUrl: new URL(data.imageUrl, response.url).href };
     }
 
+    public async validateName(name: string): Promise<void> {
+        const { error, response } = await this.api.POST('/characters/validate-name', {
+            body: { name }
+        });
+        if (!response.ok) {
+            throw new ApiResponseError(response, error);
+        }
+    }
+
     public async getById(id: number): Promise<CharacterDetails | null> {
         const { data, error, response } = await this.api.GET('/characters/{id}', {
             params: { path: { id } }

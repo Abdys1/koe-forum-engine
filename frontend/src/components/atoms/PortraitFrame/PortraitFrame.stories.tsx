@@ -20,4 +20,6 @@ export const WithImage: Story = { args: { imageUrl: "/images/ryldan2.png", image
 
 export const Large: Story = { args: { imageUrl: "/images/ryldan2.png", imageAlt: "Ryldan", size: "large" } };
 
+export const Invalid: Story = { args: { imageUrl: "/images/ryldan2.png", imageAlt: "Ryldan", invalid: true } };
+
 export const Placeholder: Story = { args: { placeholder: { icon: "add_photo_alternate", text: "Kép feltöltése" } } };

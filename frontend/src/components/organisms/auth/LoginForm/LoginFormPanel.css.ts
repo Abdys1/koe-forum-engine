@@ -1,7 +1,7 @@
 import { globalStyle, style } from '@vanilla-extract/css';
 
 import { goldLink, mutedLink } from '@/styles/shared.css';
-import { alphaColors, colors, fonts, withAlpha } from '@/styles/tokens';
+import { alphaColors, fonts } from '@/styles/tokens';
 
 export const form = style({
   display: 'flex',
@@ -24,13 +24,6 @@ export const forgotLink = style([mutedLink, {
 
 export const errorMsg = style({
   marginTop: '0.5rem',
-  padding: '0.5rem 0.75rem',
-  borderRadius: '0.375rem',
-  background: withAlpha(colors.alert, 0.12),
-  border: `1px solid ${withAlpha(colors.alert, 0.4)}`,
-  fontFamily: fonts.poppins,
-  fontSize: '0.875rem',
-  color: 'rgb(248,113,113)',
 });
 
 export const register = style({

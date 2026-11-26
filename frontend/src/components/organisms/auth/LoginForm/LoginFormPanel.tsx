@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 
+import AlertMessage from "@/components/atoms/AlertMessage/AlertMessage";
 import Button from "@/components/atoms/Button/Button";
 import InputField from "@/components/molecules/InputField/InputField";
 import type { LoginInputs } from "@/features/auth/model/login";
@@ -24,7 +25,7 @@ export default function LoginFormPanel({ loginFailed, onSubmit }: LoginFormPanel
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit)} className={styles.form} noValidate>
-                {loginFailed && <div role="alert" className={styles.errorMsg}>Hibás felhasználónév vagy jelszó!</div>}
+                {loginFailed && <AlertMessage className={styles.errorMsg}>Hibás felhasználónév vagy jelszó!</AlertMessage>}
                 <InputField {...register('username', { required: "A felhasználónév kitöltése kötelező!" })}
                     label="Felhasználónév" error={errors.username?.message} />
                 <InputField {...register('password', { required: "A jelszó kitöltése kötelező!" })}

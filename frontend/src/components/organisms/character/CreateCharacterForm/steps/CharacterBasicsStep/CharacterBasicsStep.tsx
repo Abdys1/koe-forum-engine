@@ -3,10 +3,12 @@
 import clsx from "clsx";
 import { useId, useState } from "react";
 
+import AlertMessage from "@/components/atoms/AlertMessage/AlertMessage";
 import Button from "@/components/atoms/Button/Button";
 import Icon from "@/components/atoms/Icon/Icon";
 import SectionHeading from "@/components/atoms/SectionHeading/SectionHeading";
 import { useMultiStepFormContext } from "@/components/organisms/form/MultiStepForm/MultiStepFormContext";
+import { characterNameRule } from "@/features/character/model/characterValidation";
 import type { CharacterInputs } from "@/features/character/model/createCharacter";
 import { SelectableSex, sexOptions } from "@/features/character/model/sex";
 
@@ -14,7 +16,7 @@ import * as styles from "./CharacterBasicsStep.css";
 
 export default function CharacterBasicsStep() {
     const formContext = useMultiStepFormContext<CharacterInputs>();
-    const { register, getValues, setValue, trigger, formState: { errors } } = formContext.form;
+    const { register, getValues, setValue, formState: { errors } } = formContext.form;
     const nameInputId = useId();
     const nameErrorId = useId();
     const nameError = errors.characterName?.message as string | undefined;
@@ -36,12 +38,9 @@ export default function CharacterBasicsStep() {
                             <input id={nameInputId} type="text" placeholder="Névtelen vándor" autoComplete="off"
                                 aria-invalid={!!nameError} aria-describedby={nameError ? nameErrorId : undefined}
                                 className={clsx(styles.nameInput, nameError && styles.nameInputError)}
-                                {...register("characterName", {
-                                    required: "A mező kitöltése kötelező!",
-                                    onChange: () => nameError && trigger("characterName")
-                                })}/>
+                                {...register("characterName", { validate: characterNameRule })}/>
                         </div>
-                        {nameError && <span id={nameErrorId} role="alert" className={styles.nameError}>{nameError}</span>}
+                        {nameError && <AlertMessage id={nameErrorId} className={styles.nameError}>{nameError}</AlertMessage>}
                     </div>
                     <div className={styles.rulesRow}>
                         <p className={styles.rulesText}>

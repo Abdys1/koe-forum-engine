@@ -19,6 +19,7 @@ export const colors = {
   white: '#ffffff',
   online: '#4ade80',
   alert: '#ef4444',
+  alertLight: '#f87171',
 } as const;
 
 export const fonts = {
